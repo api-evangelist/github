@@ -1,11 +1,5 @@
 # GitHub (github)
-
-GitHub is a platform and cloud-based service for software development and
-version control using Git, allowing developers to store and manage their code.
-It provides the distributed version control of Git plus access control, bug
-tracking, software feature requests, task management, continuous integration,
-and wikis for every project.[6] Headquartered in California, it has been a
-subsidiary of Microsoft since 2018.
+GitHub is a cloud-based platform for software development and version control, built on Git. It enables developers to store, manage, and collaborate on code. In addition to Gits distributed version control, GitHub offers access control, bug tracking, feature requests, task management, continuous integration, and wikis for projects. Headquartered in California, it has operated as a subsidiary of Microsoft since 2018.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-search/code/main/_apis/github/apis.md)
 
