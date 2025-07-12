@@ -57744,3 +57744,1424 @@ components:
       description: Bearer Token
       type: http
       scheme: Bearer
+  parameters:
+    per-page:
+      name: per_page
+      description: >-
+        The number of results per page (max 100). For more information, see
+        "[Using pagination in the REST
+        API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    page:
+      name: page
+      description: >-
+        The page number of the results to fetch. For more information, see
+        "[Using pagination in the REST
+        API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+    hook-id:
+      name: hook_id
+      description: >-
+        The unique identifier of the hook. You can find this value in the
+        `X-GitHub-Hook-ID` header of a webhook delivery.
+      in: path
+      required: true
+      schema:
+        type: integer
+    direction:
+      name: direction
+      description: The direction to sort the results by.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: desc
+    key-ids:
+      name: key_ids
+      description: The unique identifier of the key.
+      in: path
+      required: true
+      schema:
+        type: string
+    team-id:
+      name: team_id
+      description: The unique identifier of the team.
+      in: path
+      required: true
+      schema:
+        type: integer
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    pre-receive-environment-id:
+      name: pre_receive_environment_id
+      description: The unique identifier of the pre-receive environment.
+      in: path
+      required: true
+      schema:
+        type: integer
+    pre-receive-hook-id:
+      name: pre_receive_hook_id
+      description: The unique identifier of the pre-receive hook.
+      in: path
+      required: true
+      schema:
+        type: integer
+    token-id:
+      name: token_id
+      description: The unique identifier of the token.
+      in: path
+      required: true
+      schema:
+        type: integer
+    cursor:
+      name: cursor
+      description: >-
+        Used for pagination: the starting delivery from which the page of
+        deliveries is fetched. Refer to the `link` header for the next and
+        previous page cursors.
+      in: query
+      required: false
+      schema:
+        type: string
+    delivery-id:
+      name: delivery_id
+      in: path
+      required: true
+      schema:
+        type: integer
+    since:
+      name: since
+      description: >-
+        Only show results that were last updated after the given time. This is a
+        timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format:
+        `YYYY-MM-DDTHH:MM:SSZ`.
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    installation-id:
+      name: installation_id
+      description: The unique identifier of the installation.
+      in: path
+      required: true
+      schema:
+        type: integer
+      examples:
+        default:
+          value: 1
+    grant-id:
+      name: grant_id
+      description: The unique identifier of the grant.
+      in: path
+      required: true
+      schema:
+        type: integer
+    client-id:
+      name: client_id
+      in: path
+      required: true
+      description: The client ID of the GitHub app.
+      schema:
+        type: string
+      examples:
+        default:
+          value: Iv1.8a61f9b3a7aba766
+    app-slug:
+      name: app_slug
+      in: path
+      required: true
+      schema:
+        type: string
+    oauth-client-id:
+      name: client_id
+      in: path
+      required: true
+      description: The client ID of the OAuth app.
+      schema:
+        type: string
+      examples:
+        default:
+          value: abcde12345fghij67890
+    authorization-id:
+      name: authorization_id
+      description: The unique identifier of the authorization.
+      in: path
+      required: true
+      schema:
+        type: integer
+    enterprise:
+      name: enterprise
+      description: >-
+        The slug version of the enterprise name. You can also substitute this
+        value with the enterprise id.
+      in: path
+      required: true
+      schema:
+        type: string
+    org-id:
+      name: org_id
+      description: The unique identifier of the organization.
+      in: path
+      required: true
+      schema:
+        type: integer
+    visible-to-organization:
+      name: visible_to_organization
+      description: >-
+        Only return runner groups that are allowed to be used by this
+        organization.
+      in: query
+      required: false
+      schema:
+        type: string
+    runner-group-id:
+      name: runner_group_id
+      description: Unique identifier of the self-hosted runner group.
+      in: path
+      required: true
+      schema:
+        type: integer
+    runner-id:
+      name: runner_id
+      description: Unique identifier of the self-hosted runner.
+      in: path
+      required: true
+      schema:
+        type: integer
+    runner-label-name:
+      name: name
+      description: The name of a self-hosted runner's custom label.
+      in: path
+      required: true
+      schema:
+        type: string
+    audit-log-enterprise-phrase:
+      name: phrase
+      description: >-
+        A search phrase. For more information, see [Searching the audit
+        log](https://docs.github.com/enterprise-server@3.9/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/searching-the-audit-log-for-your-enterprise#searching-the-audit-log).
+      in: query
+      required: false
+      schema:
+        type: string
+    audit-log-include:
+      name: include
+      description: |-
+        The event types to include:
+
+        - `web` - returns web (non-Git) events.
+        - `git` - returns Git events.
+        - `all` - returns both web and Git events.
+
+        The default is `web`.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - web
+          - git
+          - all
+    audit-log-after:
+      name: after
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for events after this cursor.
+      in: query
+      required: false
+      schema:
+        type: string
+    audit-log-before:
+      name: before
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for events before this cursor.
+      in: query
+      required: false
+      schema:
+        type: string
+    audit-log-order:
+      name: order
+      description: >-
+        The order of audit log events. To list newest events first, specify
+        `desc`. To list oldest events first, specify `asc`.
+
+
+        The default is `desc`.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - desc
+          - asc
+    tool-name:
+      name: tool_name
+      description: >-
+        The name of a code scanning tool. Only results by this tool will be
+        listed. You can specify the tool by using either `tool_name` or
+        `tool_guid`, but not both.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-analysis-tool-name'
+    tool-guid:
+      name: tool_guid
+      description: >-
+        The GUID of a code scanning tool. Only results by this tool will be
+        listed. Note that some code scanning tools may not include a GUID in
+        their analysis data. You can specify the tool by using either
+        `tool_guid` or `tool_name`, but not both.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-analysis-tool-guid'
+    pagination-before:
+      name: before
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for results before this cursor.
+        For more information, see "[Using pagination in the REST
+        API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      required: false
+      schema:
+        type: string
+    pagination-after:
+      name: after
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for results after this cursor. For
+        more information, see "[Using pagination in the REST
+        API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      required: false
+      schema:
+        type: string
+    dependabot-alert-comma-separated-states:
+      name: state
+      in: query
+      description: >-
+        A comma-separated list of states. If specified, only alerts with these
+        states will be returned.
+
+
+        Can be: `auto_dismissed`, `dismissed`, `fixed`, `open`
+      schema:
+        type: string
+    dependabot-alert-comma-separated-severities:
+      name: severity
+      in: query
+      description: >-
+        A comma-separated list of severities. If specified, only alerts with
+        these severities will be returned.
+
+
+        Can be: `low`, `medium`, `high`, `critical`
+      schema:
+        type: string
+    dependabot-alert-comma-separated-ecosystems:
+      name: ecosystem
+      in: query
+      description: >-
+        A comma-separated list of ecosystems. If specified, only alerts for
+        these ecosystems will be returned.
+
+
+        Can be: `composer`, `go`, `maven`, `npm`, `nuget`, `pip`, `pub`,
+        `rubygems`, `rust`
+      schema:
+        type: string
+    dependabot-alert-comma-separated-packages:
+      name: package
+      in: query
+      description: >-
+        A comma-separated list of package names. If specified, only alerts for
+        these packages will be returned.
+      schema:
+        type: string
+    dependabot-alert-scope:
+      name: scope
+      in: query
+      description: >-
+        The scope of the vulnerable dependency. If specified, only alerts with
+        this scope will be returned.
+      schema:
+        type: string
+        enum:
+          - development
+          - runtime
+    dependabot-alert-sort:
+      name: sort
+      in: query
+      description: |-
+        The property by which to sort the results.
+        `created` means when the alert was created.
+        `updated` means when the alert's state last changed.
+      schema:
+        type: string
+        enum:
+          - created
+          - updated
+        default: created
+    pagination-first:
+      name: first
+      description: >-
+        **Deprecated**. The number of results per page (max 100), starting from
+        the first matching result.
+
+        This parameter must not be used in combination with `last`.
+
+        Instead, use `per_page` in combination with `after` to fetch the first
+        page of results.
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 30
+    pagination-last:
+      name: last
+      description: >-
+        **Deprecated**. The number of results per page (max 100), starting from
+        the last matching result.
+
+        This parameter must not be used in combination with `first`.
+
+        Instead, use `per_page` in combination with `before` to fetch the last
+        page of results.
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+    secret-scanning-alert-state:
+      name: state
+      in: query
+      description: >-
+        Set to `open` or `resolved` to only list secret scanning alerts in a
+        specific state.
+      required: false
+      schema:
+        type: string
+        enum:
+          - open
+          - resolved
+    secret-scanning-alert-secret-type:
+      name: secret_type
+      in: query
+      description: >-
+        A comma-separated list of secret types to return. By default all secret
+        types are returned.
+
+        See "[Secret scanning
+        patterns](https://docs.github.com/enterprise-server@3.9/code-security/secret-scanning/secret-scanning-patterns#supported-secrets-for-advanced-security)"
+
+        for a complete list of secret types.
+      required: false
+      schema:
+        type: string
+    secret-scanning-alert-resolution:
+      name: resolution
+      in: query
+      description: >-
+        A comma-separated list of resolutions. Only secret scanning alerts with
+        one of these resolutions are listed. Valid resolutions are
+        `false_positive`, `wont_fix`, `revoked`, `pattern_edited`,
+        `pattern_deleted` or `used_in_tests`.
+      required: false
+      schema:
+        type: string
+    secret-scanning-alert-sort:
+      name: sort
+      description: >-
+        The property to sort the results by. `created` means when the alert was
+        created. `updated` means when the alert was updated or resolved.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - created
+          - updated
+        default: created
+    enterprise-security-product:
+      name: security_product
+      in: path
+      description: The security feature to enable or disable.
+      required: true
+      schema:
+        type: string
+        enum:
+          - advanced_security
+          - dependabot_alerts
+          - secret_scanning
+          - secret_scanning_push_protection
+    enterprise-security-product-enablement:
+      name: enablement
+      in: path
+      description: >-
+        The action to take.
+
+
+        `enable_all` means to enable the specified security feature for all
+        repositories in the enterprise.
+
+        `disable_all` means to disable the specified security feature for all
+        repositories in the enterprise.
+      required: true
+      schema:
+        type: string
+        enum:
+          - enable_all
+          - disable_all
+    gist-id:
+      name: gist_id
+      description: The unique identifier of the gist.
+      in: path
+      required: true
+      schema:
+        type: string
+    comment-id:
+      name: comment_id
+      description: The unique identifier of the comment.
+      in: path
+      required: true
+      schema:
+        type: integer
+    labels:
+      name: labels
+      description: 'A list of comma separated label names. Example: `bug,ui,@high`'
+      in: query
+      required: false
+      schema:
+        type: string
+    uuid:
+      name: uuid
+      description: The UUID which identifies a node.
+      in: query
+      required: false
+      schema:
+        type: string
+    cluster-roles:
+      name: cluster_roles
+      description: The cluster roles from the cluster configuration file.
+      in: query
+      required: false
+      schema:
+        type: string
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    repo:
+      name: repo
+      description: >-
+        The name of the repository without the `.git` extension. The name is not
+        case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    all:
+      name: all
+      description: If `true`, show notifications marked as read.
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+    participating:
+      name: participating
+      description: >-
+        If `true`, only shows notifications in which the user is directly
+        participating or mentioned.
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+    before:
+      name: before
+      description: >-
+        Only show notifications updated before the given time. This is a
+        timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format:
+        `YYYY-MM-DDTHH:MM:SSZ`.
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    thread-id:
+      name: thread_id
+      description: >-
+        The unique identifier of the notification thread. This corresponds to
+        the value returned in the `id` field when you retrieve notifications
+        (for example with the [`GET /notifications`
+        operation](https://docs.github.com/enterprise-server@3.9/rest/activity/notifications#list-notifications-for-the-authenticated-user)).
+      in: path
+      required: true
+      schema:
+        type: integer
+    since-org:
+      name: since
+      description: >-
+        An organization ID. Only return organizations with an ID greater than
+        this ID.
+      in: query
+      required: false
+      schema:
+        type: integer
+    repository-id:
+      name: repository_id
+      description: The unique identifier of the repository.
+      in: path
+      required: true
+      schema:
+        type: integer
+    visible-to-repository:
+      name: visible_to_repository
+      description: >-
+        Only return runner groups that are allowed to be used by this
+        repository.
+      in: query
+      required: false
+      schema:
+        type: string
+    secret-name:
+      name: secret_name
+      description: The name of the secret.
+      in: path
+      required: true
+      schema:
+        type: string
+    variables-per-page:
+      name: per_page
+      description: >-
+        The number of results per page (max 30). For more information, see
+        "[Using pagination in the REST
+        API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 10
+    variable-name:
+      name: name
+      description: The name of the variable.
+      in: path
+      required: true
+      schema:
+        type: string
+    audit-log-phrase:
+      name: phrase
+      description: >-
+        A search phrase. For more information, see [Searching the audit
+        log](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log).
+      in: query
+      required: false
+      schema:
+        type: string
+    role-id:
+      name: role_id
+      description: The unique identifier of the role.
+      in: path
+      required: true
+      schema:
+        type: integer
+    group-id:
+      name: group_id
+      description: The unique identifier of the group.
+      in: path
+      required: true
+      schema:
+        type: integer
+    migration-id:
+      name: migration_id
+      description: The unique identifier of the migration.
+      in: path
+      required: true
+      schema:
+        type: integer
+    repo-name:
+      name: repo_name
+      description: repo_name parameter
+      in: path
+      required: true
+      schema:
+        type: string
+    package-visibility:
+      name: visibility
+      description: >-
+        The selected visibility of the packages.  This parameter is optional and
+        only filters an existing result set.
+
+
+        The `internal` visibility is only supported for GitHub Packages
+        registries that allow for granular permissions. For other ecosystems
+        `internal` is synonymous with `private`.
+
+        For the list of GitHub Packages registries that support granular
+        permissions, see "[About permissions for GitHub
+        Packages](https://docs.github.com/enterprise-server@3.9/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - public
+          - private
+          - internal
+    package-type:
+      name: package_type
+      description: >-
+        The type of supported package. Packages in GitHub's Gradle registry have
+        the type `maven`. Docker images pushed to GitHub's Container registry
+        (`ghcr.io`) have the type `container`. You can use the type `docker` to
+        find images that were pushed to GitHub's Docker registry
+        (`docker.pkg.github.com`), even if these have now been migrated to the
+        Container registry.
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - npm
+          - maven
+          - rubygems
+          - docker
+          - nuget
+          - container
+    package-name:
+      name: package_name
+      description: The name of the package.
+      in: path
+      required: true
+      schema:
+        type: string
+    package-version-id:
+      name: package_version_id
+      description: Unique identifier of the package version.
+      in: path
+      required: true
+      schema:
+        type: integer
+    secret-scanning-pagination-before-org-repo:
+      name: before
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for events before this cursor. To
+        receive an initial cursor on your first request, include an empty
+        "before" query string.
+      in: query
+      required: false
+      schema:
+        type: string
+    secret-scanning-pagination-after-org-repo:
+      name: after
+      description: >-
+        A cursor, as given in the [Link
+        header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers).
+        If specified, the query only searches for events after this cursor.  To
+        receive an initial cursor on your first request, include an empty
+        "after" query string.
+      in: query
+      required: false
+      schema:
+        type: string
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+    discussion-number:
+      name: discussion_number
+      description: The number that identifies the discussion.
+      in: path
+      required: true
+      schema:
+        type: integer
+    comment-number:
+      name: comment_number
+      description: The number that identifies the comment.
+      in: path
+      required: true
+      schema:
+        type: integer
+    reaction-id:
+      name: reaction_id
+      description: The unique identifier of the reaction.
+      in: path
+      required: true
+      schema:
+        type: integer
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    security-product:
+      name: security_product
+      in: path
+      description: The security feature to enable or disable.
+      required: true
+      schema:
+        type: string
+        enum:
+          - dependency_graph
+          - dependabot_alerts
+          - dependabot_security_updates
+          - advanced_security
+          - code_scanning_default_setup
+          - secret_scanning
+          - secret_scanning_push_protection
+    org-security-product-enablement:
+      name: enablement
+      in: path
+      description: >-
+        The action to take.
+
+
+        `enable_all` means to enable the specified security feature for all
+        repositories in the organization.
+
+        `disable_all` means to disable the specified security feature for all
+        repositories in the organization.
+      required: true
+      schema:
+        type: string
+        enum:
+          - enable_all
+          - disable_all
+    card-id:
+      name: card_id
+      description: The unique identifier of the card.
+      in: path
+      required: true
+      schema:
+        type: integer
+    column-id:
+      name: column_id
+      description: The unique identifier of the column.
+      in: path
+      required: true
+      schema:
+        type: integer
+    artifact-name:
+      name: name
+      description: >-
+        The name field of an artifact. When specified, only artifacts with this
+        name will be returned.
+      in: query
+      required: false
+      schema:
+        type: string
+    artifact-id:
+      name: artifact_id
+      description: The unique identifier of the artifact.
+      in: path
+      required: true
+      schema:
+        type: integer
+    actions-cache-git-ref-full:
+      name: ref
+      description: >-
+        The full Git reference for narrowing down the cache. The `ref` for a
+        branch should be formatted as `refs/heads/<branch name>`. To reference a
+        pull request use `refs/pull/<number>/merge`.
+      in: query
+      required: false
+      schema:
+        type: string
+    actions-cache-key:
+      name: key
+      description: An explicit key or prefix for identifying the cache
+      in: query
+      required: false
+      schema:
+        type: string
+    actions-cache-list-sort:
+      name: sort
+      description: >-
+        The property to sort the results by. `created_at` means when the cache
+        was created. `last_accessed_at` means when the cache was last accessed.
+        `size_in_bytes` is the size of the cache in bytes.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - created_at
+          - last_accessed_at
+          - size_in_bytes
+        default: last_accessed_at
+    actions-cache-key-required:
+      name: key
+      description: A key for identifying the cache.
+      in: query
+      required: true
+      schema:
+        type: string
+    cache-id:
+      name: cache_id
+      description: The unique identifier of the GitHub Actions cache.
+      in: path
+      required: true
+      schema:
+        type: integer
+    job-id:
+      name: job_id
+      description: The unique identifier of the job.
+      in: path
+      required: true
+      schema:
+        type: integer
+    actor:
+      name: actor
+      description: >-
+        Returns someone's workflow runs. Use the login for the user who created
+        the `push` associated with the check suite or workflow run.
+      in: query
+      required: false
+      schema:
+        type: string
+    workflow-run-branch:
+      name: branch
+      description: >-
+        Returns workflow runs associated with a branch. Use the name of the
+        branch of the `push`.
+      in: query
+      required: false
+      schema:
+        type: string
+    event:
+      name: event
+      description: >-
+        Returns workflow run triggered by the event you specify. For example,
+        `push`, `pull_request` or `issue`. For more information, see "[Events
+        that trigger
+        workflows](https://docs.github.com/enterprise-server@3.9/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows)."
+      in: query
+      required: false
+      schema:
+        type: string
+    workflow-run-status:
+      name: status
+      description: >-
+        Returns workflow runs with the check run `status` or `conclusion` that
+        you specify. For example, a conclusion can be `success` or a status can
+        be `in_progress`. Only GitHub Actions can set a status of `waiting`,
+        `pending`, or `requested`.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - completed
+          - action_required
+          - cancelled
+          - failure
+          - neutral
+          - skipped
+          - stale
+          - success
+          - timed_out
+          - in_progress
+          - queued
+          - requested
+          - waiting
+          - pending
+    created:
+      name: created
+      description: >-
+        Returns workflow runs created within the given date-time range. For more
+        information on the syntax, see "[Understanding the search
+        syntax](https://docs.github.com/enterprise-server@3.9/search-github/getting-started-with-searching-on-github/understanding-the-search-syntax#query-for-dates)."
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    exclude-pull-requests:
+      name: exclude_pull_requests
+      description: If `true` pull requests are omitted from the response (empty array).
+      in: query
+      required: false
+      schema:
+        type: boolean
+        default: false
+    workflow-run-check-suite-id:
+      name: check_suite_id
+      description: Returns workflow runs with the `check_suite_id` that you specify.
+      in: query
+      schema:
+        type: integer
+    workflow-run-head-sha:
+      name: head_sha
+      description: >-
+        Only returns workflow runs that are associated with the specified
+        `head_sha`.
+      in: query
+      required: false
+      schema:
+        type: string
+    run-id:
+      name: run_id
+      description: The unique identifier of the workflow run.
+      in: path
+      required: true
+      schema:
+        type: integer
+    attempt-number:
+      name: attempt_number
+      description: The attempt number of the workflow run.
+      in: path
+      required: true
+      schema:
+        type: integer
+    workflow-id:
+      name: workflow_id
+      in: path
+      description: >-
+        The ID of the workflow. You can also pass the workflow file name as a
+        string.
+      required: true
+      schema:
+        oneOf:
+          - type: integer
+          - type: string
+    autolink-id:
+      name: autolink_id
+      description: The unique identifier of the autolink.
+      in: path
+      required: true
+      schema:
+        type: integer
+    branch:
+      name: branch
+      description: >-
+        The name of the branch. Cannot contain wildcard characters. To use
+        wildcard characters in branch names, use [the GraphQL
+        API](https://docs.github.com/enterprise-server@3.9/graphql).
+      in: path
+      required: true
+      schema:
+        type: string
+      x-multi-segment: true
+    check-run-id:
+      name: check_run_id
+      description: The unique identifier of the check run.
+      in: path
+      required: true
+      schema:
+        type: integer
+    check-suite-id:
+      name: check_suite_id
+      description: The unique identifier of the check suite.
+      in: path
+      required: true
+      schema:
+        type: integer
+    check-name:
+      name: check_name
+      description: Returns check runs with the specified `name`.
+      in: query
+      required: false
+      schema:
+        type: string
+    status:
+      name: status
+      description: Returns check runs with the specified `status`.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - queued
+          - in_progress
+          - completed
+    git-ref:
+      name: ref
+      description: >-
+        The Git reference for the results you want to list. The `ref` for a
+        branch can be formatted either as `refs/heads/<branch name>` or simply
+        `<branch name>`. To reference a pull request use
+        `refs/pull/<number>/merge`.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-ref'
+    alert-number:
+      name: alert_number
+      in: path
+      description: >-
+        The number that identifies an alert. You can find this at the end of the
+        URL for a code scanning alert within GitHub, and in the `number` field
+        in the response from the `GET
+        /repos/{owner}/{repo}/code-scanning/alerts` operation.
+      required: true
+      schema:
+        $ref: '#/components/schemas/alert-number'
+    commit-sha:
+      name: commit_sha
+      description: The SHA of the commit.
+      in: path
+      required: true
+      schema:
+        type: string
+      x-multi-segment: true
+    commit-ref:
+      name: ref
+      description: >-
+        The commit reference. Can be a commit SHA, branch name
+        (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more
+        information, see "[Git
+        References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)"
+        in the Git documentation.
+      in: path
+      required: true
+      schema:
+        type: string
+      x-multi-segment: true
+    dependabot-alert-comma-separated-manifests:
+      name: manifest
+      in: query
+      description: >-
+        A comma-separated list of full manifest paths. If specified, only alerts
+        for these manifests will be returned.
+      schema:
+        type: string
+    dependabot-alert-number:
+      name: alert_number
+      in: path
+      description: >-
+        The number that identifies a Dependabot alert in its repository.
+
+        You can find this at the end of the URL for a Dependabot alert within
+        GitHub,
+
+        or in `number` fields in the response from the
+
+        `GET /repos/{owner}/{repo}/dependabot/alerts` operation.
+      required: true
+      schema:
+        $ref: '#/components/schemas/alert-number'
+    manifest-path:
+      name: name
+      description: >-
+        The full path, relative to the repository root, of the dependency
+        manifest file.
+      in: query
+      required: false
+      schema:
+        type: string
+    deployment-id:
+      name: deployment_id
+      description: deployment_id parameter
+      in: path
+      required: true
+      schema:
+        type: integer
+    environment-name:
+      name: environment_name
+      in: path
+      required: true
+      description: >-
+        The name of the environment. The name must be URL encoded. For example,
+        any slashes in the name must be replaced with `%2F`.
+      schema:
+        type: string
+    branch-policy-id:
+      name: branch_policy_id
+      in: path
+      required: true
+      description: The unique identifier of the branch policy.
+      schema:
+        type: integer
+    git-ref-only:
+      name: ref
+      description: >-
+        The Git reference. For more information, see "[Git
+        References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)"
+        in the Git documentation.
+      in: path
+      required: true
+      example: heads/feature-a
+      schema:
+        type: string
+      x-multi-segment: true
+    invitation-id:
+      name: invitation_id
+      description: The unique identifier of the invitation.
+      in: path
+      required: true
+      schema:
+        type: integer
+    sort:
+      name: sort
+      description: The property to sort the results by.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - created
+          - updated
+        default: created
+    issue-number:
+      name: issue_number
+      description: The number that identifies the issue.
+      in: path
+      required: true
+      schema:
+        type: integer
+    key-id:
+      name: key_id
+      description: The unique identifier of the key.
+      in: path
+      required: true
+      schema:
+        type: integer
+    milestone-number:
+      name: milestone_number
+      description: The number that identifies the milestone.
+      in: path
+      required: true
+      schema:
+        type: integer
+    pull-number:
+      name: pull_number
+      description: The number that identifies the pull request.
+      in: path
+      required: true
+      schema:
+        type: integer
+    review-id:
+      name: review_id
+      description: The unique identifier of the review.
+      in: path
+      required: true
+      schema:
+        type: integer
+    asset-id:
+      name: asset_id
+      description: The unique identifier of the asset.
+      in: path
+      required: true
+      schema:
+        type: integer
+    release-id:
+      name: release_id
+      description: The unique identifier of the release.
+      in: path
+      required: true
+      schema:
+        type: integer
+    tag-protection-id:
+      name: tag_protection_id
+      description: The unique identifier of the tag protection.
+      in: path
+      required: true
+      schema:
+        type: integer
+    since-repo:
+      name: since
+      description: >-
+        A repository ID. Only return repositories with an ID greater than this
+        ID.
+      in: query
+      required: false
+      schema:
+        type: integer
+    excluded-attributes:
+      name: excludedAttributes
+      description: >-
+        Excludes the specified attribute from being returned in the results.
+        Using this parameter can speed up response time.
+      in: query
+      required: false
+      schema:
+        type: string
+        example: members
+    start-index:
+      name: startIndex
+      description: >-
+        Used for pagination: the starting index of the first result to return
+        when paginating through values.
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        format: int32
+        example: 1
+    count:
+      name: count
+      description: 'Used for pagination: the number of results to return per page.'
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 30
+        format: int32
+        example: 1
+    scim-group-id:
+      name: scim_group_id
+      description: A unique identifier of the SCIM group.
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 7fce0092-d52e-4f76-b727-3955bd72c939
+    scim-user-id:
+      name: scim_user_id
+      description: The unique identifier of the SCIM user.
+      in: path
+      required: true
+      schema:
+        type: string
+    order:
+      name: order
+      description: >-
+        Determines whether the first search result returned is the highest
+        number of matches (`desc`) or lowest number of matches (`asc`). This
+        parameter is ignored unless you provide `sort`.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - desc
+          - asc
+        default: desc
+    gpg-key-id:
+      name: gpg_key_id
+      description: The unique identifier of the GPG key.
+      in: path
+      required: true
+      schema:
+        type: integer
+    since-repo-date:
+      name: since
+      description: >-
+        Only show repositories updated after the given time. This is a timestamp
+        in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format:
+        `YYYY-MM-DDTHH:MM:SSZ`.
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    before-repo-date:
+      name: before
+      description: >-
+        Only show repositories updated before the given time. This is a
+        timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format:
+        `YYYY-MM-DDTHH:MM:SSZ`.
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    ssh-signing-key-id:
+      name: ssh_signing_key_id
+      description: The unique identifier of the SSH signing key.
+      in: path
+      required: true
+      schema:
+        type: integer
+    sort-starred:
+      name: sort
+      description: >-
+        The property to sort the results by. `created` means when the repository
+        was starred. `updated` means when the repository was last pushed to.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - created
+          - updated
+        default: created
+    account-id:
+      name: account_id
+      description: account_id parameter
+      in: path
+      required: true
+      schema:
+        type: integer
+    since-user:
+      name: since
+      description: A user ID. Only return users with an ID greater than this ID.
+      in: query
+      required: false
+      schema:
+        type: integer
+  headers:
+    link:
+      example: >-
+        <https://api.github.com/resource?page=2>; rel="next",
+        <https://api.github.com/resource?page=5>; rel="last"
+      schema:
+        type: string
+    content-type:
+      example: text/html
+      schema:
+        type: string
+    x-common-marker-version:
+      example: 0.17.4
+      schema:
+        type: string
+    x-rate-limit-limit:
+      example: 5000
+      schema:
+        type: integer
+    x-rate-limit-remaining:
+      example: 4999
+      schema:
+        type: integer
+    x-rate-limit-reset:
+      example: 1590701888
+      schema:
+        type: integer
+        format: timestamp
+    location:
+      example: >-
+        https://pipelines.actions.githubusercontent.com/OhgS4QRKqmgx7bKC27GKU83jnQjyeqG8oIMTge8eqtheppcmw8/_apis/pipelines/1/runs/176/signedlogcontent?urlExpires=2020-01-24T18%3A10%3A31.5729946Z&urlSigningMethod=HMACV1&urlSignature=agG73JakPYkHrh06seAkvmH7rBR4Ji4c2%2B6a2ejYh3E%3D
+      schema:
+        type: string
