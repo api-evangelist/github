@@ -1,5 +1,5 @@
 # GitHub (github)
-GitHub is a cloud-based platform for software development and version control, built on Git. It enables developers to store, manage, and collaborate on code. In addition to Gits distributed version control, GitHub offers access control, bug tracking, feature requests, task management, continuous integration, and wikis for projects. Headquartered in California, it has operated as a subsidiary of Microsoft since 2018.
+GitHub is a cloud-based platform for software development and version control, built on Git. It enables developers to store, manage, and collaborate on code. In addition to Gits distributed version control, GitHub offers access control, bug tracking, feature requests, task management, continuous integration, and wikis for projects. Headquartered in California, it has operated as a subsidiary of Microsoft since 2018.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-search/code/main/_apis/github/apis.md)
 
@@ -11,12 +11,12 @@ GitHub is a cloud-based platform for software development and version control, b
 
 ## Tags:
 
- - Code, Source Control, Software Development
+ - Code, Source Control, Software Development, Platform, Pipelines
 
 ## Timestamps
 
 - **Created:** 2024/04/14 
-- **Modified:** 2024-12-30 
+- **Modified:** 2025-07-16 
 
 ## APIs
 
@@ -29,26 +29,22 @@ flexible queries than the GitHub REST API.
 
 #### Tags:
 
- - No Tags
+ - GraphQL
 ### GitHub Admin API
 Use the REST API to administer your enterprise.
 
-**Human URL:** [
-https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28](
-https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28)
+**Human URL:** [https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28)
 
 
 #### Tags:
 
- - Access, Administrative, Authorization, Download, Downloads, Environments, Global, Hook, Hooks, Impersonation, Keys, LDAP, Latest, Mapping, Names, OAuth, Organizations, Personal, Pings, Pre, Pre Receive, Public, Receive, Status, Sync, Teams, Tokens, User Names, Users, Webhooks
+ - Administrative, Hooks, Pings, Keys, Teams, Mapping, Sync, Users, Organizations, Pre, Receive, Environments, Downloads, Latest, Tokens, Authorization
 
 #### Properties
 
-- [OpenAPI](openapi/github-admin-openapi-original.yml)
-- [Documentation](
-https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin)
+- [OpenAPI](properties/github-admin-api-openapi.yml)
+- [Documentation](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin)
 ### GitHub App API
-
 Use the REST API to retrieve information about GitHub Apps and GitHub App
 installations.
 
@@ -59,11 +55,11 @@ installations.
 
 #### Tags:
 
- - Access, Actions, Applications, Approvals, Attempts, Authenticated, Authorization, Branch, Branches, Checks, Clients, Code, Configurations, Conversions, Deliveries, Git, Grants, History, Hook, Hub, Installations, Manifests, Owners, Protected, Protection, Redeliver, Repositories, Reset, Restrictions, Reviews, Runs, Scoped, Sets, Single, Slug, Suspend, Suspended, Tokens, Unsuspend, Webhooks, Workflows
+ - Applications, Manifests, Code, Conversions, Hook, Configurations, Deliveries, Attempts, Installation, Installations, Access_tokens, Suspended, Grants, Grants"", Token, Scoped, App_slug, Repositories, Owner, Actions, Runs, Approvals, Branches, Branch, Protection, Restrictions
 
 #### Properties
 
-- [OpenAPI](openapi/github-app-openapi-original.yml)
+- [OpenAPI](properties/github-app-api-openapi.yml)
 - [Documentation](https://docs.github.com/en/rest/apps)
 ### GitHub Auth API
 
@@ -79,11 +75,11 @@ https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?ap
 
 #### Tags:
 
- - Administrative, Applications, Authorization, Authorized, Clients, Existing, Fingerprint, Impersonation, Keys, OAuth, SSH, Settings, Setup, Single, Specific, Tokens, User Names, Users
+ - Administrative, Users, User Names, Authorization, Clients, Fingerprint, Setup, Apis, Settings, Authorized, Keys
 
 #### Properties
 
-- [OpenAPI](openapi/github-auth-openapi-original.yml)
+- [OpenAPI](properties/github-auth-api-openapi.yml)
 - [Documentation](
 https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api)
 ### GitHub Code of Conduct API
@@ -98,11 +94,11 @@ https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct?apiVersion=202
 
 #### Tags:
 
- - Code, Codes, Conduct, Keys
+ - Keys
 
 #### Properties
 
-- [OpenAPI](openapi/github-codes-openapi-original.yml)
+- [OpenAPI](properties/github-code-of-conduct-api-openapi.yml)
 - [Documentation](https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct)
 ### GitHub Emojis API
 
@@ -516,6 +512,26 @@ users.
 #### Properties
 
 - [OpenAPI](openapi/github-user-openapi-original.yml)
+
+## Common Properties
+
+- [Plans](https://github.com/pricing)
+- [RoadMap](https://github.com/github/roadmap)
+- [About](https://github.com/about)
+- [Documentation](https://docs.github.com/en/get-started/exploring-integrations/about-building-integrations)
+- [Status](https://www.githubstatus.com/)
+- [CLI](https://cli.github.com/)
+- [GitHubOrganization](https://github.com/github)
+- [Support](https://support.github.com/)
+- [Partners](https://github.com/partners/)
+- [Partners](https://github.com/partners/)
+- [TermsOfService](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)
+- [PrivacyPolicy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
+- [PrivacyPolicy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
+- [RateLimits](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28)
+- [Pagination](https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28)
+- [Authentication](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28)
+- [GettingStarted](https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28)
 
 ## Maintainers
 
