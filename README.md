@@ -11,12 +11,12 @@ GitHub is a cloud-based platform for software development and version control, b
 
 ## Tags:
 
- - Code, Source Control, Software Development, Platform, Pipelines
+ - Code, Source Control, Software Development, Platform, Pipelines, T1
 
 ## Timestamps
 
 - **Created:** 2024/04/14 
-- **Modified:** 2025-07-16 
+- **Modified:** 2025-12-21 
 
 ## APIs
 
@@ -33,17 +33,20 @@ flexible queries than the GitHub REST API.
 ### GitHub Admin API
 Use the REST API to administer your enterprise.
 
-**Human URL:** [https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28)
+**Human URL:** [
+https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28](
+https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin?apiVersion=2022-11-28)
 
 
 #### Tags:
 
- - Administrative, Hooks, Pings, Keys, Teams, Mapping, Sync, Users, Organizations, Pre, Receive, Environments, Downloads, Latest, Tokens, Authorization
+ - Administrative
 
 #### Properties
 
 - [OpenAPI](properties/github-admin-api-openapi.yml)
-- [Documentation](https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin)
+- [Documentation](
+https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin)
 ### GitHub App API
 Use the REST API to retrieve information about GitHub Apps and GitHub App
 installations.
@@ -55,7 +58,7 @@ installations.
 
 #### Tags:
 
- - Applications, Manifests, Code, Conversions, Hook, Configurations, Deliveries, Attempts, Installation, Installations, Access_tokens, Suspended, Grants, Grants"", Token, Scoped, App_slug, Repositories, Owner, Actions, Runs, Approvals, Branches, Branch, Protection, Restrictions
+ - Applications
 
 #### Properties
 
@@ -66,9 +69,7 @@ installations.
 You can authenticate to the REST API to access more endpoints and have a
 higher rate limit.
 
-**Human URL:** [
-https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28](
-https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28)
+**Human URL:** [https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api?apiVersion=2022-11-28)
 
 **Base URL:** [https://api.github.com](https://api.github.com)
 
@@ -85,9 +86,7 @@ https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api)
 ### GitHub Code of Conduct API
 Use the REST API to get information about codes of conduct.
 
-**Human URL:** [
-https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct?apiVersion=2022-11-28](
-https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct?apiVersion=2022-11-28)
+**Human URL:** [https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct?apiVersion=2022-11-28](https://docs.github.com/en/rest/codes-of-conduct/codes-of-conduct?apiVersion=2022-11-28)
 
 **Base URL:** [https://api.github.com](https://api.github.com)
 
@@ -116,7 +115,7 @@ GitHub.
 
 #### Properties
 
-- [OpenAPI](openapi/github-emojis--openapi-original.yml)
+- [OpenAPI](openapi/github-emojis-openapi.yml)
 - [Documentation](https://docs.github.com/en/rest/emojis)
 ### GitHub Enterprise API
 
@@ -134,7 +133,7 @@ GitHub REST API.
 
 #### Properties
 
-- [OpenAPI](openapi/github-enterprise-openapi-original.yml)
+- [OpenAPI](openapi/github-enterprise-openapi.yml)
 - [Documentation](
 https://docs.github.com/en/enterprise-cloud@latest/rest/enterprise-admin)
 ### GitHub Events API
@@ -151,7 +150,7 @@ Use the REST API to interact with GitHub events.
 
 #### Properties
 
-- [OpenAPI](openapi/github-events--openapi-original.yml)
+- [OpenAPI](properties/github-events-api-openapi.yml)
 ### GitHub Feeds API
 
 Use the REST API to interact with GitHub feeds. Lists the feeds available
@@ -169,7 +168,7 @@ can then get a specific feed by sending a request to one of the feed URLs.
 
 #### Properties
 
-- [OpenAPI](openapi/github-feeds--openapi-original.yml)
+- [OpenAPI](openapi/github-feeds-openapi.yml)
 ### GitHub Gists API
 
 Use the REST API to list, create, update and delete the public gists on
@@ -186,7 +185,7 @@ GitHub.
 
 #### Properties
 
-- [OpenAPI](openapi/github-gists--openapi-original.yml)
+- [OpenAPI](openapi/github-gists-openapi.yml)
 ### GitHub Gitignore Templates API
 
 Use the REST API to get .gitignore templates that can be used to ignore
@@ -203,7 +202,7 @@ files and directories.
 
 #### Properties
 
-- [OpenAPI](openapi/github-gitignore-templates--openapi-original.yml)
+- [OpenAPI](openapi/github-gitignore-templates-openapi.yml)
 ### GitHub Installation API
 
 Use the REST API to get information about GitHub App installations and
@@ -218,7 +217,7 @@ perform actions within those installations.
 
 #### Properties
 
-- [OpenAPI](openapi/github-installation-openapi-original.yml)
+- [OpenAPI](openapi/github-installation-openapi.yml)
 ### GitHub Issues API
 
 Use the REST API to view and manage issues, including issue assignees,
@@ -235,7 +234,7 @@ comments, labels, and milestones.
 
 #### Properties
 
-- [OpenAPI](openapi/github-issues--openapi-original.yml)
+- [OpenAPI](properties/github-issues-api-openapi.yml)
 ### GitHub Licenses API
 
 Use the REST API to retrieve popular open source licenses and information
@@ -252,7 +251,7 @@ about a particular project's license file.
 
 #### Properties
 
-- [OpenAPI](openapi/github-licenses--openapi-original.yml)
+- [OpenAPI](openapi/github-licenses-openapi.yml)
 ### GitHub Manage API
 Needs description.
 
@@ -267,7 +266,7 @@ Needs description.
 
 #### Properties
 
-- [OpenAPI](openapi/github-manage-openapi-original.yml)
+- [OpenAPI](openapi/github-manage-openapi.yml)
 ### GitHub Markdown API
 
 Use the REST API to render a Markdown document as an HTML page or as raw
@@ -284,7 +283,7 @@ text.
 
 #### Properties
 
-- [OpenAPI](openapi/github-markdown--openapi-original.yml)
+- [OpenAPI](openapi/github-markdown-openapi.yml)
 - [Documentation](https://docs.github.com/en/rest/markdown)
 ### GitHub Meta API
 
@@ -302,7 +301,7 @@ addresses of GitHub services.
 
 #### Properties
 
-- [OpenAPI](openapi/github-meta--openapi-original.yml)
+- [OpenAPI](openapi/github-meta-openapi.yml)
 - [Documentation](https://docs.github.com/en/rest/meta)
 ### GitHub Networks API
 Needs description.
@@ -318,7 +317,7 @@ Needs description.
 
 #### Properties
 
-- [OpenAPI](openapi/github-networks-openapi-original.yml)
+- [OpenAPI](openapi/github-networks-openapi.yml)
 ### GitHub Notifications API
 
 Use the REST API to manage GitHub notifications.
@@ -340,7 +339,7 @@ https://docs.github.com/en/rest/activity/notifications?apiVersion=2022-11-28)
 
 #### Properties
 
-- [OpenAPI](openapi/github-notifications--openapi-original.yml)
+- [OpenAPI](openapi/github-notifications-openapi.yml)
 ### GitHub Octocat API
 Needs description.
 
@@ -355,7 +354,7 @@ Needs description.
 
 #### Properties
 
-- [OpenAPI](openapi/github-octocat--openapi-original.yml)
+- [OpenAPI](openapi/github-octocat-openapi.yml)
 ### GitHub Org API
 Use the REST API to control and manage all your GitHub organizations.
 
@@ -370,7 +369,7 @@ Use the REST API to control and manage all your GitHub organizations.
 
 #### Properties
 
-- [OpenAPI](openapi/github-org-openapi-original.yml)
+- [OpenAPI](openapi/github-org-openapi.yml)
 ### GitHub Projects API
 
 Use the REST API to create, list, update, delete and customize projects
@@ -385,7 +384,7 @@ Use the REST API to create, list, update, delete and customize projects
 
 #### Properties
 
-- [OpenAPI](openapi/github-projects-openapi-original.yml)
+- [OpenAPI](openapi/github-projects-openapi.yml)
 ### GitHub Rate Limit API
 
 Learn about REST API rate limits, how to avoid exceeding them, and what to
@@ -404,7 +403,7 @@ https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?
 
 #### Properties
 
-- [OpenAPI](openapi/github-rate-limit--openapi-original.yml)
+- [OpenAPI](openapi/github-rate-limit-openapi.yml)
 ### GitHub Repos API
 
 Use the REST API to create, manage and control the workflow of public and
@@ -417,11 +416,11 @@ private GitHub repositories.
 
 #### Tags:
 
- - Enterprise, Repositories, Statistics, Accessible, Applications, Installations, Actions, Enabled, Git, Hub, Organizations, Permissions, Selected, Sets, Enable, Disable, Access, Groups, Runners, Self Hosted, Self Hosted, Self Hosted, Removes, Self Hosted, Names, Secrets, Variables, Dependabot, Locks, Migrations, Unlock, Fine, Fine Grained, Grained, Slug, Teams, Checks, Owners, Artifacts, Archive, Download, Format, Cache, Usage, Policies, Caches, (using, Keys, ID), Jobs, Runs, Workflows, Logs, Re Run, Rerun, Claim, Customizations, OIDC, Subjects, Templates, Levels, Outside, Allowed, Default, Self Hosted, Downloads, Registrations, Tokens, Self Hosted, Self Hosted, Labels, Self Hosted, Custom, Self Hosted, Self Hosted, Self Hosted, Self Hosted, Approvals, History, Reviews, Attempt, Attempts, Numbers, Cancel, Deployments, Pending, Re Run, Failed, Re Run, Public, Dispatch, Dispatches, Events, Assignees, Assigned, Assignee, If, Users, Auto Links, Auto Link, References, Branches, Branch, Protection, Administrative, Administrator, Enforce, Pull, Required, Commit, Signatures, Status, Contexts, Restrictions, Protected, Rename, Annotations, Rerequest, Suites, Preferences, Alerts, Code, Scanning, Instances, Analysis, Configurations, Setup, Data, SARIF, Uploads, About, Information, Sarif, CODEOWNERS, Code Owners, Errors, Collaborators, Is, User Names, Permission, Comments, Reactions, Commits, HEAD, Head, SHA, Associated, Pulls, Combined, Specific, Statuses, Basehead, Compare, Content, Contents, Paths, Files, Contributors, Between, Dependencies, Difference, Graphs, (SBOM), Bill, Exports, Materials, Software, Snapshots, Environments, Forks, Fork, Blobs, Objects, Matching, Tags, Trees, Hooks, Webhooks, Hook, Deliveries, Redeliver, Ping, Pings, Tests, Authenticated, Invitations, Invitation, Issues, Timeline, Deploy, Languages, LFS, Licenses, Merge, Sync, Upstream, Merges, Milestones, Notifications, Mark, Read, Pages, Servers, Sites, Builds, Build, Latest, Pre, Pre Receive, Receive, Pre Receive, Enforcement, Pre Receive, Pre Receive, Projects, Replies, Replies'', Merged, Requested, Reviewers, Dismiss, Dismissals, Submit, README, Readme, Directory, Releases, Assets, Generate, Notes, Replicas, Replication, Locations, Stargazers, Activity, Frequency, Weekly, Last, Years, Count, Participation, Cards, Days, Hourly, Punch, Subscribers, Watchers, Subscriptions, States, (tar), Targets, Topics, Replace, Transfers, Vulnerabilities, (zip), Using, Search, (Legacy), Accept, Decline
+ -  Repositories, Repos
 
 #### Properties
 
-- [OpenAPI](openapi/github-repos-openapi-original.yml)
+- [OpenAPI](properties/github-repos-api-openapi.yml)
 ### GitHub SCIM API
 
 Use the REST API to control and manage your GitHub organization members'
@@ -440,7 +439,7 @@ https://docs.github.com/en/enterprise-cloud@latest/rest/scim?apiVersion=2022-11-
 
 #### Properties
 
-- [OpenAPI](openapi/github-scim-openapi-original.yml)
+- [OpenAPI](openapi/github-scim-openapi.yml)
 ### GitHub Search API
 Use the REST API to search for specific items on GitHub.
 
@@ -455,7 +454,7 @@ Use the REST API to search for specific items on GitHub.
 
 #### Properties
 
-- [OpenAPI](openapi/github-search-openapi-original.yml)
+- [OpenAPI](properties/github-search-api-openapi.yml)
 ### GitHub Setup API
 Use the REST API to create and manage teams in your GitHub organization.
 
@@ -470,7 +469,7 @@ Use the REST API to create and manage teams in your GitHub organization.
 
 #### Properties
 
-- [OpenAPI](openapi/github-setup-openapi-original.yml)
+- [OpenAPI](openapi/github-setup-openapi.yml)
 ### GitHub Teams API
 Needs description.
 
@@ -483,7 +482,7 @@ Needs description.
 
 #### Properties
 
-- [OpenAPI](openapi/github-teams-openapi-original.yml)
+- [OpenAPI](openapi/github-teams-openapi.yml)
 ### GitHub Zen API
 Needs description.
 
@@ -494,7 +493,7 @@ Needs description.
 
 #### Properties
 
-- [OpenAPI](openapi/github-zen--openapi-original.yml)
+- [OpenAPI](openapi/github-zen-openapi.yml)
 ### GitHub User API
 
 Use the REST API to get public and private information about authenticated
@@ -507,11 +506,11 @@ users.
 
 #### Tags:
 
- - Administrative, LDAP, Mapping, User Names, Users, Sync, Authorization, Impersonation, OAuth, Tokens, Enterprise, Statistics, Access, Branch, Branches, Owners, Protected, Protection, Repositories, Restrictions, Sets, Removes, Search, Authenticated, Authenticated User, Conflicting, Conflicts, Docker, During, Migrations, Packages, Addresses, Emails, Followers, Following, Follows, People, Checks, Followed, If, Is, Person, Follow, Unfollowing, GPG, Gpg, Keys, Accessible, Applications, Installations, Accounts, Assigned, Issues, Public, SSH, Memberships, Organizations, Archive, Download, Namespaces, Names, Types, Restore, Owned, Versions, Projects, Invitations, Accept, Invitation, Decline, Social, Signing, Starred, Star, Unstar, Subscriptions, Watched, Teams, Events, Another, Targets, Gists, Contextual, Hovercard, Information, Received, Administrator, Promote, Sites, Demote, Suspend, Suspended, Unsuspend
+ - Administrative,  LDAP,  Mapping,  User Names,  Users,  Sync,  Authorization,  Impersonation,  OAuth,  Tokens,  Enterprise,  Statistics,  Access,  Branch,  Branches,  Owners,  Protected,  Protection,  Repositories,  Restrictions,  Sets,  Removes,  Search,  Authenticated,  Authenticated User,  Conflicting,  Conflicts,  Docker,  During,  Migrations,  Packages,  Addresses,  Emails,  Followers,  Following,  Follows,  People,  Checks,  Followed,  Person,  Follow,  Unfollowing,  GPG,  Gpg,  Keys,  Accessible,  Applications,  Installations,  Accounts,  Assigned,  Issues,  Public,  SSH,  Memberships,  Organizations,  Archive,  Download,  Namespaces,  Names,  Types,  Restore,  Owned,  Versions,  Projects,  Invitations,  Accept,  Invitation,  Decline,  Social,  Signing,  Starred,  Star,  Unstar,  Subscriptions,  Watched,  Teams,  Events,  Another,  Targets,  Gists,  Contextual,  Hovercard,  Information,  Received,  Administrator,  Promote,  Sites,  Demote,  Suspend,  Suspended,  Unsuspend
 
 #### Properties
 
-- [OpenAPI](openapi/github-user-openapi-original.yml)
+- [OpenAPI](properties/github-user-api-openapi.yml)
 
 ## Common Properties
 
