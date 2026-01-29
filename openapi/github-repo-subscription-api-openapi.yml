@@ -1,0 +1,284 @@
+openapi: 3.1.0
+info:
+  version: 1.1.4
+  title: github-repos-api
+  description: |-
+    Use the REST API to create, manage and control the workflow of public and
+    private GitHub repositories.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact
+servers:
+  - url: '{protocol}://{hostname}'
+    variables:
+      hostname:
+        description: Self-hosted Enterprise Server hostname
+        default: api.github.com
+      protocol:
+        description: Self-hosted Enterprise Server protocol
+        default: https
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/
+tags:
+  - name: Repositories
+    description: Source control repositories.
+paths:
+  /repos/{owner}/{repo}/subscription:
+    get:
+      summary: Get Repository Subscription
+      description: |-
+        Gets information about whether the authenticated user is subscribed to the repository.
+      tags:
+        - Get
+        - Repositories
+        - Subscriptions
+      operationId: getRepositorySubscription
+      externalDocs:
+        description: API method documentation
+        url: |-
+          https://docs.github.com/enterprise-server@3.9/rest/activity/watching#get-a-repository-subscription
+      parameters:
+        - $ref: '#/components/parameters/owner'
+        - $ref: '#/components/parameters/repo'
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+        - in: header
+          name: X-GitHub-Api-Version
+          schema:
+            type: string
+            default: '2022-11-28'
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/vnd.github+json
+      responses:
+        '200':
+          description: if you subscribe to the repository
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/repository-subscription'
+              examples:
+                response-if-you-subscribe-to-the-repository:
+                  $ref: |-
+                    #/components/examples/repository-subscription-response-if-you-subscribe-to-the-repository
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          description: Not Found if you don't subscribe to the repository
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: activity
+        subcategory: watching
+      security:
+        - bearerHttpAuthentication: []
+    put:
+      summary: Set Repository Subscription
+      description: |-
+        If you would like to watch a repository, set `subscribed` to `true`. If you would like to ignore notifications made within a repository, set `ignored` to `true`. If you would like to stop watching a repository, [delete the repository's subscription](https://docs.github.com/enterprise-server@3.9/rest/activity/watching#delete-a-repository-subscription) completely.
+      tags:
+        - Sets
+        - Repositories
+        - Subscriptions
+      operationId: setRepositorySubscription
+      externalDocs:
+        description: API method documentation
+        url: |-
+          https://docs.github.com/enterprise-server@3.9/rest/activity/watching#set-a-repository-subscription
+      parameters:
+        - $ref: '#/components/parameters/owner'
+        - $ref: '#/components/parameters/repo'
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+        - in: header
+          name: X-GitHub-Api-Version
+          schema:
+            type: string
+            default: '2022-11-28'
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/vnd.github+json
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscribed:
+                  type: boolean
+                  description: |-
+                    Determines if notifications should be received from this repository.
+                ignored:
+                  type: boolean
+                  description: |-
+                    Determines if all notifications should be blocked from this repository.
+            examples:
+              default:
+                value:
+                  subscribed: true
+                  ignored: false
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/repository-subscription'
+              examples:
+                default:
+                  $ref: '#/components/examples/repository-subscription'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: activity
+        subcategory: watching
+      security:
+        - bearerHttpAuthentication: []
+    delete:
+      summary: Delete Repository Subscription
+      description: |-
+        This endpoint should only be used to stop watching a repository. To control whether or not you wish to receive notifications from a repository, [set the repository's subscription manually](https://docs.github.com/enterprise-server@3.9/rest/activity/watching#set-a-repository-subscription).
+      tags:
+        - Delete
+        - Repositories
+        - Subscriptions
+      operationId: deleteRepositorySubscription
+      externalDocs:
+        description: API method documentation
+        url: |-
+          https://docs.github.com/enterprise-server@3.9/rest/activity/watching#delete-a-repository-subscription
+      parameters:
+        - $ref: '#/components/parameters/owner'
+        - $ref: '#/components/parameters/repo'
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+        - in: header
+          name: X-GitHub-Api-Version
+          schema:
+            type: string
+            default: '2022-11-28'
+        - in: header
+          name: Accept
+          schema:
+            type: string
+            default: application/vnd.github+json
+      responses:
+        '204':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: activity
+        subcategory: watching
+      security:
+        - bearerHttpAuthentication: []
+components:
+  schemas:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+        documentation_url:
+          type: string
+        url:
+          type: string
+        status:
+          type: string
+    repository-subscription:
+      title: Repository Invitation
+      description: Repository invitations let you manage who you collaborate with.
+      type: object
+      properties:
+        subscribed:
+          description: Determines if notifications should be received from this repository.
+          type: boolean
+          example: true
+        ignored:
+          description: |-
+            Determines if all notifications should be blocked from this repository.
+          type: boolean
+        reason:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          example: '2012-10-06T21:34:12Z'
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/example/subscription
+        repository_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/example
+      required:
+        - created_at
+        - ignored
+        - reason
+        - subscribed
+        - url
+        - repository_url
+  examples:
+    repository-subscription-response-if-you-subscribe-to-the-repository:
+      value:
+        subscribed: true
+        ignored: false
+        reason: ''
+        created_at: '2012-10-06T21:34:12Z'
+        url: https://api.github.com/repos/octocat/example/subscription
+        repository_url: https://api.github.com/repos/octocat/example
+    repository-subscription:
+      value:
+        subscribed: true
+        ignored: false
+        reason: ''
+        created_at: '2012-10-06T21:34:12Z'
+        url: https://api.github.com/repos/octocat/example/subscription
+        repository_url: https://api.github.com/repos/octocat/example
+  parameters:
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    repo:
+      name: repo
+      description: |-
+        The name of the repository without the `.git` extension. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
