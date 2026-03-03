@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/schemas/github/webhook-delivery.json",
+  "title": "GitHub Webhook Delivery",
+  "description": "A record of a webhook delivery from GitHub, including the request headers, payload, and response information.",
+  "type": "object",
+  "required": ["id", "guid", "event", "action"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The unique identifier of the webhook delivery."
+    },
+    "guid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "The globally unique identifier for the delivery (X-GitHub-Delivery header)."
+    },
+    "delivered_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the delivery was made."
+    },
+    "redelivery": {
+      "type": "boolean",
+      "description": "Whether this delivery is a redelivery of a previous delivery."
+    },
+    "duration": {
+      "type": "number",
+      "minimum": 0,
+      "description": "The time in seconds the delivery took."
+    },
+    "status": {
+      "type": "string",
+      "description": "The HTTP status description returned by the receiver."
+    },
+    "status_code": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 599,
+      "description": "The HTTP status code returned by the receiver."
+    },
+    "event": {
+      "type": "string",
+      "description": "The event type that triggered the delivery (X-GitHub-Event header)."
+    },
+    "action": {
+      "type": ["string", "null"],
+      "description": "The action within the event that triggered the delivery."
+    },
+    "installation_id": {
+      "type": ["integer", "null"],
+      "description": "The GitHub App installation ID, if applicable."
+    },
+    "repository_id": {
+      "type": ["integer", "null"],
+      "description": "The repository ID associated with the delivery."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The API URL for the delivery record."
+    },
+    "request": {
+      "$ref": "#/$defs/DeliveryRequest"
+    },
+    "response": {
+      "$ref": "#/$defs/DeliveryResponse"
+    }
+  },
+  "$defs": {
+    "DeliveryRequest": {
+      "type": "object",
+      "description": "The HTTP request that was sent to the webhook receiver.",
+      "properties": {
+        "headers": {
+          "type": "object",
+          "description": "The HTTP headers sent with the request.",
+          "properties": {
+            "X-GitHub-Hook-ID": {
+              "type": "string",
+              "description": "Unique identifier for the webhook configuration."
+            },
+            "X-GitHub-Event": {
+              "type": "string",
+              "description": "The name of the event that triggered the delivery."
+            },
+            "X-GitHub-Delivery": {
+              "type": "string",
+              "format": "uuid",
+              "description": "A GUID to uniquely identify the delivery."
+            },
+            "X-Hub-Signature-256": {
+              "type": "string",
+              "pattern": "^sha256=[0-9a-f]{64}$",
+              "description": "HMAC-SHA256 hex digest of the payload, prefixed with sha256=."
+            },
+            "X-Hub-Signature": {
+              "type": "string",
+              "pattern": "^sha1=[0-9a-f]{40}$",
+              "description": "Legacy HMAC-SHA1 hex digest of the payload, prefixed with sha1=."
+            },
+            "X-GitHub-Hook-Installation-Target-Type": {
+              "type": "string",
+              "enum": ["repository", "organization", "business", "app"],
+              "description": "The type of resource the webhook is installed on."
+            },
+            "X-GitHub-Hook-Installation-Target-ID": {
+              "type": "string",
+              "description": "The unique identifier of the resource the webhook is installed on."
+            },
+            "User-Agent": {
+              "type": "string",
+              "pattern": "^GitHub-Hookshot/",
+              "description": "The GitHub user agent string."
+            },
+            "Content-Type": {
+              "type": "string",
+              "enum": ["application/json", "application/x-www-form-urlencoded"],
+              "description": "The content type of the payload."
+            }
+          }
+        },
+        "payload": {
+          "type": "object",
+          "description": "The JSON payload that was sent."
+        }
+      }
+    },
+    "DeliveryResponse": {
+      "type": "object",
+      "description": "The HTTP response received from the webhook receiver.",
+      "properties": {
+        "headers": {
+          "type": "object",
+          "description": "The HTTP response headers.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "payload": {
+          "type": ["string", "null"],
+          "description": "The response body returned by the receiver."
+        }
+      }
+    }
+  }
+}

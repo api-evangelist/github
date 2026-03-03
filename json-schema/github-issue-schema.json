@@ -1,0 +1,332 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/schemas/github/issue.json",
+  "title": "GitHub Issue",
+  "description": "A GitHub issue used for tracking bugs, feature requests, tasks, and discussions within a repository.",
+  "type": "object",
+  "required": ["id", "number", "title", "state", "user"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The unique identifier of the issue."
+    },
+    "node_id": {
+      "type": "string",
+      "description": "The GraphQL node ID for the issue."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The API URL for the issue."
+    },
+    "html_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL of the issue on GitHub."
+    },
+    "number": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The issue number within the repository."
+    },
+    "state": {
+      "type": "string",
+      "enum": ["open", "closed"],
+      "description": "The current state of the issue."
+    },
+    "state_reason": {
+      "type": ["string", "null"],
+      "enum": ["completed", "reopened", "not_planned", null],
+      "description": "The reason the issue state was changed."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the issue.",
+      "minLength": 1
+    },
+    "body": {
+      "type": ["string", "null"],
+      "description": "The contents of the issue in Markdown format."
+    },
+    "user": {
+      "$ref": "#/$defs/SimpleUser"
+    },
+    "labels": {
+      "type": "array",
+      "description": "Labels applied to the issue.",
+      "items": {
+        "$ref": "#/$defs/Label"
+      }
+    },
+    "assignee": {
+      "oneOf": [
+        { "$ref": "#/$defs/SimpleUser" },
+        { "type": "null" }
+      ],
+      "description": "The primary user assigned to the issue."
+    },
+    "assignees": {
+      "type": "array",
+      "description": "All users assigned to the issue.",
+      "items": {
+        "$ref": "#/$defs/SimpleUser"
+      }
+    },
+    "milestone": {
+      "oneOf": [
+        { "$ref": "#/$defs/Milestone" },
+        { "type": "null" }
+      ],
+      "description": "The milestone the issue is associated with."
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "Whether the issue is locked."
+    },
+    "active_lock_reason": {
+      "type": ["string", "null"],
+      "enum": ["off-topic", "too heated", "resolved", "spam", null],
+      "description": "The reason the issue was locked."
+    },
+    "comments": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The number of comments on the issue."
+    },
+    "pull_request": {
+      "type": "object",
+      "description": "Pull request metadata if this issue is also a pull request.",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for the pull request."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the pull request on GitHub."
+        },
+        "diff_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the pull request diff."
+        },
+        "patch_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the pull request patch."
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the issue was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the issue was last updated."
+    },
+    "closed_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "The date and time the issue was closed."
+    },
+    "closed_by": {
+      "oneOf": [
+        { "$ref": "#/$defs/SimpleUser" },
+        { "type": "null" }
+      ],
+      "description": "The user who closed the issue."
+    },
+    "author_association": {
+      "type": "string",
+      "enum": ["COLLABORATOR", "CONTRIBUTOR", "FIRST_TIMER", "FIRST_TIME_CONTRIBUTOR", "MANNEQUIN", "MEMBER", "NONE", "OWNER"],
+      "description": "How the author is associated with the repository."
+    },
+    "reactions": {
+      "$ref": "#/$defs/Reactions"
+    }
+  },
+  "$defs": {
+    "SimpleUser": {
+      "type": "object",
+      "description": "A simplified representation of a GitHub user.",
+      "required": ["login", "id"],
+      "properties": {
+        "login": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier for the user."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's avatar image."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's GitHub profile."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["User", "Organization", "Bot"],
+          "description": "The type of account."
+        }
+      }
+    },
+    "Label": {
+      "type": "object",
+      "description": "A label applied to an issue or pull request.",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier of the label."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the label."
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "A description of the label."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{6}$",
+          "description": "The hex color code of the label without the # prefix."
+        },
+        "default": {
+          "type": "boolean",
+          "description": "Whether this is a default label."
+        }
+      }
+    },
+    "Milestone": {
+      "type": "object",
+      "description": "A milestone used to track progress on groups of issues and pull requests.",
+      "required": ["id", "number", "title", "state"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier of the milestone."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "number": {
+          "type": "integer",
+          "description": "The milestone number."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the milestone."
+        },
+        "description": {
+          "type": ["string", "null"],
+          "description": "A description of the milestone."
+        },
+        "state": {
+          "type": "string",
+          "enum": ["open", "closed"],
+          "description": "The state of the milestone."
+        },
+        "open_issues": {
+          "type": "integer",
+          "description": "The number of open issues in the milestone."
+        },
+        "closed_issues": {
+          "type": "integer",
+          "description": "The number of closed issues in the milestone."
+        },
+        "due_on": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "The due date of the milestone."
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the milestone was created."
+        },
+        "closed_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "When the milestone was closed."
+        }
+      }
+    },
+    "Reactions": {
+      "type": "object",
+      "description": "Reaction counts for the issue.",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API URL for the reactions."
+        },
+        "total_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of reactions."
+        },
+        "+1": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of thumbs up reactions."
+        },
+        "-1": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of thumbs down reactions."
+        },
+        "laugh": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of laugh reactions."
+        },
+        "hooray": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of hooray reactions."
+        },
+        "confused": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of confused reactions."
+        },
+        "heart": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of heart reactions."
+        },
+        "rocket": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of rocket reactions."
+        },
+        "eyes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of eyes reactions."
+        }
+      }
+    }
+  }
+}

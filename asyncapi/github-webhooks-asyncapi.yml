@@ -1,0 +1,968 @@
+asyncapi: 2.6.0
+info:
+  title: GitHub Webhooks
+  description: >-
+    GitHub Webhooks deliver HTTP POST payloads to a configured URL whenever
+    specified events occur on GitHub, such as pushes, pull requests, issues,
+    releases, and more. Webhooks can be configured at the repository,
+    organization, or GitHub App level. Each delivery includes headers for
+    event identification, delivery tracking, and HMAC signature verification.
+  version: '2022-11-28'
+  contact:
+    name: GitHub Support
+    url: https://support.github.com/
+  license:
+    name: GitHub Terms of Service
+    url: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service
+  externalDocs:
+    description: GitHub Webhooks Documentation
+    url: https://docs.github.com/en/webhooks
+servers:
+  webhook-receiver:
+    url: '{webhookUrl}'
+    protocol: https
+    description: >-
+      Your webhook receiver endpoint. GitHub sends POST requests to this URL
+      when subscribed events occur.
+    variables:
+      webhookUrl:
+        description: The URL configured to receive webhook deliveries.
+    security:
+      - hmacSignature: []
+channels:
+  /webhook:
+    description: >-
+      The endpoint that receives all GitHub webhook event deliveries. The
+      specific event type is identified by the X-GitHub-Event header.
+    publish:
+      operationId: receiveWebhookEvent
+      summary: Receive a GitHub webhook event
+      description: >-
+        GitHub delivers webhook events as HTTP POST requests with JSON payloads.
+        Each delivery includes identifying headers and an HMAC signature for
+        verification. The maximum payload size is 25 MB.
+      bindings:
+        http:
+          type: request
+          method: POST
+          headers:
+            type: object
+            properties:
+              X-GitHub-Event:
+                type: string
+                description: The name of the event that triggered the delivery.
+              X-GitHub-Delivery:
+                type: string
+                format: uuid
+                description: A GUID to uniquely identify the delivery.
+              X-GitHub-Hook-ID:
+                type: string
+                description: Unique identifier for the webhook configuration.
+              X-Hub-Signature-256:
+                type: string
+                description: >-
+                  HMAC-SHA256 hex digest of the payload body, prefixed with
+                  sha256=. Used for verifying payload authenticity.
+              X-GitHub-Hook-Installation-Target-Type:
+                type: string
+                enum:
+                  - repository
+                  - organization
+                  - business
+                  - app
+                description: The type of resource the webhook is installed on.
+              X-GitHub-Hook-Installation-Target-ID:
+                type: string
+                description: The unique identifier of the resource the webhook is installed on.
+              User-Agent:
+                type: string
+                description: Always prefixed with GitHub-Hookshot/.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/push'
+          - $ref: '#/components/messages/pull_request'
+          - $ref: '#/components/messages/issues'
+          - $ref: '#/components/messages/issue_comment'
+          - $ref: '#/components/messages/create'
+          - $ref: '#/components/messages/delete'
+          - $ref: '#/components/messages/release'
+          - $ref: '#/components/messages/fork'
+          - $ref: '#/components/messages/watch'
+          - $ref: '#/components/messages/star'
+          - $ref: '#/components/messages/check_run'
+          - $ref: '#/components/messages/check_suite'
+          - $ref: '#/components/messages/commit_comment'
+          - $ref: '#/components/messages/deployment'
+          - $ref: '#/components/messages/deployment_status'
+          - $ref: '#/components/messages/discussion'
+          - $ref: '#/components/messages/discussion_comment'
+          - $ref: '#/components/messages/workflow_run'
+          - $ref: '#/components/messages/workflow_job'
+          - $ref: '#/components/messages/workflow_dispatch'
+          - $ref: '#/components/messages/repository'
+          - $ref: '#/components/messages/repository_dispatch'
+          - $ref: '#/components/messages/pull_request_review'
+          - $ref: '#/components/messages/pull_request_review_comment'
+          - $ref: '#/components/messages/pull_request_review_thread'
+          - $ref: '#/components/messages/code_scanning_alert'
+          - $ref: '#/components/messages/dependabot_alert'
+          - $ref: '#/components/messages/secret_scanning_alert'
+          - $ref: '#/components/messages/security_advisory'
+          - $ref: '#/components/messages/branch_protection_rule'
+          - $ref: '#/components/messages/branch_protection_configuration'
+          - $ref: '#/components/messages/member'
+          - $ref: '#/components/messages/membership'
+          - $ref: '#/components/messages/organization'
+          - $ref: '#/components/messages/team'
+          - $ref: '#/components/messages/team_add'
+          - $ref: '#/components/messages/label'
+          - $ref: '#/components/messages/milestone'
+          - $ref: '#/components/messages/project_card'
+          - $ref: '#/components/messages/project'
+          - $ref: '#/components/messages/project_column'
+          - $ref: '#/components/messages/projects_v2'
+          - $ref: '#/components/messages/projects_v2_item'
+          - $ref: '#/components/messages/page_build'
+          - $ref: '#/components/messages/package'
+          - $ref: '#/components/messages/public'
+          - $ref: '#/components/messages/gollum'
+          - $ref: '#/components/messages/installation'
+          - $ref: '#/components/messages/installation_repositories'
+          - $ref: '#/components/messages/github_app_authorization'
+          - $ref: '#/components/messages/marketplace_purchase'
+          - $ref: '#/components/messages/merge_group'
+          - $ref: '#/components/messages/meta'
+          - $ref: '#/components/messages/org_block'
+          - $ref: '#/components/messages/ping'
+          - $ref: '#/components/messages/deploy_key'
+          - $ref: '#/components/messages/deployment_protection_rule'
+          - $ref: '#/components/messages/deployment_review'
+          - $ref: '#/components/messages/status'
+          - $ref: '#/components/messages/sponsorship'
+          - $ref: '#/components/messages/repository_advisory'
+          - $ref: '#/components/messages/repository_ruleset'
+          - $ref: '#/components/messages/repository_vulnerability_alert'
+          - $ref: '#/components/messages/personal_access_token_request'
+          - $ref: '#/components/messages/custom_property'
+          - $ref: '#/components/messages/custom_property_values'
+          - $ref: '#/components/messages/security_and_analysis'
+          - $ref: '#/components/messages/secret_scanning_alert_location'
+          - $ref: '#/components/messages/sub_issues'
+          - $ref: '#/components/messages/repository_import'
+          - $ref: '#/components/messages/registry_package'
+          - $ref: '#/components/messages/installation_target'
+          - $ref: '#/components/messages/projects_v2_status_update'
+          - $ref: '#/components/messages/issue_dependencies'
+          - $ref: '#/components/messages/secret_scanning_scan'
+components:
+  securitySchemes:
+    hmacSignature:
+      type: httpApiKey
+      name: X-Hub-Signature-256
+      in: header
+      description: >-
+        HMAC-SHA256 signature of the payload using the webhook secret. The value
+        is prefixed with sha256=. Use constant-time comparison to validate.
+  messages:
+    push:
+      name: push
+      title: Push Event
+      summary: Commits pushed to a repository branch or tag.
+      description: >-
+        Triggered when one or more commits are pushed to a repository branch or
+        tag. This is one of the most common webhook events and includes details
+        about all commits in the push.
+      payload:
+        $ref: '#/components/schemas/PushEvent'
+    pull_request:
+      name: pull_request
+      title: Pull Request Event
+      summary: Pull request opened, closed, merged, or updated.
+      description: >-
+        Triggered when a pull request is assigned, auto-merge enabled/disabled,
+        closed, converted to draft, demilestoned, dequeued, edited, enqueued,
+        labeled, locked, milestoned, opened, ready for review, reopened,
+        review requested, review request removed, synchronized, unassigned,
+        unlabeled, or unlocked.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    issues:
+      name: issues
+      title: Issues Event
+      summary: Issue opened, edited, closed, or updated.
+      description: >-
+        Triggered when an issue is opened, edited, deleted, pinned, unpinned,
+        closed, reopened, assigned, unassigned, labeled, unlabeled, locked,
+        unlocked, transferred, milestoned, or demilestoned.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    issue_comment:
+      name: issue_comment
+      title: Issue Comment Event
+      summary: Comment on issue or pull request created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    create:
+      name: create
+      title: Create Event
+      summary: Branch or tag created.
+      description: >-
+        Triggered when a Git branch or tag is created. This event does not
+        include an action property.
+      payload:
+        $ref: '#/components/schemas/RefEvent'
+    delete:
+      name: delete
+      title: Delete Event
+      summary: Branch or tag deleted.
+      description: >-
+        Triggered when a Git branch or tag is deleted. This event does not
+        include an action property.
+      payload:
+        $ref: '#/components/schemas/RefEvent'
+    release:
+      name: release
+      title: Release Event
+      summary: Release created, published, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    fork:
+      name: fork
+      title: Fork Event
+      summary: Repository forked.
+      description: >-
+        Triggered when a user forks a repository. This event does not include
+        an action property.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    watch:
+      name: watch
+      title: Watch Event
+      summary: User starred a repository (legacy naming).
+      description: >-
+        Triggered when someone stars a repository. This is a legacy event name
+        that fires on star activity. The star event was added later as the
+        correctly named equivalent.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    star:
+      name: star
+      title: Star Event
+      summary: Repository starred or unstarred.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    check_run:
+      name: check_run
+      title: Check Run Event
+      summary: Check run created, completed, or rerequested.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    check_suite:
+      name: check_suite
+      title: Check Suite Event
+      summary: Check suite completed, requested, or rerequested.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    commit_comment:
+      name: commit_comment
+      title: Commit Comment Event
+      summary: Commit comment created.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    deployment:
+      name: deployment
+      title: Deployment Event
+      summary: Deployment created.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    deployment_status:
+      name: deployment_status
+      title: Deployment Status Event
+      summary: Deployment status updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    discussion:
+      name: discussion
+      title: Discussion Event
+      summary: Discussion created, edited, answered, or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    discussion_comment:
+      name: discussion_comment
+      title: Discussion Comment Event
+      summary: Discussion comment created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    workflow_run:
+      name: workflow_run
+      title: Workflow Run Event
+      summary: Workflow run requested, completed, or in progress.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    workflow_job:
+      name: workflow_job
+      title: Workflow Job Event
+      summary: Workflow job queued, in progress, completed, or waiting.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    workflow_dispatch:
+      name: workflow_dispatch
+      title: Workflow Dispatch Event
+      summary: Workflow manually triggered.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    repository:
+      name: repository
+      title: Repository Event
+      summary: Repository created, deleted, archived, or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    repository_dispatch:
+      name: repository_dispatch
+      title: Repository Dispatch Event
+      summary: Custom event triggered via the API.
+      description: >-
+        Triggered by a POST to the repository dispatch endpoint, allowing
+        external systems to trigger GitHub Actions workflows with custom
+        event payloads.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    pull_request_review:
+      name: pull_request_review
+      title: Pull Request Review Event
+      summary: Pull request review submitted, edited, or dismissed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    pull_request_review_comment:
+      name: pull_request_review_comment
+      title: Pull Request Review Comment Event
+      summary: Pull request review comment created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    pull_request_review_thread:
+      name: pull_request_review_thread
+      title: Pull Request Review Thread Event
+      summary: Pull request review thread resolved or unresolved.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    code_scanning_alert:
+      name: code_scanning_alert
+      title: Code Scanning Alert Event
+      summary: Code scanning alert created, fixed, or appeared in branch.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    dependabot_alert:
+      name: dependabot_alert
+      title: Dependabot Alert Event
+      summary: Dependabot alert activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    secret_scanning_alert:
+      name: secret_scanning_alert
+      title: Secret Scanning Alert Event
+      summary: Secret scanning alert created, resolved, or reopened.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    security_advisory:
+      name: security_advisory
+      title: Security Advisory Event
+      summary: Security advisory published, updated, or withdrawn.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    branch_protection_rule:
+      name: branch_protection_rule
+      title: Branch Protection Rule Event
+      summary: Branch protection rule created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    branch_protection_configuration:
+      name: branch_protection_configuration
+      title: Branch Protection Configuration Event
+      summary: Branch protection configuration enabled or disabled.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    member:
+      name: member
+      title: Member Event
+      summary: Collaborator added, removed, or permissions edited.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    membership:
+      name: membership
+      title: Membership Event
+      summary: Team membership added or removed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    organization:
+      name: organization
+      title: Organization Event
+      summary: Organization membership changes.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    team:
+      name: team
+      title: Team Event
+      summary: Team created, deleted, edited, or child team changes.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    team_add:
+      name: team_add
+      title: Team Add Event
+      summary: Repository added to a team.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    label:
+      name: label
+      title: Label Event
+      summary: Label created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    milestone:
+      name: milestone
+      title: Milestone Event
+      summary: Milestone created, closed, opened, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    project_card:
+      name: project_card
+      title: Project Card Event
+      summary: Project (classic) card activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    project:
+      name: project
+      title: Project Event
+      summary: Project (classic) created, edited, closed, or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    project_column:
+      name: project_column
+      title: Project Column Event
+      summary: Project (classic) column activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    projects_v2:
+      name: projects_v2
+      title: Projects V2 Event
+      summary: Projects v2 created, edited, closed, or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    projects_v2_item:
+      name: projects_v2_item
+      title: Projects V2 Item Event
+      summary: Projects v2 item activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    page_build:
+      name: page_build
+      title: Page Build Event
+      summary: GitHub Pages build attempted.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    package:
+      name: package
+      title: Package Event
+      summary: GitHub Package published or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    public:
+      name: public
+      title: Public Event
+      summary: Private repository made public.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    gollum:
+      name: gollum
+      title: Wiki Event
+      summary: Wiki page created or updated.
+      description: >-
+        Triggered when a wiki page is created or updated. The event name gollum
+        is a long-standing GitHub tradition derived from the Lord of the Rings
+        character.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    installation:
+      name: installation
+      title: Installation Event
+      summary: GitHub App installed, uninstalled, or permissions changed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    installation_repositories:
+      name: installation_repositories
+      title: Installation Repositories Event
+      summary: Repositories added or removed from GitHub App installation.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    github_app_authorization:
+      name: github_app_authorization
+      title: GitHub App Authorization Event
+      summary: GitHub App authorization revoked.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    marketplace_purchase:
+      name: marketplace_purchase
+      title: Marketplace Purchase Event
+      summary: GitHub Marketplace purchase activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    merge_group:
+      name: merge_group
+      title: Merge Group Event
+      summary: Merge group checks requested or destroyed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    meta:
+      name: meta
+      title: Meta Event
+      summary: The webhook itself is deleted.
+      description: >-
+        Triggered when the webhook configuration that is receiving this event
+        is deleted. This allows the receiver to clean up any state associated
+        with the webhook.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    org_block:
+      name: org_block
+      title: Organization Block Event
+      summary: Organization blocked or unblocked a user.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    ping:
+      name: ping
+      title: Ping Event
+      summary: Test event sent when a webhook is first created.
+      description: >-
+        Sent when a new webhook is created to verify the endpoint is reachable.
+        This is a connectivity test and is not subscribable as a regular event.
+      payload:
+        $ref: '#/components/schemas/PingEvent'
+    deploy_key:
+      name: deploy_key
+      title: Deploy Key Event
+      summary: Deploy key created or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    deployment_protection_rule:
+      name: deployment_protection_rule
+      title: Deployment Protection Rule Event
+      summary: Deployment protection rule requested.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    deployment_review:
+      name: deployment_review
+      title: Deployment Review Event
+      summary: Deployment review approved, rejected, or requested.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    status:
+      name: status
+      title: Status Event
+      summary: Commit status updated.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    sponsorship:
+      name: sponsorship
+      title: Sponsorship Event
+      summary: Sponsorship created, edited, tier changed, or cancelled.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    repository_advisory:
+      name: repository_advisory
+      title: Repository Advisory Event
+      summary: Repository security advisory published or reported.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    repository_ruleset:
+      name: repository_ruleset
+      title: Repository Ruleset Event
+      summary: Repository ruleset created, edited, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    repository_vulnerability_alert:
+      name: repository_vulnerability_alert
+      title: Repository Vulnerability Alert Event
+      summary: Vulnerability alert created, dismissed, or resolved.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    personal_access_token_request:
+      name: personal_access_token_request
+      title: Personal Access Token Request Event
+      summary: Fine-grained PAT request created, approved, or denied.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    custom_property:
+      name: custom_property
+      title: Custom Property Event
+      summary: Custom property created, updated, or deleted.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    custom_property_values:
+      name: custom_property_values
+      title: Custom Property Values Event
+      summary: Custom property values changed for a repository.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    security_and_analysis:
+      name: security_and_analysis
+      title: Security and Analysis Event
+      summary: Code security or analysis features enabled or disabled.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    secret_scanning_alert_location:
+      name: secret_scanning_alert_location
+      title: Secret Scanning Alert Location Event
+      summary: Secret scanning alert location detected.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    sub_issues:
+      name: sub_issues
+      title: Sub Issues Event
+      summary: Sub-issue added or removed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    repository_import:
+      name: repository_import
+      title: Repository Import Event
+      summary: Repository import activity.
+      payload:
+        $ref: '#/components/schemas/BaseEvent'
+    registry_package:
+      name: registry_package
+      title: Registry Package Event
+      summary: Registry package published or updated.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    installation_target:
+      name: installation_target
+      title: Installation Target Event
+      summary: Installation target renamed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    projects_v2_status_update:
+      name: projects_v2_status_update
+      title: Projects V2 Status Update Event
+      summary: Projects v2 status update activity.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    issue_dependencies:
+      name: issue_dependencies
+      title: Issue Dependencies Event
+      summary: Issue dependency added or removed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+    secret_scanning_scan:
+      name: secret_scanning_scan
+      title: Secret Scanning Scan Event
+      summary: Secret scanning scan completed.
+      payload:
+        $ref: '#/components/schemas/ActionEvent'
+  schemas:
+    BaseEvent:
+      type: object
+      description: >-
+        Common properties shared by all GitHub webhook event payloads.
+      properties:
+        sender:
+          $ref: '#/components/schemas/User'
+        repository:
+          $ref: '#/components/schemas/Repository'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        enterprise:
+          type: object
+          description: The enterprise account, present for enterprise-level events.
+        installation:
+          type: object
+          description: >-
+            The GitHub App installation, present when the delivery is to a
+            GitHub App.
+          properties:
+            id:
+              type: integer
+              description: The installation ID.
+            node_id:
+              type: string
+              description: The node ID for the installation.
+    ActionEvent:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          properties:
+            action:
+              type: string
+              description: >-
+                The action that was performed. This is the primary discriminator
+                for determining what happened within an event type.
+    PushEvent:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - ref
+            - commits
+          properties:
+            ref:
+              type: string
+              description: >-
+                The full git ref that was pushed, e.g. refs/heads/main or
+                refs/tags/v1.0.
+            before:
+              type: string
+              description: The SHA of the most recent commit before the push.
+            after:
+              type: string
+              description: The SHA of the most recent commit after the push.
+            created:
+              type: boolean
+              description: Whether this push created the ref.
+            deleted:
+              type: boolean
+              description: Whether this push deleted the ref.
+            forced:
+              type: boolean
+              description: Whether this was a force push.
+            head_commit:
+              $ref: '#/components/schemas/Commit'
+            commits:
+              type: array
+              description: The list of pushed commits.
+              items:
+                $ref: '#/components/schemas/Commit'
+            compare:
+              type: string
+              format: uri
+              description: URL comparing the before and after commits.
+            pusher:
+              type: object
+              description: The user who pushed the commits.
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+    RefEvent:
+      allOf:
+        - $ref: '#/components/schemas/BaseEvent'
+        - type: object
+          required:
+            - ref
+            - ref_type
+          properties:
+            ref:
+              type: string
+              description: The git ref name (branch or tag name).
+            ref_type:
+              type: string
+              enum:
+                - branch
+                - tag
+              description: The type of git ref object created or deleted.
+            master_branch:
+              type: string
+              description: The name of the repository's default branch.
+            description:
+              type: string
+              description: The repository description.
+    PingEvent:
+      type: object
+      description: >-
+        Sent when a webhook is first created to verify the endpoint is reachable.
+      properties:
+        zen:
+          type: string
+          description: A random string from the Zen of GitHub.
+        hook_id:
+          type: integer
+          description: The ID of the webhook that triggered the ping.
+        hook:
+          type: object
+          description: The webhook configuration.
+          properties:
+            type:
+              type: string
+            id:
+              type: integer
+            name:
+              type: string
+            active:
+              type: boolean
+            events:
+              type: array
+              items:
+                type: string
+            config:
+              type: object
+              properties:
+                content_type:
+                  type: string
+                url:
+                  type: string
+                  format: uri
+                insecure_ssl:
+                  type: string
+        sender:
+          $ref: '#/components/schemas/User'
+        repository:
+          $ref: '#/components/schemas/Repository'
+    User:
+      type: object
+      description: A GitHub user account.
+      properties:
+        login:
+          type: string
+          description: The username of the user.
+        id:
+          type: integer
+          description: The unique identifier for the user.
+        node_id:
+          type: string
+          description: The node ID for GraphQL.
+        avatar_url:
+          type: string
+          format: uri
+          description: URL to the user's avatar image.
+        html_url:
+          type: string
+          format: uri
+          description: URL to the user's GitHub profile.
+        type:
+          type: string
+          enum:
+            - User
+            - Organization
+            - Bot
+          description: The type of account.
+        site_admin:
+          type: boolean
+          description: Whether the user is a GitHub site administrator.
+    Repository:
+      type: object
+      description: A GitHub repository.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier for the repository.
+        node_id:
+          type: string
+          description: The node ID for GraphQL.
+        name:
+          type: string
+          description: The name of the repository.
+        full_name:
+          type: string
+          description: The full name of the repository (owner/name).
+        private:
+          type: boolean
+          description: Whether the repository is private.
+        owner:
+          $ref: '#/components/schemas/User'
+        html_url:
+          type: string
+          format: uri
+          description: URL to the repository on GitHub.
+        description:
+          type: string
+          description: The repository description.
+        fork:
+          type: boolean
+          description: Whether the repository is a fork.
+        url:
+          type: string
+          format: uri
+          description: API URL for the repository.
+        default_branch:
+          type: string
+          description: The default branch of the repository.
+        visibility:
+          type: string
+          enum:
+            - public
+            - private
+            - internal
+          description: The visibility of the repository.
+    Organization:
+      type: object
+      description: A GitHub organization.
+      properties:
+        login:
+          type: string
+          description: The organization's login name.
+        id:
+          type: integer
+          description: The unique identifier for the organization.
+        node_id:
+          type: string
+          description: The node ID for GraphQL.
+        url:
+          type: string
+          format: uri
+          description: API URL for the organization.
+        avatar_url:
+          type: string
+          format: uri
+          description: URL to the organization's avatar image.
+        description:
+          type: string
+          description: The organization's description.
+    Commit:
+      type: object
+      description: A Git commit included in a push event.
+      properties:
+        id:
+          type: string
+          description: The SHA of the commit.
+        tree_id:
+          type: string
+          description: The SHA of the commit's tree.
+        distinct:
+          type: boolean
+          description: Whether this commit is distinct from any previously pushed.
+        message:
+          type: string
+          description: The commit message.
+        timestamp:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp of the commit.
+        url:
+          type: string
+          format: uri
+          description: URL to the commit on GitHub.
+        author:
+          type: object
+          description: The author of the commit.
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            username:
+              type: string
+        committer:
+          type: object
+          description: The committer of the commit.
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            username:
+              type: string
+        added:
+          type: array
+          description: Files added in the commit.
+          items:
+            type: string
+        removed:
+          type: array
+          description: Files removed in the commit.
+          items:
+            type: string
+        modified:
+          type: array
+          description: Files modified in the commit.
+          items:
+            type: string

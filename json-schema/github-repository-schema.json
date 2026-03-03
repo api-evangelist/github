@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/schemas/github/repository.json",
+  "title": "GitHub Repository",
+  "description": "A GitHub repository containing source code, issues, pull requests, and other project resources.",
+  "type": "object",
+  "required": ["id", "name", "full_name", "owner"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "The unique identifier of the repository."
+    },
+    "node_id": {
+      "type": "string",
+      "description": "The GraphQL node ID for the repository."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the repository without the owner prefix.",
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "full_name": {
+      "type": "string",
+      "description": "The full name of the repository in owner/name format.",
+      "pattern": "^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$"
+    },
+    "owner": {
+      "$ref": "#/$defs/SimpleUser"
+    },
+    "private": {
+      "type": "boolean",
+      "description": "Whether the repository is private."
+    },
+    "html_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL of the repository on GitHub."
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "A short description of the repository.",
+      "maxLength": 350
+    },
+    "fork": {
+      "type": "boolean",
+      "description": "Whether the repository is a fork of another repository."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The API URL for the repository."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the repository was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the repository was last updated."
+    },
+    "pushed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time of the last push to the repository."
+    },
+    "homepage": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "The URL of the repository's homepage."
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The size of the repository in kilobytes."
+    },
+    "stargazers_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The number of stars the repository has received."
+    },
+    "watchers_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The number of watchers on the repository."
+    },
+    "language": {
+      "type": ["string", "null"],
+      "description": "The primary programming language of the repository."
+    },
+    "forks_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The number of forks of the repository."
+    },
+    "open_issues_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The number of open issues in the repository."
+    },
+    "default_branch": {
+      "type": "string",
+      "description": "The default branch of the repository."
+    },
+    "visibility": {
+      "type": "string",
+      "enum": ["public", "private", "internal"],
+      "description": "The visibility level of the repository."
+    },
+    "topics": {
+      "type": "array",
+      "description": "The topics (tags) associated with the repository.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "has_issues": {
+      "type": "boolean",
+      "description": "Whether the repository has issues enabled."
+    },
+    "has_projects": {
+      "type": "boolean",
+      "description": "Whether the repository has projects enabled."
+    },
+    "has_wiki": {
+      "type": "boolean",
+      "description": "Whether the repository has the wiki enabled."
+    },
+    "has_pages": {
+      "type": "boolean",
+      "description": "Whether the repository has GitHub Pages enabled."
+    },
+    "has_downloads": {
+      "type": "boolean",
+      "description": "Whether the repository has downloads enabled."
+    },
+    "has_discussions": {
+      "type": "boolean",
+      "description": "Whether the repository has discussions enabled."
+    },
+    "archived": {
+      "type": "boolean",
+      "description": "Whether the repository is archived and read-only."
+    },
+    "disabled": {
+      "type": "boolean",
+      "description": "Whether the repository is disabled."
+    },
+    "is_template": {
+      "type": "boolean",
+      "description": "Whether the repository is a template repository."
+    },
+    "allow_forking": {
+      "type": "boolean",
+      "description": "Whether forking is allowed on the repository."
+    },
+    "license": {
+      "$ref": "#/$defs/License"
+    },
+    "permissions": {
+      "$ref": "#/$defs/Permissions"
+    }
+  },
+  "$defs": {
+    "SimpleUser": {
+      "type": "object",
+      "description": "A simplified representation of a GitHub user.",
+      "required": ["login", "id"],
+      "properties": {
+        "login": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier for the user."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's avatar image."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's GitHub profile."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["User", "Organization", "Bot"],
+          "description": "The type of account."
+        },
+        "site_admin": {
+          "type": "boolean",
+          "description": "Whether the user is a GitHub site administrator."
+        }
+      }
+    },
+    "License": {
+      "type": ["object", "null"],
+      "description": "The license associated with the repository.",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "The SPDX license key."
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the license."
+        },
+        "spdx_id": {
+          "type": ["string", "null"],
+          "description": "The SPDX identifier for the license."
+        },
+        "url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "URL to the license on api.github.com."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        }
+      }
+    },
+    "Permissions": {
+      "type": "object",
+      "description": "The permissions the authenticated user has on the repository.",
+      "properties": {
+        "admin": {
+          "type": "boolean",
+          "description": "Whether the user has admin access."
+        },
+        "maintain": {
+          "type": "boolean",
+          "description": "Whether the user has maintain access."
+        },
+        "push": {
+          "type": "boolean",
+          "description": "Whether the user has push (write) access."
+        },
+        "triage": {
+          "type": "boolean",
+          "description": "Whether the user has triage access."
+        },
+        "pull": {
+          "type": "boolean",
+          "description": "Whether the user has pull (read) access."
+        }
+      }
+    }
+  }
+}
