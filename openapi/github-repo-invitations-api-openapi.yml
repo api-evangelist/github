@@ -25,8 +25,13 @@ externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
+  - name: Delete
+  - name: Invitation
+  - name: Invitations
+  - name: Lists
   - name: Repositories
     description: Source control repositories.
+  - name: Update
 paths:
   /repos/{owner}/{repo}/invitations:
     get:
@@ -34,9 +39,9 @@ paths:
       description: |-
         When authenticating as a user with admin rights to a repository, this endpoint will list all currently open repository invitations.
       tags:
+        - Invitations
         - Lists
         - Repositories
-        - Invitations
       operationId: listRepositoryInvitations
       externalDocs:
         description: API method documentation
@@ -91,9 +96,9 @@ paths:
       description: |-
         This API endpoint allows you to update an existing repository invitation by modifying its permissions level. You must authenticate as a repository owner or administrator and provide the invitation ID in the URL path. The PATCH request accepts a JSON body with a 'permissions' field that can be set to 'read', 'write', 'maintain', 'triage', or 'admin' to change the access level being offered to the invited user. Upon successful execution, it returns the updated invitation object containing details such as the invitation ID, invitee information, permissions level, and creation timestamp. This is useful when you need to adjust the access rights of a pending invitation before it has been accepted by the recipient.
       tags:
-        - Update
-        - Repositories
         - Invitation
+        - Repositories
+        - Update
       operationId: updateRepositoryInvitation
       externalDocs:
         description: API method documentation
@@ -162,8 +167,8 @@ paths:
         This API operation allows a repository owner or administrator to delete a pending invitation to collaborate on a repository. By sending a DELETE request to the endpoint with the repository owner's username, repository name, and the specific invitation ID, the invitation is permanently removed and the invited user will no longer be able to accept it. This is useful for revoking invitations that were sent in error, are no longer needed, or when access requirements have changed before the invitation was accepted.
       tags:
         - Delete
-        - Repositories
         - Invitation
+        - Repositories
       operationId: deleteRepositoryInvitation
       externalDocs:
         description: API method documentation
