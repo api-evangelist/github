@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/refs/heads/main/json-structure/github-scim-group-response-structure.json",
+  "name": "group-response",
+  "description": "group-response from GitHub API",
+  "type": "object",
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "The URIs that are used to indicate the namespaces of the SCIM schemas.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "urn:ietf:params:scim:schemas:core:2.0:Group",
+          "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+        ]
+      },
+      "example": [
+        "urn:ietf:params:scim:schemas:core:2.0:Group"
+      ]
+    },
+    "externalId": {
+      "type": "string",
+      "description": "A unique identifier for the resource as defined by the provisioning client.",
+      "example": "8aa1a0c0-c4c3-4bc0-b4a5-2ef676900159",
+      "nullable": true
+    },
+    "displayName": {
+      "type": "string",
+      "description": "A human-readable name for a security group.",
+      "example": "Engineering",
+      "nullable": true
+    },
+    "members": {
+      "type": "array",
+      "description": "The group members.",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "$ref"
+        ],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "The local unique identifier for the member",
+            "example": "23a35c27-23d3-4c03-b4c5-6443c09e7173"
+          },
+          "$ref": {
+            "type": "string"
+          },
+          "display": {
+            "type": "string",
+            "description": "The display name associated with the member",
+            "example": "Monalisa Octocat"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "schemas"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/refs/heads/main/json-schema/github-networks-event-schema.json",
+  "title": "event",
+  "description": "Event",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "example": "12345678"
+    },
+    "type": {
+      "type": "string",
+      "nullable": true,
+      "example": "User"
+    },
+    "actor": {
+      "$ref": "#/components/schemas/actor"
+    },
+    "repo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "url"
+      ]
+    },
+    "org": {
+      "$ref": "#/components/schemas/actor"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "issue": {
+          "$ref": "#/components/schemas/issue"
+        },
+        "comment": {
+          "$ref": "#/components/schemas/issue-comment"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "page_name": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string",
+                "nullable": true
+              },
+              "action": {
+                "type": "string"
+              },
+              "sha": {
+                "type": "string"
+              },
+              "html_url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "public": {
+      "type": "boolean",
+      "example": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true,
+      "example": "2026-04-17T12:00:00Z"
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "actor",
+    "repo",
+    "payload",
+    "public",
+    "created_at"
+  ]
+}

@@ -1,350 +1,1920 @@
 {
   "@context": {
     "@version": 1.1,
-    "github": "https://docs.github.com/ns/",
+    "gh": "https://docs.github.com/schema/",
     "schema": "https://schema.org/",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
-    "dcterms": "http://purl.org/dc/terms/",
-
-    "Repository": {
-      "@id": "github:Repository",
-      "@context": {
-        "name": "schema:name",
-        "full_name": "github:fullName",
-        "description": "schema:description",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "url": {
-          "@id": "github:apiUrl",
-          "@type": "@id"
-        },
-        "homepage": {
-          "@id": "schema:mainEntityOfPage",
-          "@type": "@id"
-        },
-        "owner": {
-          "@id": "schema:maintainer",
-          "@type": "@id"
-        },
-        "language": "schema:programmingLanguage",
-        "topics": {
-          "@id": "schema:keywords",
-          "@container": "@set"
-        },
-        "license": "schema:license",
-        "private": "github:isPrivate",
-        "fork": "github:isFork",
-        "archived": "github:isArchived",
-        "disabled": "github:isDisabled",
-        "is_template": "github:isTemplate",
-        "visibility": "github:visibility",
-        "default_branch": "github:defaultBranch",
-        "stargazers_count": "github:stargazersCount",
-        "watchers_count": "github:watchersCount",
-        "forks_count": "github:forksCount",
-        "open_issues_count": "github:openIssuesCount",
-        "size": "schema:contentSize",
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "updated_at": {
-          "@id": "dcterms:modified",
-          "@type": "xsd:dateTime"
-        },
-        "pushed_at": {
-          "@id": "github:pushedAt",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "GitHub Commit": "gh:GitHub Commit",
+    "GitHub Issue": "gh:GitHub Issue",
+    "GitHub Organization": "gh:GitHub Organization",
+    "GitHub Pull Request": "gh:GitHub Pull Request",
+    "GitHub Repository": "gh:GitHub Repository",
+    "GitHub User": "gh:GitHub User",
+    "GitHub Webhook Delivery": "gh:GitHub Webhook Delivery",
+    "api-overview": "gh:api-overview",
+    "app-permissions": "gh:app-permissions",
+    "application-grant": "gh:application-grant",
+    "authorization": "gh:authorization",
+    "autolink": "gh:autolink",
+    "base-gist": "gh:base-gist",
+    "basic-error": "gh:basic-error",
+    "code-of-conduct": "gh:code-of-conduct",
+    "collaborator": "gh:collaborator",
+    "configuration-status": "gh:configuration-status",
+    "enterprise": {
+      "@id": "gh:enterprise",
+      "@type": "xsd:string"
     },
-
-    "User": {
-      "@id": "github:User",
-      "@context": {
-        "login": "schema:alternateName",
-        "name": "schema:name",
-        "email": "schema:email",
-        "bio": "schema:description",
-        "company": "schema:worksFor",
-        "location": "schema:homeLocation",
-        "blog": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "html_url": {
-          "@id": "schema:mainEntityOfPage",
-          "@type": "@id"
-        },
-        "avatar_url": {
-          "@id": "schema:image",
-          "@type": "@id"
-        },
-        "twitter_username": "github:twitterUsername",
-        "hireable": "github:isHireable",
-        "public_repos": "github:publicReposCount",
-        "public_gists": "github:publicGistsCount",
-        "followers": "schema:follows",
-        "following": "github:followingCount",
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "updated_at": {
-          "@id": "dcterms:modified",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "enterprise-settings": "gh:enterprise-settings",
+    "event": {
+      "@id": "gh:event",
+      "@type": "xsd:string"
     },
-
-    "Organization": {
-      "@id": "github:Organization",
-      "@context": {
-        "login": "schema:alternateName",
-        "name": "schema:name",
-        "description": "schema:description",
-        "email": "schema:email",
-        "location": "schema:location",
-        "blog": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "html_url": {
-          "@id": "schema:mainEntityOfPage",
-          "@type": "@id"
-        },
-        "avatar_url": {
-          "@id": "schema:image",
-          "@type": "@id"
-        },
-        "company": "schema:legalName",
-        "is_verified": "github:isVerified",
-        "public_repos": "github:publicReposCount",
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "updated_at": {
-          "@id": "dcterms:modified",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "feed": "gh:feed",
+    "ghes-config-nodes": "gh:ghes-config-nodes",
+    "ghes-replication-status": "gh:ghes-replication-status",
+    "gist-comment": "gh:gist-comment",
+    "gist-commit": "gh:gist-commit",
+    "gist-simple": "gh:gist-simple",
+    "gitignore-template": "gh:gitignore-template",
+    "global-hook": "gh:global-hook",
+    "global-hook-2": "gh:global-hook-2",
+    "group-response": "gh:group-response",
+    "hook-delivery": "gh:hook-delivery",
+    "hook-delivery-item": "gh:hook-delivery-item",
+    "installation": {
+      "@id": "gh:installation",
+      "@type": "xsd:string"
     },
-
-    "Issue": {
-      "@id": "github:Issue",
-      "@context": {
-        "title": "schema:name",
-        "body": "schema:text",
-        "number": "schema:identifier",
-        "state": "github:state",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "user": {
-          "@id": "schema:author",
-          "@type": "@id"
-        },
-        "assignees": {
-          "@id": "github:assignees",
-          "@container": "@set"
-        },
-        "labels": {
-          "@id": "github:labels",
-          "@container": "@set"
-        },
-        "milestone": "github:milestone",
-        "comments": "schema:commentCount",
-        "locked": "github:isLocked",
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "updated_at": {
-          "@id": "dcterms:modified",
-          "@type": "xsd:dateTime"
-        },
-        "closed_at": {
-          "@id": "github:closedAt",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "installation-token": "gh:installation-token",
+    "integration": "gh:integration",
+    "integration-installation-request": "gh:integration-installation-request",
+    "ldap-mapping-team": "gh:ldap-mapping-team",
+    "ldap-mapping-user": "gh:ldap-mapping-user",
+    "license": {
+      "@id": "gh:license",
+      "@type": "xsd:string"
     },
-
-    "PullRequest": {
-      "@id": "github:PullRequest",
-      "@context": {
-        "title": "schema:name",
-        "body": "schema:text",
-        "number": "schema:identifier",
-        "state": "github:state",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "user": {
-          "@id": "schema:author",
-          "@type": "@id"
-        },
-        "head": "github:headRef",
-        "base": "github:baseRef",
-        "draft": "github:isDraft",
-        "merged": "github:isMerged",
-        "mergeable": "github:isMergeable",
-        "additions": "github:additions",
-        "deletions": "github:deletions",
-        "changed_files": "github:changedFiles",
-        "commits": "github:commitsCount",
-        "comments": "schema:commentCount",
-        "review_comments": "github:reviewCommentsCount",
-        "requested_reviewers": {
-          "@id": "github:requestedReviewers",
-          "@container": "@set"
-        },
-        "labels": {
-          "@id": "github:labels",
-          "@container": "@set"
-        },
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "updated_at": {
-          "@id": "dcterms:modified",
-          "@type": "xsd:dateTime"
-        },
-        "closed_at": {
-          "@id": "github:closedAt",
-          "@type": "xsd:dateTime"
-        },
-        "merged_at": {
-          "@id": "github:mergedAt",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "maintenance-status": "gh:maintenance-status",
+    "meta": "gh:meta",
+    "minimal-repository": "gh:minimal-repository",
+    "nullable-collaborator": "gh:nullable-collaborator",
+    "nullable-license-simple": "gh:nullable-license-simple",
+    "nullable-milestone": "gh:nullable-milestone",
+    "nullable-simple-user": "gh:nullable-simple-user",
+    "nullable-team-simple": "gh:nullable-team-simple",
+    "organization-custom-repository-role": "gh:organization-custom-repository-role",
+    "organization-full": "gh:organization-full",
+    "organization-simple": "gh:organization-simple",
+    "pre-receive-environment": "gh:pre-receive-environment",
+    "project": "gh:project",
+    "project-card": "gh:project-card",
+    "project-collaborator-permission": "gh:project-collaborator-permission",
+    "project-column": "gh:project-column",
+    "public-key-full": "gh:public-key-full",
+    "public-user": "gh:public-user",
+    "rate-limit": "gh:rate-limit",
+    "rate-limit-overview": "gh:rate-limit-overview",
+    "reaction": "gh:reaction",
+    "repository": {
+      "@id": "gh:repository",
+      "@type": "xsd:string"
     },
-
-    "Commit": {
-      "@id": "github:Commit",
-      "@context": {
-        "sha": "schema:identifier",
-        "message": "schema:text",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "author": {
-          "@id": "schema:author",
-          "@type": "@id"
-        },
-        "committer": {
-          "@id": "github:committer",
-          "@type": "@id"
-        },
-        "parents": {
-          "@id": "github:parentCommits",
-          "@container": "@set"
-        },
-        "verification": "github:verification"
-      }
+    "repository-collaborator-permission": "gh:repository-collaborator-permission",
+    "repository-invitation": "gh:repository-invitation",
+    "repository-subscription": "gh:repository-subscription",
+    "root": "gh:root",
+    "scim-error": "gh:scim-error",
+    "security-and-analysis": "gh:security-and-analysis",
+    "simple-user": "gh:simple-user",
+    "ssh-key": "gh:ssh-key",
+    "starred-repository": "gh:starred-repository",
+    "team": "gh:team",
+    "team-discussion": "gh:team-discussion",
+    "team-discussion-comment": "gh:team-discussion-comment",
+    "team-full": "gh:team-full",
+    "team-project": "gh:team-project",
+    "thread": "gh:thread",
+    "thread-subscription": "gh:thread-subscription",
+    "user-name-response": "gh:user-name-response",
+    "user-response": "gh:user-response",
+    "validation-error": "gh:validation-error",
+    "validation-error-simple": "gh:validation-error-simple",
+    "webhook-branch-protection-rule-created": "gh:webhook-branch-protection-rule-created",
+    "webhook-branch-protection-rule-deleted": "gh:webhook-branch-protection-rule-deleted",
+    "webhook-branch-protection-rule-edited": "gh:webhook-branch-protection-rule-edited",
+    "webhook-cache-sync": "gh:webhook-cache-sync",
+    "webhook-check-run-completed": "gh:webhook-check-run-completed",
+    "webhook-check-run-completed-form-encoded": "gh:webhook-check-run-completed-form-encoded",
+    "webhook-check-run-created": "gh:webhook-check-run-created",
+    "webhook-check-run-created-form-encoded": "gh:webhook-check-run-created-form-encoded",
+    "webhook-config": "gh:webhook-config",
+    "_links": {
+      "@id": "gh:_links",
+      "@type": "@id"
     },
-
-    "Release": {
-      "@id": "github:Release",
-      "@context": {
-        "tag_name": "schema:version",
-        "name": "schema:name",
-        "body": "schema:text",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "author": {
-          "@id": "schema:author",
-          "@type": "@id"
-        },
-        "draft": "github:isDraft",
-        "prerelease": "github:isPrerelease",
-        "assets": {
-          "@id": "github:releaseAssets",
-          "@container": "@set"
-        },
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        },
-        "published_at": {
-          "@id": "dcterms:issued",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "access_tokens_url": {
+      "@id": "gh:access_tokens_url",
+      "@type": "@id"
     },
-
-    "Team": {
-      "@id": "github:Team",
-      "@context": {
-        "name": "schema:name",
-        "slug": "schema:alternateName",
-        "description": "schema:description",
-        "html_url": {
-          "@id": "schema:url",
-          "@type": "@id"
-        },
-        "privacy": "github:privacy",
-        "permission": "github:permission",
-        "members_count": "github:membersCount",
-        "repos_count": "github:reposCount"
-      }
+    "account": {
+      "@id": "gh:account",
+      "@type": "xsd:string"
     },
-
-    "Label": {
-      "@id": "github:Label",
-      "@context": {
-        "name": "schema:name",
-        "description": "schema:description",
-        "color": "github:color"
-      }
+    "action": {
+      "@id": "gh:action",
+      "@type": "xsd:string"
     },
-
-    "Milestone": {
-      "@id": "github:Milestone",
-      "@context": {
-        "title": "schema:name",
-        "description": "schema:description",
-        "state": "github:state",
-        "due_on": {
-          "@id": "github:dueOn",
-          "@type": "xsd:dateTime"
-        },
-        "open_issues": "github:openIssuesCount",
-        "closed_issues": "github:closedIssuesCount",
-        "created_at": {
-          "@id": "dcterms:created",
-          "@type": "xsd:dateTime"
-        }
-      }
+    "actions": {
+      "@id": "gh:actions",
+      "@type": "xsd:string"
     },
-
-    "WebhookEvent": {
-      "@id": "github:WebhookEvent",
-      "@context": {
-        "action": "github:action",
-        "sender": {
-          "@id": "github:sender",
-          "@type": "@id"
-        },
-        "repository": {
-          "@id": "github:repository",
-          "@type": "@id"
-        },
-        "organization": {
-          "@id": "github:organization",
-          "@type": "@id"
-        }
-      }
+    "active": {
+      "@id": "gh:active",
+      "@type": "xsd:boolean"
+    },
+    "active_lock_reason": {
+      "@id": "gh:active_lock_reason",
+      "@type": "xsd:string"
+    },
+    "actor": {
+      "@id": "gh:actor",
+      "@type": "xsd:string"
+    },
+    "added_by": {
+      "@id": "gh:added_by",
+      "@type": "xsd:string"
+    },
+    "additions": {
+      "@id": "gh:additions",
+      "@type": "xsd:integer"
+    },
+    "administration": {
+      "@id": "gh:administration",
+      "@type": "xsd:string"
+    },
+    "advanced_security": {
+      "@id": "gh:advanced_security",
+      "@type": "@id"
+    },
+    "advanced_security_enabled_for_new_repositories": {
+      "@id": "gh:advanced_security_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "after": {
+      "@id": "gh:after",
+      "@type": "xsd:string"
+    },
+    "allow_auto_merge": {
+      "@id": "gh:allow_auto_merge",
+      "@type": "xsd:boolean"
+    },
+    "allow_forking": {
+      "@id": "gh:allow_forking",
+      "@type": "xsd:boolean"
+    },
+    "allow_merge_commit": {
+      "@id": "gh:allow_merge_commit",
+      "@type": "xsd:boolean"
+    },
+    "allow_rebase_merge": {
+      "@id": "gh:allow_rebase_merge",
+      "@type": "xsd:boolean"
+    },
+    "allow_squash_merge": {
+      "@id": "gh:allow_squash_merge",
+      "@type": "xsd:boolean"
+    },
+    "allow_update_branch": {
+      "@id": "gh:allow_update_branch",
+      "@type": "xsd:boolean"
+    },
+    "anonymous_access_enabled": {
+      "@id": "gh:anonymous_access_enabled",
+      "@type": "xsd:boolean"
+    },
+    "app": {
+      "@id": "gh:app",
+      "@type": "@id"
+    },
+    "app_id": {
+      "@id": "gh:app_id",
+      "@type": "xsd:integer"
+    },
+    "app_slug": {
+      "@id": "gh:app_slug",
+      "@type": "xsd:string"
+    },
+    "archive_url": {
+      "@id": "gh:archive_url",
+      "@type": "xsd:string"
+    },
+    "archived": {
+      "@id": "gh:archived",
+      "@type": "xsd:boolean"
+    },
+    "assignee": {
+      "@id": "gh:assignee",
+      "@type": "xsd:string"
+    },
+    "assignees": {
+      "@id": "gh:assignees",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "assignees_url": {
+      "@id": "gh:assignees_url",
+      "@type": "xsd:string"
+    },
+    "author": {
+      "@id": "gh:author",
+      "@type": "xsd:string"
+    },
+    "author_association": {
+      "@id": "gh:author_association",
+      "@type": "xsd:string"
+    },
+    "authorizations_url": {
+      "@id": "gh:authorizations_url",
+      "@type": "xsd:string"
+    },
+    "auto_merge": {
+      "@id": "gh:auto_merge",
+      "@type": "@id"
+    },
+    "avatar_url": {
+      "@id": "gh:avatar_url",
+      "@type": "@id"
+    },
+    "base": {
+      "@id": "gh:base",
+      "@type": "xsd:string"
+    },
+    "base_role": {
+      "@id": "gh:base_role",
+      "@type": "xsd:string"
+    },
+    "before": {
+      "@id": "gh:before",
+      "@type": "xsd:string"
+    },
+    "billing_email": {
+      "@id": "gh:billing_email",
+      "@type": "xsd:string"
+    },
+    "bio": {
+      "@id": "gh:bio",
+      "@type": "xsd:string"
+    },
+    "blobs_url": {
+      "@id": "gh:blobs_url",
+      "@type": "xsd:string"
+    },
+    "blog": {
+      "@id": "gh:blog",
+      "@type": "xsd:string"
+    },
+    "body": {
+      "@id": "gh:body",
+      "@type": "xsd:string"
+    },
+    "body_html": {
+      "@id": "gh:body_html",
+      "@type": "xsd:string"
+    },
+    "body_version": {
+      "@id": "gh:body_version",
+      "@type": "xsd:string"
+    },
+    "branches_url": {
+      "@id": "gh:branches_url",
+      "@type": "xsd:string"
+    },
+    "business_plus": {
+      "@id": "gh:business_plus",
+      "@type": "xsd:boolean"
+    },
+    "cache_location": {
+      "@id": "gh:cache_location",
+      "@type": "xsd:string"
+    },
+    "cards_url": {
+      "@id": "gh:cards_url",
+      "@type": "@id"
+    },
+    "change_status": {
+      "@id": "gh:change_status",
+      "@type": "@id"
+    },
+    "changed_files": {
+      "@id": "gh:changed_files",
+      "@type": "xsd:integer"
+    },
+    "changes": {
+      "@id": "gh:changes",
+      "@type": "@id"
+    },
+    "check_run": {
+      "@id": "gh:check_run",
+      "@type": "xsd:string"
+    },
+    "checks": {
+      "@id": "gh:checks",
+      "@type": "xsd:string"
+    },
+    "client_id": {
+      "@id": "gh:client_id",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "gh:client_secret",
+      "@type": "xsd:string"
+    },
+    "clone_url": {
+      "@id": "gh:clone_url",
+      "@type": "xsd:string"
+    },
+    "closed_at": {
+      "@id": "gh:closed_at",
+      "@type": "xsd:dateTime"
+    },
+    "closed_by": {
+      "@id": "gh:closed_by",
+      "@type": "xsd:string"
+    },
+    "closed_issues": {
+      "@id": "gh:closed_issues",
+      "@type": "xsd:integer"
+    },
+    "code_of_conduct": {
+      "@id": "gh:code_of_conduct",
+      "@type": "xsd:string"
+    },
+    "code_search_url": {
+      "@id": "gh:code_search_url",
+      "@type": "xsd:string"
+    },
+    "codespaces": {
+      "@id": "gh:codespaces",
+      "@type": "xsd:string"
+    },
+    "collaborators": {
+      "@id": "gh:collaborators",
+      "@type": "xsd:integer"
+    },
+    "collaborators_url": {
+      "@id": "gh:collaborators_url",
+      "@type": "xsd:string"
+    },
+    "column_name": {
+      "@id": "gh:column_name",
+      "@type": "xsd:string"
+    },
+    "column_url": {
+      "@id": "gh:column_url",
+      "@type": "@id"
+    },
+    "columns_url": {
+      "@id": "gh:columns_url",
+      "@type": "@id"
+    },
+    "comments": {
+      "@id": "gh:comments",
+      "@type": "xsd:integer"
+    },
+    "comments_count": {
+      "@id": "gh:comments_count",
+      "@type": "xsd:integer"
+    },
+    "comments_url": {
+      "@id": "gh:comments_url",
+      "@type": "@id"
+    },
+    "commit": {
+      "@id": "gh:commit",
+      "@type": "xsd:string"
+    },
+    "commit_search_url": {
+      "@id": "gh:commit_search_url",
+      "@type": "xsd:string"
+    },
+    "commits": {
+      "@id": "gh:commits",
+      "@type": "xsd:integer"
+    },
+    "commits_url": {
+      "@id": "gh:commits_url",
+      "@type": "@id"
+    },
+    "committed_at": {
+      "@id": "gh:committed_at",
+      "@type": "xsd:dateTime"
+    },
+    "committer": {
+      "@id": "gh:committer",
+      "@type": "xsd:string"
+    },
+    "company": {
+      "@id": "gh:company",
+      "@type": "xsd:string"
+    },
+    "compare_url": {
+      "@id": "gh:compare_url",
+      "@type": "xsd:string"
+    },
+    "conditions": {
+      "@id": "gh:conditions",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "config": {
+      "@id": "gh:config",
+      "@type": "@id"
+    },
+    "connection_services": {
+      "@id": "gh:connection_services",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "contact_email": {
+      "@id": "gh:contact_email",
+      "@type": "xsd:string"
+    },
+    "content": {
+      "@id": "gh:content",
+      "@type": "xsd:string"
+    },
+    "content_type": {
+      "@id": "gh:content_type",
+      "@type": "xsd:string"
+    },
+    "content_url": {
+      "@id": "gh:content_url",
+      "@type": "@id"
+    },
+    "contents": {
+      "@id": "gh:contents",
+      "@type": "xsd:string"
+    },
+    "contents_url": {
+      "@id": "gh:contents_url",
+      "@type": "xsd:string"
+    },
+    "contributors_url": {
+      "@id": "gh:contributors_url",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "gh:created",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "gh:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "creator": {
+      "@id": "gh:creator",
+      "@type": "xsd:string"
+    },
+    "current_user_actor_url": {
+      "@id": "gh:current_user_actor_url",
+      "@type": "xsd:string"
+    },
+    "current_user_authorizations_html_url": {
+      "@id": "gh:current_user_authorizations_html_url",
+      "@type": "xsd:string"
+    },
+    "current_user_organization_url": {
+      "@id": "gh:current_user_organization_url",
+      "@type": "xsd:string"
+    },
+    "current_user_organization_urls": {
+      "@id": "gh:current_user_organization_urls",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "current_user_public_url": {
+      "@id": "gh:current_user_public_url",
+      "@type": "xsd:string"
+    },
+    "current_user_repositories_url": {
+      "@id": "gh:current_user_repositories_url",
+      "@type": "xsd:string"
+    },
+    "current_user_url": {
+      "@id": "gh:current_user_url",
+      "@type": "xsd:string"
+    },
+    "default_branch": {
+      "@id": "gh:default_branch",
+      "@type": "xsd:string"
+    },
+    "default_environment": {
+      "@id": "gh:default_environment",
+      "@type": "xsd:boolean"
+    },
+    "default_repository_permission": {
+      "@id": "gh:default_repository_permission",
+      "@type": "xsd:string"
+    },
+    "delete_branch_on_merge": {
+      "@id": "gh:delete_branch_on_merge",
+      "@type": "xsd:boolean"
+    },
+    "deletions": {
+      "@id": "gh:deletions",
+      "@type": "xsd:integer"
+    },
+    "delivered_at": {
+      "@id": "gh:delivered_at",
+      "@type": "xsd:dateTime"
+    },
+    "dependabot": {
+      "@id": "gh:dependabot",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "dependabot_alerts_enabled_for_new_repositories": {
+      "@id": "gh:dependabot_alerts_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "dependabot_secrets": {
+      "@id": "gh:dependabot_secrets",
+      "@type": "xsd:string"
+    },
+    "dependabot_security_updates_enabled_for_new_repositories": {
+      "@id": "gh:dependabot_security_updates_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "dependency_graph_enabled_for_new_repositories": {
+      "@id": "gh:dependency_graph_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "deployments": {
+      "@id": "gh:deployments",
+      "@type": "xsd:string"
+    },
+    "deployments_url": {
+      "@id": "gh:deployments_url",
+      "@type": "@id"
+    },
+    "description": {
+      "@id": "gh:description",
+      "@type": "xsd:string"
+    },
+    "detail": {
+      "@id": "gh:detail",
+      "@type": "xsd:string"
+    },
+    "diff_url": {
+      "@id": "gh:diff_url",
+      "@type": "@id"
+    },
+    "disabled": {
+      "@id": "gh:disabled",
+      "@type": "xsd:boolean"
+    },
+    "discussion_url": {
+      "@id": "gh:discussion_url",
+      "@type": "@id"
+    },
+    "disk_usage": {
+      "@id": "gh:disk_usage",
+      "@type": "xsd:integer"
+    },
+    "displayName": {
+      "@id": "gh:displayName",
+      "@type": "xsd:string"
+    },
+    "documentation_url": {
+      "@id": "gh:documentation_url",
+      "@type": "xsd:string"
+    },
+    "domains": {
+      "@id": "gh:domains",
+      "@type": "@id"
+    },
+    "download": {
+      "@id": "gh:download",
+      "@type": "@id"
+    },
+    "downloads_url": {
+      "@id": "gh:downloads_url",
+      "@type": "@id"
+    },
+    "draft": {
+      "@id": "gh:draft",
+      "@type": "xsd:boolean"
+    },
+    "due_on": {
+      "@id": "gh:due_on",
+      "@type": "xsd:dateTime"
+    },
+    "duration": {
+      "@id": "gh:duration",
+      "@type": "xsd:decimal"
+    },
+    "email": {
+      "@id": "gh:email",
+      "@type": "xsd:string"
+    },
+    "email_addresses": {
+      "@id": "gh:email_addresses",
+      "@type": "xsd:string"
+    },
+    "emails": {
+      "@id": "gh:emails",
+      "@type": "xsd:string"
+    },
+    "emails_url": {
+      "@id": "gh:emails_url",
+      "@type": "xsd:string"
+    },
+    "emojis_url": {
+      "@id": "gh:emojis_url",
+      "@type": "xsd:string"
+    },
+    "environments": {
+      "@id": "gh:environments",
+      "@type": "xsd:string"
+    },
+    "errors": {
+      "@id": "gh:errors",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "events": {
+      "@id": "gh:events",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "events_url": {
+      "@id": "gh:events_url",
+      "@type": "xsd:string"
+    },
+    "expired": {
+      "@id": "gh:expired",
+      "@type": "xsd:boolean"
+    },
+    "expires_at": {
+      "@id": "gh:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "externalId": {
+      "@id": "gh:externalId",
+      "@type": "xsd:string"
+    },
+    "external_url": {
+      "@id": "gh:external_url",
+      "@type": "@id"
+    },
+    "familyName": {
+      "@id": "gh:familyName",
+      "@type": "xsd:string"
+    },
+    "featured": {
+      "@id": "gh:featured",
+      "@type": "xsd:boolean"
+    },
+    "feeds_url": {
+      "@id": "gh:feeds_url",
+      "@type": "xsd:string"
+    },
+    "files": {
+      "@id": "gh:files",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "fingerprint": {
+      "@id": "gh:fingerprint",
+      "@type": "xsd:string"
+    },
+    "followers": {
+      "@id": "gh:followers",
+      "@type": "xsd:integer"
+    },
+    "followers_url": {
+      "@id": "gh:followers_url",
+      "@type": "@id"
+    },
+    "following": {
+      "@id": "gh:following",
+      "@type": "xsd:integer"
+    },
+    "following_url": {
+      "@id": "gh:following_url",
+      "@type": "xsd:string"
+    },
+    "fork": {
+      "@id": "gh:fork",
+      "@type": "xsd:boolean"
+    },
+    "fork_of": {
+      "@id": "gh:fork_of",
+      "@type": "@id"
+    },
+    "forks": {
+      "@id": "gh:forks",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "forks_count": {
+      "@id": "gh:forks_count",
+      "@type": "xsd:integer"
+    },
+    "forks_url": {
+      "@id": "gh:forks_url",
+      "@type": "@id"
+    },
+    "formatted": {
+      "@id": "gh:formatted",
+      "@type": "xsd:string"
+    },
+    "full_name": {
+      "@id": "gh:full_name",
+      "@type": "xsd:string"
+    },
+    "gists_url": {
+      "@id": "gh:gists_url",
+      "@type": "xsd:string"
+    },
+    "git_commits_url": {
+      "@id": "gh:git_commits_url",
+      "@type": "xsd:string"
+    },
+    "git_pull_url": {
+      "@id": "gh:git_pull_url",
+      "@type": "@id"
+    },
+    "git_push_url": {
+      "@id": "gh:git_push_url",
+      "@type": "@id"
+    },
+    "git_refs_url": {
+      "@id": "gh:git_refs_url",
+      "@type": "xsd:string"
+    },
+    "git_ssh_keys": {
+      "@id": "gh:git_ssh_keys",
+      "@type": "xsd:string"
+    },
+    "git_tags_url": {
+      "@id": "gh:git_tags_url",
+      "@type": "xsd:string"
+    },
+    "git_url": {
+      "@id": "gh:git_url",
+      "@type": "xsd:string"
+    },
+    "givenName": {
+      "@id": "gh:givenName",
+      "@type": "xsd:string"
+    },
+    "gpg_keys": {
+      "@id": "gh:gpg_keys",
+      "@type": "xsd:string"
+    },
+    "gravatar_id": {
+      "@id": "gh:gravatar_id",
+      "@type": "xsd:string"
+    },
+    "guid": {
+      "@id": "gh:guid",
+      "@type": "xsd:string"
+    },
+    "has_discussions": {
+      "@id": "gh:has_discussions",
+      "@type": "xsd:boolean"
+    },
+    "has_downloads": {
+      "@id": "gh:has_downloads",
+      "@type": "xsd:boolean"
+    },
+    "has_issues": {
+      "@id": "gh:has_issues",
+      "@type": "xsd:boolean"
+    },
+    "has_multiple_single_files": {
+      "@id": "gh:has_multiple_single_files",
+      "@type": "xsd:boolean"
+    },
+    "has_organization_projects": {
+      "@id": "gh:has_organization_projects",
+      "@type": "xsd:boolean"
+    },
+    "has_pages": {
+      "@id": "gh:has_pages",
+      "@type": "xsd:boolean"
+    },
+    "has_projects": {
+      "@id": "gh:has_projects",
+      "@type": "xsd:boolean"
+    },
+    "has_repository_projects": {
+      "@id": "gh:has_repository_projects",
+      "@type": "xsd:boolean"
+    },
+    "has_wiki": {
+      "@id": "gh:has_wiki",
+      "@type": "xsd:boolean"
+    },
+    "hashed_token": {
+      "@id": "gh:hashed_token",
+      "@type": "xsd:string"
+    },
+    "head": {
+      "@id": "gh:head",
+      "@type": "xsd:string"
+    },
+    "hireable": {
+      "@id": "gh:hireable",
+      "@type": "xsd:boolean"
+    },
+    "history": {
+      "@id": "gh:history",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "homepage": {
+      "@id": "gh:homepage",
+      "@type": "@id"
+    },
+    "hooks_count": {
+      "@id": "gh:hooks_count",
+      "@type": "xsd:integer"
+    },
+    "hooks_url": {
+      "@id": "gh:hooks_url",
+      "@type": "xsd:string"
+    },
+    "html_url": {
+      "@id": "gh:html_url",
+      "@type": "@id"
+    },
+    "hub_url": {
+      "@id": "gh:hub_url",
+      "@type": "xsd:string"
+    },
+    "id": {
+      "@id": "gh:id",
+      "@type": "xsd:integer"
+    },
+    "ignored": {
+      "@id": "gh:ignored",
+      "@type": "xsd:boolean"
+    },
+    "image_url": {
+      "@id": "gh:image_url",
+      "@type": "xsd:string"
+    },
+    "implementation": {
+      "@id": "gh:implementation",
+      "@type": "xsd:string"
+    },
+    "insecure_ssl": {
+      "@id": "gh:insecure_ssl",
+      "@type": "xsd:string"
+    },
+    "installation_id": {
+      "@id": "gh:installation_id",
+      "@type": "xsd:integer"
+    },
+    "installations_count": {
+      "@id": "gh:installations_count",
+      "@type": "xsd:integer"
+    },
+    "installed_version": {
+      "@id": "gh:installed_version",
+      "@type": "xsd:string"
+    },
+    "interaction_limits": {
+      "@id": "gh:interaction_limits",
+      "@type": "xsd:string"
+    },
+    "invitee": {
+      "@id": "gh:invitee",
+      "@type": "xsd:string"
+    },
+    "inviter": {
+      "@id": "gh:inviter",
+      "@type": "xsd:string"
+    },
+    "is_alphanumeric": {
+      "@id": "gh:is_alphanumeric",
+      "@type": "xsd:boolean"
+    },
+    "is_template": {
+      "@id": "gh:is_template",
+      "@type": "xsd:boolean"
+    },
+    "is_verified": {
+      "@id": "gh:is_verified",
+      "@type": "xsd:boolean"
+    },
+    "issue_comment_url": {
+      "@id": "gh:issue_comment_url",
+      "@type": "xsd:string"
+    },
+    "issue_events_url": {
+      "@id": "gh:issue_events_url",
+      "@type": "xsd:string"
+    },
+    "issue_search_url": {
+      "@id": "gh:issue_search_url",
+      "@type": "xsd:string"
+    },
+    "issues": {
+      "@id": "gh:issues",
+      "@type": "xsd:string"
+    },
+    "issues_url": {
+      "@id": "gh:issues_url",
+      "@type": "xsd:string"
+    },
+    "key": {
+      "@id": "gh:key",
+      "@type": "xsd:string"
+    },
+    "key_prefix": {
+      "@id": "gh:key_prefix",
+      "@type": "xsd:string"
+    },
+    "keys_url": {
+      "@id": "gh:keys_url",
+      "@type": "xsd:string"
+    },
+    "label_search_url": {
+      "@id": "gh:label_search_url",
+      "@type": "xsd:string"
+    },
+    "labels": {
+      "@id": "gh:labels",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "labels_url": {
+      "@id": "gh:labels_url",
+      "@type": "xsd:string"
+    },
+    "language": {
+      "@id": "gh:language",
+      "@type": "xsd:string"
+    },
+    "languages_url": {
+      "@id": "gh:languages_url",
+      "@type": "@id"
+    },
+    "lastModified": {
+      "@id": "gh:lastModified",
+      "@type": "xsd:string"
+    },
+    "last_edited_at": {
+      "@id": "gh:last_edited_at",
+      "@type": "xsd:dateTime"
+    },
+    "last_read_at": {
+      "@id": "gh:last_read_at",
+      "@type": "xsd:string"
+    },
+    "last_used": {
+      "@id": "gh:last_used",
+      "@type": "xsd:dateTime"
+    },
+    "ldap_dn": {
+      "@id": "gh:ldap_dn",
+      "@type": "xsd:string"
+    },
+    "limit": {
+      "@id": "gh:limit",
+      "@type": "xsd:integer"
+    },
+    "limitations": {
+      "@id": "gh:limitations",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "location": {
+      "@id": "gh:location",
+      "@type": "xsd:string"
+    },
+    "locked": {
+      "@id": "gh:locked",
+      "@type": "xsd:boolean"
+    },
+    "login": {
+      "@id": "gh:login",
+      "@type": "xsd:string"
+    },
+    "master_branch": {
+      "@id": "gh:master_branch",
+      "@type": "xsd:string"
+    },
+    "members": {
+      "@id": "gh:members",
+      "@type": "xsd:string"
+    },
+    "members_allowed_repository_creation_type": {
+      "@id": "gh:members_allowed_repository_creation_type",
+      "@type": "xsd:string"
+    },
+    "members_can_create_internal_repositories": {
+      "@id": "gh:members_can_create_internal_repositories",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_pages": {
+      "@id": "gh:members_can_create_pages",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_private_pages": {
+      "@id": "gh:members_can_create_private_pages",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_private_repositories": {
+      "@id": "gh:members_can_create_private_repositories",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_public_pages": {
+      "@id": "gh:members_can_create_public_pages",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_public_repositories": {
+      "@id": "gh:members_can_create_public_repositories",
+      "@type": "xsd:boolean"
+    },
+    "members_can_create_repositories": {
+      "@id": "gh:members_can_create_repositories",
+      "@type": "xsd:boolean"
+    },
+    "members_can_fork_private_repositories": {
+      "@id": "gh:members_can_fork_private_repositories",
+      "@type": "xsd:boolean"
+    },
+    "members_count": {
+      "@id": "gh:members_count",
+      "@type": "xsd:integer"
+    },
+    "members_url": {
+      "@id": "gh:members_url",
+      "@type": "xsd:string"
+    },
+    "merge_commit_message": {
+      "@id": "gh:merge_commit_message",
+      "@type": "xsd:string"
+    },
+    "merge_commit_sha": {
+      "@id": "gh:merge_commit_sha",
+      "@type": "xsd:string"
+    },
+    "merge_commit_title": {
+      "@id": "gh:merge_commit_title",
+      "@type": "xsd:string"
+    },
+    "mergeable": {
+      "@id": "gh:mergeable",
+      "@type": "xsd:boolean"
+    },
+    "mergeable_state": {
+      "@id": "gh:mergeable_state",
+      "@type": "xsd:string"
+    },
+    "merged": {
+      "@id": "gh:merged",
+      "@type": "xsd:boolean"
+    },
+    "merged_at": {
+      "@id": "gh:merged_at",
+      "@type": "xsd:dateTime"
+    },
+    "merged_by": {
+      "@id": "gh:merged_by",
+      "@type": "xsd:string"
+    },
+    "merges_url": {
+      "@id": "gh:merges_url",
+      "@type": "@id"
+    },
+    "message": {
+      "@id": "gh:message",
+      "@type": "xsd:string"
+    },
+    "metadata": {
+      "@id": "gh:metadata",
+      "@type": "xsd:string"
+    },
+    "middleName": {
+      "@id": "gh:middleName",
+      "@type": "xsd:string"
+    },
+    "milestone": {
+      "@id": "gh:milestone",
+      "@type": "xsd:string"
+    },
+    "milestones_url": {
+      "@id": "gh:milestones_url",
+      "@type": "xsd:string"
+    },
+    "mirror_url": {
+      "@id": "gh:mirror_url",
+      "@type": "@id"
+    },
+    "name": {
+      "@id": "gh:name",
+      "@type": "xsd:string"
+    },
+    "network_count": {
+      "@id": "gh:network_count",
+      "@type": "xsd:integer"
+    },
+    "node_id": {
+      "@id": "gh:node_id",
+      "@type": "xsd:string"
+    },
+    "nodes": {
+      "@id": "gh:nodes",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "note": {
+      "@id": "gh:note",
+      "@type": "xsd:string"
+    },
+    "note_url": {
+      "@id": "gh:note_url",
+      "@type": "@id"
+    },
+    "notifications_url": {
+      "@id": "gh:notifications_url",
+      "@type": "xsd:string"
+    },
+    "number": {
+      "@id": "gh:number",
+      "@type": "xsd:integer"
+    },
+    "open_issues": {
+      "@id": "gh:open_issues",
+      "@type": "xsd:integer"
+    },
+    "open_issues_count": {
+      "@id": "gh:open_issues_count",
+      "@type": "xsd:integer"
+    },
+    "org": {
+      "@id": "gh:org",
+      "@type": "xsd:string"
+    },
+    "organization": {
+      "@id": "gh:organization",
+      "@type": "xsd:string"
+    },
+    "organization_administration": {
+      "@id": "gh:organization_administration",
+      "@type": "xsd:string"
+    },
+    "organization_announcement_banners": {
+      "@id": "gh:organization_announcement_banners",
+      "@type": "xsd:string"
+    },
+    "organization_copilot_seat_management": {
+      "@id": "gh:organization_copilot_seat_management",
+      "@type": "xsd:string"
+    },
+    "organization_custom_roles": {
+      "@id": "gh:organization_custom_roles",
+      "@type": "xsd:string"
+    },
+    "organization_events": {
+      "@id": "gh:organization_events",
+      "@type": "xsd:string"
+    },
+    "organization_hooks": {
+      "@id": "gh:organization_hooks",
+      "@type": "xsd:string"
+    },
+    "organization_packages": {
+      "@id": "gh:organization_packages",
+      "@type": "xsd:string"
+    },
+    "organization_permission": {
+      "@id": "gh:organization_permission",
+      "@type": "xsd:string"
+    },
+    "organization_personal_access_token_requests": {
+      "@id": "gh:organization_personal_access_token_requests",
+      "@type": "xsd:string"
+    },
+    "organization_personal_access_tokens": {
+      "@id": "gh:organization_personal_access_tokens",
+      "@type": "xsd:string"
+    },
+    "organization_plan": {
+      "@id": "gh:organization_plan",
+      "@type": "xsd:string"
+    },
+    "organization_projects": {
+      "@id": "gh:organization_projects",
+      "@type": "xsd:string"
+    },
+    "organization_repositories_url": {
+      "@id": "gh:organization_repositories_url",
+      "@type": "xsd:string"
+    },
+    "organization_secrets": {
+      "@id": "gh:organization_secrets",
+      "@type": "xsd:string"
+    },
+    "organization_self_hosted_runners": {
+      "@id": "gh:organization_self_hosted_runners",
+      "@type": "xsd:string"
+    },
+    "organization_teams_url": {
+      "@id": "gh:organization_teams_url",
+      "@type": "xsd:string"
+    },
+    "organization_url": {
+      "@id": "gh:organization_url",
+      "@type": "xsd:string"
+    },
+    "organization_user_blocking": {
+      "@id": "gh:organization_user_blocking",
+      "@type": "xsd:string"
+    },
+    "organizations_url": {
+      "@id": "gh:organizations_url",
+      "@type": "@id"
+    },
+    "owned_private_repos": {
+      "@id": "gh:owned_private_repos",
+      "@type": "xsd:integer"
+    },
+    "owner": {
+      "@id": "gh:owner",
+      "@type": "xsd:string"
+    },
+    "owner_url": {
+      "@id": "gh:owner_url",
+      "@type": "@id"
+    },
+    "packages": {
+      "@id": "gh:packages",
+      "@type": "xsd:string"
+    },
+    "pages": {
+      "@id": "gh:pages",
+      "@type": "xsd:string"
+    },
+    "parent": {
+      "@id": "gh:parent",
+      "@type": "xsd:string"
+    },
+    "parents": {
+      "@id": "gh:parents",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "patch_url": {
+      "@id": "gh:patch_url",
+      "@type": "@id"
+    },
+    "payload": {
+      "@id": "gh:payload",
+      "@type": "xsd:string"
+    },
+    "pem": {
+      "@id": "gh:pem",
+      "@type": "xsd:string"
+    },
+    "permission": {
+      "@id": "gh:permission",
+      "@type": "xsd:string"
+    },
+    "permissions": {
+      "@id": "gh:permissions",
+      "@type": "xsd:string"
+    },
+    "ping_url": {
+      "@id": "gh:ping_url",
+      "@type": "xsd:string"
+    },
+    "pinned": {
+      "@id": "gh:pinned",
+      "@type": "xsd:boolean"
+    },
+    "plan": {
+      "@id": "gh:plan",
+      "@type": "@id"
+    },
+    "pretty-print": {
+      "@id": "gh:pretty-print",
+      "@type": "xsd:string"
+    },
+    "privacy": {
+      "@id": "gh:privacy",
+      "@type": "xsd:string"
+    },
+    "private": {
+      "@id": "gh:private",
+      "@type": "xsd:boolean"
+    },
+    "private_gists": {
+      "@id": "gh:private_gists",
+      "@type": "xsd:integer"
+    },
+    "profile": {
+      "@id": "gh:profile",
+      "@type": "xsd:string"
+    },
+    "progress": {
+      "@id": "gh:progress",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "project_id": {
+      "@id": "gh:project_id",
+      "@type": "xsd:string"
+    },
+    "project_url": {
+      "@id": "gh:project_url",
+      "@type": "@id"
+    },
+    "public": {
+      "@id": "gh:public",
+      "@type": "xsd:boolean"
+    },
+    "public_gists": {
+      "@id": "gh:public_gists",
+      "@type": "xsd:integer"
+    },
+    "public_gists_url": {
+      "@id": "gh:public_gists_url",
+      "@type": "xsd:string"
+    },
+    "public_members_url": {
+      "@id": "gh:public_members_url",
+      "@type": "xsd:string"
+    },
+    "public_repos": {
+      "@id": "gh:public_repos",
+      "@type": "xsd:integer"
+    },
+    "pull_request": {
+      "@id": "gh:pull_request",
+      "@type": "@id"
+    },
+    "pull_requests": {
+      "@id": "gh:pull_requests",
+      "@type": "xsd:string"
+    },
+    "pulls_url": {
+      "@id": "gh:pulls_url",
+      "@type": "xsd:string"
+    },
+    "pushed_at": {
+      "@id": "gh:pushed_at",
+      "@type": "xsd:dateTime"
+    },
+    "rate": {
+      "@id": "gh:rate",
+      "@type": "xsd:string"
+    },
+    "rate_limit_url": {
+      "@id": "gh:rate_limit_url",
+      "@type": "xsd:string"
+    },
+    "reactions": {
+      "@id": "gh:reactions",
+      "@type": "xsd:string"
+    },
+    "read_only": {
+      "@id": "gh:read_only",
+      "@type": "xsd:boolean"
+    },
+    "reason": {
+      "@id": "gh:reason",
+      "@type": "xsd:string"
+    },
+    "received_events_url": {
+      "@id": "gh:received_events_url",
+      "@type": "@id"
+    },
+    "redelivery": {
+      "@id": "gh:redelivery",
+      "@type": "xsd:boolean"
+    },
+    "ref": {
+      "@id": "gh:ref",
+      "@type": "xsd:string"
+    },
+    "releases_url": {
+      "@id": "gh:releases_url",
+      "@type": "xsd:string"
+    },
+    "remaining": {
+      "@id": "gh:remaining",
+      "@type": "xsd:integer"
+    },
+    "repo": {
+      "@id": "gh:repo",
+      "@type": "@id"
+    },
+    "repos_count": {
+      "@id": "gh:repos_count",
+      "@type": "xsd:integer"
+    },
+    "repos_url": {
+      "@id": "gh:repos_url",
+      "@type": "@id"
+    },
+    "repositories": {
+      "@id": "gh:repositories",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "repositories_url": {
+      "@id": "gh:repositories_url",
+      "@type": "@id"
+    },
+    "repository_discussions_category_url": {
+      "@id": "gh:repository_discussions_category_url",
+      "@type": "xsd:string"
+    },
+    "repository_discussions_url": {
+      "@id": "gh:repository_discussions_url",
+      "@type": "xsd:string"
+    },
+    "repository_hooks": {
+      "@id": "gh:repository_hooks",
+      "@type": "xsd:string"
+    },
+    "repository_id": {
+      "@id": "gh:repository_id",
+      "@type": "xsd:integer"
+    },
+    "repository_projects": {
+      "@id": "gh:repository_projects",
+      "@type": "xsd:string"
+    },
+    "repository_search_url": {
+      "@id": "gh:repository_search_url",
+      "@type": "xsd:string"
+    },
+    "repository_selection": {
+      "@id": "gh:repository_selection",
+      "@type": "xsd:string"
+    },
+    "repository_url": {
+      "@id": "gh:repository_url",
+      "@type": "xsd:string"
+    },
+    "request": {
+      "@id": "gh:request",
+      "@type": "@id"
+    },
+    "requested_reviewers": {
+      "@id": "gh:requested_reviewers",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "requested_teams": {
+      "@id": "gh:requested_teams",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "requester": {
+      "@id": "gh:requester",
+      "@type": "xsd:string"
+    },
+    "reset": {
+      "@id": "gh:reset",
+      "@type": "xsd:integer"
+    },
+    "resourceType": {
+      "@id": "gh:resourceType",
+      "@type": "xsd:string"
+    },
+    "resources": {
+      "@id": "gh:resources",
+      "@type": "@id"
+    },
+    "response": {
+      "@id": "gh:response",
+      "@type": "@id"
+    },
+    "review_comments": {
+      "@id": "gh:review_comments",
+      "@type": "xsd:integer"
+    },
+    "role_name": {
+      "@id": "gh:role_name",
+      "@type": "xsd:string"
+    },
+    "roles": {
+      "@id": "gh:roles",
+      "@type": "xsd:string"
+    },
+    "rule": {
+      "@id": "gh:rule",
+      "@type": "@id"
+    },
+    "run_list": {
+      "@id": "gh:run_list",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "scheduled_time": {
+      "@id": "gh:scheduled_time",
+      "@type": "xsd:string"
+    },
+    "schemas": {
+      "@id": "gh:schemas",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "scimType": {
+      "@id": "gh:scimType",
+      "@type": "xsd:string"
+    },
+    "scopes": {
+      "@id": "gh:scopes",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "secret": {
+      "@id": "gh:secret",
+      "@type": "xsd:string"
+    },
+    "secret_scanning": {
+      "@id": "gh:secret_scanning",
+      "@type": "@id"
+    },
+    "secret_scanning_alerts": {
+      "@id": "gh:secret_scanning_alerts",
+      "@type": "xsd:string"
+    },
+    "secret_scanning_enabled_for_new_repositories": {
+      "@id": "gh:secret_scanning_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "secret_scanning_push_protection": {
+      "@id": "gh:secret_scanning_push_protection",
+      "@type": "@id"
+    },
+    "secret_scanning_push_protection_custom_link": {
+      "@id": "gh:secret_scanning_push_protection_custom_link",
+      "@type": "xsd:string"
+    },
+    "secret_scanning_push_protection_custom_link_enabled": {
+      "@id": "gh:secret_scanning_push_protection_custom_link_enabled",
+      "@type": "xsd:boolean"
+    },
+    "secret_scanning_push_protection_enabled_for_new_repositories": {
+      "@id": "gh:secret_scanning_push_protection_enabled_for_new_repositories",
+      "@type": "xsd:boolean"
+    },
+    "secrets": {
+      "@id": "gh:secrets",
+      "@type": "xsd:string"
+    },
+    "security_advisories_url": {
+      "@id": "gh:security_advisories_url",
+      "@type": "xsd:string"
+    },
+    "security_and_analysis": {
+      "@id": "gh:security_and_analysis",
+      "@type": "xsd:string"
+    },
+    "security_events": {
+      "@id": "gh:security_events",
+      "@type": "xsd:string"
+    },
+    "sender": {
+      "@id": "gh:sender",
+      "@type": "xsd:string"
+    },
+    "sha": {
+      "@id": "gh:sha",
+      "@type": "xsd:string"
+    },
+    "single_file": {
+      "@id": "gh:single_file",
+      "@type": "xsd:string"
+    },
+    "single_file_name": {
+      "@id": "gh:single_file_name",
+      "@type": "xsd:string"
+    },
+    "single_file_paths": {
+      "@id": "gh:single_file_paths",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "site_admin": {
+      "@id": "gh:site_admin",
+      "@type": "xsd:boolean"
+    },
+    "size": {
+      "@id": "gh:size",
+      "@type": "xsd:integer"
+    },
+    "slug": {
+      "@id": "gh:slug",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "gh:source",
+      "@type": "xsd:string"
+    },
+    "spdx_id": {
+      "@id": "gh:spdx_id",
+      "@type": "xsd:string"
+    },
+    "squash_merge_commit_message": {
+      "@id": "gh:squash_merge_commit_message",
+      "@type": "xsd:string"
+    },
+    "squash_merge_commit_title": {
+      "@id": "gh:squash_merge_commit_title",
+      "@type": "xsd:string"
+    },
+    "ssh_url": {
+      "@id": "gh:ssh_url",
+      "@type": "xsd:string"
+    },
+    "stargazers_count": {
+      "@id": "gh:stargazers_count",
+      "@type": "xsd:integer"
+    },
+    "stargazers_url": {
+      "@id": "gh:stargazers_url",
+      "@type": "@id"
+    },
+    "starred_at": {
+      "@id": "gh:starred_at",
+      "@type": "xsd:string"
+    },
+    "starred_gists_url": {
+      "@id": "gh:starred_gists_url",
+      "@type": "xsd:string"
+    },
+    "starred_url": {
+      "@id": "gh:starred_url",
+      "@type": "xsd:string"
+    },
+    "starring": {
+      "@id": "gh:starring",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "gh:state",
+      "@type": "xsd:string"
+    },
+    "state_reason": {
+      "@id": "gh:state_reason",
+      "@type": "xsd:string"
+    },
+    "stats": {
+      "@id": "gh:stats",
+      "@type": "@id"
+    },
+    "status": {
+      "@id": "gh:status",
+      "@type": "xsd:string"
+    },
+    "status_code": {
+      "@id": "gh:status_code",
+      "@type": "xsd:integer"
+    },
+    "statuses": {
+      "@id": "gh:statuses",
+      "@type": "xsd:string"
+    },
+    "statuses_url": {
+      "@id": "gh:statuses_url",
+      "@type": "xsd:string"
+    },
+    "subject": {
+      "@id": "gh:subject",
+      "@type": "@id"
+    },
+    "subscribed": {
+      "@id": "gh:subscribed",
+      "@type": "xsd:boolean"
+    },
+    "subscribers_count": {
+      "@id": "gh:subscribers_count",
+      "@type": "xsd:integer"
+    },
+    "subscribers_url": {
+      "@id": "gh:subscribers_url",
+      "@type": "@id"
+    },
+    "subscription_url": {
+      "@id": "gh:subscription_url",
+      "@type": "xsd:string"
+    },
+    "subscriptions_url": {
+      "@id": "gh:subscriptions_url",
+      "@type": "@id"
+    },
+    "suspended_at": {
+      "@id": "gh:suspended_at",
+      "@type": "xsd:dateTime"
+    },
+    "suspended_by": {
+      "@id": "gh:suspended_by",
+      "@type": "xsd:string"
+    },
+    "svn_url": {
+      "@id": "gh:svn_url",
+      "@type": "@id"
+    },
+    "tags_url": {
+      "@id": "gh:tags_url",
+      "@type": "@id"
+    },
+    "target_id": {
+      "@id": "gh:target_id",
+      "@type": "xsd:integer"
+    },
+    "target_type": {
+      "@id": "gh:target_type",
+      "@type": "xsd:string"
+    },
+    "team_discussions": {
+      "@id": "gh:team_discussions",
+      "@type": "xsd:string"
+    },
+    "team_url": {
+      "@id": "gh:team_url",
+      "@type": "@id"
+    },
+    "teams_url": {
+      "@id": "gh:teams_url",
+      "@type": "@id"
+    },
+    "temp_clone_token": {
+      "@id": "gh:temp_clone_token",
+      "@type": "xsd:string"
+    },
+    "thread_url": {
+      "@id": "gh:thread_url",
+      "@type": "@id"
+    },
+    "throttled_at": {
+      "@id": "gh:throttled_at",
+      "@type": "xsd:dateTime"
+    },
+    "timeline_url": {
+      "@id": "gh:timeline_url",
+      "@type": "xsd:string"
+    },
+    "title": {
+      "@id": "gh:title",
+      "@type": "xsd:string"
+    },
+    "token": {
+      "@id": "gh:token",
+      "@type": "xsd:string"
+    },
+    "token_last_eight": {
+      "@id": "gh:token_last_eight",
+      "@type": "xsd:string"
+    },
+    "topic_search_url": {
+      "@id": "gh:topic_search_url",
+      "@type": "xsd:string"
+    },
+    "topics": {
+      "@id": "gh:topics",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "topology": {
+      "@id": "gh:topology",
+      "@type": "xsd:string"
+    },
+    "total_private_repos": {
+      "@id": "gh:total_private_repos",
+      "@type": "xsd:integer"
+    },
+    "trees_url": {
+      "@id": "gh:trees_url",
+      "@type": "xsd:string"
+    },
+    "truncated": {
+      "@id": "gh:truncated",
+      "@type": "xsd:boolean"
+    },
+    "twitter_username": {
+      "@id": "gh:twitter_username",
+      "@type": "xsd:string"
+    },
+    "two_factor_authentication": {
+      "@id": "gh:two_factor_authentication",
+      "@type": "xsd:boolean"
+    },
+    "two_factor_requirement_enabled": {
+      "@id": "gh:two_factor_requirement_enabled",
+      "@type": "xsd:boolean"
+    },
+    "type": {
+      "@id": "gh:type",
+      "@type": "xsd:string"
+    },
+    "unread": {
+      "@id": "gh:unread",
+      "@type": "xsd:boolean"
+    },
+    "updated_at": {
+      "@id": "gh:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "url": {
+      "@id": "gh:url",
+      "@type": "@id"
+    },
+    "url_template": {
+      "@id": "gh:url_template",
+      "@type": "xsd:string"
+    },
+    "use_squash_pr_title_as_default": {
+      "@id": "gh:use_squash_pr_title_as_default",
+      "@type": "xsd:boolean"
+    },
+    "used": {
+      "@id": "gh:used",
+      "@type": "xsd:integer"
+    },
+    "user": {
+      "@id": "gh:user",
+      "@type": "xsd:string"
+    },
+    "userName": {
+      "@id": "gh:userName",
+      "@type": "xsd:string"
+    },
+    "user_id": {
+      "@id": "gh:user_id",
+      "@type": "xsd:integer"
+    },
+    "user_organizations_url": {
+      "@id": "gh:user_organizations_url",
+      "@type": "xsd:string"
+    },
+    "user_repositories_url": {
+      "@id": "gh:user_repositories_url",
+      "@type": "xsd:string"
+    },
+    "user_search_url": {
+      "@id": "gh:user_search_url",
+      "@type": "xsd:string"
+    },
+    "user_url": {
+      "@id": "gh:user_url",
+      "@type": "xsd:string"
+    },
+    "verifiable_password_authentication": {
+      "@id": "gh:verifiable_password_authentication",
+      "@type": "xsd:boolean"
+    },
+    "verified": {
+      "@id": "gh:verified",
+      "@type": "xsd:boolean"
+    },
+    "version": {
+      "@id": "gh:version",
+      "@type": "xsd:string"
+    },
+    "visibility": {
+      "@id": "gh:visibility",
+      "@type": "xsd:string"
+    },
+    "vulnerability_alerts": {
+      "@id": "gh:vulnerability_alerts",
+      "@type": "xsd:string"
+    },
+    "watchers": {
+      "@id": "gh:watchers",
+      "@type": "xsd:integer"
+    },
+    "watchers_count": {
+      "@id": "gh:watchers_count",
+      "@type": "xsd:integer"
+    },
+    "web_commit_signoff_required": {
+      "@id": "gh:web_commit_signoff_required",
+      "@type": "xsd:boolean"
+    },
+    "webhook_secret": {
+      "@id": "gh:webhook_secret",
+      "@type": "xsd:string"
+    },
+    "website_url": {
+      "@id": "gh:website_url",
+      "@type": "@id"
+    },
+    "workflows": {
+      "@id": "gh:workflows",
+      "@type": "xsd:string"
     }
   }
 }

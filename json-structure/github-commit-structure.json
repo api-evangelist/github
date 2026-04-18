@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://github.com/schemas/github/commit.json",
+  "name": "GitHub Commit",
+  "description": "A Git commit in a GitHub repository, including metadata about the author, committer, tree, parents, and verification status.",
+  "type": "object",
+  "required": [
+    "sha",
+    "commit"
+  ],
+  "properties": {
+    "sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The SHA-1 hash of the commit."
+    },
+    "node_id": {
+      "type": "string",
+      "description": "The GraphQL node ID for the commit."
+    },
+    "url": {
+      "type": "uri",
+      "description": "The API URL for the commit."
+    },
+    "html_url": {
+      "type": "uri",
+      "description": "The URL of the commit on GitHub."
+    },
+    "comments_url": {
+      "type": "uri",
+      "description": "The API URL for the commit's comments."
+    },
+    "commit": {
+      "$ref": "#/$defs/GitCommit"
+    },
+    "author": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SimpleUser"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The GitHub user who authored the commit."
+    },
+    "committer": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SimpleUser"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The GitHub user who committed the changes."
+    },
+    "parents": {
+      "type": "array",
+      "description": "The parent commits of this commit.",
+      "items": {
+        "$ref": "#/$defs/ParentCommit"
+      }
+    },
+    "stats": {
+      "type": "object",
+      "description": "Statistics about the commit changes.",
+      "properties": {
+        "additions": {
+          "type": "int32",
+          "minimum": 0,
+          "description": "The number of lines added."
+        },
+        "deletions": {
+          "type": "int32",
+          "minimum": 0,
+          "description": "The number of lines deleted."
+        },
+        "total": {
+          "type": "int32",
+          "minimum": 0,
+          "description": "The total number of lines changed."
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "description": "The files changed in the commit.",
+      "items": {
+        "$ref": "#/$defs/CommitFile"
+      }
+    }
+  },
+  "$defs": {
+    "GitCommit": {
+      "type": "object",
+      "description": "The underlying Git commit object data.",
+      "required": [
+        "message",
+        "tree",
+        "author",
+        "committer"
+      ],
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "The commit message."
+        },
+        "tree": {
+          "type": "object",
+          "description": "The tree object the commit points to.",
+          "properties": {
+            "sha": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$",
+              "description": "The SHA of the tree."
+            },
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The API URL for the tree."
+            }
+          }
+        },
+        "author": {
+          "$ref": "#/$defs/GitUser"
+        },
+        "committer": {
+          "$ref": "#/$defs/GitUser"
+        },
+        "verification": {
+          "$ref": "#/$defs/Verification"
+        },
+        "comment_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The number of comments on the commit."
+        }
+      }
+    },
+    "GitUser": {
+      "type": "object",
+      "description": "A Git user (author or committer) with name, email, and timestamp.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the Git user."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address of the Git user."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the action."
+        }
+      }
+    },
+    "SimpleUser": {
+      "type": "object",
+      "description": "A simplified representation of a GitHub user.",
+      "required": [
+        "login",
+        "id"
+      ],
+      "properties": {
+        "login": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier for the user."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's avatar image."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's GitHub profile."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "User",
+            "Organization",
+            "Bot"
+          ],
+          "description": "The type of account."
+        }
+      }
+    },
+    "ParentCommit": {
+      "type": "object",
+      "description": "A reference to a parent commit.",
+      "required": [
+        "sha",
+        "url"
+      ],
+      "properties": {
+        "sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "The SHA of the parent commit."
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The API URL for the parent commit."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the parent commit on GitHub."
+        }
+      }
+    },
+    "CommitFile": {
+      "type": "object",
+      "description": "A file changed in a commit.",
+      "properties": {
+        "sha": {
+          "type": "string",
+          "description": "The SHA of the file blob."
+        },
+        "filename": {
+          "type": "string",
+          "description": "The path and name of the file."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "added",
+            "removed",
+            "modified",
+            "renamed",
+            "copied",
+            "changed",
+            "unchanged"
+          ],
+          "description": "The status of the file change."
+        },
+        "additions": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The number of lines added."
+        },
+        "deletions": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The number of lines deleted."
+        },
+        "changes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "The total number of changes."
+        },
+        "patch": {
+          "type": "string",
+          "description": "The unified diff patch for the file."
+        },
+        "previous_filename": {
+          "type": "string",
+          "description": "The previous filename if the file was renamed."
+        }
+      }
+    },
+    "Verification": {
+      "type": "object",
+      "description": "Commit signature verification status.",
+      "properties": {
+        "verified": {
+          "type": "boolean",
+          "description": "Whether the signature was verified."
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "expired_key",
+            "not_signing_key",
+            "gpgverify_error",
+            "gpgverify_unavailable",
+            "unsigned",
+            "unknown_signature_type",
+            "no_user",
+            "unverified_email",
+            "bad_email",
+            "unknown_key",
+            "malformed_signature",
+            "invalid",
+            "valid",
+            "bad_cert",
+            "ocsp_pending"
+          ],
+          "description": "The reason for the verification result."
+        },
+        "signature": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The signature that was extracted from the commit."
+        },
+        "payload": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The payload that was signed."
+        }
+      }
+    }
+  }
+}

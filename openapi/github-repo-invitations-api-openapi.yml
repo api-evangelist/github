@@ -13,25 +13,25 @@ info:
     name: Support
     url: https://support.github.com/contact
 servers:
-  - url: '{protocol}://{hostname}'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: api.github.com
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: https
+- url: '{protocol}://{hostname}'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
-  - name: Delete
-  - name: Invitation
-  - name: Invitations
-  - name: Lists
-  - name: Repositories
-    description: Source control repositories.
-  - name: Update
+- name: Delete
+- name: Invitation
+- name: Invitations
+- name: Lists
+- name: Repositories
+  description: Source control repositories.
+- name: Update
 paths:
   /repos/{owner}/{repo}/invitations:
     get:
@@ -39,33 +39,36 @@ paths:
       description: |-
         When authenticating as a user with admin rights to a repository, this endpoint will list all currently open repository invitations.
       tags:
-        - Invitations
-        - Lists
-        - Repositories
+      - Invitations
+      - Lists
+      - Repositories
       operationId: listRepositoryInvitations
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/collaborators/invitations#list-repository-invitations
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/per-page'
-        - $ref: '#/components/parameters/page'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -89,39 +92,45 @@ paths:
       x-api-evangelist-certified: '2025-07-16'
       x-api-naftiko-published: '2025-07-25'
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/invitations/{invitation_id}:
     patch:
       summary: GitHub Update Repository Invitation
       description: |-
         This API endpoint allows you to update an existing repository invitation by modifying its permissions level. You must authenticate as a repository owner or administrator and provide the invitation ID in the URL path. The PATCH request accepts a JSON body with a 'permissions' field that can be set to 'read', 'write', 'maintain', 'triage', or 'admin' to change the access level being offered to the invited user. Upon successful execution, it returns the updated invitation object containing details such as the invitation ID, invitee information, permissions level, and creation timestamp. This is useful when you need to adjust the access rights of a pending invitation before it has been accepted by the recipient.
       tags:
-        - Invitation
-        - Repositories
-        - Update
+      - Invitation
+      - Repositories
+      - Update
       operationId: updateRepositoryInvitation
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/collaborators/invitations#update-a-repository-invitation
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/invitation-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/invitation-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
@@ -134,11 +143,11 @@ paths:
                   description: |-
                     The permissions that the associated user will have on the repository. Valid values are `read`, `write`, `maintain`, `triage`, and `admin`.
                   enum:
-                    - read
-                    - write
-                    - maintain
-                    - triage
-                    - admin
+                  - read
+                  - write
+                  - maintain
+                  - triage
+                  - admin
             examples:
               default:
                 summary: Example request body
@@ -160,38 +169,44 @@ paths:
         category: collaborators
         subcategory: invitations
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Repository Invitation
       description: |-
         This API operation allows a repository owner or administrator to delete a pending invitation to collaborate on a repository. By sending a DELETE request to the endpoint with the repository owner's username, repository name, and the specific invitation ID, the invitation is permanently removed and the invited user will no longer be able to accept it. This is useful for revoking invitations that were sent in error, are no longer needed, or when access requirements have changed before the invitation was accepted.
       tags:
-        - Delete
-        - Invitation
-        - Repositories
+      - Delete
+      - Invitation
+      - Repositories
       operationId: deleteRepositoryInvitation
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/collaborators/invitations#delete-a-repository-invitation
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/invitation-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/invitation-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -201,7 +216,10 @@ paths:
         category: collaborators
         subcategory: invitations
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   schemas:
     nullable-simple-user:
@@ -211,8 +229,10 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         email:
           type: string
+          example: octocat@github.com
         login:
           type: string
           example: octocat
@@ -275,28 +295,29 @@ components:
           example: User
         site_admin:
           type: boolean
+          example: true
         starred_at:
           type: string
           example: '"2020-07-09T00:17:55Z"'
       required:
-        - avatar_url
-        - events_url
-        - followers_url
-        - following_url
-        - gists_url
-        - gravatar_id
-        - html_url
-        - id
-        - node_id
-        - login
-        - organizations_url
-        - received_events_url
-        - repos_url
-        - site_admin
-        - starred_url
-        - subscriptions_url
-        - type
-        - url
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     simple-user:
       title: Simple User
       description: GitHub user.
@@ -304,8 +325,10 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         email:
           type: string
+          example: octocat@github.com
         login:
           type: string
           example: octocat
@@ -368,28 +391,29 @@ components:
           example: User
         site_admin:
           type: boolean
+          example: true
         starred_at:
           type: string
           example: '"2020-07-09T00:17:55Z"'
       required:
-        - avatar_url
-        - events_url
-        - followers_url
-        - following_url
-        - gists_url
-        - gravatar_id
-        - html_url
-        - id
-        - node_id
-        - login
-        - organizations_url
-        - received_events_url
-        - repos_url
-        - site_admin
-        - starred_url
-        - subscriptions_url
-        - type
-        - url
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     code-of-conduct:
       title: Code Of Conduct
       description: Code Of Conduct
@@ -492,11 +516,12 @@ components:
         html_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
       required:
-        - url
-        - html_url
-        - key
-        - name
+      - url
+      - html_url
+      - key
+      - name
     security-and-analysis:
       type: object
       properties:
@@ -506,24 +531,24 @@ components:
             status:
               type: string
               enum:
-                - enabled
-                - disabled
+              - enabled
+              - disabled
         secret_scanning:
           type: object
           properties:
             status:
               type: string
               enum:
-                - enabled
-                - disabled
+              - enabled
+              - disabled
         secret_scanning_push_protection:
           type: object
           properties:
             status:
               type: string
               enum:
-                - enabled
-                - disabled
+              - enabled
+              - disabled
     minimal-repository:
       title: Minimal Repository
       description: Minimal Repository
@@ -546,6 +571,7 @@ components:
           $ref: '#/components/schemas/simple-user'
         private:
           type: boolean
+          example: true
         html_url:
           type: string
           format: uri
@@ -555,6 +581,7 @@ components:
           example: This your first repo!
         fork:
           type: boolean
+          example: true
         url:
           type: string
           format: uri
@@ -806,52 +833,52 @@ components:
         security_and_analysis:
           $ref: '#/components/schemas/security-and-analysis'
       required:
-        - archive_url
-        - assignees_url
-        - blobs_url
-        - branches_url
-        - collaborators_url
-        - comments_url
-        - commits_url
-        - compare_url
-        - contents_url
-        - contributors_url
-        - deployments_url
-        - description
-        - downloads_url
-        - events_url
-        - fork
-        - forks_url
-        - full_name
-        - git_commits_url
-        - git_refs_url
-        - git_tags_url
-        - hooks_url
-        - html_url
-        - id
-        - node_id
-        - issue_comment_url
-        - issue_events_url
-        - issues_url
-        - keys_url
-        - labels_url
-        - languages_url
-        - merges_url
-        - milestones_url
-        - name
-        - notifications_url
-        - owner
-        - private
-        - pulls_url
-        - releases_url
-        - stargazers_url
-        - statuses_url
-        - subscribers_url
-        - subscription_url
-        - tags_url
-        - teams_url
-        - trees_url
-        - url
+      - archive_url
+      - assignees_url
+      - blobs_url
+      - branches_url
+      - collaborators_url
+      - comments_url
+      - commits_url
+      - compare_url
+      - contents_url
+      - contributors_url
+      - deployments_url
+      - description
+      - downloads_url
+      - events_url
+      - fork
+      - forks_url
+      - full_name
+      - git_commits_url
+      - git_refs_url
+      - git_tags_url
+      - hooks_url
+      - html_url
+      - id
+      - node_id
+      - issue_comment_url
+      - issue_events_url
+      - issues_url
+      - keys_url
+      - labels_url
+      - languages_url
+      - merges_url
+      - milestones_url
+      - name
+      - notifications_url
+      - owner
+      - private
+      - pulls_url
+      - releases_url
+      - stargazers_url
+      - statuses_url
+      - subscribers_url
+      - subscription_url
+      - tags_url
+      - teams_url
+      - trees_url
+      - url
     repository-invitation:
       title: Repository Invitation
       description: Repository invitations let you manage who you collaborate with.
@@ -873,11 +900,11 @@ components:
           example: read
           type: string
           enum:
-            - read
-            - write
-            - admin
-            - triage
-            - maintain
+          - read
+          - write
+          - admin
+          - triage
+          - maintain
         created_at:
           type: string
           format: date-time
@@ -885,6 +912,7 @@ components:
         expired:
           description: Whether or not the invitation has expired
           type: boolean
+          example: true
         url:
           description: URL for the repository invitation
           example: https://api.github.com/user/repository-invitations/1
@@ -894,95 +922,27 @@ components:
           example: https://github.com/octocat/Hello-World/invitations
         node_id:
           type: string
+          example: '12345678'
       required:
-        - id
-        - node_id
-        - permissions
-        - inviter
-        - invitee
-        - repository
-        - url
-        - html_url
-        - created_at
+      - id
+      - node_id
+      - permissions
+      - inviter
+      - invitee
+      - repository
+      - url
+      - html_url
+      - created_at
   examples:
     repository-invitation-items:
       value:
-        - id: 1
-          repository:
-            id: 1296269
-            node_id: MDEwOlJlcG9zaXRvcnkxMjk2MjY5
-            name: Hello-World
-            full_name: octocat/Hello-World
-            owner:
-              login: octocat
-              id: 1
-              node_id: MDQ6VXNlcjE=
-              avatar_url: https://github.com/images/error/octocat_happy.gif
-              gravatar_id: ''
-              url: https://api.github.com/users/octocat
-              html_url: https://github.com/octocat
-              followers_url: https://api.github.com/users/octocat/followers
-              following_url: https://api.github.com/users/octocat/following{/other_user}
-              gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-              starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-              subscriptions_url: https://api.github.com/users/octocat/subscriptions
-              organizations_url: https://api.github.com/users/octocat/orgs
-              repos_url: https://api.github.com/users/octocat/repos
-              events_url: https://api.github.com/users/octocat/events{/privacy}
-              received_events_url: https://api.github.com/users/octocat/received_events
-              type: User
-              site_admin: false
-            private: false
-            html_url: https://github.com/octocat/Hello-World
-            description: This your first repo!
-            fork: false
-            url: https://api.github.com/repos/octocat/Hello-World
-            archive_url: |-
-              https://api.github.com/repos/octocat/Hello-World/{archive_format}{/ref}
-            assignees_url: https://api.github.com/repos/octocat/Hello-World/assignees{/user}
-            blobs_url: https://api.github.com/repos/octocat/Hello-World/git/blobs{/sha}
-            branches_url: https://api.github.com/repos/octocat/Hello-World/branches{/branch}
-            collaborators_url: |-
-              https://api.github.com/repos/octocat/Hello-World/collaborators{/collaborator}
-            comments_url: https://api.github.com/repos/octocat/Hello-World/comments{/number}
-            commits_url: https://api.github.com/repos/octocat/Hello-World/commits{/sha}
-            compare_url: |-
-              https://api.github.com/repos/octocat/Hello-World/compare/{base}...{head}
-            contents_url: https://api.github.com/repos/octocat/Hello-World/contents/{+path}
-            contributors_url: https://api.github.com/repos/octocat/Hello-World/contributors
-            deployments_url: https://api.github.com/repos/octocat/Hello-World/deployments
-            downloads_url: https://api.github.com/repos/octocat/Hello-World/downloads
-            events_url: https://api.github.com/repos/octocat/Hello-World/events
-            forks_url: https://api.github.com/repos/octocat/Hello-World/forks
-            git_commits_url: https://api.github.com/repos/octocat/Hello-World/git/commits{/sha}
-            git_refs_url: https://api.github.com/repos/octocat/Hello-World/git/refs{/sha}
-            git_tags_url: https://api.github.com/repos/octocat/Hello-World/git/tags{/sha}
-            git_url: git:github.com/octocat/Hello-World.git
-            issue_comment_url: |-
-              https://api.github.com/repos/octocat/Hello-World/issues/comments{/number}
-            issue_events_url: |-
-              https://api.github.com/repos/octocat/Hello-World/issues/events{/number}
-            issues_url: https://api.github.com/repos/octocat/Hello-World/issues{/number}
-            keys_url: https://api.github.com/repos/octocat/Hello-World/keys{/key_id}
-            labels_url: https://api.github.com/repos/octocat/Hello-World/labels{/name}
-            languages_url: https://api.github.com/repos/octocat/Hello-World/languages
-            merges_url: https://api.github.com/repos/octocat/Hello-World/merges
-            milestones_url: |-
-              https://api.github.com/repos/octocat/Hello-World/milestones{/number}
-            notifications_url: |-
-              https://api.github.com/repos/octocat/Hello-World/notifications{?since,all,participating}
-            pulls_url: https://api.github.com/repos/octocat/Hello-World/pulls{/number}
-            releases_url: https://api.github.com/repos/octocat/Hello-World/releases{/id}
-            ssh_url: git@github.com:octocat/Hello-World.git
-            stargazers_url: https://api.github.com/repos/octocat/Hello-World/stargazers
-            statuses_url: https://api.github.com/repos/octocat/Hello-World/statuses/{sha}
-            subscribers_url: https://api.github.com/repos/octocat/Hello-World/subscribers
-            subscription_url: https://api.github.com/repos/octocat/Hello-World/subscription
-            tags_url: https://api.github.com/repos/octocat/Hello-World/tags
-            teams_url: https://api.github.com/repos/octocat/Hello-World/teams
-            trees_url: https://api.github.com/repos/octocat/Hello-World/git/trees{/sha}
-            hooks_url: http://api.github.com/repos/octocat/Hello-World/hooks
-          invitee:
+      - id: 1
+        repository:
+          id: 1296269
+          node_id: MDEwOlJlcG9zaXRvcnkxMjk2MjY5
+          name: Hello-World
+          full_name: octocat/Hello-World
+          owner:
             login: octocat
             id: 1
             node_id: MDQ6VXNlcjE=
@@ -1001,30 +961,99 @@ components:
             received_events_url: https://api.github.com/users/octocat/received_events
             type: User
             site_admin: false
-          inviter:
-            login: octocat
-            id: 1
-            node_id: MDQ6VXNlcjE=
-            avatar_url: https://github.com/images/error/octocat_happy.gif
-            gravatar_id: ''
-            url: https://api.github.com/users/octocat
-            html_url: https://github.com/octocat
-            followers_url: https://api.github.com/users/octocat/followers
-            following_url: https://api.github.com/users/octocat/following{/other_user}
-            gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-            starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-            subscriptions_url: https://api.github.com/users/octocat/subscriptions
-            organizations_url: https://api.github.com/users/octocat/orgs
-            repos_url: https://api.github.com/users/octocat/repos
-            events_url: https://api.github.com/users/octocat/events{/privacy}
-            received_events_url: https://api.github.com/users/octocat/received_events
-            type: User
-            site_admin: false
-          permissions: write
-          created_at: '2016-06-13T14:52:50-05:00'
-          url: https://api.github.com/user/repository_invitations/1296269
-          html_url: https://github.com/octocat/Hello-World/invitations
+          private: false
+          html_url: https://github.com/octocat/Hello-World
+          description: This your first repo!
+          fork: false
+          url: https://api.github.com/repos/octocat/Hello-World
+          archive_url: |-
+            https://api.github.com/repos/octocat/Hello-World/{archive_format}{/ref}
+          assignees_url: https://api.github.com/repos/octocat/Hello-World/assignees{/user}
+          blobs_url: https://api.github.com/repos/octocat/Hello-World/git/blobs{/sha}
+          branches_url: https://api.github.com/repos/octocat/Hello-World/branches{/branch}
+          collaborators_url: |-
+            https://api.github.com/repos/octocat/Hello-World/collaborators{/collaborator}
+          comments_url: https://api.github.com/repos/octocat/Hello-World/comments{/number}
+          commits_url: https://api.github.com/repos/octocat/Hello-World/commits{/sha}
+          compare_url: |-
+            https://api.github.com/repos/octocat/Hello-World/compare/{base}...{head}
+          contents_url: https://api.github.com/repos/octocat/Hello-World/contents/{+path}
+          contributors_url: https://api.github.com/repos/octocat/Hello-World/contributors
+          deployments_url: https://api.github.com/repos/octocat/Hello-World/deployments
+          downloads_url: https://api.github.com/repos/octocat/Hello-World/downloads
+          events_url: https://api.github.com/repos/octocat/Hello-World/events
+          forks_url: https://api.github.com/repos/octocat/Hello-World/forks
+          git_commits_url: https://api.github.com/repos/octocat/Hello-World/git/commits{/sha}
+          git_refs_url: https://api.github.com/repos/octocat/Hello-World/git/refs{/sha}
+          git_tags_url: https://api.github.com/repos/octocat/Hello-World/git/tags{/sha}
+          git_url: git:github.com/octocat/Hello-World.git
+          issue_comment_url: |-
+            https://api.github.com/repos/octocat/Hello-World/issues/comments{/number}
+          issue_events_url: |-
+            https://api.github.com/repos/octocat/Hello-World/issues/events{/number}
+          issues_url: https://api.github.com/repos/octocat/Hello-World/issues{/number}
+          keys_url: https://api.github.com/repos/octocat/Hello-World/keys{/key_id}
+          labels_url: https://api.github.com/repos/octocat/Hello-World/labels{/name}
+          languages_url: https://api.github.com/repos/octocat/Hello-World/languages
+          merges_url: https://api.github.com/repos/octocat/Hello-World/merges
+          milestones_url: |-
+            https://api.github.com/repos/octocat/Hello-World/milestones{/number}
+          notifications_url: |-
+            https://api.github.com/repos/octocat/Hello-World/notifications{?since,all,participating}
+          pulls_url: https://api.github.com/repos/octocat/Hello-World/pulls{/number}
+          releases_url: https://api.github.com/repos/octocat/Hello-World/releases{/id}
+          ssh_url: git@github.com:octocat/Hello-World.git
+          stargazers_url: https://api.github.com/repos/octocat/Hello-World/stargazers
+          statuses_url: https://api.github.com/repos/octocat/Hello-World/statuses/{sha}
+          subscribers_url: https://api.github.com/repos/octocat/Hello-World/subscribers
+          subscription_url: https://api.github.com/repos/octocat/Hello-World/subscription
+          tags_url: https://api.github.com/repos/octocat/Hello-World/tags
+          teams_url: https://api.github.com/repos/octocat/Hello-World/teams
+          trees_url: https://api.github.com/repos/octocat/Hello-World/git/trees{/sha}
+          hooks_url: http://api.github.com/repos/octocat/Hello-World/hooks
+        invitee:
+          login: octocat
+          id: 1
           node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        inviter:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        permissions: write
+        created_at: '2016-06-13T14:52:50-05:00'
+        url: https://api.github.com/user/repository_invitations/1296269
+        html_url: https://github.com/octocat/Hello-World/invitations
+        node_id: MDQ6VXNlcjE=
     repository-invitation:
       value:
         id: 1

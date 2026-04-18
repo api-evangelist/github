@@ -13,37 +13,37 @@ info:
     name: Support
     url: https://support.github.com/contact
 servers:
-  - url: '{protocol}://{hostname}'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: api.github.com
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: https
+- url: '{protocol}://{hostname}'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
-  - name: Configuration
-  - name: Create
-  - name: Delete
-  - name: Deliveries
-  - name: Enforcement
-  - name: Get
-  - name: Hook
-  - name: Hooks
-  - name: Lists
-  - name: Ping
-  - name: Pre-Receive
-  - name: Push
-  - name: Re-Deliver
-  - name: Remove
-  - name: Repositories
-    description: Source control repositories.
-  - name: Tests
-  - name: Update
-  - name: Webhooks
+- name: Configuration
+- name: Create
+- name: Delete
+- name: Deliveries
+- name: Enforcement
+- name: Get
+- name: Hook
+- name: Hooks
+- name: Lists
+- name: Ping
+- name: Pre-Receive
+- name: Push
+- name: Re-Deliver
+- name: Remove
+- name: Repositories
+  description: Source control repositories.
+- name: Tests
+- name: Update
+- name: Webhooks
 paths:
   /repos/{owner}/{repo}/hooks:
     get:
@@ -51,33 +51,36 @@ paths:
       description: |-
         Lists webhooks for a repository. `last response` may return null if there have not been any deliveries within 30 days.
       tags:
-        - Lists
-        - Repositories
-        - Webhooks
+      - Lists
+      - Repositories
+      - Webhooks
       operationId: listRepositoryWebhooks
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#list-repository-webhooks
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/per-page'
-        - $ref: '#/components/parameters/page'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -103,38 +106,44 @@ paths:
       x-api-evangelist-certified: '2025-07-16'
       x-api-naftiko-published: '2025-07-25'
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Create Repository Webhook
       description: |-
         Repositories can have multiple webhooks installed. Each webhook should have a unique `config`. Multiple webhooks can
         share the same `config` as long as those webhooks do not have any `events` that overlap.
       tags:
-        - Create
-        - Repositories
-        - Webhooks
+      - Create
+      - Repositories
+      - Webhooks
       operationId: createRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#create-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
@@ -163,7 +172,7 @@ paths:
                   description: |-
                     Determines what [events](https://docs.github.com/enterprise-server@3.9/webhooks/event-payloads) the hook is triggered for.
                   default:
-                    - push
+                  - push
                   items:
                     type: string
                 active:
@@ -178,8 +187,8 @@ paths:
                   name: web
                   active: true
                   events:
-                    - push
-                    - pull_request
+                  - push
+                  - pull_request
                   config:
                     url: https://example.com/webhook
                     content_type: json
@@ -211,39 +220,45 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}:
     get:
       summary: GitHub Get Repository Webhook
       description: |-
         Returns a webhook configured in a repository. To get only the webhook `config` properties, see "[Get webhook configuration for a repository](/rest/webhooks/repo-config#get-a-webhook-configuration-for-a-repository)."
       tags:
-        - Get
-        - Repositories
-        - Webhooks
+      - Get
+      - Repositories
+      - Webhooks
       operationId: getRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#get-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -262,38 +277,44 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     patch:
       summary: GitHub Update Repository Webhook
       description: |-
         Updates a webhook configured in a repository. If you previously had a `secret` set, you must provide the same `secret` or set a new `secret` or the secret will be removed. If you are only updating individual webhook `config` properties, use "[Update a webhook configuration for a repository](/rest/webhooks/repo-config#update-a-webhook-configuration-for-a-repository)."
       tags:
-        - Repositories
-        - Update
-        - Webhooks
+      - Repositories
+      - Update
+      - Webhooks
       operationId: updateRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#update-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: true
         content:
@@ -308,7 +329,7 @@ paths:
                   description: |-
                     Determines what [events](https://docs.github.com/enterprise-server@3.9/webhooks/event-payloads) the hook is triggered for. This replaces the entire array of events.
                   default:
-                    - push
+                  - push
                   items:
                     type: string
                 add_events:
@@ -333,7 +354,7 @@ paths:
                 value:
                   active: true
                   add_events:
-                    - pull_request
+                  - pull_request
       responses:
         '200':
           description: Response
@@ -354,38 +375,44 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Repository Webhook
       description: |-
         This API operation deletes a specific webhook from a GitHub repository by sending a DELETE request to the endpoint /repos/{owner}/{repo}/hooks/{hook_id}. The operation requires three path parameters: the repository owner's username, the repository name, and the unique identifier of the webhook to be removed. Upon successful execution, the webhook is permanently deleted from the repository, meaning it will no longer receive or trigger events for that repository. This operation typically requires appropriate authentication and repository admin permissions to execute, and it returns a 204 No Content status code when the deletion is successful.
       tags:
-        - Delete
-        - Repositories
-        - Webhooks
+      - Delete
+      - Repositories
+      - Webhooks
       operationId: deleteRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#delete-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -397,42 +424,48 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/config:
     get:
-      summary: GitHub Get Webhook Configuration For Repository
+      summary: GitHub Get Webhook Configuration for Repository
       description: |-
         Returns the webhook configuration for a repository. To get more information about the webhook, including the `active` state and `events`, use "[Get repository webhook](/rest/webhooks/repos#get-a-repository-webhook)."
 
         OAuth app tokens and personal access tokens (classic) need the `read:repo_hook` or `repo` scope to use this endpoint.
       tags:
-        - Configuration
-        - Get
-        - Repositories
-        - Webhooks
+      - Configuration
+      - Get
+      - Repositories
+      - Webhooks
       operationId: getWebhookConfigurationForRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#get-a-webhook-configuration-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -449,41 +482,47 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     patch:
-      summary: GitHub Update Webhook Configuration For Repository
+      summary: GitHub Update Webhook Configuration for Repository
       description: |-
         Updates the webhook configuration for a repository. To update more information about the webhook, including the `active` state and `events`, use "[Update a repository webhook](/rest/webhooks/repos#update-a-repository-webhook)."
 
         OAuth app tokens and personal access tokens (classic) need the `write:repo_hook` or `repo` scope to use this endpoint.
       tags:
-        - Configuration
-        - Repositories
-        - Update
-        - Webhooks
+      - Configuration
+      - Repositories
+      - Update
+      - Webhooks
       operationId: updateWebhookConfigurationForRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#update-a-webhook-configuration-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
@@ -522,47 +561,54 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/deliveries:
     get:
-      summary: GitHub List Deliveries For Repository Webhook
+      summary: GitHub List Deliveries for Repository Webhook
       description: |-
         Returns a list of webhook deliveries for a webhook configured in a repository.
       tags:
-        - Deliveries
-        - Lists
-        - Repositories
-        - Webhooks
+      - Deliveries
+      - Lists
+      - Repositories
+      - Webhooks
       operationId: listDeliveriesForRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#list-deliveries-for-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - $ref: '#/components/parameters/per-page'
-        - $ref: '#/components/parameters/cursor'
-        - name: redelivery
-          in: query
-          required: false
-          schema:
-            type: boolean
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/cursor'
+      - name: redelivery
+        in: query
+        required: false
+        schema:
+          type: boolean
+        example: true
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -585,40 +631,46 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}:
     get:
-      summary: GitHub Get Delivery For Repository Webhook
+      summary: GitHub Get Delivery for Repository Webhook
       description: Returns a delivery for a webhook configured in a repository.
       tags:
-        - Deliveries
-        - Get
-        - Repositories
-        - Webhooks
+      - Deliveries
+      - Get
+      - Repositories
+      - Webhooks
       operationId: getDeliveryForRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#get-a-delivery-for-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - $ref: '#/components/parameters/delivery-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - $ref: '#/components/parameters/delivery-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -639,40 +691,46 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts:
     post:
-      summary: GitHub Redeliver Delivery For Repository Webhook
+      summary: GitHub Redeliver Delivery for Repository Webhook
       description: Redeliver a webhook delivery for a webhook configured in a repository.
       tags:
-        - Deliveries
-        - Re-Deliver
-        - Repositories
-        - Webhooks
+      - Deliveries
+      - Re-Deliver
+      - Repositories
+      - Webhooks
       operationId: redeliverDeliveryForRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#redeliver-a-delivery-for-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - $ref: '#/components/parameters/delivery-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - $ref: '#/components/parameters/delivery-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '202':
           $ref: '#/components/responses/accepted'
@@ -686,39 +744,45 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/pings:
     post:
       summary: GitHub Ping Repository Webhook
       description: |-
         This will trigger a [ping event](https://docs.github.com/enterprise-server@3.9/webhooks/#ping-event) to be sent to the hook.
       tags:
-        - Ping
-        - Repositories
-        - Webhooks
+      - Ping
+      - Repositories
+      - Webhooks
       operationId: pingRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#ping-a-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -730,42 +794,48 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/hooks/{hook_id}/tests:
     post:
-      summary: GitHub Test The Push Repository Webhook
+      summary: GitHub Test the Push Repository Webhook
       description: |-
         This will trigger the hook with the latest push to the current repository if the hook is subscribed to `push` events. If the hook is not subscribed to `push` events, the server will respond with 204 but no test POST will be generated.
 
         **Note**: Previously `/repos/:owner/:repo/hooks/:hook_id/test`
       tags:
-        - Push
-        - Repositories
-        - Tests
-        - Webhooks
+      - Push
+      - Repositories
+      - Tests
+      - Webhooks
       operationId: testThePushRepositoryWebhook
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/webhooks#test-the-push-repository-webhook
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -777,52 +847,59 @@ paths:
         category: repos
         subcategory: webhooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/pre-receive-hooks:
     get:
-      summary: GitHub List Pre-receive Hooks For Repository
+      summary: GitHub List Pre-receive Hooks for Repository
       description: |-
         List all pre-receive hooks that are enabled or testing for this repository as well as any disabled hooks that are allowed to be enabled at the repository level. Pre-receive hooks that are disabled at a higher level and are not configurable will not be listed.
       operationId: listPrereceiveHooksForRepository
       tags:
-        - Hooks
-        - Lists
-        - Pre-Receive
-        - Repositories
+      - Hooks
+      - Lists
+      - Pre-Receive
+      - Repositories
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/repo-pre-receive-hooks#list-pre-receive-hooks-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/per-page'
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/direction'
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - created
-              - updated
-              - name
-            default: created
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/direction'
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - created
+          - updated
+          - name
+          default: created
+        example: created
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -841,40 +918,46 @@ paths:
         category: enterprise-admin
         subcategory: repo-pre-receive-hooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/pre-receive-hooks/{pre_receive_hook_id}:
     get:
-      summary: GitHub Get Pre-receive Hook For Repository
+      summary: GitHub Get Pre-receive Hook for Repository
       description: |-
         This API endpoint retrieves detailed information about a specific pre-receive hook configured for a GitHub repository. Pre-receive hooks are scripts that run on the GitHub server before code is accepted into a repository, allowing administrators to enforce quality standards or policies. By providing the repository owner, repository name, and the pre-receive hook ID in the URL path, this GET operation returns comprehensive details about that particular hook, including its configuration, enforcement level, and current status within the specified repository.
       operationId: getPrereceiveHookForRepository
       tags:
-        - Get
-        - Hook
-        - Pre-Receive
-        - Repositories
+      - Get
+      - Hook
+      - Pre-Receive
+      - Repositories
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/repo-pre-receive-hooks#get-a-pre-receive-hook-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/pre-receive-hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/pre-receive-hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -891,40 +974,46 @@ paths:
         category: enterprise-admin
         subcategory: repo-pre-receive-hooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     patch:
-      summary: GitHub Update Pre-receive Hook Enforcement For Repository
+      summary: GitHub Update Pre-receive Hook Enforcement for Repository
       description: |-
         For pre-receive hooks which are allowed to be configured at the repo level, you can set `enforcement`
       operationId: updatePrereceiveHookEnforcementForRepository
       tags:
-        - Enforcement
-        - Hook
-        - Pre-Receive
-        - Repositories
-        - Update
+      - Enforcement
+      - Hook
+      - Pre-Receive
+      - Repositories
+      - Update
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/repo-pre-receive-hooks#update-pre-receive-hook-enforcement-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/pre-receive-hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/pre-receive-hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -946,9 +1035,9 @@ paths:
                   description: The state of enforcement for the hook on this repository.
                   type: string
                   enum:
-                    - enabled
-                    - disabled
-                    - testing
+                  - enabled
+                  - disabled
+                  - testing
             examples:
               default:
                 value:
@@ -959,42 +1048,48 @@ paths:
         category: enterprise-admin
         subcategory: repo-pre-receive-hooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
-      summary: GitHub Remove Pre-receive Hook Enforcement For Repository
+      summary: GitHub Remove Pre-receive Hook Enforcement for Repository
       description: |-
         Deletes any overridden enforcement on this repository for the specified hook.
 
         Responds with effective values inherited from owner and/or global level.
       operationId: removePrereceiveHookEnforcementForRepository
       tags:
-        - Enforcement
-        - Hook
-        - Pre-Receive
-        - Remove
-        - Repositories
+      - Enforcement
+      - Hook
+      - Pre-Receive
+      - Remove
+      - Repositories
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/repo-pre-receive-hooks#remove-pre-receive-hook-enforcement-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/pre-receive-hook-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/pre-receive-hook-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: |-
@@ -1012,7 +1107,10 @@ paths:
         category: enterprise-admin
         subcategory: repo-pre-receive-hooks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   schemas:
     basic-error:
@@ -1022,12 +1120,16 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
+          example: open
     webhook-config-url:
       type: string
       description: The URL to which the payloads will be delivered.
@@ -1045,11 +1147,11 @@ components:
       example: '"********"'
     webhook-config-insecure-ssl:
       oneOf:
-        - type: string
-          description: |-
-            Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.**
-          example: '"0"'
-        - type: number
+      - type: string
+        description: |-
+          Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.**
+        example: '"0"'
+      - type: number
     webhook-config:
       title: Webhook Configuration
       description: Configuration object of the webhook
@@ -1120,17 +1222,17 @@ components:
           format: date-time
           example: '2021-05-12T20:33:44Z'
       required:
-        - id
-        - guid
-        - delivered_at
-        - redelivery
-        - duration
-        - status
-        - status_code
-        - event
-        - action
-        - installation_id
-        - repository_id
+      - id
+      - guid
+      - delivered_at
+      - redelivery
+      - duration
+      - status
+      - status_code
+      - event
+      - action
+      - installation_id
+      - repository_id
     scim-error:
       title: Scim Error
       description: Scim Error
@@ -1138,14 +1240,19 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         detail:
           type: string
+          example: example_value
         status:
           type: integer
+          example: 42
         scimType:
           type: string
+          example: User
         schemas:
           type: array
           items:
@@ -1155,19 +1262,21 @@ components:
       description: Validation Error
       type: object
       required:
-        - message
-        - documentation_url
+      - message
+      - documentation_url
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         errors:
           type: array
           items:
             type: object
             required:
-              - code
+            - code
             properties:
               resource:
                 type: string
@@ -1181,11 +1290,11 @@ components:
                 type: integer
               value:
                 oneOf:
-                  - type: string
-                  - type: integer
-                  - type: array
-                    items:
-                      type: string
+                - type: string
+                - type: integer
+                - type: array
+                  items:
+                    type: string
     hook-delivery:
       title: Webhook delivery
       description: Delivery made by a webhook.
@@ -1258,8 +1367,8 @@ components:
               type: object
               additionalProperties: true
           required:
-            - headers
-            - payload
+          - headers
+          - payload
         response:
           type: object
           properties:
@@ -1272,36 +1381,39 @@ components:
               type: string
               additionalProperties: true
           required:
-            - headers
-            - payload
+          - headers
+          - payload
       required:
-        - id
-        - guid
-        - delivered_at
-        - redelivery
-        - duration
-        - status
-        - status_code
-        - event
-        - action
-        - installation_id
-        - repository_id
-        - request
-        - response
+      - id
+      - guid
+      - delivered_at
+      - redelivery
+      - duration
+      - status
+      - status_code
+      - event
+      - action
+      - installation_id
+      - repository_id
+      - request
+      - response
     hook-response:
       title: Hook Response
       type: object
       properties:
         code:
           type: integer
+          example: 42
         status:
           type: string
+          example: open
         message:
           type: string
+          example: Example body text
       required:
-        - code
-        - status
-        - message
+      - code
+      - status
+      - message
     hook:
       title: Webhook
       description: Webhooks for repositories.
@@ -1309,6 +1421,7 @@ components:
       properties:
         type:
           type: string
+          example: User
         id:
           description: Unique identifier of the webhook.
           example: 42
@@ -1327,8 +1440,8 @@ components:
           items:
             type: string
           example:
-            - push
-            - pull_request
+          - push
+          - pull_request
         config:
           $ref: '#/components/schemas/webhook-config'
         updated_at:
@@ -1358,29 +1471,33 @@ components:
         last_response:
           $ref: '#/components/schemas/hook-response'
       required:
-        - id
-        - url
-        - type
-        - name
-        - active
-        - events
-        - config
-        - ping_url
-        - created_at
-        - updated_at
-        - last_response
-        - test_url
+      - id
+      - url
+      - type
+      - name
+      - active
+      - events
+      - config
+      - ping_url
+      - created_at
+      - updated_at
+      - last_response
+      - test_url
     repository-pre-receive-hook:
       type: object
       properties:
         id:
           type: integer
+          example: 42
         name:
           type: string
+          example: octocat
         enforcement:
           type: string
+          example: example_value
         configuration_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
   examples:
     webhook-config:
       value:
@@ -1390,30 +1507,30 @@ components:
         url: https://example.com/webhook
     hook-delivery-items:
       value:
-        - id: 12345678
-          guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-          delivered_at: '2019-06-03T00:57:16Z'
-          redelivery: false
-          duration: 0.27
-          status: OK
-          status_code: 200
-          event: issues
-          action: opened
-          installation_id: 123
-          repository_id: 456
-          throttled_at: '2019-06-03T00:57:16Z'
-        - id: 123456789
-          guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-          delivered_at: '2019-06-04T00:57:16Z'
-          redelivery: true
-          duration: 0.28
-          status: OK
-          status_code: 200
-          event: issues
-          action: opened
-          installation_id: 123
-          repository_id: 456
-          throttled_at: '2019-06-03T00:57:16Z'
+      - id: 12345678
+        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+        delivered_at: '2019-06-03T00:57:16Z'
+        redelivery: false
+        duration: 0.27
+        status: OK
+        status_code: 200
+        event: issues
+        action: opened
+        installation_id: 123
+        repository_id: 456
+        throttled_at: '2019-06-03T00:57:16Z'
+      - id: 123456789
+        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+        delivered_at: '2019-06-04T00:57:16Z'
+        redelivery: true
+        duration: 0.28
+        status: OK
+        status_code: 200
+        event: issues
+        action: opened
+        installation_id: 123
+        repository_id: 456
+        throttled_at: '2019-06-03T00:57:16Z'
     hook-delivery:
       value:
         id: 12345678
@@ -1453,29 +1570,29 @@ components:
           payload: ok
     hook-items:
       value:
-        - type: Repository
-          id: 12345678
-          name: web
-          active: true
-          events:
-            - push
-            - pull_request
-          config:
-            content_type: json
-            insecure_ssl: '0'
-            url: https://example.com/webhook
-          updated_at: '2019-06-03T00:57:16Z'
-          created_at: '2019-06-03T00:57:16Z'
-          url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678
-          test_url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678/test
-          ping_url: |-
-            https://api.github.com/repos/octocat/Hello-World/hooks/12345678/pings
-          deliveries_url: |-
-            https://api.github.com/repos/octocat/Hello-World/hooks/12345678/deliveries
-          last_response:
-            code: 1
-            status: unused
-            message: ''
+      - type: Repository
+        id: 12345678
+        name: web
+        active: true
+        events:
+        - push
+        - pull_request
+        config:
+          content_type: json
+          insecure_ssl: '0'
+          url: https://example.com/webhook
+        updated_at: '2019-06-03T00:57:16Z'
+        created_at: '2019-06-03T00:57:16Z'
+        url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678
+        test_url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678/test
+        ping_url: |-
+          https://api.github.com/repos/octocat/Hello-World/hooks/12345678/pings
+        deliveries_url: |-
+          https://api.github.com/repos/octocat/Hello-World/hooks/12345678/deliveries
+        last_response:
+          code: 1
+          status: unused
+          message: ''
     hook:
       value:
         type: Repository
@@ -1483,8 +1600,8 @@ components:
         name: web
         active: true
         events:
-          - push
-          - pull_request
+        - push
+        - pull_request
         config:
           content_type: json
           insecure_ssl: '0'
@@ -1502,10 +1619,10 @@ components:
           message: ''
     repository-pre-receive-hook-items:
       value:
-        - id: 42
-          name: Check Commits
-          enforcement: disabled
-          configuration_url: https://github.example.com/api/v3/orgs/octocat/pre-receive-hooks/42
+      - id: 42
+        name: Check Commits
+        enforcement: disabled
+        configuration_url: https://github.example.com/api/v3/orgs/octocat/pre-receive-hooks/42
     repository-pre-receive-hook:
       value:
         id: 42
@@ -1552,8 +1669,8 @@ components:
       schema:
         type: string
         enum:
-          - asc
-          - desc
+        - asc
+        - desc
         default: desc
     pre-receive-hook-id:
       name: pre_receive_hook_id

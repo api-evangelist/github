@@ -13,44 +13,44 @@ info:
     name: Support
     url: https://support.github.com/contact
 servers:
-  - url: '{protocol}://{hostname}'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: api.github.com
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: https
+- url: '{protocol}://{hostname}'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
-  - name: Access
-  - name: Add
-  - name: Administrative
-  - name: All
-  - name: Applications
-  - name: Branches
-  - name: Checks
-  - name: Commits
-  - name: Contexts
-  - name: Create
-  - name: Delete
-  - name: Get
-  - name: Protected
-  - name: Protections
-  - name: Pull
-  - name: Remove
-  - name: Rename
-  - name: Requests
-  - name: Restrictions
-  - name: Reviews
-  - name: Sets
-  - name: Signatures
-  - name: Status
-  - name: Teams
-  - name: Update
-  - name: Users
+- name: Access
+- name: Add
+- name: Administrative
+- name: All
+- name: Applications
+- name: Branches
+- name: Checks
+- name: Commits
+- name: Contexts
+- name: Create
+- name: Delete
+- name: Get
+- name: Protected
+- name: Protections
+- name: Pull
+- name: Remove
+- name: Rename
+- name: Requests
+- name: Restrictions
+- name: Reviews
+- name: Sets
+- name: Signatures
+- name: Status
+- name: Teams
+- name: Update
+- name: Users
 paths:
   /repos/{owner}/{repo}/branches/{branch}:
     get:
@@ -58,31 +58,34 @@ paths:
       description: |-
         The Get Branch endpoint retrieves detailed information about a specific branch in a GitHub repository. By making a GET request to /repos/{owner}/{repo}/branches/{branch}, you can access comprehensive data about the branch including its name, commit SHA, protection status, and associated metadata. This operation requires you to provide the repository owner's username, the repository name, and the specific branch name as path parameters. The response includes the branch's latest commit information, protection rules if enabled, and links to related resources. This endpoint is particularly useful for verifying branch existence, checking protection settings, or retrieving the current commit reference before performing operations like merges or deployments.
       tags:
-        - Branches
-        - Get
+      - Branches
+      - Get
       operationId: getBranch
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branches#get-a-branch
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -103,39 +106,45 @@ paths:
         category: branches
         subcategory: branches
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection:
     get:
       summary: GitHub Get Branch Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Branches
-        - Get
-        - Protections
+      - Branches
+      - Get
+      - Protections
       operationId: getBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -154,7 +163,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       summary: GitHub Update Branch Protection
       description: |-
@@ -166,32 +178,35 @@ paths:
 
         **Note**: The list of users, apps, and teams in total is limited to 100 items.
       tags:
-        - Branches
-        - Protections
-        - Update
+      - Branches
+      - Protections
+      - Update
       operationId: updateBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#update-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: true
         content:
@@ -221,7 +236,7 @@ paths:
                       items:
                         type: object
                         required:
-                          - context
+                        - context
                         properties:
                           context:
                             type: string
@@ -231,8 +246,8 @@ paths:
                             description: |-
                               The ID of the GitHub App that must provide this check. Omit this field to automatically select the GitHub App that has recently provided this check, or any app if it was not set by a GitHub App. Pass -1 to explicitly allow any app to set the status.
                   required:
-                    - strict
-                    - contexts
+                  - strict
+                  - contexts
                 enforce_admins:
                   type: boolean
                   description: |-
@@ -323,8 +338,8 @@ paths:
                       items:
                         type: string
                   required:
-                    - users
-                    - teams
+                  - users
+                  - teams
                 required_linear_history:
                   type: boolean
                   description: |-
@@ -356,40 +371,40 @@ paths:
                     Whether users can pull changes from upstream when the branch is locked. Set to `true` to allow fork syncing. Set to `false` to prevent fork syncing. Default: `false`.
                   default: false
               required:
-                - required_status_checks
-                - enforce_admins
-                - required_pull_request_reviews
-                - restrictions
+              - required_status_checks
+              - enforce_admins
+              - required_pull_request_reviews
+              - restrictions
             examples:
               default:
                 value:
                   required_status_checks:
                     strict: true
                     contexts:
-                      - continuous-integration/travis-ci
+                    - continuous-integration/travis-ci
                   enforce_admins: true
                   required_pull_request_reviews:
                     dismissal_restrictions:
                       users:
-                        - octocat
+                      - octocat
                       teams:
-                        - justice-league
+                      - justice-league
                     dismiss_stale_reviews: true
                     require_code_owner_reviews: true
                     required_approving_review_count: 2
                     require_last_push_approval: true
                     bypass_pull_request_allowances:
                       users:
-                        - octocat
+                      - octocat
                       teams:
-                        - justice-league
+                      - justice-league
                   restrictions:
                     users:
-                      - octocat
+                    - octocat
                     teams:
-                      - justice-league
+                    - justice-league
                     apps:
-                      - super-ci
+                    - super-ci
                   required_linear_history: true
                   allow_force_pushes: true
                   allow_deletions: true
@@ -419,38 +434,44 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Branch Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Branches
-        - Delete
-        - Protections
+      - Branches
+      - Delete
+      - Protections
       operationId: deleteBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#delete-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -462,40 +483,46 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins:
     get:
       summary: GitHub Get Admin Branch Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Administrative
-        - Branches
-        - Get
-        - Protections
+      - Administrative
+      - Branches
+      - Get
+      - Protections
       operationId: getAdminBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-admin-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -512,7 +539,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Set Admin Branch Protection
       description: |-
@@ -520,33 +550,36 @@ paths:
 
         Adding admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.
       tags:
-        - Administrative
-        - Branches
-        - Protections
-        - Sets
+      - Administrative
+      - Branches
+      - Protections
+      - Sets
       operationId: setAdminBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#set-admin-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -563,7 +596,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Admin Branch Protection
       description: |-
@@ -571,33 +607,36 @@ paths:
 
         Removing admin enforcement requires admin or owner permissions to the repository and branch protection to be enabled.
       tags:
-        - Administrative
-        - Branches
-        - Delete
-        - Protections
+      - Administrative
+      - Branches
+      - Delete
+      - Protections
       operationId: deleteAdminBranchProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#delete-admin-branch-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -609,41 +648,47 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews:
     get:
       summary: GitHub Get Pull Request Review Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Get
-        - Protections
-        - Pull
-        - Requests
-        - Reviews
+      - Get
+      - Protections
+      - Pull
+      - Requests
+      - Reviews
       operationId: getPullRequestReviewProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-pull-request-review-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -660,7 +705,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     patch:
       summary: GitHub Update Pull Request Review Protection
       description: |-
@@ -670,34 +718,37 @@ paths:
 
         **Note**: Passing new arrays of `users` and `teams` replaces their previous values.
       tags:
-        - Protections
-        - Pull
-        - Requests
-        - Reviews
-        - Update
+      - Protections
+      - Pull
+      - Requests
+      - Reviews
+      - Update
       operationId: updatePullRequestReviewProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#update-pull-request-review-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
@@ -770,18 +821,18 @@ paths:
                 value:
                   dismissal_restrictions:
                     users:
-                      - octocat
+                    - octocat
                     teams:
-                      - justice-league
+                    - justice-league
                     apps:
-                      - octoapp
+                    - octoapp
                   bypass_pull_request_allowances:
                     users:
-                      - octocat
+                    - octocat
                     teams:
-                      - justice-league
+                    - justice-league
                     apps:
-                      - octoapp
+                    - octoapp
                   dismiss_stale_reviews: true
                   require_code_owner_reviews: true
                   required_approving_review_count: 2
@@ -804,40 +855,46 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Pull Request Review Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Delete
-        - Protections
-        - Pull
-        - Requests
-        - Reviews
+      - Delete
+      - Protections
+      - Pull
+      - Requests
+      - Reviews
       operationId: deletePullRequestReviewProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#delete-pull-request-review-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -849,7 +906,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures:
     get:
       summary: GitHub Get Commit Signature Protection
@@ -860,33 +920,36 @@ paths:
 
         **Note**: You must enable branch protection to require signed commits.
       tags:
-        - Commits
-        - Get
-        - Protections
-        - Signatures
+      - Commits
+      - Get
+      - Protections
+      - Signatures
       operationId: getCommitSignatureProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-commit-signature-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -905,7 +968,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Create Commit Signature Protection
       description: |-
@@ -913,33 +979,36 @@ paths:
 
         When authenticated with admin or owner permissions to the repository, you can use this endpoint to require signed commits on a branch. You must enable branch protection to require signed commits.
       tags:
-        - Commits
-        - Create
-        - Protections
-        - Signatures
+      - Commits
+      - Create
+      - Protections
+      - Signatures
       operationId: createCommitSignatureProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#create-commit-signature-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -958,7 +1027,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Commit Signature Protection
       description: |-
@@ -966,33 +1038,36 @@ paths:
 
         When authenticated with admin or owner permissions to the repository, you can use this endpoint to disable required signed commits on a branch. You must enable branch protection to require signed commits.
       tags:
-        - Commits
-        - Delete
-        - Protections
-        - Signatures
+      - Commits
+      - Delete
+      - Protections
+      - Signatures
       operationId: deleteCommitSignatureProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#delete-commit-signature-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -1004,40 +1079,46 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks:
     get:
       summary: GitHub Get Status Checks Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Checks
-        - Get
-        - Protections
-        - Status
+      - Checks
+      - Get
+      - Protections
+      - Status
       operationId: getStatusChecksProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-status-checks-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -1056,7 +1137,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     patch:
       summary: GitHub Update Status Check Protection
       description: |-
@@ -1064,33 +1148,36 @@ paths:
 
         Updating required status checks requires admin or owner permissions to the repository and branch protection to be enabled.
       tags:
-        - Checks
-        - Protections
-        - Status
-        - Update
+      - Checks
+      - Protections
+      - Status
+      - Update
       operationId: updateStatusCheckProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#update-status-check-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
@@ -1115,7 +1202,7 @@ paths:
                   items:
                     type: object
                     required:
-                      - context
+                    - context
                     properties:
                       context:
                         type: string
@@ -1129,7 +1216,7 @@ paths:
                 value:
                   strict: true
                   contexts:
-                    - continuous-integration/travis-ci
+                  - continuous-integration/travis-ci
       responses:
         '200':
           description: Response
@@ -1150,39 +1237,45 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Remove Status Check Protection
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Checks
-        - Protections
-        - Remove
-        - Status
+      - Checks
+      - Protections
+      - Remove
+      - Status
       operationId: removeStatusCheckProtection
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#remove-status-check-protection
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -1192,41 +1285,47 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts:
     get:
       summary: GitHub Get All Status Check Contexts
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - All
-        - Checks
-        - Contexts
-        - Get
-        - Status
+      - All
+      - Checks
+      - Contexts
+      - Get
+      - Status
       operationId: getAllStatusCheckContexts
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-all-status-check-contexts
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -1239,7 +1338,7 @@ paths:
               examples:
                 default:
                   value:
-                    - continuous-integration/travis-ci
+                  - continuous-integration/travis-ci
         '404':
           $ref: '#/components/responses/not_found'
       x-github:
@@ -1248,68 +1347,74 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Add Status Check Contexts
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Add
-        - Checks
-        - Contexts
-        - Status
+      - Add
+      - Checks
+      - Contexts
+      - Status
       operationId: addStatusCheckContexts
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#add-status-check-contexts
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    contexts:
-                      type: array
-                      description: The name of the status checks
-                      items:
-                        type: string
-                  required:
-                    - contexts
-                  example:
-                    contexts:
-                      - contexts
-                - type: array
-                  description: The name of the status checks
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  contexts:
+                    type: array
+                    description: The name of the status checks
+                    items:
+                      type: string
+                required:
+                - contexts
+                example:
+                  contexts:
+                  - contexts
+              - type: array
+                description: The name of the status checks
+                items:
+                  type: string
             examples:
               default:
                 summary: Example adding status checks to a branch protection rule
                 value:
                   contexts:
-                    - continuous-integration/travis-ci
-                    - continuous-integration/jenkins
+                  - continuous-integration/travis-ci
+                  - continuous-integration/jenkins
       responses:
         '200':
           description: Response
@@ -1322,8 +1427,8 @@ paths:
               examples:
                 default:
                   value:
-                    - continuous-integration/travis-ci
-                    - continuous-integration/jenkins
+                  - continuous-integration/travis-ci
+                  - continuous-integration/jenkins
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
@@ -1337,67 +1442,73 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       summary: GitHub Set Status Check Contexts
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Checks
-        - Contexts
-        - Sets
-        - Status
+      - Checks
+      - Contexts
+      - Sets
+      - Status
       operationId: setStatusCheckContexts
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#set-status-check-contexts
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    contexts:
-                      type: array
-                      description: The name of the status checks
-                      items:
-                        type: string
-                  required:
-                    - contexts
-                  example:
-                    contexts:
-                      - contexts
-                - type: array
-                  description: The name of the status checks
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  contexts:
+                    type: array
+                    description: The name of the status checks
+                    items:
+                      type: string
+                required:
+                - contexts
+                example:
+                  contexts:
+                  - contexts
+              - type: array
+                description: The name of the status checks
+                items:
+                  type: string
             examples:
               default:
                 summary: Example updating status checks for a branch protection rule
                 value:
                   contexts:
-                    - continuous-integration/travis-ci
+                  - continuous-integration/travis-ci
       responses:
         '200':
           description: Response
@@ -1410,7 +1521,7 @@ paths:
               examples:
                 default:
                   value:
-                    - continuous-integration/travis-ci
+                  - continuous-integration/travis-ci
         '404':
           $ref: '#/components/responses/not_found'
         '422':
@@ -1422,66 +1533,72 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Remove Status Check Contexts
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
       tags:
-        - Checks
-        - Contexts
-        - Remove
-        - Status
+      - Checks
+      - Contexts
+      - Remove
+      - Status
       operationId: removeStatusCheckContexts
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#remove-status-check-contexts
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    contexts:
-                      type: array
-                      description: The name of the status checks
-                      items:
-                        type: string
-                  required:
-                    - contexts
-                  example:
-                    contexts:
-                      - contexts
-                - type: array
-                  description: The name of the status checks
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  contexts:
+                    type: array
+                    description: The name of the status checks
+                    items:
+                      type: string
+                required:
+                - contexts
+                example:
+                  contexts:
+                  - contexts
+              - type: array
+                description: The name of the status checks
+                items:
+                  type: string
             examples:
               default:
                 summary: Example removing status checks from a branch protection rule
                 value:
                   contexts:
-                    - continuous-integration/jenkins
+                  - continuous-integration/jenkins
       responses:
         '200':
           description: Response
@@ -1494,7 +1611,7 @@ paths:
               examples:
                 default:
                   value:
-                    - continuous-integration/travis-ci
+                  - continuous-integration/travis-ci
         '404':
           $ref: '#/components/responses/not_found'
         '422':
@@ -1506,7 +1623,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/restrictions:
     get:
       summary: GitHub Get Access Restrictions
@@ -1517,32 +1637,35 @@ paths:
 
         **Note**: Users, apps, and teams `restrictions` are only available for organization-owned repositories.
       tags:
-        - Access
-        - Get
-        - Restrictions
+      - Access
+      - Get
+      - Restrictions
       operationId: getAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -1561,7 +1684,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Delete Access Restrictions
       description: |-
@@ -1569,32 +1695,35 @@ paths:
 
         Disables the ability to restrict who can push to this branch.
       tags:
-        - Access
-        - Delete
-        - Restrictions
+      - Access
+      - Delete
+      - Restrictions
       operationId: deleteAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#delete-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -1604,43 +1733,49 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps:
     get:
-      summary: GitHub Get Apps With Access To The Protected Branch
+      summary: GitHub Get Apps with Access to the Protected Branch
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
         Lists the GitHub Apps that have push access to this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.
       tags:
-        - Access
-        - Applications
-        - Branches
-        - Get
-        - Protected
+      - Access
+      - Applications
+      - Branches
+      - Get
+      - Protected
       operationId: getAppsWithAccessToTheProtectedBranch
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-apps-with-access-to-the-protected-branch
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -1661,7 +1796,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Add App Access Restrictions
       description: |-
@@ -1669,60 +1807,63 @@ paths:
 
         Grants the specified apps push access for this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.
       tags:
-        - Access
-        - Add
-        - Applications
-        - Restrictions
+      - Access
+      - Add
+      - Applications
+      - Restrictions
       operationId: addAppAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#add-app-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    apps:
-                      type: array
-                      description: |-
-                        The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
-                      items:
-                        type: string
-                  required:
-                    - apps
-                  example:
-                    apps:
-                      - my-app
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  apps:
+                    type: array
+                    description: |-
+                      The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
+                    items:
+                      type: string
+                required:
+                - apps
+                example:
+                  apps:
+                  - my-app
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 value:
                   apps:
-                    - octoapp
+                  - octoapp
       responses:
         '200':
           description: Response
@@ -1744,7 +1885,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       summary: GitHub Set App Access Restrictions
       description: |-
@@ -1752,60 +1896,63 @@ paths:
 
         Replaces the list of apps that have push access to this branch. This removes all apps that previously had push access and grants push access to the new list of apps. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.
       tags:
-        - Access
-        - Applications
-        - Restrictions
-        - Sets
+      - Access
+      - Applications
+      - Restrictions
+      - Sets
       operationId: setAppAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#set-app-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    apps:
-                      type: array
-                      description: |-
-                        The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
-                      items:
-                        type: string
-                  required:
-                    - apps
-                  example:
-                    apps:
-                      - my-app
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  apps:
+                    type: array
+                    description: |-
+                      The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
+                    items:
+                      type: string
+                required:
+                - apps
+                example:
+                  apps:
+                  - my-app
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 value:
                   apps:
-                    - octoapp
+                  - octoapp
       responses:
         '200':
           description: Response
@@ -1827,7 +1974,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Remove App Access Restrictions
       description: |-
@@ -1835,59 +1985,62 @@ paths:
 
         Removes the ability of an app to push to this branch. Only GitHub Apps that are installed on the repository and that have been granted write access to the repository contents can be added as authorized actors on a protected branch.
       tags:
-        - Access
-        - Applications
-        - Remove
-        - Restrictions
+      - Access
+      - Applications
+      - Remove
+      - Restrictions
       operationId: removeAppAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#remove-app-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    apps:
-                      type: array
-                      description: |-
-                        The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
-                      items:
-                        type: string
-                  required:
-                    - apps
-                  example:
-                    apps:
-                      - my-app
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  apps:
+                    type: array
+                    description: |-
+                      The GitHub Apps that have push access to this branch. Use the slugified version of the app name. **Note**: The list of users, apps, and teams in total is limited to 100 items.
+                    items:
+                      type: string
+                required:
+                - apps
+                example:
+                  apps:
+                  - my-app
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 value:
                   apps:
-                    - my-app
+                  - my-app
       responses:
         '200':
           description: Response
@@ -1909,43 +2062,49 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams:
     get:
-      summary: GitHub Get Teams With Access To The Protected Branch
+      summary: GitHub Get Teams with Access to the Protected Branch
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
         Lists the teams who have push access to this branch. The list includes child teams.
       tags:
-        - Access
-        - Branches
-        - Get
-        - Protected
-        - Teams
+      - Access
+      - Branches
+      - Get
+      - Protected
+      - Teams
       operationId: getTeamsWithAccessToTheProtectedBranch
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-teams-with-access-to-the-protected-branch
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -1966,7 +2125,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Add Team Access Restrictions
       description: |-
@@ -1974,61 +2136,64 @@ paths:
 
         Grants the specified teams push access for this branch. You can also give push access to child teams.
       tags:
-        - Access
-        - Add
-        - Restrictions
-        - Teams
+      - Access
+      - Add
+      - Restrictions
+      - Teams
       operationId: addTeamAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#add-team-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    teams:
-                      type: array
-                      description: The slug values for teams
-                      items:
-                        type: string
-                  required:
-                    - teams
-                  example:
-                    teams:
-                      - my-team
-                - type: array
-                  description: The slug values for teams
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  teams:
+                    type: array
+                    description: The slug values for teams
+                    items:
+                      type: string
+                required:
+                - teams
+                example:
+                  teams:
+                  - my-team
+              - type: array
+                description: The slug values for teams
+                items:
+                  type: string
             examples:
               default:
                 summary: Example adding a team in a branch protection rule
                 value:
                   teams:
-                    - justice-league
+                  - justice-league
       responses:
         '200':
           description: Response
@@ -2050,7 +2215,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       summary: GitHub Set Team Access Restrictions
       description: |-
@@ -2058,61 +2226,64 @@ paths:
 
         Replaces the list of teams that have push access to this branch. This removes all teams that previously had push access and grants push access to the new list of teams. Team restrictions include child teams.
       tags:
-        - Access
-        - Restrictions
-        - Sets
-        - Teams
+      - Access
+      - Restrictions
+      - Sets
+      - Teams
       operationId: setTeamAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#set-team-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    teams:
-                      type: array
-                      description: The slug values for teams
-                      items:
-                        type: string
-                  required:
-                    - teams
-                  example:
-                    teams:
-                      - justice-league
-                - type: array
-                  description: The slug values for teams
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  teams:
+                    type: array
+                    description: The slug values for teams
+                    items:
+                      type: string
+                required:
+                - teams
+                example:
+                  teams:
+                  - justice-league
+              - type: array
+                description: The slug values for teams
+                items:
+                  type: string
             examples:
               default:
                 summary: Example replacing a team in a branch protection rule
                 value:
                   teams:
-                    - justice-league
+                  - justice-league
       responses:
         '200':
           description: Response
@@ -2134,7 +2305,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Remove Team Access Restrictions
       description: |-
@@ -2142,60 +2316,63 @@ paths:
 
         Removes the ability of a team to push to this branch. You can also remove push access for child teams.
       tags:
-        - Access
-        - Remove
-        - Restrictions
-        - Teams
+      - Access
+      - Remove
+      - Restrictions
+      - Teams
       operationId: removeTeamAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#remove-team-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    teams:
-                      type: array
-                      description: The slug values for teams
-                      items:
-                        type: string
-                  required:
-                    - teams
-                  example:
-                    teams:
-                      - my-team
-                - type: array
-                  description: The slug values for teams
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  teams:
+                    type: array
+                    description: The slug values for teams
+                    items:
+                      type: string
+                required:
+                - teams
+                example:
+                  teams:
+                  - my-team
+              - type: array
+                description: The slug values for teams
+                items:
+                  type: string
             examples:
               default:
                 summary: Example removing a team in a branch protection rule
                 value:
                   teams:
-                    - octocats
+                  - octocats
       responses:
         '200':
           description: Response
@@ -2217,43 +2394,49 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users:
     get:
-      summary: GitHub Get Users With Access To The Protected Branch
+      summary: GitHub Get Users with Access to the Protected Branch
       description: |-
         Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.
 
         Lists the people who have push access to this branch.
       tags:
-        - Access
-        - Branches
-        - Get
-        - Protected
-        - Users
+      - Access
+      - Branches
+      - Get
+      - Protected
+      - Users
       operationId: getUsersWithAccessToTheProtectedBranch
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#get-users-with-access-to-the-protected-branch
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -2274,7 +2457,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Add User Access Restrictions
       description: |-
@@ -2286,60 +2472,63 @@ paths:
         | - | -- |
         | `array` | Usernames for people who can have push access. **Note**: The list of users, apps, and teams in total is limited to 100 items. |
       tags:
-        - Access
-        - Add
-        - Restrictions
-        - Users
+      - Access
+      - Add
+      - Restrictions
+      - Users
       operationId: addUserAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#add-user-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    users:
-                      type: array
-                      description: The username for users
-                      items:
-                        type: string
-                  required:
-                    - users
-                  example:
-                    users:
-                      - mona
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  users:
+                    type: array
+                    description: The username for users
+                    items:
+                      type: string
+                required:
+                - users
+                example:
+                  users:
+                  - mona
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 summary: Example adding a user in a branch protection rule
                 value:
                   users:
-                    - octocat
+                  - octocat
       responses:
         '200':
           description: Response
@@ -2361,7 +2550,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     put:
       summary: GitHub Set User Access Restrictions
       description: |-
@@ -2373,60 +2565,63 @@ paths:
         | - | -- |
         | `array` | Usernames for people who can have push access. **Note**: The list of users, apps, and teams in total is limited to 100 items. |
       tags:
-        - Access
-        - Restrictions
-        - Sets
-        - Users
+      - Access
+      - Restrictions
+      - Sets
+      - Users
       operationId: setUserAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#set-user-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: false
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    users:
-                      type: array
-                      description: The username for users
-                      items:
-                        type: string
-                  required:
-                    - users
-                  example:
-                    users:
-                      - mona
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  users:
+                    type: array
+                    description: The username for users
+                    items:
+                      type: string
+                required:
+                - users
+                example:
+                  users:
+                  - mona
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 summary: Example replacing a user in a branch protection rule
                 value:
                   users:
-                    - octocat
+                  - octocat
       responses:
         '200':
           description: Response
@@ -2448,7 +2643,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
       summary: GitHub Remove User Access Restrictions
       description: |-
@@ -2461,59 +2659,62 @@ paths:
         |
         | `array` | Usernames of the people who should no longer have push access. **Note**: The list of users, apps, and teams in total is limited to 100 items. |
       tags:
-        - Access
-        - Remove
-        - Restrictions
-        - Users
+      - Access
+      - Remove
+      - Restrictions
+      - Users
       operationId: removeUserAccessRestrictions
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branch-protection#remove-user-access-restrictions
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         content:
           application/json:
             schema:
               oneOf:
-                - type: object
-                  properties:
-                    users:
-                      type: array
-                      description: The username for users
-                      items:
-                        type: string
-                  required:
-                    - users
-                  example:
-                    users:
-                      - mona
-                - type: array
-                  items:
-                    type: string
+              - type: object
+                properties:
+                  users:
+                    type: array
+                    description: The username for users
+                    items:
+                      type: string
+                required:
+                - users
+                example:
+                  users:
+                  - mona
+              - type: array
+                items:
+                  type: string
             examples:
               default:
                 summary: Example removing a user in a branch protection rule
                 value:
                   users:
-                    - octocat
+                  - octocat
       responses:
         '200':
           description: Response
@@ -2535,7 +2736,10 @@ paths:
         category: branches
         subcategory: branch-protection
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/branches/{branch}/rename:
     post:
       summary: GitHub Rename Branch
@@ -2548,31 +2752,34 @@ paths:
 
         In order to rename the default branch, fine-grained access tokens also need the `administration:write` repository permission.
       tags:
-        - Branches
-        - Rename
+      - Branches
+      - Rename
       operationId: renameBranch
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/branches/branches#rename-a-branch
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/branch'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/branch'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: true
         content:
@@ -2584,7 +2791,7 @@ paths:
                   type: string
                   description: The new name of the branch.
               required:
-                - new_name
+              - new_name
             examples:
               default:
                 value:
@@ -2611,7 +2818,10 @@ paths:
         category: branches
         subcategory: branches
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   schemas:
     nullable-simple-user:
@@ -2621,8 +2831,10 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         email:
           type: string
+          example: octocat@github.com
         login:
           type: string
           example: octocat
@@ -2685,28 +2897,29 @@ components:
           example: User
         site_admin:
           type: boolean
+          example: true
         starred_at:
           type: string
           example: '"2020-07-09T00:17:55Z"'
       required:
-        - avatar_url
-        - events_url
-        - followers_url
-        - following_url
-        - gists_url
-        - gravatar_id
-        - html_url
-        - id
-        - node_id
-        - login
-        - organizations_url
-        - received_events_url
-        - repos_url
-        - site_admin
-        - starred_url
-        - subscriptions_url
-        - type
-        - url
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     simple-user:
       title: Simple User
       description: GitHub user.
@@ -2714,8 +2927,10 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         email:
           type: string
+          example: octocat@github.com
         login:
           type: string
           example: octocat
@@ -2778,28 +2993,29 @@ components:
           example: User
         site_admin:
           type: boolean
+          example: true
         starred_at:
           type: string
           example: '"2020-07-09T00:17:55Z"'
       required:
-        - avatar_url
-        - events_url
-        - followers_url
-        - following_url
-        - gists_url
-        - gravatar_id
-        - html_url
-        - id
-        - node_id
-        - login
-        - organizations_url
-        - received_events_url
-        - repos_url
-        - site_admin
-        - starred_url
-        - subscriptions_url
-        - type
-        - url
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     integration:
       title: GitHub app
       description: |-
@@ -2864,8 +3080,8 @@ components:
         events:
           description: The list of events for the GitHub app
           example:
-            - label
-            - deployment
+          - label
+          - deployment
           type: array
           items:
             type: string
@@ -2887,17 +3103,17 @@ components:
           example: |-
             "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQEArYxrNYD/iT5CZVpRJu4rBKmmze3PVmT/gCo2ATUvDvZTPTey\nxcGJ3vvrJXazKk06pN05TN29o98jrYz4cengG3YGsXPNEpKsIrEl8NhbnxapEnM9\nJCMRe0P5JcPsfZlX6hmiT7136GRWiGOUba2X9+HKh8QJVLG5rM007TBER9/z9mWm\nrJuNh+m5l320oBQY/Qq3A7wzdEfZw8qm/mIN0FCeoXH1L6B8xXWaAYBwhTEh6SSn\nZHlO1Xu1JWDmAvBCi0RO5aRSKM8q9QEkvvHP4yweAtK3N8+aAbZ7ovaDhyGz8r6r\nzhU1b8Uo0Z2ysf503WqzQgIajr7Fry7/kUwpgQIDAQABAoIBADwJp80Ko1xHPZDy\nfcCKBDfIuPvkmSW6KumbsLMaQv1aGdHDwwTGv3t0ixSay8CGlxMRtRDyZPib6SvQ\n6OH/lpfpbMdW2ErkksgtoIKBVrDilfrcAvrNZu7NxRNbhCSvN8q0s4ICecjbbVQh\nnueSdlA6vGXbW58BHMq68uRbHkP+k+mM9U0mDJ1HMch67wlg5GbayVRt63H7R2+r\nVxcna7B80J/lCEjIYZznawgiTvp3MSanTglqAYi+m1EcSsP14bJIB9vgaxS79kTu\noiSo93leJbBvuGo8QEiUqTwMw4tDksmkLsoqNKQ1q9P7LZ9DGcujtPy4EZsamSJT\ny8OJt0ECgYEA2lxOxJsQk2kI325JgKFjo92mQeUObIvPfSNWUIZQDTjniOI6Gv63\nGLWVFrZcvQBWjMEQraJA9xjPbblV8PtfO87MiJGLWCHFxmPz2dzoedN+2Coxom8m\nV95CLz8QUShuao6u/RYcvUaZEoYs5bHcTmy5sBK80JyEmafJPtCQVxMCgYEAy3ar\nZr3yv4xRPEPMat4rseswmuMooSaK3SKub19WFI5IAtB/e7qR1Rj9JhOGcZz+OQrl\nT78O2OFYlgOIkJPvRMrPpK5V9lslc7tz1FSh3BZMRGq5jSyD7ETSOQ0c8T2O/s7v\nbeEPbVbDe4mwvM24XByH0GnWveVxaDl51ABD65sCgYB3ZAspUkOA5egVCh8kNpnd\nSd6SnuQBE3ySRlT2WEnCwP9Ph6oPgn+oAfiPX4xbRqkL8q/k0BdHQ4h+zNwhk7+h\nWtPYRAP1Xxnc/F+jGjb+DVaIaKGU18MWPg7f+FI6nampl3Q0KvfxwX0GdNhtio8T\nTj1E+SnFwh56SRQuxSh2gwKBgHKjlIO5NtNSflsUYFM+hyQiPiqnHzddfhSG+/3o\nm5nNaSmczJesUYreH5San7/YEy2UxAugvP7aSY2MxB+iGsiJ9WD2kZzTUlDZJ7RV\nUzWsoqBR+eZfVJ2FUWWvy8TpSG6trh4dFxImNtKejCR1TREpSiTV3Zb1dmahK9GV\nrK9NAoGAbBxRLoC01xfxCTgt5BDiBcFVh4fp5yYKwavJPLzHSpuDOrrI9jDn1oKN\nonq5sDU1i391zfQvdrbX4Ova48BN+B7p63FocP/MK5tyyBoT8zQEk2+vWDOw7H/Z\nu5dTCPxTIsoIwUw1I+7yIxqJzLPFgR2gVBwY1ra/8iAqCj+zeBw=\n-----END RSA PRIVATE KEY-----\n"
       required:
-        - id
-        - node_id
-        - owner
-        - name
-        - description
-        - external_url
-        - html_url
-        - created_at
-        - updated_at
-        - permissions
-        - events
+      - id
+      - node_id
+      - owner
+      - name
+      - description
+      - external_url
+      - html_url
+      - created_at
+      - updated_at
+      - permissions
+      - events
     basic-error:
       title: Basic Error
       description: Basic Error
@@ -2905,24 +3121,30 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
+          example: open
     validation-error-simple:
       title: Validation Error Simple
       description: Validation Error Simple
       type: object
       required:
-        - message
-        - documentation_url
+      - message
+      - documentation_url
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         errors:
           type: array
           items:
@@ -2932,19 +3154,21 @@ components:
       description: Validation Error
       type: object
       required:
-        - message
-        - documentation_url
+      - message
+      - documentation_url
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         errors:
           type: array
           items:
             type: object
             required:
-              - code
+            - code
             properties:
               resource:
                 type: string
@@ -2958,11 +3182,11 @@ components:
                 type: integer
               value:
                 oneOf:
-                  - type: string
-                  - type: integer
-                  - type: array
-                    items:
-                      type: string
+                - type: string
+                - type: integer
+                - type: array
+                  items:
+                    type: string
     empty-object:
       title: Empty Object
       description: An object without any properties.
@@ -3021,16 +3245,16 @@ components:
           example: uid=example,ou=users,dc=github,dc=com
           type: string
       required:
-        - id
-        - node_id
-        - url
-        - members_url
-        - name
-        - description
-        - permission
-        - html_url
-        - repositories_url
-        - slug
+      - id
+      - node_id
+      - url
+      - members_url
+      - name
+      - description
+      - permission
+      - html_url
+      - repositories_url
+      - slug
     team:
       title: Team
       description: |-
@@ -3039,18 +3263,25 @@ components:
       properties:
         id:
           type: integer
+          example: 42
         node_id:
           type: string
+          example: '12345678'
         name:
           type: string
+          example: octocat
         slug:
           type: string
+          example: example_value
         description:
           type: string
+          example: This is an example repository
         privacy:
           type: string
+          example: example_value
         permission:
           type: string
+          example: example_value
         permissions:
           type: object
           properties:
@@ -3065,37 +3296,40 @@ components:
             admin:
               type: boolean
           required:
-            - pull
-            - triage
-            - push
-            - maintain
-            - admin
+          - pull
+          - triage
+          - push
+          - maintain
+          - admin
         url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         html_url:
           type: string
           format: uri
           example: https://github.com/orgs/rails/teams/core
         members_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         repositories_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         parent:
           $ref: '#/components/schemas/nullable-team-simple'
       required:
-        - id
-        - node_id
-        - url
-        - members_url
-        - name
-        - description
-        - permission
-        - html_url
-        - repositories_url
-        - slug
-        - parent
+      - id
+      - node_id
+      - url
+      - members_url
+      - name
+      - description
+      - permission
+      - html_url
+      - repositories_url
+      - slug
+      - parent
     protected-branch-required-status-check:
       title: Protected Branch Required Status Check
       description: Protected Branch Required Status Check
@@ -3103,8 +3337,10 @@ components:
       properties:
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         enforcement_level:
           type: string
+          example: example_value
         contexts:
           type: array
           items:
@@ -3119,15 +3355,17 @@ components:
               app_id:
                 type: integer
             required:
-              - context
-              - app_id
+            - context
+            - app_id
         contexts_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         strict:
           type: boolean
+          example: true
       required:
-        - contexts
-        - checks
+      - contexts
+      - checks
     protected-branch-admin-enforced:
       title: Protected Branch Admin Enforced
       description: Protected Branch Admin Enforced
@@ -3142,8 +3380,8 @@ components:
           type: boolean
           example: true
       required:
-        - url
-        - enabled
+      - url
+      - enabled
     protected-branch-pull-request-review:
       title: Protected Branch Pull Request Review
       description: Protected Branch Pull Request Review
@@ -3222,8 +3460,8 @@ components:
           example: true
           default: false
       required:
-        - dismiss_stale_reviews
-        - require_code_owner_reviews
+      - dismiss_stale_reviews
+      - require_code_owner_reviews
     branch-restriction-policy:
       title: Branch Restriction Policy
       description: Branch Restriction Policy
@@ -3232,15 +3470,19 @@ components:
         url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         users_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         teams_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         apps_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         users:
           type: array
           items:
@@ -3418,13 +3660,13 @@ components:
                 items:
                   type: string
       required:
-        - url
-        - users_url
-        - teams_url
-        - apps_url
-        - users
-        - teams
-        - apps
+      - url
+      - users_url
+      - teams_url
+      - apps_url
+      - users
+      - teams
+      - apps
     branch-protection:
       title: Branch Protection
       description: Branch Protection
@@ -3432,8 +3674,10 @@ components:
       properties:
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         enabled:
           type: boolean
+          example: true
         required_status_checks:
           $ref: '#/components/schemas/protected-branch-required-status-check'
         enforce_admins:
@@ -3486,8 +3730,8 @@ components:
               type: boolean
               example: true
           required:
-            - url
-            - enabled
+          - url
+          - enabled
         lock_branch:
           type: object
           description: |-
@@ -3524,17 +3768,21 @@ components:
       properties:
         verified:
           type: boolean
+          example: true
         reason:
           type: string
+          example: example_value
         payload:
           type: string
+          example: example_value
         signature:
           type: string
+          example: example_value
       required:
-        - verified
-        - reason
-        - payload
-        - signature
+      - verified
+      - reason
+      - payload
+      - signature
     diff-entry:
       title: Diff Entry
       description: Diff Entry
@@ -3549,13 +3797,13 @@ components:
         status:
           type: string
           enum:
-            - added
-            - removed
-            - modified
-            - renamed
-            - copied
-            - changed
-            - unchanged
+          - added
+          - removed
+          - modified
+          - renamed
+          - copied
+          - changed
+          - unchanged
           example: added
         additions:
           type: integer
@@ -3588,15 +3836,15 @@ components:
           type: string
           example: file.txt
       required:
-        - additions
-        - blob_url
-        - changes
-        - contents_url
-        - deletions
-        - filename
-        - raw_url
-        - sha
-        - status
+      - additions
+      - blob_url
+      - changes
+      - contents_url
+      - deletions
+      - filename
+      - raw_url
+      - sha
+      - status
     commit:
       title: Commit
       description: Commit
@@ -3653,25 +3901,27 @@ components:
                   example: |-
                     https://api.github.com/repos/octocat/Hello-World/tree/827efc6d56897b048c772eb4087f854f46256132
               required:
-                - sha
-                - url
+              - sha
+              - url
             verification:
               $ref: '#/components/schemas/verification'
           required:
-            - author
-            - committer
-            - comment_count
-            - message
-            - tree
-            - url
+          - author
+          - committer
+          - comment_count
+          - message
+          - tree
+          - url
         author:
           oneOf:
-            - $ref: '#/components/schemas/simple-user'
-            - $ref: '#/components/schemas/empty-object'
+          - $ref: '#/components/schemas/simple-user'
+          - $ref: '#/components/schemas/empty-object'
+          example: example_value
         committer:
           oneOf:
-            - $ref: '#/components/schemas/simple-user'
-            - $ref: '#/components/schemas/empty-object'
+          - $ref: '#/components/schemas/simple-user'
+          - $ref: '#/components/schemas/empty-object'
+          example: example_value
         parents:
           type: array
           items:
@@ -3691,8 +3941,8 @@ components:
                 example: |-
                   https://github.com/octocat/Hello-World/commit/7638417db6d59f3c431d3e1f261cc637155684cd
             required:
-              - sha
-              - url
+            - sha
+            - url
         stats:
           type: object
           properties:
@@ -3707,15 +3957,15 @@ components:
           items:
             $ref: '#/components/schemas/diff-entry'
       required:
-        - url
-        - sha
-        - node_id
-        - html_url
-        - comments_url
-        - commit
-        - author
-        - committer
-        - parents
+      - url
+      - sha
+      - node_id
+      - html_url
+      - comments_url
+      - commit
+      - author
+      - committer
+      - parents
     branch-with-protection:
       title: Branch With Protection
       description: Branch With Protection
@@ -3723,6 +3973,7 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         commit:
           $ref: '#/components/schemas/commit'
         _links:
@@ -3734,15 +3985,17 @@ components:
               type: string
               format: uri
           required:
-            - html
-            - self
+          - html
+          - self
         protected:
           type: boolean
+          example: true
         protection:
           $ref: '#/components/schemas/branch-protection'
         protection_url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         pattern:
           type: string
           example: '"mas*"'
@@ -3750,12 +4003,12 @@ components:
           type: integer
           example: 1
       required:
-        - name
-        - commit
-        - _links
-        - protection
-        - protected
-        - protection_url
+      - name
+      - commit
+      - _links
+      - protection
+      - protected
+      - protection_url
     status-check-policy:
       title: Status Check Policy
       description: Status Check Policy
@@ -3772,7 +4025,7 @@ components:
         contexts:
           type: array
           example:
-            - continuous-integration/travis-ci
+          - continuous-integration/travis-ci
           items:
             type: string
         checks:
@@ -3786,19 +4039,19 @@ components:
               app_id:
                 type: integer
             required:
-              - context
-              - app_id
+            - context
+            - app_id
         contexts_url:
           type: string
           format: uri
           example: |-
             https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks/contexts
       required:
-        - url
-        - contexts_url
-        - strict
-        - contexts
-        - checks
+      - url
+      - contexts_url
+      - strict
+      - contexts
+      - checks
     protected-branch:
       title: Protected Branch
       description: Branch protections protect branches
@@ -3807,6 +4060,7 @@ components:
         url:
           type: string
           format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
         required_status_checks:
           $ref: '#/components/schemas/status-check-policy'
         required_pull_request_reviews:
@@ -3851,11 +4105,11 @@ components:
                   items:
                     $ref: '#/components/schemas/integration'
               required:
-                - url
-                - users_url
-                - teams_url
-                - users
-                - teams
+              - url
+              - users_url
+              - teams_url
+              - users
+              - teams
             bypass_pull_request_allowances:
               type: object
               properties:
@@ -3872,10 +4126,10 @@ components:
                   items:
                     $ref: '#/components/schemas/integration'
               required:
-                - users
-                - teams
+              - users
+              - teams
           required:
-            - url
+          - url
         required_signatures:
           type: object
           properties:
@@ -3888,8 +4142,8 @@ components:
               type: boolean
               example: true
           required:
-            - url
-            - enabled
+          - url
+          - enabled
         enforce_admins:
           type: object
           properties:
@@ -3900,8 +4154,8 @@ components:
               type: boolean
           additionalProperties: false
           required:
-            - url
-            - enabled
+          - url
+          - enabled
         required_linear_history:
           type: object
           properties:
@@ -3909,7 +4163,7 @@ components:
               type: boolean
           additionalProperties: false
           required:
-            - enabled
+          - enabled
         allow_force_pushes:
           type: object
           properties:
@@ -3917,7 +4171,7 @@ components:
               type: boolean
           additionalProperties: false
           required:
-            - enabled
+          - enabled
         allow_deletions:
           type: object
           properties:
@@ -3925,7 +4179,7 @@ components:
               type: boolean
           additionalProperties: false
           required:
-            - enabled
+          - enabled
         restrictions:
           $ref: '#/components/schemas/branch-restriction-policy'
         required_conversation_resolution:
@@ -3941,7 +4195,7 @@ components:
               type: boolean
           additionalProperties: false
           required:
-            - enabled
+          - enabled
         lock_branch:
           type: object
           description: |-
@@ -3961,31 +4215,43 @@ components:
               type: boolean
           additionalProperties: false
       required:
-        - url
+      - url
   examples:
     simple-user-items:
       value:
-        - login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
+      - login: octocat
+        id: 1
+        node_id: MDQ6VXNlcjE=
+        avatar_url: https://github.com/images/error/octocat_happy.gif
+        gravatar_id: ''
+        url: https://api.github.com/users/octocat
+        html_url: https://github.com/octocat
+        followers_url: https://api.github.com/users/octocat/followers
+        following_url: https://api.github.com/users/octocat/following{/other_user}
+        gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url: https://api.github.com/users/octocat/subscriptions
+        organizations_url: https://api.github.com/users/octocat/orgs
+        repos_url: https://api.github.com/users/octocat/repos
+        events_url: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url: https://api.github.com/users/octocat/received_events
+        type: User
+        site_admin: false
     team-items:
       value:
-        - id: 1
+      - id: 1
+        node_id: MDQ6VGVhbTE=
+        url: https://api.github.com/teams/1
+        html_url: https://github.com/orgs/github/teams/justice-league
+        name: Justice League
+        slug: justice-league
+        description: great team.
+        privacy: closed
+        permission: admin
+        members_url: https://api.github.com/teams/1/members{/member}
+        repositories_url: https://api.github.com/teams/1/repos
+        parent:
+          id: 2
           node_id: MDQ6VGVhbTE=
           url: https://api.github.com/teams/1
           html_url: https://github.com/orgs/github/teams/justice-league
@@ -3996,18 +4262,6 @@ components:
           permission: admin
           members_url: https://api.github.com/teams/1/members{/member}
           repositories_url: https://api.github.com/teams/1/repos
-          parent:
-            id: 2
-            node_id: MDQ6VGVhbTE=
-            url: https://api.github.com/teams/1
-            html_url: https://github.com/orgs/github/teams/justice-league
-            name: Justice League
-            slug: justice-league
-            description: great team.
-            privacy: closed
-            permission: admin
-            members_url: https://api.github.com/teams/1/members{/member}
-            repositories_url: https://api.github.com/teams/1/repos
     branch-get:
       value:
         name: main
@@ -4085,16 +4339,16 @@ components:
             type: User
             site_admin: false
           parents:
-            - sha: 553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
-              url: |-
-                https://api.github.com/repos/octocat/Hello-World/commits/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
-              html_url: |-
-                https://github.com/octocat/Hello-World/commit/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
-            - sha: 762941318ee16e59dabbacb1b4049eec22f0d303
-              url: |-
-                https://api.github.com/repos/octocat/Hello-World/commits/762941318ee16e59dabbacb1b4049eec22f0d303
-              html_url: |-
-                https://github.com/octocat/Hello-World/commit/762941318ee16e59dabbacb1b4049eec22f0d303
+          - sha: 553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
+            url: |-
+              https://api.github.com/repos/octocat/Hello-World/commits/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
+            html_url: |-
+              https://github.com/octocat/Hello-World/commit/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
+          - sha: 762941318ee16e59dabbacb1b4049eec22f0d303
+            url: |-
+              https://api.github.com/repos/octocat/Hello-World/commits/762941318ee16e59dabbacb1b4049eec22f0d303
+            html_url: |-
+              https://github.com/octocat/Hello-World/commit/762941318ee16e59dabbacb1b4049eec22f0d303
         _links:
           self: https://api.github.com/repos/octocat/Hello-World/branches/main
           html: https://github.com/octocat/Hello-World/tree/main
@@ -4116,7 +4370,7 @@ components:
           url: |-
             https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks
           contexts:
-            - continuous-integration/travis-ci
+          - continuous-integration/travis-ci
           contexts_url: |-
             https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks/contexts
           enforcement_level: non_admins
@@ -4135,104 +4389,6 @@ components:
             teams_url: |-
               https://api.github.com/repos/octocat/Hello-World/branches/master/protection/dismissal_restrictions/teams
             users:
-              - login: octocat
-                id: 1
-                node_id: MDQ6VXNlcjE=
-                avatar_url: https://github.com/images/error/octocat_happy.gif
-                gravatar_id: ''
-                url: https://api.github.com/users/octocat
-                html_url: https://github.com/octocat
-                followers_url: https://api.github.com/users/octocat/followers
-                following_url: https://api.github.com/users/octocat/following{/other_user}
-                gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-                starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-                subscriptions_url: https://api.github.com/users/octocat/subscriptions
-                organizations_url: https://api.github.com/users/octocat/orgs
-                repos_url: https://api.github.com/users/octocat/repos
-                events_url: https://api.github.com/users/octocat/events{/privacy}
-                received_events_url: https://api.github.com/users/octocat/received_events
-                type: User
-                site_admin: false
-            teams:
-              - id: 1
-                node_id: MDQ6VGVhbTE=
-                url: https://api.github.com/teams/1
-                html_url: https://github.com/orgs/github/teams/justice-league
-                name: Justice League
-                slug: justice-league
-                description: great team.
-                privacy: closed
-                permission: admin
-                members_url: https://api.github.com/teams/1/members{/member}
-                repositories_url: https://api.github.com/teams/1/repos
-                parent:
-                  id: 2
-                  node_id: MDQ6VGVhbTE=
-                  url: https://api.github.com/teams/1
-                  html_url: https://github.com/orgs/github/teams/justice-league
-                  name: Justice League
-                  slug: justice-league
-                  description: great team.
-                  privacy: closed
-                  permission: admin
-                  members_url: https://api.github.com/teams/1/members{/member}
-                  repositories_url: https://api.github.com/teams/1/repos
-            apps:
-              - id: 1
-                slug: octoapp
-                node_id: MDExOkludGVncmF0aW9uMQ==
-                owner:
-                  login: github
-                  id: 1
-                  type: User
-                  node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-                  url: https://api.github.com/orgs/github
-                  repos_url: https://api.github.com/orgs/github/repos
-                  events_url: https://api.github.com/orgs/github/events
-                  hooks_url: https://api.github.com/orgs/github/hooks
-                  issues_url: https://api.github.com/orgs/github/issues
-                  members_url: https://api.github.com/orgs/github/members{/member}
-                  public_members_url: https://api.github.com/orgs/github/public_members{/member}
-                  followers_url: https://api.github.com/orgs/github/followers
-                  following_url: https://api.github.com/orgs/github/following
-                  gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-                  avatar_url: https://github.com/images/error/octocat_happy.gif
-                  description: great organization
-                  gravatar_id: ''
-                  html_url: https://github.com/apps/octoapp
-                  organizations_url: https://api.github.com/users/octocat/orgs
-                  received_events_url: https://api.github.com/users/octocat/received_events
-                  starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-                  subscriptions_url: https://api.github.com/users/octocat/subscriptions
-                  site_admin: false
-                name: Octocat App
-                description: ''
-                external_url: https://example.com
-                html_url: https://github.com/apps/octoapp
-                created_at: '2017-07-08T16:18:44-04:00'
-                updated_at: '2017-07-08T16:18:44-04:00'
-                permissions:
-                  metadata: read
-                  contents: read
-                  issues: write
-                  single_file: write
-                events:
-                  - push
-                  - pull_request
-          dismiss_stale_reviews: true
-          require_code_owner_reviews: true
-          required_approving_review_count: 2
-          require_last_push_approval: true
-        restrictions:
-          url: |-
-            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions
-          users_url: |-
-            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/users
-          teams_url: |-
-            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/teams
-          apps_url: |-
-            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/apps
-          users:
             - login: octocat
               id: 1
               node_id: MDQ6VXNlcjE=
@@ -4251,7 +4407,7 @@ components:
               received_events_url: https://api.github.com/users/octocat/received_events
               type: User
               site_admin: false
-          teams:
+            teams:
             - id: 1
               node_id: MDQ6VGVhbTE=
               url: https://api.github.com/teams/1
@@ -4263,14 +4419,26 @@ components:
               permission: admin
               members_url: https://api.github.com/teams/1/members{/member}
               repositories_url: https://api.github.com/teams/1/repos
-              parent: ''
-          apps:
+              parent:
+                id: 2
+                node_id: MDQ6VGVhbTE=
+                url: https://api.github.com/teams/1
+                html_url: https://github.com/orgs/github/teams/justice-league
+                name: Justice League
+                slug: justice-league
+                description: great team.
+                privacy: closed
+                permission: admin
+                members_url: https://api.github.com/teams/1/members{/member}
+                repositories_url: https://api.github.com/teams/1/repos
+            apps:
             - id: 1
               slug: octoapp
               node_id: MDExOkludGVncmF0aW9uMQ==
               owner:
                 login: github
                 id: 1
+                type: User
                 node_id: MDEyOk9yZ2FuaXphdGlvbjE=
                 url: https://api.github.com/orgs/github
                 repos_url: https://api.github.com/orgs/github/repos
@@ -4279,8 +4447,18 @@ components:
                 issues_url: https://api.github.com/orgs/github/issues
                 members_url: https://api.github.com/orgs/github/members{/member}
                 public_members_url: https://api.github.com/orgs/github/public_members{/member}
+                followers_url: https://api.github.com/orgs/github/followers
+                following_url: https://api.github.com/orgs/github/following
+                gists_url: https://api.github.com/users/octocat/gists{/gist_id}
                 avatar_url: https://github.com/images/error/octocat_happy.gif
                 description: great organization
+                gravatar_id: ''
+                html_url: https://github.com/apps/octoapp
+                organizations_url: https://api.github.com/users/octocat/orgs
+                received_events_url: https://api.github.com/users/octocat/received_events
+                starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+                subscriptions_url: https://api.github.com/users/octocat/subscriptions
+                site_admin: false
               name: Octocat App
               description: ''
               external_url: https://example.com
@@ -4293,8 +4471,84 @@ components:
                 issues: write
                 single_file: write
               events:
-                - push
-                - pull_request
+              - push
+              - pull_request
+          dismiss_stale_reviews: true
+          require_code_owner_reviews: true
+          required_approving_review_count: 2
+          require_last_push_approval: true
+        restrictions:
+          url: |-
+            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions
+          users_url: |-
+            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/users
+          teams_url: |-
+            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/teams
+          apps_url: |-
+            https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/apps
+          users:
+          - login: octocat
+            id: 1
+            node_id: MDQ6VXNlcjE=
+            avatar_url: https://github.com/images/error/octocat_happy.gif
+            gravatar_id: ''
+            url: https://api.github.com/users/octocat
+            html_url: https://github.com/octocat
+            followers_url: https://api.github.com/users/octocat/followers
+            following_url: https://api.github.com/users/octocat/following{/other_user}
+            gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+            starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+            subscriptions_url: https://api.github.com/users/octocat/subscriptions
+            organizations_url: https://api.github.com/users/octocat/orgs
+            repos_url: https://api.github.com/users/octocat/repos
+            events_url: https://api.github.com/users/octocat/events{/privacy}
+            received_events_url: https://api.github.com/users/octocat/received_events
+            type: User
+            site_admin: false
+          teams:
+          - id: 1
+            node_id: MDQ6VGVhbTE=
+            url: https://api.github.com/teams/1
+            html_url: https://github.com/orgs/github/teams/justice-league
+            name: Justice League
+            slug: justice-league
+            description: great team.
+            privacy: closed
+            permission: admin
+            members_url: https://api.github.com/teams/1/members{/member}
+            repositories_url: https://api.github.com/teams/1/repos
+            parent: ''
+          apps:
+          - id: 1
+            slug: octoapp
+            node_id: MDExOkludGVncmF0aW9uMQ==
+            owner:
+              login: github
+              id: 1
+              node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+              url: https://api.github.com/orgs/github
+              repos_url: https://api.github.com/orgs/github/repos
+              events_url: https://api.github.com/orgs/github/events
+              hooks_url: https://api.github.com/orgs/github/hooks
+              issues_url: https://api.github.com/orgs/github/issues
+              members_url: https://api.github.com/orgs/github/members{/member}
+              public_members_url: https://api.github.com/orgs/github/public_members{/member}
+              avatar_url: https://github.com/images/error/octocat_happy.gif
+              description: great organization
+            name: Octocat App
+            description: ''
+            external_url: https://example.com
+            html_url: https://github.com/apps/octoapp
+            created_at: '2017-07-08T16:18:44-04:00'
+            updated_at: '2017-07-08T16:18:44-04:00'
+            permissions:
+              metadata: read
+              contents: read
+              issues: write
+              single_file: write
+            events:
+            - push
+            - pull_request
         required_linear_history:
           enabled: true
         allow_force_pushes:
@@ -4316,12 +4570,12 @@ components:
             https://api.github.com/repos/octocat/hello-world/branches/main/protection/required_status_checks
           strict: true
           contexts:
-            - continuous-integration/travis-ci
+          - continuous-integration/travis-ci
           contexts_url: |-
             https://api.github.com/repos/octocat/hello-world/branches/main/protection/required_status_checks/contexts
           checks:
-            - context: continuous-integration/travis-ci
-              app_id: 1
+          - context: continuous-integration/travis-ci
+            app_id: 1
         restrictions:
           url: |-
             https://api.github.com/repos/octocat/hello-world/branches/main/protection/restrictions
@@ -4390,120 +4644,6 @@ components:
           teams_url: |-
             https://api.github.com/repos/octocat/Hello-World/branches/master/protection/dismissal_restrictions/teams
           users:
-            - login: octocat
-              id: 1
-              node_id: MDQ6VXNlcjE=
-              avatar_url: https://github.com/images/error/octocat_happy.gif
-              gravatar_id: ''
-              url: https://api.github.com/users/octocat
-              html_url: https://github.com/octocat
-              followers_url: https://api.github.com/users/octocat/followers
-              following_url: https://api.github.com/users/octocat/following{/other_user}
-              gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-              starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-              subscriptions_url: https://api.github.com/users/octocat/subscriptions
-              organizations_url: https://api.github.com/users/octocat/orgs
-              repos_url: https://api.github.com/users/octocat/repos
-              events_url: https://api.github.com/users/octocat/events{/privacy}
-              received_events_url: https://api.github.com/users/octocat/received_events
-              type: User
-              site_admin: false
-          teams:
-            - id: 1
-              node_id: MDQ6VGVhbTE=
-              url: https://api.github.com/teams/1
-              html_url: https://github.com/orgs/github/teams/justice-league
-              name: Justice League
-              slug: justice-league
-              description: great team.
-              privacy: closed
-              permission: admin
-              members_url: https://api.github.com/teams/1/members{/member}
-              repositories_url: https://api.github.com/teams/1/repos
-              parent:
-                id: 2
-                node_id: MDQ6VGVhbTE=
-                url: https://api.github.com/teams/1
-                html_url: https://github.com/orgs/github/teams/justice-league
-                name: Justice League
-                slug: justice-league
-                description: great team.
-                privacy: closed
-                permission: admin
-                members_url: https://api.github.com/teams/1/members{/member}
-                repositories_url: https://api.github.com/teams/1/repos
-          apps:
-            - id: 1
-              slug: octoapp
-              node_id: MDExOkludGVncmF0aW9uMQ==
-              owner:
-                login: github
-                id: 1
-                type: User
-                node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-                url: https://api.github.com/orgs/github
-                repos_url: https://api.github.com/orgs/github/repos
-                events_url: https://api.github.com/orgs/github/events
-                hooks_url: https://api.github.com/orgs/github/hooks
-                issues_url: https://api.github.com/orgs/github/issues
-                members_url: https://api.github.com/orgs/github/members{/member}
-                public_members_url: https://api.github.com/orgs/github/public_members{/member}
-                followers_url: https://api.github.com/orgs/github/followers
-                following_url: https://api.github.com/orgs/github/following
-                avatar_url: https://github.com/images/error/octocat_happy.gif
-                gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-                description: great organization
-                gravatar_id: ''
-                html_url: https://github.com/apps/octoapp
-                organizations_url: https://api.github.com/users/octocat/orgs
-                received_events_url: https://api.github.com/users/octocat/received_events
-                starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-                subscriptions_url: https://api.github.com/users/octocat/subscriptions
-                site_admin: false
-              name: Octocat App
-              description: ''
-              external_url: https://example.com
-              html_url: https://github.com/apps/octoapp
-              created_at: '2017-07-08T16:18:44-04:00'
-              updated_at: '2017-07-08T16:18:44-04:00'
-              permissions:
-                metadata: read
-                contents: read
-                issues: write
-                single_file: write
-              events:
-                - push
-                - pull_request
-        dismiss_stale_reviews: true
-        require_code_owner_reviews: true
-        required_approving_review_count: 2
-        require_last_push_approval: true
-    protected-branch-admin-enforced:
-      value:
-        url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_signatures
-        enabled: true
-    status-check-policy:
-      value:
-        checks: []
-        url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks
-        strict: true
-        contexts:
-          - continuous-integration/travis-ci
-        contexts_url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks/contexts
-    branch-restriction-policy:
-      value:
-        url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions
-        users_url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/users
-        teams_url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/teams
-        apps_url: |-
-          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/apps
-        users:
           - login: octocat
             id: 1
             node_id: MDQ6VXNlcjE=
@@ -4522,7 +4662,7 @@ components:
             received_events_url: https://api.github.com/users/octocat/received_events
             type: User
             site_admin: false
-        teams:
+          teams:
           - id: 1
             node_id: MDQ6VGVhbTE=
             url: https://api.github.com/teams/1
@@ -4534,14 +4674,26 @@ components:
             permission: admin
             members_url: https://api.github.com/teams/1/members{/member}
             repositories_url: https://api.github.com/teams/1/repos
-            parent: ''
-        apps:
+            parent:
+              id: 2
+              node_id: MDQ6VGVhbTE=
+              url: https://api.github.com/teams/1
+              html_url: https://github.com/orgs/github/teams/justice-league
+              name: Justice League
+              slug: justice-league
+              description: great team.
+              privacy: closed
+              permission: admin
+              members_url: https://api.github.com/teams/1/members{/member}
+              repositories_url: https://api.github.com/teams/1/repos
+          apps:
           - id: 1
             slug: octoapp
             node_id: MDExOkludGVncmF0aW9uMQ==
             owner:
               login: github
               id: 1
+              type: User
               node_id: MDEyOk9yZ2FuaXphdGlvbjE=
               url: https://api.github.com/orgs/github
               repos_url: https://api.github.com/orgs/github/repos
@@ -4550,8 +4702,18 @@ components:
               issues_url: https://api.github.com/orgs/github/issues
               members_url: https://api.github.com/orgs/github/members{/member}
               public_members_url: https://api.github.com/orgs/github/public_members{/member}
+              followers_url: https://api.github.com/orgs/github/followers
+              following_url: https://api.github.com/orgs/github/following
               avatar_url: https://github.com/images/error/octocat_happy.gif
+              gists_url: https://api.github.com/users/octocat/gists{/gist_id}
               description: great organization
+              gravatar_id: ''
+              html_url: https://github.com/apps/octoapp
+              organizations_url: https://api.github.com/users/octocat/orgs
+              received_events_url: https://api.github.com/users/octocat/received_events
+              starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+              subscriptions_url: https://api.github.com/users/octocat/subscriptions
+              site_admin: false
             name: Octocat App
             description: ''
             external_url: https://example.com
@@ -4564,10 +4726,70 @@ components:
               issues: write
               single_file: write
             events:
-              - push
-              - pull_request
-    integration-items:
+            - push
+            - pull_request
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+        required_approving_review_count: 2
+        require_last_push_approval: true
+    protected-branch-admin-enforced:
       value:
+        url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_signatures
+        enabled: true
+    status-check-policy:
+      value:
+        checks: []
+        url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks
+        strict: true
+        contexts:
+        - continuous-integration/travis-ci
+        contexts_url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/required_status_checks/contexts
+    branch-restriction-policy:
+      value:
+        url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions
+        users_url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/users
+        teams_url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/teams
+        apps_url: |-
+          https://api.github.com/repos/octocat/Hello-World/branches/master/protection/restrictions/apps
+        users:
+        - login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        teams:
+        - id: 1
+          node_id: MDQ6VGVhbTE=
+          url: https://api.github.com/teams/1
+          html_url: https://github.com/orgs/github/teams/justice-league
+          name: Justice League
+          slug: justice-league
+          description: great team.
+          privacy: closed
+          permission: admin
+          members_url: https://api.github.com/teams/1/members{/member}
+          repositories_url: https://api.github.com/teams/1/repos
+          parent: ''
+        apps:
         - id: 1
           slug: octoapp
           node_id: MDExOkludGVncmF0aW9uMQ==
@@ -4578,18 +4800,12 @@ components:
             url: https://api.github.com/orgs/github
             repos_url: https://api.github.com/orgs/github/repos
             events_url: https://api.github.com/orgs/github/events
+            hooks_url: https://api.github.com/orgs/github/hooks
+            issues_url: https://api.github.com/orgs/github/issues
+            members_url: https://api.github.com/orgs/github/members{/member}
+            public_members_url: https://api.github.com/orgs/github/public_members{/member}
             avatar_url: https://github.com/images/error/octocat_happy.gif
-            gravatar_id: ''
-            html_url: https://github.com/octocat
-            followers_url: https://api.github.com/users/octocat/followers
-            following_url: https://api.github.com/users/octocat/following{/other_user}
-            gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-            starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-            subscriptions_url: https://api.github.com/users/octocat/subscriptions
-            organizations_url: https://api.github.com/users/octocat/orgs
-            received_events_url: https://api.github.com/users/octocat/received_events
-            type: User
-            site_admin: true
+            description: great organization
           name: Octocat App
           description: ''
           external_url: https://example.com
@@ -4602,8 +4818,46 @@ components:
             issues: write
             single_file: write
           events:
-            - push
-            - pull_request
+          - push
+          - pull_request
+    integration-items:
+      value:
+      - id: 1
+        slug: octoapp
+        node_id: MDExOkludGVncmF0aW9uMQ==
+        owner:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: true
+        name: Octocat App
+        description: ''
+        external_url: https://example.com
+        html_url: https://github.com/apps/octoapp
+        created_at: '2017-07-08T16:18:44-04:00'
+        updated_at: '2017-07-08T16:18:44-04:00'
+        permissions:
+          metadata: read
+          contents: read
+          issues: write
+          single_file: write
+        events:
+        - push
+        - pull_request
     branch-with-protection:
       value:
         name: master
@@ -4656,12 +4910,12 @@ components:
             type: User
             site_admin: true
           parents:
-            - sha: 553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
-              url: |-
-                https://api.github.com/repos/octocat/Hello-World/commits/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
-            - sha: 762941318ee16e59dabbacb1b4049eec22f0d303
-              url: |-
-                https://api.github.com/repos/octocat/Hello-World/commits/762941318ee16e59dabbacb1b4049eec22f0d303
+          - sha: 553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
+            url: |-
+              https://api.github.com/repos/octocat/Hello-World/commits/553c2077f0edc3d5dc5d17262f6aa498e69d6f8e
+          - sha: 762941318ee16e59dabbacb1b4049eec22f0d303
+            url: |-
+              https://api.github.com/repos/octocat/Hello-World/commits/762941318ee16e59dabbacb1b4049eec22f0d303
           url: |-
             https://api.github.com/repos/octocat/Hello-World/commits/7fd1a60b01f91b314f59955a4e4d4e80d8edf11d
           committer:
@@ -4697,8 +4951,8 @@ components:
             checks: []
             enforcement_level: non_admins
             contexts:
-              - ci-test
-              - linter
+            - ci-test
+            - linter
         protection_url: |-
           https://api.github.com/repos/octocat/hello-world/branches/master/protection
   parameters:

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/refs/heads/main/json-structure/github-networks-event-structure.json",
+  "name": "event",
+  "description": "Event",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "example": "12345678"
+    },
+    "type": {
+      "type": "string",
+      "nullable": true,
+      "example": "User"
+    },
+    "actor": {
+      "$ref": "#/components/schemas/actor"
+    },
+    "repo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "url"
+      ]
+    },
+    "org": {
+      "$ref": "#/components/schemas/actor"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "issue": {
+          "$ref": "#/components/schemas/issue"
+        },
+        "comment": {
+          "$ref": "#/components/schemas/issue-comment"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "page_name": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string",
+                "nullable": true
+              },
+              "action": {
+                "type": "string"
+              },
+              "sha": {
+                "type": "string"
+              },
+              "html_url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "public": {
+      "type": "boolean",
+      "example": true
+    },
+    "created_at": {
+      "type": "datetime",
+      "nullable": true,
+      "example": "2026-04-17T12:00:00Z"
+    }
+  },
+  "required": [
+    "id",
+    "type",
+    "actor",
+    "repo",
+    "payload",
+    "public",
+    "created_at"
+  ]
+}

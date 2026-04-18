@@ -13,61 +13,64 @@ info:
     name: Support
     url: https://support.github.com/contact
 servers:
-  - url: '{protocol}://{hostname}'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: api.github.com
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: https
+- url: '{protocol}://{hostname}'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
-  - name: All
-  - name: Autolinks
-  - name: Create
-  - name: Delete
-  - name: Get
-  - name: References
-  - name: Repositories
-    description: Source control repositories.
+- name: All
+- name: Autolinks
+- name: Create
+- name: Delete
+- name: Get
+- name: References
+- name: Repositories
+  description: Source control repositories.
 paths:
   /repos/{owner}/{repo}/autolinks:
     get:
-      summary: GitHub Get All Autolinks Of Repository
+      summary: GitHub Get All Autolinks of Repository
       description: |-
         Gets all autolinks that are configured for a repository.
 
         Information about autolinks are only available to repository administrators.
       tags:
-        - All
-        - Autolinks
-        - Get
-        - Repositories
+      - All
+      - Autolinks
+      - Get
+      - Repositories
       operationId: getAllAutolinksOfRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/autolinks#get-all-autolinks-of-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -88,36 +91,42 @@ paths:
       x-api-evangelist-certified: '2025-07-16'
       x-api-naftiko-published: '2025-07-25'
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
-      summary: GitHub Create An Autolink Reference For Repository
+      summary: GitHub Create an Autolink Reference for Repository
       description: Users with admin access to the repository can create an autolink.
       tags:
-        - Create
-        - References
-        - Repositories
+      - Create
+      - References
+      - Repositories
       operationId: createAnAutolinkReferenceForRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/autolinks#create-an-autolink-reference-for-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: true
         content:
@@ -139,8 +148,8 @@ paths:
                   description: |-
                     Whether this autolink reference matches alphanumeric characters. If true, the `<num>` parameter of the `url_template` matches alphanumeric characters `A-Z` (case insensitive), `0-9`, and `-`. If false, this autolink reference only matches numeric characters.
               required:
-                - key_prefix
-                - url_template
+              - key_prefix
+              - url_template
             examples:
               default:
                 value:
@@ -170,41 +179,47 @@ paths:
         category: repos
         subcategory: autolinks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/autolinks/{autolink_id}:
     get:
-      summary: GitHub Get An Autolink Reference Of Repository
+      summary: GitHub Get an Autolink Reference of Repository
       description: |-
         This returns a single autolink reference by ID that was configured for the given repository.
 
         Information about autolinks are only available to repository administrators.
       tags:
-        - Get
-        - References
-        - Repositories
+      - Get
+      - References
+      - Repositories
       operationId: getAnAutolinkReferenceOfRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/autolinks#get-an-autolink-reference-of-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/autolink-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/autolink-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -223,41 +238,47 @@ paths:
         category: repos
         subcategory: autolinks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete An Autolink Reference From Repository
+      summary: GitHub Delete an Autolink Reference from Repository
       description: |-
         This deletes a single autolink reference by ID that was configured for the given repository.
 
         Information about autolinks are only available to repository administrators.
       tags:
-        - Autolinks
-        - Delete
-        - References
-        - Repositories
+      - Autolinks
+      - Delete
+      - References
+      - Repositories
       operationId: deleteAnAutolinkReferenceFromRepository
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/repos/autolinks#delete-an-autolink-reference-from-a-repository
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - $ref: '#/components/parameters/autolink-id'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/autolink-id'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '204':
           description: Response
@@ -269,7 +290,10 @@ paths:
         category: repos
         subcategory: autolinks
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   schemas:
     basic-error:
@@ -279,30 +303,36 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
+          example: open
     validation-error:
       title: Validation Error
       description: Validation Error
       type: object
       required:
-        - message
-        - documentation_url
+      - message
+      - documentation_url
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         errors:
           type: array
           items:
             type: object
             required:
-              - code
+            - code
             properties:
               resource:
                 type: string
@@ -316,11 +346,11 @@ components:
                 type: integer
               value:
                 oneOf:
-                  - type: string
-                  - type: integer
-                  - type: array
-                    items:
-                      type: string
+                - type: string
+                - type: integer
+                - type: array
+                  items:
+                    type: string
     autolink:
       title: Autolink reference
       description: An autolink reference.
@@ -343,17 +373,17 @@ components:
           example: true
           type: boolean
       required:
-        - id
-        - key_prefix
-        - url_template
-        - is_alphanumeric
+      - id
+      - key_prefix
+      - url_template
+      - is_alphanumeric
   examples:
     autolink-items:
       value:
-        - id: 1
-          key_prefix: TICKET-
-          url_template: https://example.com/TICKET?query=<num>
-          is_alphanumeric: true
+      - id: 1
+        key_prefix: TICKET-
+        url_template: https://example.com/TICKET?query=<num>
+        is_alphanumeric: true
     autolink:
       value:
         id: 1

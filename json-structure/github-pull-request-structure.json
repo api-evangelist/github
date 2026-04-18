@@ -1,0 +1,394 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://github.com/schemas/github/pull-request.json",
+  "name": "GitHub Pull Request",
+  "description": "A GitHub pull request representing a proposed change to a repository, including metadata for code review, merging, and CI/CD status.",
+  "type": "object",
+  "required": [
+    "id",
+    "number",
+    "title",
+    "state",
+    "user",
+    "head",
+    "base"
+  ],
+  "properties": {
+    "id": {
+      "type": "int32",
+      "description": "The unique identifier of the pull request."
+    },
+    "node_id": {
+      "type": "string",
+      "description": "The GraphQL node ID for the pull request."
+    },
+    "url": {
+      "type": "uri",
+      "description": "The API URL for the pull request."
+    },
+    "html_url": {
+      "type": "uri",
+      "description": "The URL of the pull request on GitHub."
+    },
+    "diff_url": {
+      "type": "uri",
+      "description": "The URL to the pull request diff."
+    },
+    "patch_url": {
+      "type": "uri",
+      "description": "The URL to the pull request patch."
+    },
+    "number": {
+      "type": "int32",
+      "minimum": 1,
+      "description": "The pull request number within the repository."
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed"
+      ],
+      "description": "The current state of the pull request."
+    },
+    "locked": {
+      "type": "boolean",
+      "description": "Whether the pull request is locked."
+    },
+    "title": {
+      "type": "string",
+      "description": "The title of the pull request.",
+      "minLength": 1
+    },
+    "body": {
+      "type": "string",
+      "description": "The contents of the pull request description in Markdown format."
+    },
+    "user": {
+      "$ref": "#/$defs/SimpleUser"
+    },
+    "labels": {
+      "type": "array",
+      "description": "Labels applied to the pull request.",
+      "items": {
+        "$ref": "#/$defs/Label"
+      }
+    },
+    "assignees": {
+      "type": "array",
+      "description": "Users assigned to the pull request.",
+      "items": {
+        "$ref": "#/$defs/SimpleUser"
+      }
+    },
+    "requested_reviewers": {
+      "type": "array",
+      "description": "Users requested to review the pull request.",
+      "items": {
+        "$ref": "#/$defs/SimpleUser"
+      }
+    },
+    "requested_teams": {
+      "type": "array",
+      "description": "Teams requested to review the pull request.",
+      "items": {
+        "$ref": "#/$defs/Team"
+      }
+    },
+    "head": {
+      "$ref": "#/$defs/BranchRef"
+    },
+    "base": {
+      "$ref": "#/$defs/BranchRef"
+    },
+    "draft": {
+      "type": "boolean",
+      "description": "Whether the pull request is a draft."
+    },
+    "merged": {
+      "type": "boolean",
+      "description": "Whether the pull request has been merged."
+    },
+    "mergeable": {
+      "type": "boolean",
+      "description": "Whether the pull request can be merged. Null if not yet computed."
+    },
+    "mergeable_state": {
+      "type": "string",
+      "description": "The mergeability state of the pull request."
+    },
+    "merge_commit_sha": {
+      "type": "string",
+      "description": "The SHA of the merge commit, if merged."
+    },
+    "merged_by": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/SimpleUser"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "The user who merged the pull request."
+    },
+    "comments": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of comments on the pull request."
+    },
+    "review_comments": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of review comments on the pull request."
+    },
+    "commits": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of commits in the pull request."
+    },
+    "additions": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of lines added."
+    },
+    "deletions": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of lines deleted."
+    },
+    "changed_files": {
+      "type": "int32",
+      "minimum": 0,
+      "description": "The number of changed files."
+    },
+    "created_at": {
+      "type": "datetime",
+      "description": "The date and time the pull request was created."
+    },
+    "updated_at": {
+      "type": "datetime",
+      "description": "The date and time the pull request was last updated."
+    },
+    "closed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the pull request was closed."
+    },
+    "merged_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date and time the pull request was merged."
+    },
+    "auto_merge": {
+      "type": "object",
+      "description": "Auto-merge configuration if enabled.",
+      "properties": {
+        "enabled_by": {
+          "$ref": "#/$defs/SimpleUser"
+        },
+        "merge_method": {
+          "type": "string",
+          "enum": [
+            "merge",
+            "squash",
+            "rebase"
+          ],
+          "description": "The merge method to use."
+        },
+        "commit_title": {
+          "type": "string",
+          "description": "The commit title for the auto-merge."
+        },
+        "commit_message": {
+          "type": "string",
+          "description": "The commit message for the auto-merge."
+        }
+      }
+    },
+    "author_association": {
+      "type": "string",
+      "enum": [
+        "COLLABORATOR",
+        "CONTRIBUTOR",
+        "FIRST_TIMER",
+        "FIRST_TIME_CONTRIBUTOR",
+        "MANNEQUIN",
+        "MEMBER",
+        "NONE",
+        "OWNER"
+      ],
+      "description": "How the author is associated with the repository."
+    }
+  },
+  "$defs": {
+    "SimpleUser": {
+      "type": "object",
+      "description": "A simplified representation of a GitHub user.",
+      "required": [
+        "login",
+        "id"
+      ],
+      "properties": {
+        "login": {
+          "type": "string",
+          "description": "The username of the user."
+        },
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier for the user."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's avatar image."
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the user's GitHub profile."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "User",
+            "Organization",
+            "Bot"
+          ],
+          "description": "The type of account."
+        }
+      }
+    },
+    "Label": {
+      "type": "object",
+      "description": "A label applied to an issue or pull request.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier of the label."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the label."
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{6}$",
+          "description": "The hex color code of the label."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A description of the label."
+        }
+      }
+    },
+    "Team": {
+      "type": "object",
+      "description": "A GitHub team within an organization.",
+      "required": [
+        "id",
+        "name",
+        "slug"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The unique identifier of the team."
+        },
+        "node_id": {
+          "type": "string",
+          "description": "The GraphQL node ID."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the team."
+        },
+        "slug": {
+          "type": "string",
+          "description": "The URL-friendly slug of the team name."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A description of the team."
+        },
+        "privacy": {
+          "type": "string",
+          "enum": [
+            "closed",
+            "secret"
+          ],
+          "description": "The privacy level of the team."
+        },
+        "permission": {
+          "type": "string",
+          "description": "The default permission level for repositories."
+        }
+      }
+    },
+    "BranchRef": {
+      "type": "object",
+      "description": "A reference to a branch in a repository.",
+      "required": [
+        "label",
+        "ref",
+        "sha"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "The label for the branch in owner:branch format."
+        },
+        "ref": {
+          "type": "string",
+          "description": "The branch name."
+        },
+        "sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "The SHA of the head commit on the branch."
+        },
+        "user": {
+          "$ref": "#/$defs/SimpleUser"
+        },
+        "repo": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "The repository the branch belongs to.",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "The repository ID."
+            },
+            "name": {
+              "type": "string",
+              "description": "The repository name."
+            },
+            "full_name": {
+              "type": "string",
+              "description": "The full repository name."
+            },
+            "owner": {
+              "$ref": "#/$defs/SimpleUser"
+            }
+          }
+        }
+      }
+    }
+  }
+}

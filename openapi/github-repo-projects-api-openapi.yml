@@ -13,24 +13,24 @@ info:
     name: Support
     url: https://support.github.com/contact
 servers:
-  - url: '{protocol}://{hostname}'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: api.github.com
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: https
+- url: '{protocol}://{hostname}'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 tags:
-  - name: Create
-  - name: Lists
-  - name: Project
-  - name: Projects
-  - name: Repositories
-    description: Source control repositories.
+- name: Create
+- name: Lists
+- name: Project
+- name: Projects
+- name: Repositories
+  description: Source control repositories.
 paths:
   /repos/{owner}/{repo}/projects:
     get:
@@ -38,44 +38,48 @@ paths:
       description: |-
         Lists the projects in a repository. Returns a `404 Not Found` status if projects are disabled in the repository. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
       tags:
-        - Lists
-        - Projects
-        - Repositories
+      - Lists
+      - Projects
+      - Repositories
       operationId: listRepositoryProjects
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/projects/projects#list-repository-projects
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - name: state
-          description: Indicates the state of the projects to return.
-          in: query
-          required: false
-          schema:
-            type: string
-            enum:
-              - open
-              - closed
-              - all
-            default: open
-        - $ref: '#/components/parameters/per-page'
-        - $ref: '#/components/parameters/page'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - name: state
+        description: Indicates the state of the projects to return.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - all
+          default: open
+        example: open
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       responses:
         '200':
           description: Response
@@ -109,37 +113,43 @@ paths:
       x-api-evangelist-certified: '2025-07-16'
       x-api-naftiko-published: '2025-07-25'
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
     post:
       summary: GitHub Create Repository Project
       description: |-
         Creates a repository project board. Returns a `410 Gone` status if projects are disabled in the repository or if the repository does not have existing classic projects. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
       tags:
-        - Create
-        - Project
-        - Repositories
+      - Create
+      - Project
+      - Repositories
       operationId: createRepositoryProject
       externalDocs:
         description: API method documentation
         url: |-
           https://docs.github.com/enterprise-server@3.9/rest/projects/projects#create-a-repository-project
       parameters:
-        - $ref: '#/components/parameters/owner'
-        - $ref: '#/components/parameters/repo'
-        - in: header
-          name: Authorization
-          schema:
-            type: string
-        - in: header
-          name: X-GitHub-Api-Version
-          schema:
-            type: string
-            default: '2022-11-28'
-        - in: header
-          name: Accept
-          schema:
-            type: string
-            default: application/vnd.github+json
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - in: header
+        name: Authorization
+        schema:
+          type: string
+        example: example_value
+      - in: header
+        name: X-GitHub-Api-Version
+        schema:
+          type: string
+          default: '2022-11-28'
+        example: example_value
+      - in: header
+        name: Accept
+        schema:
+          type: string
+          default: application/vnd.github+json
+        example: example_value
       requestBody:
         required: true
         content:
@@ -154,7 +164,7 @@ paths:
                   type: string
                   description: The description of the project.
               required:
-                - name
+              - name
             examples:
               default:
                 value:
@@ -186,7 +196,10 @@ paths:
         category: projects
         subcategory: projects
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   schemas:
     nullable-simple-user:
@@ -196,8 +209,10 @@ components:
       properties:
         name:
           type: string
+          example: octocat
         email:
           type: string
+          example: octocat@github.com
         login:
           type: string
           example: octocat
@@ -260,28 +275,29 @@ components:
           example: User
         site_admin:
           type: boolean
+          example: true
         starred_at:
           type: string
           example: '"2020-07-09T00:17:55Z"'
       required:
-        - avatar_url
-        - events_url
-        - followers_url
-        - following_url
-        - gists_url
-        - gravatar_id
-        - html_url
-        - id
-        - node_id
-        - login
-        - organizations_url
-        - received_events_url
-        - repos_url
-        - site_admin
-        - starred_url
-        - subscriptions_url
-        - type
-        - url
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     basic-error:
       title: Basic Error
       description: Basic Error
@@ -289,24 +305,30 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
+          example: open
     validation-error-simple:
       title: Validation Error Simple
       description: Validation Error Simple
       type: object
       required:
-        - message
-        - documentation_url
+      - message
+      - documentation_url
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         errors:
           type: array
           items:
@@ -368,28 +390,30 @@ components:
             The baseline permission that all organization members have on this project. Only present if owner is an organization.
           type: string
           enum:
-            - read
-            - write
-            - admin
-            - none
+          - read
+          - write
+          - admin
+          - none
+          example: read
         private:
           description: |-
             Whether or not this project can be seen by everyone. Only present if owner is an organization.
           type: boolean
+          example: true
       required:
-        - id
-        - node_id
-        - number
-        - name
-        - body
-        - state
-        - url
-        - html_url
-        - owner_url
-        - creator
-        - columns_url
-        - created_at
-        - updated_at
+      - id
+      - node_id
+      - number
+      - name
+      - body
+      - state
+      - url
+      - html_url
+      - owner_url
+      - creator
+      - columns_url
+      - created_at
+      - updated_at
   examples:
     project-3:
       value:
@@ -426,37 +450,37 @@ components:
         updated_at: '2014-03-03T18:58:10Z'
     project-items-2:
       value:
-        - owner_url: https://api.github.com/repos/api-playground/projects-test
-          url: https://api.github.com/projects/1002604
-          html_url: https://github.com/api-playground/projects-test/projects/1
-          columns_url: https://api.github.com/projects/1002604/columns
-          id: 1002604
-          node_id: MDc6UHJvamVjdDEwMDI2MDQ=
-          name: Projects Documentation
-          body: Developer documentation project for the developer site.
-          number: 1
-          state: open
-          creator:
-            login: octocat
-            id: 1
-            node_id: MDQ6VXNlcjE=
-            avatar_url: https://github.com/images/error/octocat_happy.gif
-            gravatar_id: ''
-            url: https://api.github.com/users/octocat
-            html_url: https://github.com/octocat
-            followers_url: https://api.github.com/users/octocat/followers
-            following_url: https://api.github.com/users/octocat/following{/other_user}
-            gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-            starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-            subscriptions_url: https://api.github.com/users/octocat/subscriptions
-            organizations_url: https://api.github.com/users/octocat/orgs
-            repos_url: https://api.github.com/users/octocat/repos
-            events_url: https://api.github.com/users/octocat/events{/privacy}
-            received_events_url: https://api.github.com/users/octocat/received_events
-            type: User
-            site_admin: false
-          created_at: '2011-04-10T20:09:31Z'
-          updated_at: '2014-03-03T18:58:10Z'
+      - owner_url: https://api.github.com/repos/api-playground/projects-test
+        url: https://api.github.com/projects/1002604
+        html_url: https://github.com/api-playground/projects-test/projects/1
+        columns_url: https://api.github.com/projects/1002604/columns
+        id: 1002604
+        node_id: MDc6UHJvamVjdDEwMDI2MDQ=
+        name: Projects Documentation
+        body: Developer documentation project for the developer site.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
   parameters:
     per-page:
       name: per_page

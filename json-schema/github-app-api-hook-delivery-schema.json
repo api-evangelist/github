@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/refs/heads/main/json-schema/github-app-api-hook-delivery-schema.json",
+  "title": "hook-delivery",
+  "description": "Delivery made by a webhook.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique identifier of the delivery.",
+      "type": "integer",
+      "example": 42
+    },
+    "guid": {
+      "description": "Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).",
+      "type": "string",
+      "example": "58474f00-b361-11eb-836d-0e4f3503ccbe"
+    },
+    "delivered_at": {
+      "description": "Time when the delivery was delivered.",
+      "type": "string",
+      "format": "date-time",
+      "example": "2021-05-12T20:33:44Z"
+    },
+    "redelivery": {
+      "description": "Whether the delivery is a redelivery.",
+      "type": "boolean",
+      "example": false
+    },
+    "duration": {
+      "description": "Time spent delivering.",
+      "type": "number",
+      "example": 0.03
+    },
+    "status": {
+      "description": "Description of the status of the attempted delivery",
+      "type": "string",
+      "example": "failed to connect"
+    },
+    "status_code": {
+      "description": "Status code received when delivery was made.",
+      "type": "integer",
+      "example": 502
+    },
+    "event": {
+      "description": "The event that triggered the delivery.",
+      "type": "string",
+      "example": "issues"
+    },
+    "action": {
+      "description": "The type of activity for the event that triggered the delivery.",
+      "type": "string",
+      "example": "opened",
+      "nullable": true
+    },
+    "installation_id": {
+      "description": "The id of the GitHub App installation associated with this event.",
+      "type": "integer",
+      "example": 123,
+      "nullable": true
+    },
+    "repository_id": {
+      "description": "The id of the repository associated with this event.",
+      "type": "integer",
+      "example": 123,
+      "nullable": true
+    },
+    "url": {
+      "description": "The URL target of the delivery.",
+      "type": "string",
+      "example": "https://www.example.com"
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "description": "The request headers sent with the webhook delivery.",
+          "type": "object",
+          "nullable": true,
+          "additionalProperties": true
+        },
+        "payload": {
+          "description": "The webhook payload.",
+          "type": "object",
+          "nullable": true,
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "headers",
+        "payload"
+      ]
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "headers": {
+          "description": "The response headers received when the delivery was made.",
+          "type": "object",
+          "nullable": true,
+          "additionalProperties": true
+        },
+        "payload": {
+          "description": "The response payload received.",
+          "type": "string",
+          "nullable": true,
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "headers",
+        "payload"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "guid",
+    "delivered_at",
+    "redelivery",
+    "duration",
+    "status",
+    "status_code",
+    "event",
+    "action",
+    "installation_id",
+    "repository_id",
+    "request",
+    "response"
+  ]
+}

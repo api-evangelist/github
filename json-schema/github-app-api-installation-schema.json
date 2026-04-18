@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/refs/heads/main/json-schema/github-app-api-installation-schema.json",
+  "title": "installation",
+  "description": "Installation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The ID of the installation.",
+      "type": "integer",
+      "example": 1
+    },
+    "account": {
+      "nullable": true,
+      "anyOf": [
+        {
+          "$ref": "#/components/schemas/simple-user"
+        },
+        {
+          "$ref": "#/components/schemas/enterprise"
+        }
+      ],
+      "example": "example_value"
+    },
+    "repository_selection": {
+      "description": "Describe whether all repositories have been selected or there's a selection involved",
+      "type": "string",
+      "enum": [
+        "all",
+        "selected"
+      ],
+      "example": "all"
+    },
+    "access_tokens_url": {
+      "type": "string",
+      "format": "uri",
+      "example": "https://api.github.com/app/installations/1/access_tokens"
+    },
+    "repositories_url": {
+      "type": "string",
+      "format": "uri",
+      "example": "https://api.github.com/installation/repositories"
+    },
+    "html_url": {
+      "type": "string",
+      "format": "uri",
+      "example": "https://github.com/organizations/github/settings/installations/1"
+    },
+    "app_id": {
+      "type": "integer",
+      "example": 1
+    },
+    "target_id": {
+      "description": "The ID of the user or organization this token is being scoped to.",
+      "type": "integer",
+      "example": 42
+    },
+    "target_type": {
+      "type": "string",
+      "example": "Organization"
+    },
+    "permissions": {
+      "$ref": "#/components/schemas/app-permissions"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2026-04-17T12:00:00Z"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "example": "2026-04-17T12:00:00Z"
+    },
+    "single_file_name": {
+      "type": "string",
+      "example": "config.yaml",
+      "nullable": true
+    },
+    "has_multiple_single_files": {
+      "type": "boolean",
+      "example": true
+    },
+    "single_file_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "example": [
+        "config.yml",
+        ".github/issue_TEMPLATE.md"
+      ]
+    },
+    "app_slug": {
+      "type": "string",
+      "example": "github-actions"
+    },
+    "suspended_by": {
+      "$ref": "#/components/schemas/nullable-simple-user"
+    },
+    "suspended_at": {
+      "type": "string",
+      "format": "date-time",
+      "nullable": true,
+      "example": "2026-04-17T12:00:00Z"
+    },
+    "contact_email": {
+      "type": "string",
+      "example": "\"test_13f1e99741e3e004@d7e1eb0bc0a1ba12.com\"",
+      "nullable": true
+    }
+  },
+  "required": [
+    "id",
+    "app_id",
+    "app_slug",
+    "target_id",
+    "target_type",
+    "single_file_name",
+    "repository_selection",
+    "access_tokens_url",
+    "html_url",
+    "repositories_url",
+    "events",
+    "account",
+    "permissions",
+    "created_at",
+    "updated_at",
+    "suspended_by",
+    "suspended_at"
+  ]
+}

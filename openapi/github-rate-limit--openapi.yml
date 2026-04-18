@@ -23,25 +23,25 @@ info:
   x-github-plan: ghes
   x-github-release: 3.9
 tags:
-  - name: Get
-  - name: Limit
-  - name: Rate
+- name: Get
+- name: Limit
+- name: Rate
 servers:
-  - url: '{protocol}://{hostname}/api/v3'
-    variables:
-      hostname:
-        description: Self-hosted Enterprise Server hostname
-        default: HOSTNAME
-      protocol:
-        description: Self-hosted Enterprise Server protocol
-        default: http
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
 paths:
   /rate_limit:
     get:
-      summary: GitHub Get  Rate Limit
+      summary: GitHub Get Rate Limit
       description: >-
         Some categories of endpoints have custom rate limits that are separate
         from the rate limit governing the other REST API endpoints. For this
@@ -94,9 +94,9 @@ paths:
         instead of the `rate` object. The `core` object contains the same
         information that is present in the `rate` object.
       tags:
-        - Get
-        - Limit
-        - Rate
+      - Get
+      - Limit
+      - Rate
       operationId: getRateLimit
       externalDocs:
         description: API method documentation
@@ -130,7 +130,10 @@ paths:
         category: rate-limit
         subcategory: rate-limit
       security:
-        - bearerHttpAuthentication: []
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
 components:
   examples:
     rate-limit-overview:
@@ -201,12 +204,16 @@ components:
       properties:
         message:
           type: string
+          example: Example body text
         documentation_url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
+          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
+          example: open
     rate-limit-overview:
       title: Rate Limit Overview
       description: Rate Limit Overview
@@ -234,30 +241,34 @@ components:
             scim:
               $ref: '#/components/schemas/rate-limit'
           required:
-            - core
-            - search
+          - core
+          - search
         rate:
           $ref: '#/components/schemas/rate-limit'
       required:
-        - rate
-        - resources
+      - rate
+      - resources
     rate-limit:
       title: Rate Limit
       type: object
       properties:
         limit:
           type: integer
+          example: 42
         remaining:
           type: integer
+          example: 42
         reset:
           type: integer
+          example: 42
         used:
           type: integer
+          example: 42
       required:
-        - limit
-        - remaining
-        - reset
-        - used
+      - limit
+      - remaining
+      - reset
+      - used
   responses:
     not_modified:
       description: Not modified

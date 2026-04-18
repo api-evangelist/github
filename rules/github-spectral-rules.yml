@@ -1,0 +1,83 @@
+rules:
+  info-title-required:
+    severity: error
+    given: $.info
+    then: {field: title, function: truthy}
+  info-title-format:
+    severity: warn
+    given: $.info.title
+    then: {function: pattern, functionOptions: {match: "^GitHub "}}
+  info-description-required:
+    severity: error
+    given: $.info
+    then: {field: description, function: truthy}
+  info-version-required:
+    severity: error
+    given: $.info
+    then: {field: version, function: truthy}
+  servers-defined:
+    severity: error
+    given: $
+    then: {field: servers, function: truthy}
+  servers-https-only:
+    severity: error
+    given: $.servers[*].url
+    then: {function: pattern, functionOptions: {match: "^https://"}}
+  paths-no-trailing-slash:
+    severity: error
+    given: $.paths
+    then: {field: "@key", function: pattern, functionOptions: {notMatch: "\\/$"}}
+  paths-kebab-case:
+    severity: info
+    description: Path segments should use kebab-case or snake_case.
+    given: $.paths
+    then: {field: "@key", function: pattern, functionOptions: {notMatch: "\\/[a-z]+[A-Z]"}}
+  operation-description-required:
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then: {field: description, function: truthy}
+  operation-operationid-required:
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then: {field: operationId, function: truthy}
+  operation-operationid-unique:
+    severity: error
+    given: $
+    then: {function: oasOpId}
+  operation-tags-required:
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete]
+    then: {field: tags, function: truthy}
+  tags-title-case:
+    severity: info
+    given: $.tags[*].name
+    then: {function: pattern, functionOptions: {match: "^[A-Z][a-zA-Z0-9]*(\\s[A-Za-z0-9]+)*$"}}
+  parameter-description-required:
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].parameters[*]
+    then: {field: description, function: truthy}
+  parameter-snake-case:
+    severity: info
+    description: Parameter names should use snake_case (GitHub convention).
+    given: $.paths[*][get,post,put,patch,delete].parameters[*]
+    then: {field: name, function: pattern, functionOptions: {match: "^[a-z][a-z0-9_]*$"}}
+  response-success-required:
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].responses
+    then: {function: schema, functionOptions: {schema: {anyOf: [{required: ["200"]}, {required: ["201"]}, {required: ["204"]}]}}}
+  response-description-required:
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].responses[*]
+    then: {field: description, function: truthy}
+  security-schemes-defined:
+    severity: warn
+    given: $.components
+    then: {field: securitySchemes, function: truthy}
+  get-no-request-body:
+    severity: error
+    given: $.paths[*].get
+    then: {field: requestBody, function: falsy}
+  no-empty-descriptions:
+    severity: error
+    given: "$..description"
+    then: {function: truthy}
