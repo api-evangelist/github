@@ -1,0 +1,550 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Issues"
+  description: "Manage GitHub issues, labels, milestones, assignees, comments, reactions, and timeline events. Sourced from github-issues-api (28 operations) and github-repo-issues-api (30 operations)."
+  tags:
+    - GitHub
+    - Issues
+    - Labels
+    - Milestones
+    - Assignees
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: github-issues
+      baseUri: https://api.github.com
+      description: "GitHub REST API for issues, labels, milestones, assignees, comments, and reactions."
+      authentication:
+        type: bearer
+        token: "{{GITHUB_TOKEN}}"
+      resources:
+        - name: issues
+          path: /repos/{owner}/{repo}/issues
+          description: "Issue CRUD and listing operations."
+          operations:
+            - name: listRepositoryIssues
+              method: GET
+              description: "List repository issues."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createAnIssue
+              method: POST
+              description: "Create an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getAnIssue
+              method: GET
+              path: /repos/{owner}/{repo}/issues/{issue_number}
+              description: "Get an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateAnIssue
+              method: PATCH
+              path: /repos/{owner}/{repo}/issues/{issue_number}
+              description: "Update an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: lockAnIssue
+              method: PUT
+              path: /repos/{owner}/{repo}/issues/{issue_number}/lock
+              description: "Lock an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: unlockAnIssue
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/{issue_number}/lock
+              description: "Unlock an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: issue-comments
+          path: /repos/{owner}/{repo}/issues
+          description: "Issue comment management."
+          operations:
+            - name: listIssueComments
+              method: GET
+              path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+              description: "List issue comments."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createAnIssueComment
+              method: POST
+              path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+              description: "Create an issue comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getAnIssueComment
+              method: GET
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+              description: "Get an issue comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateAnIssueComment
+              method: PATCH
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+              description: "Update an issue comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteAnIssueComment
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+              description: "Delete an issue comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listIssueCommentsForRepository
+              method: GET
+              path: /repos/{owner}/{repo}/issues/comments
+              description: "List issue comments for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: assignees
+          path: /repos/{owner}/{repo}
+          description: "Issue assignee management."
+          operations:
+            - name: listAssignees
+              method: GET
+              path: /repos/{owner}/{repo}/assignees
+              description: "List assignees."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: checkIfUserCanBeAssigned
+              method: GET
+              path: /repos/{owner}/{repo}/assignees/{assignee}
+              description: "Check if a user can be assigned."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: addAssigneesToAnIssue
+              method: POST
+              path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+              description: "Add assignees to an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: removeAssigneesFromAnIssue
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+              description: "Remove assignees from an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: labels
+          path: /repos/{owner}/{repo}/labels
+          description: "Label management for repositories and issues."
+          operations:
+            - name: listLabelsForRepository
+              method: GET
+              description: "List labels for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createLabel
+              method: POST
+              description: "Create a label."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getLabel
+              method: GET
+              path: /repos/{owner}/{repo}/labels/{name}
+              description: "Get a label."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateLabel
+              method: PATCH
+              path: /repos/{owner}/{repo}/labels/{name}
+              description: "Update a label."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteLabel
+              method: DELETE
+              path: /repos/{owner}/{repo}/labels/{name}
+              description: "Delete a label."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listLabelsForAnIssue
+              method: GET
+              path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+              description: "List labels for an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: addLabelsToAnIssue
+              method: POST
+              path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+              description: "Add labels to an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: removeAllLabelsFromAnIssue
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+              description: "Remove all labels from an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: removeLabelFromAnIssue
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
+              description: "Remove a label from an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: milestones
+          path: /repos/{owner}/{repo}/milestones
+          description: "Milestone management."
+          operations:
+            - name: listMilestones
+              method: GET
+              description: "List milestones."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createMilestone
+              method: POST
+              description: "Create a milestone."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getMilestone
+              method: GET
+              path: /repos/{owner}/{repo}/milestones/{milestone_number}
+              description: "Get a milestone."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateMilestone
+              method: PATCH
+              path: /repos/{owner}/{repo}/milestones/{milestone_number}
+              description: "Update a milestone."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteMilestone
+              method: DELETE
+              path: /repos/{owner}/{repo}/milestones/{milestone_number}
+              description: "Delete a milestone."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: reactions
+          path: /repos/{owner}/{repo}/issues
+          description: "Issue and comment reaction management."
+          operations:
+            - name: listReactionsForAnIssue
+              method: GET
+              path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+              description: "List reactions for an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createReactionForAnIssue
+              method: POST
+              path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+              description: "Create reaction for an issue."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteAnIssueReaction
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
+              description: "Delete an issue reaction."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listReactionsForAnIssueComment
+              method: GET
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+              description: "List reactions for an issue comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createReactionForAnIssueComment
+              method: POST
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+              description: "Create reaction for an issue comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteAnIssueCommentReaction
+              method: DELETE
+              path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
+              description: "Delete an issue comment reaction."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: timeline
+          path: /repos/{owner}/{repo}/issues/{issue_number}/timeline
+          description: "Issue timeline events."
+          operations:
+            - name: listTimelineEventsForAnIssue
+              method: GET
+              description: "List timeline events for an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: issue-events
+          path: /repos/{owner}/{repo}/issues/events
+          description: "Issue event listing."
+          operations:
+            - name: listIssueEventsForRepository
+              method: GET
+              description: "List issue events for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getAnIssueEvent
+              method: GET
+              path: /repos/{owner}/{repo}/issues/events/{event_id}
+              description: "Get an issue event."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listIssueEvents
+              method: GET
+              path: /repos/{owner}/{repo}/issues/{issue_number}/events
+              description: "List events for an issue."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8101
+      namespace: github-issues-api
+      resources:
+        - path: /v1/repositories/{owner}/{repo}/issues
+          name: issues
+          description: "Issue listing and creation"
+          operations:
+            - method: GET
+              name: listRepositoryIssues
+              description: "List repository issues"
+            - method: POST
+              name: createAnIssue
+              description: "Create an issue"
+        - path: /v1/repositories/{owner}/{repo}/issues/{issue_number}
+          name: issue
+          description: "Individual issue operations"
+          operations:
+            - method: GET
+              name: getAnIssue
+              description: "Get an issue"
+            - method: PATCH
+              name: updateAnIssue
+              description: "Update an issue"
+        - path: /v1/repositories/{owner}/{repo}/labels
+          name: labels
+          description: "Label management"
+          operations:
+            - method: GET
+              name: listLabelsForRepository
+              description: "List labels"
+            - method: POST
+              name: createLabel
+              description: "Create a label"
+        - path: /v1/repositories/{owner}/{repo}/milestones
+          name: milestones
+          description: "Milestone management"
+          operations:
+            - method: GET
+              name: listMilestones
+              description: "List milestones"
+            - method: POST
+              name: createMilestone
+              description: "Create a milestone"
+
+    - type: mcp
+      port: 9101
+      namespace: github-issues-mcp
+      transport: http
+      tools:
+        - name: list-issues
+          description: "List repository issues"
+          call: "github-issues.listRepositoryIssues"
+          hints:
+            readOnly: true
+        - name: create-issue
+          description: "Create an issue"
+          call: "github-issues.createAnIssue"
+        - name: get-issue
+          description: "Get an issue"
+          call: "github-issues.getAnIssue"
+          hints:
+            readOnly: true
+        - name: update-issue
+          description: "Update an issue"
+          call: "github-issues.updateAnIssue"
+          hints:
+            idempotent: true
+        - name: lock-issue
+          description: "Lock an issue"
+          call: "github-issues.lockAnIssue"
+        - name: unlock-issue
+          description: "Unlock an issue"
+          call: "github-issues.unlockAnIssue"
+        - name: list-issue-comments
+          description: "List issue comments"
+          call: "github-issues.listIssueComments"
+          hints:
+            readOnly: true
+        - name: create-issue-comment
+          description: "Create an issue comment"
+          call: "github-issues.createAnIssueComment"
+        - name: list-labels
+          description: "List labels for a repository"
+          call: "github-issues.listLabelsForRepository"
+          hints:
+            readOnly: true
+        - name: create-label
+          description: "Create a label"
+          call: "github-issues.createLabel"
+        - name: list-milestones
+          description: "List milestones"
+          call: "github-issues.listMilestones"
+          hints:
+            readOnly: true
+        - name: create-milestone
+          description: "Create a milestone"
+          call: "github-issues.createMilestone"
+        - name: add-assignees
+          description: "Add assignees to an issue"
+          call: "github-issues.addAssigneesToAnIssue"
+        - name: add-labels
+          description: "Add labels to an issue"
+          call: "github-issues.addLabelsToAnIssue"
+        - name: list-timeline-events
+          description: "List timeline events for an issue"
+          call: "github-issues.listTimelineEventsForAnIssue"
+          hints:
+            readOnly: true

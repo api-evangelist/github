@@ -1,0 +1,294 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Gists"
+  description: "Manage GitHub Gists including creating, updating, forking, starring, and commenting on gists. Sourced from github-gists-openapi (16 REST operations)."
+  tags:
+    - GitHub
+    - Gists
+    - Code Snippets
+    - Comments
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: github-gists
+      baseUri: https://api.github.com
+      description: "GitHub REST API for gists, gist comments, forks, and stars."
+      authentication:
+        type: bearer
+        token: "{{GITHUB_TOKEN}}"
+      resources:
+        - name: gists
+          path: /gists
+          description: "Gist CRUD and listing."
+          operations:
+            - name: listPublicGists
+              method: GET
+              description: "List public gists."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listStarredGists
+              method: GET
+              path: /gists/starred
+              description: "List starred gists."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getgist
+              method: GET
+              path: /gists/{gist_id}
+              description: "Get a gist."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updategist
+              method: PATCH
+              path: /gists/{gist_id}
+              description: "Update a gist."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deletegist
+              method: DELETE
+              path: /gists/{gist_id}
+              description: "Delete a gist."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getgistRevision
+              method: GET
+              path: /gists/{gist_id}/{sha}
+              description: "Get a gist revision."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: gist-comments
+          path: /gists/{gist_id}/comments
+          description: "Gist comment management."
+          operations:
+            - name: listGistComments
+              method: GET
+              description: "List gist comments."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: creategistComment
+              method: POST
+              description: "Create a gist comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getgistComment
+              method: GET
+              path: /gists/{gist_id}/comments/{comment_id}
+              description: "Get a gist comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updategistComment
+              method: PATCH
+              path: /gists/{gist_id}/comments/{comment_id}
+              description: "Update a gist comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deletegistComment
+              method: DELETE
+              path: /gists/{gist_id}/comments/{comment_id}
+              description: "Delete a gist comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: gist-forks
+          path: /gists/{gist_id}/forks
+          description: "Gist fork management."
+          operations:
+            - name: listGistForks
+              method: GET
+              description: "List gist forks."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: forkgist
+              method: POST
+              description: "Fork a gist."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: gist-stars
+          path: /gists/{gist_id}/star
+          description: "Gist star management."
+          operations:
+            - name: checkIfgistIsStarred
+              method: GET
+              description: "Check if a gist is starred."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: stargist
+              method: PUT
+              description: "Star a gist."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: unstargist
+              method: DELETE
+              description: "Unstar a gist."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: gist-commits
+          path: /gists/{gist_id}/commits
+          description: "Gist commit history."
+          operations:
+            - name: listGistCommits
+              method: GET
+              description: "List gist commits."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8110
+      namespace: github-gists-api
+      resources:
+        - path: /v1/gists
+          name: gists
+          description: "Gist listing"
+          operations:
+            - method: GET
+              name: listPublicGists
+              description: "List public gists"
+        - path: /v1/gists/starred
+          name: starred-gists
+          description: "Starred gists"
+          operations:
+            - method: GET
+              name: listStarredGists
+              description: "List starred gists"
+        - path: /v1/gists/{gist_id}
+          name: gist
+          description: "Individual gist operations"
+          operations:
+            - method: GET
+              name: getgist
+              description: "Get a gist"
+            - method: PATCH
+              name: updategist
+              description: "Update a gist"
+            - method: DELETE
+              name: deletegist
+              description: "Delete a gist"
+        - path: /v1/gists/{gist_id}/comments
+          name: gist-comments
+          description: "Gist comment management"
+          operations:
+            - method: GET
+              name: listGistComments
+              description: "List comments"
+            - method: POST
+              name: creategistComment
+              description: "Create a comment"
+
+    - type: mcp
+      port: 9110
+      namespace: github-gists-mcp
+      transport: http
+      tools:
+        - name: list-public-gists
+          description: "List public gists"
+          call: "github-gists.listPublicGists"
+          hints:
+            readOnly: true
+        - name: list-starred-gists
+          description: "List starred gists"
+          call: "github-gists.listStarredGists"
+          hints:
+            readOnly: true
+        - name: get-gist
+          description: "Get a gist"
+          call: "github-gists.getgist"
+          hints:
+            readOnly: true
+        - name: update-gist
+          description: "Update a gist"
+          call: "github-gists.updategist"
+          hints:
+            idempotent: true
+        - name: delete-gist
+          description: "Delete a gist"
+          call: "github-gists.deletegist"
+          hints:
+            destructive: true
+        - name: fork-gist
+          description: "Fork a gist"
+          call: "github-gists.forkgist"
+        - name: star-gist
+          description: "Star a gist"
+          call: "github-gists.stargist"
+        - name: unstar-gist
+          description: "Unstar a gist"
+          call: "github-gists.unstargist"
+        - name: list-gist-comments
+          description: "List gist comments"
+          call: "github-gists.listGistComments"
+          hints:
+            readOnly: true
+        - name: create-gist-comment
+          description: "Create a gist comment"
+          call: "github-gists.creategistComment"
+        - name: list-gist-commits
+          description: "List gist commits"
+          call: "github-gists.listGistCommits"
+          hints:
+            readOnly: true

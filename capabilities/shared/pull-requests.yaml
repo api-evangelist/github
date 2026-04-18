@@ -1,0 +1,415 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Pull Requests"
+  description: "Manage GitHub pull requests, reviews, review comments, and merge operations. Sourced from github-repo-pulls-api (29 operations)."
+  tags:
+    - GitHub
+    - Pull Requests
+    - Reviews
+    - Code Review
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: github-pull-requests
+      baseUri: https://api.github.com
+      description: "GitHub REST API for pull requests, reviews, and review comments."
+      authentication:
+        type: bearer
+        token: "{{GITHUB_TOKEN}}"
+      resources:
+        - name: pull-requests
+          path: /repos/{owner}/{repo}/pulls
+          description: "Pull request CRUD and listing."
+          operations:
+            - name: listPullRequests
+              method: GET
+              description: "List pull requests."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createPullRequest
+              method: POST
+              description: "Create a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}
+              description: "Get a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updatePullRequest
+              method: PATCH
+              path: /repos/{owner}/{repo}/pulls/{pull_number}
+              description: "Update a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listCommitsOnPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/commits
+              description: "List commits on a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listPullRequestsFiles
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/files
+              description: "List pull request files."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: checkIfPullRequestHasBeenMerged
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/merge
+              description: "Check if a pull request has been merged."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: mergePullRequest
+              method: PUT
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/merge
+              description: "Merge a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updatePullRequestBranch
+              method: PUT
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/update-branch
+              description: "Update a pull request branch."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: review-comments
+          path: /repos/{owner}/{repo}/pulls
+          description: "Pull request review comment management."
+          operations:
+            - name: listReviewCommentsInRepository
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/comments
+              description: "List review comments in a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getReviewCommentForPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/comments/{comment_id}
+              description: "Get a review comment for a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateReviewCommentForPullRequest
+              method: PATCH
+              path: /repos/{owner}/{repo}/pulls/comments/{comment_id}
+              description: "Update a review comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteReviewCommentForPullRequest
+              method: DELETE
+              path: /repos/{owner}/{repo}/pulls/comments/{comment_id}
+              description: "Delete a review comment."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listReviewCommentsOnPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/comments
+              description: "List review comments on a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createReviewCommentForPullRequest
+              method: POST
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/comments
+              description: "Create a review comment for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createReplyForReviewComment
+              method: POST
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
+              description: "Create a reply for a review comment."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: reviews
+          path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+          description: "Pull request review management."
+          operations:
+            - name: listReviewsForPullRequest
+              method: GET
+              description: "List reviews for a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createReviewForPullRequest
+              method: POST
+              description: "Create a review for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getReviewForPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+              description: "Get a review for a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateReviewForPullRequest
+              method: PUT
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+              description: "Update a review for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deletePendingReviewForPullRequest
+              method: DELETE
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+              description: "Delete a pending review for a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: dismissReviewForPullRequest
+              method: PUT
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
+              description: "Dismiss a review for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: submitReviewForPullRequest
+              method: POST
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events
+              description: "Submit a review for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listCommentsForPullRequestReview
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
+              description: "List comments for a pull request review."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: reviewers
+          path: /repos/{owner}/{repo}/pulls/{pull_number}
+          description: "Pull request reviewer management."
+          operations:
+            - name: getAllRequestedReviewersForPullRequest
+              method: GET
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+              description: "Get all requested reviewers for a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: requestReviewersForPullRequest
+              method: POST
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+              description: "Request reviewers for a pull request."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: removeRequestedReviewersFromPullRequest
+              method: DELETE
+              path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+              description: "Remove requested reviewers from a pull request."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8102
+      namespace: github-pull-requests-api
+      resources:
+        - path: /v1/repositories/{owner}/{repo}/pulls
+          name: pull-requests
+          description: "Pull request listing and creation"
+          operations:
+            - method: GET
+              name: listPullRequests
+              description: "List pull requests"
+            - method: POST
+              name: createPullRequest
+              description: "Create a pull request"
+        - path: /v1/repositories/{owner}/{repo}/pulls/{pull_number}
+          name: pull-request
+          description: "Individual pull request operations"
+          operations:
+            - method: GET
+              name: getPullRequest
+              description: "Get a pull request"
+            - method: PATCH
+              name: updatePullRequest
+              description: "Update a pull request"
+        - path: /v1/repositories/{owner}/{repo}/pulls/{pull_number}/merge
+          name: merge
+          description: "Pull request merge operations"
+          operations:
+            - method: GET
+              name: checkIfPullRequestHasBeenMerged
+              description: "Check if merged"
+            - method: PUT
+              name: mergePullRequest
+              description: "Merge a pull request"
+        - path: /v1/repositories/{owner}/{repo}/pulls/{pull_number}/reviews
+          name: reviews
+          description: "Review management"
+          operations:
+            - method: GET
+              name: listReviewsForPullRequest
+              description: "List reviews"
+            - method: POST
+              name: createReviewForPullRequest
+              description: "Create a review"
+
+    - type: mcp
+      port: 9102
+      namespace: github-pull-requests-mcp
+      transport: http
+      tools:
+        - name: list-pull-requests
+          description: "List pull requests"
+          call: "github-pull-requests.listPullRequests"
+          hints:
+            readOnly: true
+        - name: create-pull-request
+          description: "Create a pull request"
+          call: "github-pull-requests.createPullRequest"
+        - name: get-pull-request
+          description: "Get a pull request"
+          call: "github-pull-requests.getPullRequest"
+          hints:
+            readOnly: true
+        - name: update-pull-request
+          description: "Update a pull request"
+          call: "github-pull-requests.updatePullRequest"
+          hints:
+            idempotent: true
+        - name: merge-pull-request
+          description: "Merge a pull request"
+          call: "github-pull-requests.mergePullRequest"
+        - name: list-reviews
+          description: "List reviews for a pull request"
+          call: "github-pull-requests.listReviewsForPullRequest"
+          hints:
+            readOnly: true
+        - name: create-review
+          description: "Create a review for a pull request"
+          call: "github-pull-requests.createReviewForPullRequest"
+        - name: submit-review
+          description: "Submit a review for a pull request"
+          call: "github-pull-requests.submitReviewForPullRequest"
+        - name: dismiss-review
+          description: "Dismiss a review for a pull request"
+          call: "github-pull-requests.dismissReviewForPullRequest"
+        - name: request-reviewers
+          description: "Request reviewers for a pull request"
+          call: "github-pull-requests.requestReviewersForPullRequest"
+        - name: list-pr-files
+          description: "List pull request files"
+          call: "github-pull-requests.listPullRequestsFiles"
+          hints:
+            readOnly: true
+        - name: list-pr-commits
+          description: "List commits on a pull request"
+          call: "github-pull-requests.listCommitsOnPullRequest"
+          hints:
+            readOnly: true
+        - name: list-review-comments
+          description: "List review comments on a pull request"
+          call: "github-pull-requests.listReviewCommentsOnPullRequest"
+          hints:
+            readOnly: true
+        - name: create-review-comment
+          description: "Create a review comment"
+          call: "github-pull-requests.createReviewCommentForPullRequest"

@@ -1,0 +1,239 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Search"
+  description: "Search across GitHub for code, commits, issues, pull requests, labels, repositories, topics, and users. Sourced from github-search-api-openapi (7 operations)."
+  tags:
+    - GitHub
+    - Search
+    - Code Search
+    - Issue Search
+    - Repository Search
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: github-search
+      baseUri: https://api.github.com
+      description: "GitHub REST API for searching code, commits, issues, labels, repositories, topics, and users."
+      authentication:
+        type: bearer
+        token: "{{GITHUB_TOKEN}}"
+      resources:
+        - name: search
+          path: /search
+          description: "Search operations across GitHub."
+          operations:
+            - name: searchCode
+              method: GET
+              path: /search/code
+              description: "Search code."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchCommits
+              method: GET
+              path: /search/commits
+              description: "Search commits."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchIssuesAndPullRequests
+              method: GET
+              path: /search/issues
+              description: "Search issues and pull requests."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchLabels
+              method: GET
+              path: /search/labels
+              description: "Search labels."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+                - name: repository_id
+                  in: query
+                  type: integer
+                  required: true
+                  description: "Repository ID to search labels in"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchRepositories
+              method: GET
+              path: /search/repositories
+              description: "Search repositories."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchTopics
+              method: GET
+              path: /search/topics
+              description: "Search topics."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: searchUsers
+              method: GET
+              path: /search/users
+              description: "Search users."
+              inputParameters:
+                - name: q
+                  in: query
+                  type: string
+                  required: true
+                  description: "Search query"
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8109
+      namespace: github-search-api
+      resources:
+        - path: /v1/search/code
+          name: code-search
+          description: "Code search"
+          operations:
+            - method: GET
+              name: searchCode
+              description: "Search code"
+        - path: /v1/search/commits
+          name: commit-search
+          description: "Commit search"
+          operations:
+            - method: GET
+              name: searchCommits
+              description: "Search commits"
+        - path: /v1/search/issues
+          name: issue-search
+          description: "Issue and PR search"
+          operations:
+            - method: GET
+              name: searchIssuesAndPullRequests
+              description: "Search issues and pull requests"
+        - path: /v1/search/repositories
+          name: repo-search
+          description: "Repository search"
+          operations:
+            - method: GET
+              name: searchRepositories
+              description: "Search repositories"
+        - path: /v1/search/topics
+          name: topic-search
+          description: "Topic search"
+          operations:
+            - method: GET
+              name: searchTopics
+              description: "Search topics"
+        - path: /v1/search/users
+          name: user-search
+          description: "User search"
+          operations:
+            - method: GET
+              name: searchUsers
+              description: "Search users"
+        - path: /v1/search/labels
+          name: label-search
+          description: "Label search"
+          operations:
+            - method: GET
+              name: searchLabels
+              description: "Search labels"
+
+    - type: mcp
+      port: 9109
+      namespace: github-search-mcp
+      transport: http
+      tools:
+        - name: search-code
+          description: "Search code across GitHub repositories"
+          call: "github-search.searchCode"
+          hints:
+            readOnly: true
+        - name: search-commits
+          description: "Search commits across GitHub repositories"
+          call: "github-search.searchCommits"
+          hints:
+            readOnly: true
+        - name: search-issues
+          description: "Search issues and pull requests"
+          call: "github-search.searchIssuesAndPullRequests"
+          hints:
+            readOnly: true
+        - name: search-labels
+          description: "Search labels in a repository"
+          call: "github-search.searchLabels"
+          hints:
+            readOnly: true
+        - name: search-repositories
+          description: "Search repositories"
+          call: "github-search.searchRepositories"
+          hints:
+            readOnly: true
+        - name: search-topics
+          description: "Search topics"
+          call: "github-search.searchTopics"
+          hints:
+            readOnly: true
+        - name: search-users
+          description: "Search users"
+          call: "github-search.searchUsers"
+          hints:
+            readOnly: true

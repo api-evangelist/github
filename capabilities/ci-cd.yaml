@@ -1,0 +1,276 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub CI/CD"
+  description: "Unified workflow for continuous integration and deployment combining GitHub Actions workflows, runs, jobs, artifacts, and repository management. Used by DevOps engineers for pipeline management, build monitoring, and deployment automation."
+  tags:
+    - GitHub
+    - CI/CD
+    - Actions
+    - Workflows
+    - DevOps
+    - Deployments
+  personas:
+    - devops engineers
+    - release managers
+    - platform engineers
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - import: github-actions
+      location: "./shared/actions.yaml"
+    - import: github-repos
+      location: "./shared/repos.yaml"
+
+  exposes:
+    - type: rest
+      port: 8081
+      namespace: github-ci-cd-api
+      description: "Unified REST API for CI/CD workflows combining Actions and repository management."
+      resources:
+        - path: /v1/repositories/{owner}/{repo}/workflows
+          name: workflows
+          description: "Workflow listing and dispatch"
+          operations:
+            - method: GET
+              name: listRepositoryWorkflows
+              description: "List workflows"
+              call: "github-actions.listRepositoryWorkflows"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/workflows/{workflow_id}
+          name: workflow
+          description: "Individual workflow operations"
+          operations:
+            - method: GET
+              name: getWorkflow
+              description: "Get a workflow"
+              call: "github-actions.getWorkflow"
+              with:
+                workflow_id: "rest.workflow_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/workflows/{workflow_id}/dispatches
+          name: workflow-dispatch
+          description: "Trigger workflow runs"
+          operations:
+            - method: POST
+              name: createWorkflowDispatchEvent
+              description: "Dispatch a workflow"
+              call: "github-actions.createWorkflowDispatchEvent"
+              with:
+                workflow_id: "rest.workflow_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/runs
+          name: runs
+          description: "Workflow run management"
+          operations:
+            - method: GET
+              name: listWorkflowRunsForRepository
+              description: "List workflow runs"
+              call: "github-actions.listWorkflowRunsForRepository"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/runs/{run_id}
+          name: run
+          description: "Individual run operations"
+          operations:
+            - method: GET
+              name: getWorkflowRun
+              description: "Get a workflow run"
+              call: "github-actions.getWorkflowRun"
+              with:
+                run_id: "rest.run_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/runs/{run_id}/cancel
+          name: run-cancel
+          description: "Cancel a workflow run"
+          operations:
+            - method: POST
+              name: cancelWorkflowRun
+              description: "Cancel a workflow run"
+              call: "github-actions.cancelWorkflowRun"
+              with:
+                run_id: "rest.run_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/runs/{run_id}/jobs
+          name: jobs
+          description: "Workflow run jobs"
+          operations:
+            - method: GET
+              name: listJobsForWorkflowRun
+              description: "List jobs"
+              call: "github-actions.listJobsForWorkflowRun"
+              with:
+                run_id: "rest.run_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/artifacts
+          name: artifacts
+          description: "Artifact management"
+          operations:
+            - method: GET
+              name: listArtifactsForRepository
+              description: "List artifacts"
+              call: "github-actions.listArtifactsForRepository"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/secrets
+          name: secrets
+          description: "Secret management"
+          operations:
+            - method: GET
+              name: listRepositorySecrets
+              description: "List secrets"
+              call: "github-actions.listRepositorySecrets"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/deployments
+          name: deployments
+          description: "Deployment management"
+          operations:
+            - method: GET
+              name: listDeployments
+              description: "List deployments"
+              call: "github-repos.listDeployments"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/environments
+          name: environments
+          description: "Environment management"
+          operations:
+            - method: GET
+              name: listEnvironments
+              description: "List environments"
+              call: "github-repos.listEnvironments"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9081
+      namespace: github-ci-cd-mcp
+      transport: http
+      description: "MCP server for AI-assisted CI/CD workflows."
+      tools:
+        - name: list-workflows
+          description: "List repository workflows"
+          call: "github-actions.listRepositoryWorkflows"
+          hints:
+            readOnly: true
+        - name: get-workflow
+          description: "Get a workflow"
+          call: "github-actions.getWorkflow"
+          hints:
+            readOnly: true
+        - name: dispatch-workflow
+          description: "Trigger a workflow dispatch event"
+          call: "github-actions.createWorkflowDispatchEvent"
+        - name: enable-workflow
+          description: "Enable a workflow"
+          call: "github-actions.enableWorkflow"
+        - name: disable-workflow
+          description: "Disable a workflow"
+          call: "github-actions.disableWorkflow"
+        - name: list-runs
+          description: "List workflow runs"
+          call: "github-actions.listWorkflowRunsForRepository"
+          hints:
+            readOnly: true
+        - name: get-run
+          description: "Get a workflow run"
+          call: "github-actions.getWorkflowRun"
+          hints:
+            readOnly: true
+        - name: cancel-run
+          description: "Cancel a workflow run"
+          call: "github-actions.cancelWorkflowRun"
+        - name: rerun-workflow
+          description: "Re-run a workflow"
+          call: "github-actions.rerunWorkflow"
+        - name: rerun-failed-jobs
+          description: "Re-run failed jobs"
+          call: "github-actions.rerunFailedJobsFromWorkflowRun"
+        - name: list-jobs
+          description: "List jobs for a workflow run"
+          call: "github-actions.listJobsForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: get-job
+          description: "Get a job"
+          call: "github-actions.getJobForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: download-job-logs
+          description: "Download job logs"
+          call: "github-actions.downloadJobLogsForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: list-artifacts
+          description: "List artifacts"
+          call: "github-actions.listArtifactsForRepository"
+          hints:
+            readOnly: true
+        - name: download-artifact
+          description: "Download an artifact"
+          call: "github-actions.downloadAnArtifact"
+          hints:
+            readOnly: true
+        - name: list-secrets
+          description: "List repository secrets"
+          call: "github-actions.listRepositorySecrets"
+          hints:
+            readOnly: true
+        - name: create-or-update-secret
+          description: "Create or update a secret"
+          call: "github-actions.createOrUpdateRepositorySecret"
+          hints:
+            idempotent: true
+        - name: list-variables
+          description: "List repository variables"
+          call: "github-actions.listRepositoryVariables"
+          hints:
+            readOnly: true
+        - name: list-runners
+          description: "List self-hosted runners"
+          call: "github-actions.listSelfhostedRunnersForRepository"
+          hints:
+            readOnly: true
+        - name: list-caches
+          description: "List GitHub Actions caches"
+          call: "github-actions.listGithubActionsCachesForRepository"
+          hints:
+            readOnly: true
+        - name: get-repository
+          description: "Get a repository"
+          call: "github-repos.getRepository"
+          hints:
+            readOnly: true
+        - name: list-releases
+          description: "List releases"
+          call: "github-repos.listReleases"
+          hints:
+            readOnly: true
+        - name: create-release
+          description: "Create a release"
+          call: "github-repos.createRelease"

@@ -1,0 +1,381 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Platform Administration"
+  description: "Unified workflow for platform administration combining GitHub Apps, organizations, teams, and packages. Used by platform administrators for managing app integrations, organization governance, team access control, and package registry operations."
+  tags:
+    - GitHub
+    - Platform Administration
+    - Apps
+    - Organizations
+    - Teams
+    - Packages
+  personas:
+    - platform administrators
+    - IT administrators
+    - github org owners
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - import: github-apps
+      location: "./shared/apps.yaml"
+    - import: github-orgs
+      location: "./shared/orgs.yaml"
+    - import: github-packages
+      location: "./shared/packages.yaml"
+
+  exposes:
+    - type: rest
+      port: 8085
+      namespace: github-platform-admin-api
+      description: "Unified REST API for platform administration combining apps, organizations, teams, and packages."
+      resources:
+        - path: /v1/app
+          name: app
+          description: "Authenticated app"
+          operations:
+            - method: GET
+              name: getTheAuthenticatedApp
+              description: "Get the authenticated app"
+              call: "github-apps.getTheAuthenticatedApp"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/app/installations
+          name: installations
+          description: "App installations"
+          operations:
+            - method: GET
+              name: listInstallationsForTheAuthenticatedApp
+              description: "List installations"
+              call: "github-apps.listInstallationsForTheAuthenticatedApp"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/app/installations/{installation_id}
+          name: installation
+          description: "Individual installation"
+          operations:
+            - method: GET
+              name: getAnInstallationForTheAuthenticatedApp
+              description: "Get an installation"
+              call: "github-apps.getAnInstallationForTheAuthenticatedApp"
+              with:
+                installation_id: "rest.installation_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: deleteAnInstallationForTheAuthenticatedApp
+              description: "Delete an installation"
+              call: "github-apps.deleteAnInstallationForTheAuthenticatedApp"
+              with:
+                installation_id: "rest.installation_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/app/installations/{installation_id}/access-tokens
+          name: installation-tokens
+          description: "Installation access tokens"
+          operations:
+            - method: POST
+              name: createAnInstallationAccessTokenForAnApp
+              description: "Create an access token"
+              call: "github-apps.createAnInstallationAccessTokenForAnApp"
+              with:
+                installation_id: "rest.installation_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}
+          name: organization
+          description: "Organization management"
+          operations:
+            - method: GET
+              name: getAnOrganization
+              description: "Get an organization"
+              call: "github-orgs.getAnOrganization"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: updateAnOrganization
+              description: "Update an organization"
+              call: "github-orgs.updateAnOrganization"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/members
+          name: members
+          description: "Member management"
+          operations:
+            - method: GET
+              name: listOrganizationMembers
+              description: "List members"
+              call: "github-orgs.listOrganizationMembers"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/teams
+          name: teams
+          description: "Team management"
+          operations:
+            - method: GET
+              name: listTeams
+              description: "List teams"
+              call: "github-orgs.listTeams"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createTeam
+              description: "Create a team"
+              call: "github-orgs.createTeam"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/teams/{team_slug}
+          name: team
+          description: "Individual team operations"
+          operations:
+            - method: GET
+              name: getTeamByName
+              description: "Get a team"
+              call: "github-orgs.getTeamByName"
+              with:
+                org: "rest.org"
+                team_slug: "rest.team_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: updateTeam
+              description: "Update a team"
+              call: "github-orgs.updateTeam"
+              with:
+                org: "rest.org"
+                team_slug: "rest.team_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: deleteTeam
+              description: "Delete a team"
+              call: "github-orgs.deleteTeam"
+              with:
+                org: "rest.org"
+                team_slug: "rest.team_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/packages
+          name: org-packages
+          description: "Organization packages"
+          operations:
+            - method: GET
+              name: listPackagesForAnOrganization
+              description: "List packages"
+              call: "github-packages.listPackagesForAnOrganization"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/webhooks
+          name: webhooks
+          description: "Organization webhooks"
+          operations:
+            - method: GET
+              name: listOrganizationWebhooks
+              description: "List webhooks"
+              call: "github-orgs.listOrganizationWebhooks"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/repos
+          name: org-repos
+          description: "Organization repositories"
+          operations:
+            - method: GET
+              name: listOrganizationRepositories
+              description: "List repositories"
+              call: "github-orgs.listOrganizationRepositories"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9085
+      namespace: github-platform-admin-mcp
+      transport: http
+      description: "MCP server for AI-assisted platform administration."
+      tools:
+        - name: get-authenticated-app
+          description: "Get the authenticated app"
+          call: "github-apps.getTheAuthenticatedApp"
+          hints:
+            readOnly: true
+        - name: get-app
+          description: "Get an app by slug"
+          call: "github-apps.getAnApp"
+          hints:
+            readOnly: true
+        - name: list-installations
+          description: "List app installations"
+          call: "github-apps.listInstallationsForTheAuthenticatedApp"
+          hints:
+            readOnly: true
+        - name: get-installation
+          description: "Get an app installation"
+          call: "github-apps.getAnInstallationForTheAuthenticatedApp"
+          hints:
+            readOnly: true
+        - name: create-installation-token
+          description: "Create an installation access token"
+          call: "github-apps.createAnInstallationAccessTokenForAnApp"
+        - name: suspend-installation
+          description: "Suspend an app installation"
+          call: "github-apps.suspendAnAppInstallation"
+        - name: unsuspend-installation
+          description: "Unsuspend an app installation"
+          call: "github-apps.unsuspendAnAppInstallation"
+        - name: list-installation-repos
+          description: "List repositories accessible to the installation"
+          call: "github-apps.listRepositoriesAccessibleToTheAppInstallation"
+          hints:
+            readOnly: true
+        - name: get-webhook-config
+          description: "Get app webhook configuration"
+          call: "github-apps.getwebhookConfigurationForAnApp"
+          hints:
+            readOnly: true
+        - name: update-webhook-config
+          description: "Update app webhook configuration"
+          call: "github-apps.updatewebhookConfigurationForAnApp"
+          hints:
+            idempotent: true
+        - name: get-organization
+          description: "Get an organization"
+          call: "github-orgs.getAnOrganization"
+          hints:
+            readOnly: true
+        - name: update-organization
+          description: "Update an organization"
+          call: "github-orgs.updateAnOrganization"
+          hints:
+            idempotent: true
+        - name: list-members
+          description: "List organization members"
+          call: "github-orgs.listOrganizationMembers"
+          hints:
+            readOnly: true
+        - name: set-membership
+          description: "Set organization membership"
+          call: "github-orgs.setOrganizationMembershipForUser"
+          hints:
+            idempotent: true
+        - name: remove-member
+          description: "Remove an organization member"
+          call: "github-orgs.removeAnOrganizationMember"
+          hints:
+            destructive: true
+        - name: list-teams
+          description: "List teams"
+          call: "github-orgs.listTeams"
+          hints:
+            readOnly: true
+        - name: create-team
+          description: "Create a team"
+          call: "github-orgs.createTeam"
+        - name: get-team
+          description: "Get a team"
+          call: "github-orgs.getTeamByName"
+          hints:
+            readOnly: true
+        - name: update-team
+          description: "Update a team"
+          call: "github-orgs.updateTeam"
+          hints:
+            idempotent: true
+        - name: delete-team
+          description: "Delete a team"
+          call: "github-orgs.deleteTeam"
+          hints:
+            destructive: true
+        - name: list-team-members
+          description: "List team members"
+          call: "github-orgs.listTeamMembers"
+          hints:
+            readOnly: true
+        - name: add-team-member
+          description: "Add or update team membership"
+          call: "github-orgs.addOrUpdateTeamMembershipForUser"
+          hints:
+            idempotent: true
+        - name: list-team-repos
+          description: "List team repositories"
+          call: "github-orgs.listTeamRepositories"
+          hints:
+            readOnly: true
+        - name: add-team-repo
+          description: "Add or update team repository permissions"
+          call: "github-orgs.addOrUpdateTeamRepositoryPermissions"
+          hints:
+            idempotent: true
+        - name: list-org-packages
+          description: "List organization packages"
+          call: "github-packages.listPackagesForAnOrganization"
+          hints:
+            readOnly: true
+        - name: get-org-package
+          description: "Get an organization package"
+          call: "github-packages.getPackageForAnOrganization"
+          hints:
+            readOnly: true
+        - name: delete-org-package
+          description: "Delete an organization package"
+          call: "github-packages.deletePackageForAnOrganization"
+          hints:
+            destructive: true
+        - name: list-org-package-versions
+          description: "List organization package versions"
+          call: "github-packages.listPackageVersionsForPackageOwnedByAnOrganization"
+          hints:
+            readOnly: true
+        - name: list-org-repos
+          description: "List organization repositories"
+          call: "github-orgs.listOrganizationRepositories"
+          hints:
+            readOnly: true
+        - name: create-org-repo
+          description: "Create an organization repository"
+          call: "github-orgs.createAnOrganizationRepository"
+        - name: list-webhooks
+          description: "List organization webhooks"
+          call: "github-orgs.listOrganizationWebhooks"
+          hints:
+            readOnly: true
+        - name: create-webhook
+          description: "Create an organization webhook"
+          call: "github-orgs.createAnOrganizationWebhook"

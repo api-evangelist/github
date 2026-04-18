@@ -1,0 +1,663 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Actions"
+  description: "Manage GitHub Actions workflows, runs, jobs, artifacts, caches, secrets, variables, runners, and permissions. Sourced from github-repo-actions-api (67 operations)."
+  tags:
+    - GitHub
+    - Actions
+    - Workflows
+    - CI/CD
+    - Artifacts
+    - Secrets
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: github-actions
+      baseUri: https://api.github.com
+      description: "GitHub REST API for Actions workflows, runs, jobs, artifacts, secrets, variables, and runners."
+      authentication:
+        type: bearer
+        token: "{{GITHUB_TOKEN}}"
+      resources:
+        - name: workflows
+          path: /repos/{owner}/{repo}/actions/workflows
+          description: "Workflow listing and management."
+          operations:
+            - name: listRepositoryWorkflows
+              method: GET
+              description: "List repository workflows."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getWorkflow
+              method: GET
+              path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}
+              description: "Get a workflow."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: disableWorkflow
+              method: PUT
+              path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable
+              description: "Disable a workflow."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: enableWorkflow
+              method: PUT
+              path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable
+              description: "Enable a workflow."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createWorkflowDispatchEvent
+              method: POST
+              path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches
+              description: "Create a workflow dispatch event."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listWorkflowRunsForWorkflow
+              method: GET
+              path: /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs
+              description: "List workflow runs for a workflow."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: runs
+          path: /repos/{owner}/{repo}/actions/runs
+          description: "Workflow run management."
+          operations:
+            - name: listWorkflowRunsForRepository
+              method: GET
+              description: "List workflow runs for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}
+              description: "Get a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteWorkflowRun
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}
+              description: "Delete a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: cancelWorkflowRun
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/cancel
+              description: "Cancel a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: rerunWorkflow
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
+              description: "Re-run a workflow."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: rerunFailedJobsFromWorkflowRun
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs
+              description: "Re-run failed jobs from a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getWorkflowRunAttempt
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}
+              description: "Get a workflow run attempt."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: downloadWorkflowRunLogs
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+              description: "Download workflow run logs."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteWorkflowRunLogs
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+              description: "Delete workflow run logs."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getTheReviewHistoryForWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/approvals
+              description: "Get the review history for a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getPendingDeploymentsForWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+              description: "Get pending deployments for a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: reviewPendingDeploymentsForWorkflowRun
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+              description: "Review pending deployments for a workflow run."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: jobs
+          path: /repos/{owner}/{repo}/actions
+          description: "Workflow job operations."
+          operations:
+            - name: getJobForWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/jobs/{job_id}
+              description: "Get a job for a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: downloadJobLogsForWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
+              description: "Download job logs for a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: rerunJobFromWorkflowRun
+              method: POST
+              path: /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun
+              description: "Re-run a job from a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listJobsForWorkflowRun
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/jobs
+              description: "List jobs for a workflow run."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: artifacts
+          path: /repos/{owner}/{repo}/actions/artifacts
+          description: "Workflow artifact management."
+          operations:
+            - name: listArtifactsForRepository
+              method: GET
+              description: "List artifacts for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getAnArtifact
+              method: GET
+              path: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+              description: "Get an artifact."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteAnArtifact
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}
+              description: "Delete an artifact."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: downloadAnArtifact
+              method: GET
+              path: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+              description: "Download an artifact."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: listWorkflowRunArtifacts
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts
+              description: "List workflow run artifacts."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: secrets
+          path: /repos/{owner}/{repo}/actions/secrets
+          description: "Repository Actions secrets management."
+          operations:
+            - name: listRepositorySecrets
+              method: GET
+              description: "List repository secrets."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getRepositoryPublicKey
+              method: GET
+              path: /repos/{owner}/{repo}/actions/secrets/public-key
+              description: "Get a repository public key."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getRepositorySecret
+              method: GET
+              path: /repos/{owner}/{repo}/actions/secrets/{secret_name}
+              description: "Get a repository secret."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createOrUpdateRepositorySecret
+              method: PUT
+              path: /repos/{owner}/{repo}/actions/secrets/{secret_name}
+              description: "Create or update a repository secret."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteRepositorySecret
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/secrets/{secret_name}
+              description: "Delete a repository secret."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: variables
+          path: /repos/{owner}/{repo}/actions/variables
+          description: "Repository Actions variables management."
+          operations:
+            - name: listRepositoryVariables
+              method: GET
+              description: "List repository variables."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createRepositoryVariable
+              method: POST
+              description: "Create a repository variable."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getRepositoryVariable
+              method: GET
+              path: /repos/{owner}/{repo}/actions/variables/{name}
+              description: "Get a repository variable."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: updateRepositoryVariable
+              method: PATCH
+              path: /repos/{owner}/{repo}/actions/variables/{name}
+              description: "Update a repository variable."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteRepositoryVariable
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/variables/{name}
+              description: "Delete a repository variable."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: runners
+          path: /repos/{owner}/{repo}/actions/runners
+          description: "Self-hosted runner management."
+          operations:
+            - name: listSelfhostedRunnersForRepository
+              method: GET
+              description: "List self-hosted runners for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getSelfhostedRunnerForRepository
+              method: GET
+              path: /repos/{owner}/{repo}/actions/runners/{runner_id}
+              description: "Get a self-hosted runner for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteSelfhostedRunnerFromRepository
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/runners/{runner_id}
+              description: "Delete a self-hosted runner from a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createRegistrationTokenForRepository
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runners/registration-token
+              description: "Create a registration token for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: createRemoveTokenForRepository
+              method: POST
+              path: /repos/{owner}/{repo}/actions/runners/remove-token
+              description: "Create a remove token for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: caches
+          path: /repos/{owner}/{repo}/actions/caches
+          description: "GitHub Actions cache management."
+          operations:
+            - name: listGithubActionsCachesForRepository
+              method: GET
+              description: "List GitHub Actions caches for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteGithubActionsCachesForRepositoryUsingCacheKey
+              method: DELETE
+              description: "Delete GitHub Actions caches by key."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: deleteGithubActionsCacheForRepositoryUsingCacheId
+              method: DELETE
+              path: /repos/{owner}/{repo}/actions/caches/{cache_id}
+              description: "Delete GitHub Actions cache by ID."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getGithubActionsCacheUsageForRepository
+              method: GET
+              path: /repos/{owner}/{repo}/actions/cache/usage
+              description: "Get GitHub Actions cache usage for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: permissions
+          path: /repos/{owner}/{repo}/actions/permissions
+          description: "GitHub Actions permissions management."
+          operations:
+            - name: getGithubActionsPermissionsForRepository
+              method: GET
+              description: "Get GitHub Actions permissions for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: setGithubActionsPermissionsForRepository
+              method: PUT
+              description: "Set GitHub Actions permissions for a repository."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: getAllowedActionsForRepository
+              method: GET
+              path: /repos/{owner}/{repo}/actions/permissions/selected-actions
+              description: "Get allowed actions for a repository."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: setAllowedActionsForRepository
+              method: PUT
+              path: /repos/{owner}/{repo}/actions/permissions/selected-actions
+              description: "Set allowed actions for a repository."
+              body:
+                type: json
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+
+  exposes:
+    - type: rest
+      port: 8103
+      namespace: github-actions-api
+      resources:
+        - path: /v1/repositories/{owner}/{repo}/workflows
+          name: workflows
+          description: "Workflow management"
+          operations:
+            - method: GET
+              name: listRepositoryWorkflows
+              description: "List workflows"
+        - path: /v1/repositories/{owner}/{repo}/workflow-runs
+          name: runs
+          description: "Workflow run management"
+          operations:
+            - method: GET
+              name: listWorkflowRunsForRepository
+              description: "List workflow runs"
+        - path: /v1/repositories/{owner}/{repo}/workflow-runs/{run_id}
+          name: run
+          description: "Individual run operations"
+          operations:
+            - method: GET
+              name: getWorkflowRun
+              description: "Get a workflow run"
+            - method: DELETE
+              name: deleteWorkflowRun
+              description: "Delete a workflow run"
+        - path: /v1/repositories/{owner}/{repo}/workflow-runs/{run_id}/jobs
+          name: jobs
+          description: "Workflow run jobs"
+          operations:
+            - method: GET
+              name: listJobsForWorkflowRun
+              description: "List jobs for a workflow run"
+        - path: /v1/repositories/{owner}/{repo}/artifacts
+          name: artifacts
+          description: "Artifact management"
+          operations:
+            - method: GET
+              name: listArtifactsForRepository
+              description: "List artifacts"
+        - path: /v1/repositories/{owner}/{repo}/secrets
+          name: secrets
+          description: "Secret management"
+          operations:
+            - method: GET
+              name: listRepositorySecrets
+              description: "List secrets"
+
+    - type: mcp
+      port: 9103
+      namespace: github-actions-mcp
+      transport: http
+      tools:
+        - name: list-workflows
+          description: "List repository workflows"
+          call: "github-actions.listRepositoryWorkflows"
+          hints:
+            readOnly: true
+        - name: get-workflow
+          description: "Get a workflow"
+          call: "github-actions.getWorkflow"
+          hints:
+            readOnly: true
+        - name: dispatch-workflow
+          description: "Create a workflow dispatch event"
+          call: "github-actions.createWorkflowDispatchEvent"
+        - name: list-runs
+          description: "List workflow runs"
+          call: "github-actions.listWorkflowRunsForRepository"
+          hints:
+            readOnly: true
+        - name: get-run
+          description: "Get a workflow run"
+          call: "github-actions.getWorkflowRun"
+          hints:
+            readOnly: true
+        - name: cancel-run
+          description: "Cancel a workflow run"
+          call: "github-actions.cancelWorkflowRun"
+        - name: rerun-workflow
+          description: "Re-run a workflow"
+          call: "github-actions.rerunWorkflow"
+        - name: rerun-failed-jobs
+          description: "Re-run failed jobs from a workflow run"
+          call: "github-actions.rerunFailedJobsFromWorkflowRun"
+        - name: list-jobs
+          description: "List jobs for a workflow run"
+          call: "github-actions.listJobsForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: get-job
+          description: "Get a job for a workflow run"
+          call: "github-actions.getJobForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: download-job-logs
+          description: "Download job logs"
+          call: "github-actions.downloadJobLogsForWorkflowRun"
+          hints:
+            readOnly: true
+        - name: list-artifacts
+          description: "List artifacts"
+          call: "github-actions.listArtifactsForRepository"
+          hints:
+            readOnly: true
+        - name: get-artifact
+          description: "Get an artifact"
+          call: "github-actions.getAnArtifact"
+          hints:
+            readOnly: true
+        - name: delete-artifact
+          description: "Delete an artifact"
+          call: "github-actions.deleteAnArtifact"
+          hints:
+            destructive: true
+        - name: list-secrets
+          description: "List repository secrets"
+          call: "github-actions.listRepositorySecrets"
+          hints:
+            readOnly: true
+        - name: create-or-update-secret
+          description: "Create or update a repository secret"
+          call: "github-actions.createOrUpdateRepositorySecret"
+          hints:
+            idempotent: true
+        - name: list-variables
+          description: "List repository variables"
+          call: "github-actions.listRepositoryVariables"
+          hints:
+            readOnly: true
+        - name: list-runners
+          description: "List self-hosted runners"
+          call: "github-actions.listSelfhostedRunnersForRepository"
+          hints:
+            readOnly: true
+        - name: list-caches
+          description: "List GitHub Actions caches"
+          call: "github-actions.listGithubActionsCachesForRepository"
+          hints:
+            readOnly: true

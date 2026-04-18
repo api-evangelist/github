@@ -1,0 +1,263 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Community"
+  description: "Unified workflow for community engagement combining gists, user profiles, organizations, and team discussions. Used by community managers, developer advocates, and open source maintainers for community management and engagement."
+  tags:
+    - GitHub
+    - Community
+    - Gists
+    - Users
+    - Organizations
+    - Discussions
+  personas:
+    - community managers
+    - developer advocates
+    - open source maintainers
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - import: github-gists
+      location: "./shared/gists.yaml"
+    - import: github-users
+      location: "./shared/users.yaml"
+    - import: github-orgs
+      location: "./shared/orgs.yaml"
+
+  exposes:
+    - type: rest
+      port: 8084
+      namespace: github-community-api
+      description: "Unified REST API for community engagement combining gists, users, organizations, and discussions."
+      resources:
+        - path: /v1/gists
+          name: gists
+          description: "Gist management"
+          operations:
+            - method: GET
+              name: listPublicGists
+              description: "List public gists"
+              call: "github-gists.listPublicGists"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/gists/starred
+          name: starred-gists
+          description: "Starred gists"
+          operations:
+            - method: GET
+              name: listStarredGists
+              description: "List starred gists"
+              call: "github-gists.listStarredGists"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/gists/{gist_id}
+          name: gist
+          description: "Individual gist operations"
+          operations:
+            - method: GET
+              name: getgist
+              description: "Get a gist"
+              call: "github-gists.getgist"
+              with:
+                gist_id: "rest.gist_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: updategist
+              description: "Update a gist"
+              call: "github-gists.updategist"
+              with:
+                gist_id: "rest.gist_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/users
+          name: users
+          description: "User listing"
+          operations:
+            - method: GET
+              name: listUsers
+              description: "List users"
+              call: "github-users.listUsers"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/users/{username}
+          name: user
+          description: "User profile"
+          operations:
+            - method: GET
+              name: getUser
+              description: "Get a user"
+              call: "github-users.getUser"
+              with:
+                username: "rest.username"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/users/{username}/followers
+          name: followers
+          description: "User followers"
+          operations:
+            - method: GET
+              name: listFollowersOfUser
+              description: "List followers"
+              call: "github-users.listFollowersOfUser"
+              with:
+                username: "rest.username"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}
+          name: organization
+          description: "Organization profile"
+          operations:
+            - method: GET
+              name: getAnOrganization
+              description: "Get an organization"
+              call: "github-orgs.getAnOrganization"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/members
+          name: members
+          description: "Organization members"
+          operations:
+            - method: GET
+              name: listOrganizationMembers
+              description: "List organization members"
+              call: "github-orgs.listOrganizationMembers"
+              with:
+                org: "rest.org"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/organizations/{org}/teams/{team_slug}/discussions
+          name: discussions
+          description: "Team discussions"
+          operations:
+            - method: GET
+              name: listDiscussions
+              description: "List team discussions"
+              call: "github-orgs.listDiscussions"
+              with:
+                org: "rest.org"
+                team_slug: "rest.team_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createDiscussion
+              description: "Create a team discussion"
+              call: "github-orgs.createDiscussion"
+              with:
+                org: "rest.org"
+                team_slug: "rest.team_slug"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9084
+      namespace: github-community-mcp
+      transport: http
+      description: "MCP server for AI-assisted community engagement."
+      tools:
+        - name: list-public-gists
+          description: "List public gists"
+          call: "github-gists.listPublicGists"
+          hints:
+            readOnly: true
+        - name: list-starred-gists
+          description: "List starred gists"
+          call: "github-gists.listStarredGists"
+          hints:
+            readOnly: true
+        - name: get-gist
+          description: "Get a gist"
+          call: "github-gists.getgist"
+          hints:
+            readOnly: true
+        - name: update-gist
+          description: "Update a gist"
+          call: "github-gists.updategist"
+          hints:
+            idempotent: true
+        - name: fork-gist
+          description: "Fork a gist"
+          call: "github-gists.forkgist"
+        - name: star-gist
+          description: "Star a gist"
+          call: "github-gists.stargist"
+        - name: list-gist-comments
+          description: "List gist comments"
+          call: "github-gists.listGistComments"
+          hints:
+            readOnly: true
+        - name: create-gist-comment
+          description: "Create a gist comment"
+          call: "github-gists.creategistComment"
+        - name: get-user
+          description: "Get a user profile"
+          call: "github-users.getUser"
+          hints:
+            readOnly: true
+        - name: search-users
+          description: "Search users"
+          call: "github-users.searchUsers"
+          hints:
+            readOnly: true
+        - name: list-followers
+          description: "List followers of a user"
+          call: "github-users.listFollowersOfUser"
+          hints:
+            readOnly: true
+        - name: follow-user
+          description: "Follow a user"
+          call: "github-users.followUser"
+        - name: unfollow-user
+          description: "Unfollow a user"
+          call: "github-users.unfollowUser"
+        - name: list-starred
+          description: "List starred repositories"
+          call: "github-users.listRepositoriesStarredByTheAuthenticatedUser"
+          hints:
+            readOnly: true
+        - name: star-repository
+          description: "Star a repository"
+          call: "github-users.starRepositoryForTheAuthenticatedUser"
+        - name: get-organization
+          description: "Get an organization"
+          call: "github-orgs.getAnOrganization"
+          hints:
+            readOnly: true
+        - name: list-org-members
+          description: "List organization members"
+          call: "github-orgs.listOrganizationMembers"
+          hints:
+            readOnly: true
+        - name: list-discussions
+          description: "List team discussions"
+          call: "github-orgs.listDiscussions"
+          hints:
+            readOnly: true
+        - name: create-discussion
+          description: "Create a team discussion"
+          call: "github-orgs.createDiscussion"
+        - name: get-discussion
+          description: "Get a team discussion"
+          call: "github-orgs.getDiscussion"
+          hints:
+            readOnly: true

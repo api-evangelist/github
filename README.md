@@ -59,6 +59,36 @@ See [apis.yml](apis.yml) for the complete inventory.
 
 259 example JSON files in [examples/](examples/).
 
+## Capabilities
+
+Naftiko capabilities organized as shared per-API definitions composed into customer-facing workflows.
+
+### Shared Per-API Definitions
+
+- [Repos](capabilities/shared/repos.yaml) — repositories, branches, commits, tags, releases
+- [Issues](capabilities/shared/issues.yaml) — issues, comments, labels, milestones
+- [Pull Requests](capabilities/shared/pull-requests.yaml) — PRs, reviews, review comments
+- [Actions](capabilities/shared/actions.yaml) — workflows, runs, jobs, artifacts, secrets
+- [Security](capabilities/shared/security.yaml) — code scanning, dependabot, secret scanning
+- [Users](capabilities/shared/users.yaml) — users, emails, SSH keys, GPG keys
+- [Organizations](capabilities/shared/orgs.yaml) — orgs, teams, members
+- [Packages](capabilities/shared/packages.yaml) — packages, versions
+- [Projects](capabilities/shared/projects.yaml) — projects, columns, cards
+- [Search](capabilities/shared/search.yaml) — code, issues, repos, users search
+- [Gists](capabilities/shared/gists.yaml) — gists, comments, forks
+- [Apps](capabilities/shared/apps.yaml) — GitHub Apps, installations
+
+### Workflow Capabilities
+
+| Workflow | APIs Combined | Persona |
+|----------|--------------|---------|
+| [Source Control](capabilities/source-control.yaml) | Repos + Pull Requests | Developer |
+| [CI/CD](capabilities/ci-cd.yaml) | Actions + Repos | DevOps Engineer |
+| [Project Management](capabilities/project-management.yaml) | Issues + Projects + Search | Project Manager |
+| [Security Operations](capabilities/security-operations.yaml) | Security | Security Engineer |
+| [Community](capabilities/community.yaml) | Gists + Users + Orgs | Community Manager |
+| [Platform Administration](capabilities/platform-administration.yaml) | Apps + Orgs + Packages | Platform Admin |
+
 ## Vocabulary
 
 - [GitHub Vocabulary](vocabulary/github-vocabulary.yaml) — 12 resources, 2 APIs, 5 domains, 5 personas

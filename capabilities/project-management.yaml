@@ -1,0 +1,273 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "GitHub Project Management"
+  description: "Unified workflow for project management combining issues, projects, milestones, labels, and search. Used by project managers and team leads for tracking work, organizing sprints, and managing deliverables."
+  tags:
+    - GitHub
+    - Project Management
+    - Issues
+    - Projects
+    - Milestones
+    - Search
+  personas:
+    - project managers
+    - team leads
+    - scrum masters
+    - product owners
+  created: "2026-04-17"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      GITHUB_TOKEN: GITHUB_TOKEN
+
+capability:
+  consumes:
+    - import: github-issues
+      location: "./shared/issues.yaml"
+    - import: github-projects
+      location: "./shared/projects.yaml"
+    - import: github-search
+      location: "./shared/search.yaml"
+
+  exposes:
+    - type: rest
+      port: 8082
+      namespace: github-project-management-api
+      description: "Unified REST API for project management workflows combining issues, projects, and search."
+      resources:
+        - path: /v1/repositories/{owner}/{repo}/issues
+          name: issues
+          description: "Issue management"
+          operations:
+            - method: GET
+              name: listRepositoryIssues
+              description: "List issues"
+              call: "github-issues.listRepositoryIssues"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createAnIssue
+              description: "Create an issue"
+              call: "github-issues.createAnIssue"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/issues/{issue_number}
+          name: issue
+          description: "Individual issue operations"
+          operations:
+            - method: GET
+              name: getAnIssue
+              description: "Get an issue"
+              call: "github-issues.getAnIssue"
+              with:
+                issue_number: "rest.issue_number"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: updateAnIssue
+              description: "Update an issue"
+              call: "github-issues.updateAnIssue"
+              with:
+                issue_number: "rest.issue_number"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/milestones
+          name: milestones
+          description: "Milestone management"
+          operations:
+            - method: GET
+              name: listMilestones
+              description: "List milestones"
+              call: "github-issues.listMilestones"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createMilestone
+              description: "Create a milestone"
+              call: "github-issues.createMilestone"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/repositories/{owner}/{repo}/labels
+          name: labels
+          description: "Label management"
+          operations:
+            - method: GET
+              name: listLabelsForRepository
+              description: "List labels"
+              call: "github-issues.listLabelsForRepository"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createLabel
+              description: "Create a label"
+              call: "github-issues.createLabel"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/projects/{project_id}
+          name: project
+          description: "Project operations"
+          operations:
+            - method: GET
+              name: getProject
+              description: "Get a project"
+              call: "github-projects.getProject"
+              with:
+                project_id: "rest.project_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: PATCH
+              name: updateProject
+              description: "Update a project"
+              call: "github-projects.updateProject"
+              with:
+                project_id: "rest.project_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/projects/{project_id}/columns
+          name: columns
+          description: "Project column management"
+          operations:
+            - method: GET
+              name: listProjectColumns
+              description: "List columns"
+              call: "github-projects.listProjectColumns"
+              with:
+                project_id: "rest.project_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: createProjectColumn
+              description: "Create a column"
+              call: "github-projects.createProjectColumn"
+              with:
+                project_id: "rest.project_id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/search/issues
+          name: issue-search
+          description: "Issue and PR search"
+          operations:
+            - method: GET
+              name: searchIssuesAndPullRequests
+              description: "Search issues and pull requests"
+              call: "github-search.searchIssuesAndPullRequests"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9082
+      namespace: github-project-management-mcp
+      transport: http
+      description: "MCP server for AI-assisted project management workflows."
+      tools:
+        - name: list-issues
+          description: "List repository issues"
+          call: "github-issues.listRepositoryIssues"
+          hints:
+            readOnly: true
+        - name: create-issue
+          description: "Create an issue"
+          call: "github-issues.createAnIssue"
+        - name: get-issue
+          description: "Get an issue"
+          call: "github-issues.getAnIssue"
+          hints:
+            readOnly: true
+        - name: update-issue
+          description: "Update an issue"
+          call: "github-issues.updateAnIssue"
+          hints:
+            idempotent: true
+        - name: lock-issue
+          description: "Lock an issue"
+          call: "github-issues.lockAnIssue"
+        - name: list-issue-comments
+          description: "List issue comments"
+          call: "github-issues.listIssueComments"
+          hints:
+            readOnly: true
+        - name: create-issue-comment
+          description: "Create an issue comment"
+          call: "github-issues.createAnIssueComment"
+        - name: add-assignees
+          description: "Add assignees to an issue"
+          call: "github-issues.addAssigneesToAnIssue"
+        - name: add-labels
+          description: "Add labels to an issue"
+          call: "github-issues.addLabelsToAnIssue"
+        - name: list-milestones
+          description: "List milestones"
+          call: "github-issues.listMilestones"
+          hints:
+            readOnly: true
+        - name: create-milestone
+          description: "Create a milestone"
+          call: "github-issues.createMilestone"
+        - name: list-labels
+          description: "List labels"
+          call: "github-issues.listLabelsForRepository"
+          hints:
+            readOnly: true
+        - name: create-label
+          description: "Create a label"
+          call: "github-issues.createLabel"
+        - name: get-project
+          description: "Get a project"
+          call: "github-projects.getProject"
+          hints:
+            readOnly: true
+        - name: update-project
+          description: "Update a project"
+          call: "github-projects.updateProject"
+          hints:
+            idempotent: true
+        - name: list-columns
+          description: "List project columns"
+          call: "github-projects.listProjectColumns"
+          hints:
+            readOnly: true
+        - name: create-column
+          description: "Create a project column"
+          call: "github-projects.createProjectColumn"
+        - name: list-cards
+          description: "List project cards"
+          call: "github-projects.listProjectCards"
+          hints:
+            readOnly: true
+        - name: create-card
+          description: "Create a project card"
+          call: "github-projects.createProjectCard"
+        - name: move-card
+          description: "Move a project card"
+          call: "github-projects.moveProjectCard"
+        - name: search-issues
+          description: "Search issues and pull requests"
+          call: "github-search.searchIssuesAndPullRequests"
+          hints:
+            readOnly: true
+        - name: search-labels
+          description: "Search labels"
+          call: "github-search.searchLabels"
+          hints:
+            readOnly: true
+        - name: list-timeline-events
+          description: "List timeline events for an issue"
+          call: "github-issues.listTimelineEventsForAnIssue"
+          hints:
+            readOnly: true
