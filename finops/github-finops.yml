@@ -1,0 +1,88 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: GitHub
+providerId: github
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - FinOps
+  - Cost Management
+  - FOCUS
+  - DevOps
+description: FOCUS-aligned FinOps for GitHub, primarily covering Actions minutes, Packages storage/transfer,
+  Codespaces compute, and Copilot seats.
+sources:
+  - https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+  - https://github.com/pricing
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: GitHub, Inc.
+serviceCategory: Developer Platform
+billingModel:
+  pricingCategory: Subscription + Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+    - Usage
+    - Purchase
+    - Tax
+    - Credit
+    - Adjustment
+focusColumns:
+  ServiceName: GitHub
+  ServiceCategory: Developer Platform
+  ProviderName: GitHub
+  PublisherName: GitHub, Inc.
+  InvoiceIssuerName: GitHub, Inc.
+  BillingCurrency: USD
+meters:
+  - name: actions_minutes
+    unit: minute
+    aggregation: sum
+    dimensions:
+      - repo
+      - runner_os
+      - runner_size
+  - name: packages_storage
+    unit: GB
+    aggregation: max
+    dimensions:
+      - org
+      - repo
+  - name: packages_transfer
+    unit: GB
+    aggregation: sum
+    dimensions:
+      - org
+  - name: codespaces_compute
+    unit: core_hour
+    aggregation: sum
+    dimensions:
+      - user
+      - machine_type
+  - name: codespaces_storage
+    unit: GB-month
+    aggregation: sum
+  - name: copilot_seats
+    unit: seat
+    aggregation: max
+    dimensions:
+      - org
+      - plan
+principles:
+  - name: Visibility
+    description: Use Billing API and the spending limits page to surface Actions/Packages/Codespaces consumption
+      per repo.
+  - name: Allocation
+    description: Tag workflows with cost centers; use organization-level repos for chargeback granularity.
+  - name: Optimization
+    description: Use larger runners only where they shorten wall time; cache build artifacts; restrict
+      Packages storage.
+  - name: Accountability
+    description: Set per-org spending limits; require budget approval before raising.

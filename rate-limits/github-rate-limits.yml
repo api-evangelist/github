@@ -1,0 +1,91 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: GitHub
+providerId: github
+created: '2026-05-04'
+modified: '2026-05-04'
+reconciled: true
+tags:
+  - Rate Limiting
+  - API Management
+description: GitHub REST and GraphQL API rate limits, including secondary limits and Git LFS limits.
+sources:
+  - https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+  - https://github.com/pricing
+headers:
+  limit: x-ratelimit-limit
+  remaining: x-ratelimit-remaining
+  used: x-ratelimit-used
+  reset: x-ratelimit-reset
+  resource: x-ratelimit-resource
+responseCodes:
+  throttled: 403
+  secondaryAbuse: 429
+limits:
+  - name: Unauthenticated
+    scope: ip
+    metric: requests_per_hour
+    limit: 60
+    timeFrame: hour
+  - name: Authenticated (Personal Access Token)
+    scope: user
+    metric: requests_per_hour
+    limit: 5000
+    timeFrame: hour
+  - name: GitHub App (Standard)
+    scope: installation
+    metric: requests_per_hour
+    limit: 5000
+    timeFrame: hour
+  - name: GitHub App (Enterprise Cloud)
+    scope: installation
+    metric: requests_per_hour
+    limit: 15000
+    timeFrame: hour
+  - name: OAuth App (Enterprise Cloud)
+    scope: oauth-app
+    metric: requests_per_hour
+    limit: 15000
+    timeFrame: hour
+  - name: GitHub Actions GITHUB_TOKEN
+    scope: repository
+    metric: requests_per_hour
+    limit: 1000
+    timeFrame: hour
+  - name: Git LFS Authenticated
+    scope: user
+    metric: requests_per_minute
+    limit: 3000
+    timeFrame: minute
+  - name: Search API
+    scope: user
+    metric: requests_per_minute
+    limit: 30
+    timeFrame: minute
+secondaryLimits:
+  - name: Concurrent Requests
+    scope: shared REST+GraphQL
+    limit: 100
+    metric: concurrent
+  - name: REST Endpoint Points Per Minute
+    scope: user
+    limit: 900
+    metric: points_per_minute
+    notes: Each REST endpoint has a point cost; sum cannot exceed 900/min.
+  - name: Content-Generating Requests
+    scope: user
+    limit: 80
+    metric: requests_per_minute
+    notes: Creating issues, comments, PRs, etc.
+  - name: Daily Content-Creating Limit
+    scope: user
+    limit: 500
+    metric: requests_per_hour
+policies:
+  - name: Continuing while limited triggers ban
+    description: Repeated requests after rate limit can result in integration banning.
+  - name: Reset time as Unix epoch
+    description: x-ratelimit-reset returns reset as UTC epoch seconds.
+  - name: Conditional requests free
+    description: Conditional requests (304 Not Modified) do not count against rate limits.
