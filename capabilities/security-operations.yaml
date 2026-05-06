@@ -1,261 +1,525 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "GitHub Security Operations"
-  description: "Unified workflow for security operations combining code scanning, Dependabot, and secret scanning. Used by security engineers for vulnerability management, dependency auditing, and secret leak remediation."
+  label: GitHub Security Operations
+  description: Unified workflow for security operations combining code scanning, Dependabot, and secret scanning. Used by
+    security engineers for vulnerability management, dependency auditing, and secret leak remediation.
   tags:
-    - GitHub
-    - Security
-    - Code Scanning
-    - Dependabot
-    - Secret Scanning
-    - Vulnerability Management
+  - GitHub
+  - Security
+  - Code Scanning
+  - Dependabot
+  - Secret Scanning
+  - Vulnerability Management
   personas:
-    - security engineers
-    - application security specialists
-    - compliance officers
-  created: "2026-04-17"
-  modified: "2026-04-18"
-
+  - security engineers
+  - application security specialists
+  - compliance officers
+  created: '2026-04-17'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      GITHUB_TOKEN: GITHUB_TOKEN
-
+- namespace: env
+  keys:
+    GITHUB_TOKEN: GITHUB_TOKEN
 capability:
   consumes:
-    - import: github-security
-      location: "./shared/security.yaml"
-
+  - type: http
+    namespace: github-security
+    baseUri: https://api.github.com
+    description: GitHub REST API for code scanning, Dependabot, and secret scanning.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: code-scanning
+      path: /repos/{owner}/{repo}/code-scanning
+      description: Code scanning alert and analysis management.
+      operations:
+      - name: listCodeScanningAlertsForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/alerts
+        description: List code scanning alerts for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getCodeScanningAlert
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+        description: Get a code scanning alert.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateCodeScanningAlert
+        method: PATCH
+        path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+        description: Update a code scanning alert.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listInstancesOfCodeScanningAlert
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances
+        description: List instances of a code scanning alert.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listCodeScanningAnalysesForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/analyses
+        description: List code scanning analyses for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getCodeScanningAnalysisForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+        description: Get a code scanning analysis.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteCodeScanningAnalysisFromRepository
+        method: DELETE
+        path: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+        description: Delete a code scanning analysis.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getCodeScanningDefaultSetupConfiguration
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/default-setup
+        description: Get code scanning default setup configuration.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateCodeScanningDefaultSetupConfiguration
+        method: PATCH
+        path: /repos/{owner}/{repo}/code-scanning/default-setup
+        description: Update code scanning default setup configuration.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: uploadAnAnalysisAsSarifData
+        method: POST
+        path: /repos/{owner}/{repo}/code-scanning/sarifs
+        description: Upload an analysis as SARIF data.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getInformationAboutSarifUpload
+        method: GET
+        path: /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
+        description: Get information about a SARIF upload.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: dependabot
+      path: /repos/{owner}/{repo}/dependabot
+      description: Dependabot alert and secret management.
+      operations:
+      - name: listDependabotAlertsForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/dependabot/alerts
+        description: List Dependabot alerts for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getDependabotAlert
+        method: GET
+        path: /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+        description: Get a Dependabot alert.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateDependabotAlert
+        method: PATCH
+        path: /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+        description: Update a Dependabot alert.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listRepositoryDependabotSecrets
+        method: GET
+        path: /repos/{owner}/{repo}/dependabot/secrets
+        description: List repository Dependabot secrets.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getRepositoryDependabotSecretsPublicKey
+        method: GET
+        path: /repos/{owner}/{repo}/dependabot/secrets/public-key
+        description: Get a repository Dependabot secrets public key.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getRepositoryDependabotSecret
+        method: GET
+        path: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+        description: Get a repository Dependabot secret.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createOrUpdateRepositoryDependabotSecret
+        method: PUT
+        path: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+        description: Create or update a repository Dependabot secret.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteRepositoryDependabotSecret
+        method: DELETE
+        path: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+        description: Delete a repository Dependabot secret.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: secret-scanning
+      path: /repos/{owner}/{repo}/secret-scanning
+      description: Secret scanning alert management.
+      operations:
+      - name: listSecretScanningAlertsForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/secret-scanning/alerts
+        description: List secret scanning alerts for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getSecretScanningAlert
+        method: GET
+        path: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+        description: Get a secret scanning alert.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateSecretScanningAlert
+        method: PATCH
+        path: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+        description: Update a secret scanning alert.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listLocationsForSecretScanningAlert
+        method: GET
+        path: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations
+        description: List locations for a secret scanning alert.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: vulnerability-alerts
+      path: /repos/{owner}/{repo}
+      description: Repository vulnerability alert settings.
+      operations:
+      - name: checkIfVulnerabilityAlertsAreEnabledForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/vulnerability-alerts
+        description: Check if vulnerability alerts are enabled.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: enableVulnerabilityAlerts
+        method: PUT
+        path: /repos/{owner}/{repo}/vulnerability-alerts
+        description: Enable vulnerability alerts.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: disableVulnerabilityAlerts
+        method: DELETE
+        path: /repos/{owner}/{repo}/vulnerability-alerts
+        description: Disable vulnerability alerts.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8083
-      namespace: github-security-ops-api
-      description: "Unified REST API for security operations combining code scanning, Dependabot, and secret scanning."
-      resources:
-        - path: /v1/repositories/{owner}/{repo}/code-scanning/alerts
-          name: code-scanning-alerts
-          description: "Code scanning alert management"
-          operations:
-            - method: GET
-              name: listCodeScanningAlertsForRepository
-              description: "List code scanning alerts"
-              call: "github-security.listCodeScanningAlertsForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/code-scanning/alerts/{alert_number}
-          name: code-scanning-alert
-          description: "Individual code scanning alert"
-          operations:
-            - method: GET
-              name: getCodeScanningAlert
-              description: "Get a code scanning alert"
-              call: "github-security.getCodeScanningAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateCodeScanningAlert
-              description: "Update a code scanning alert"
-              call: "github-security.updateCodeScanningAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/code-scanning/analyses
-          name: code-scanning-analyses
-          description: "Code scanning analyses"
-          operations:
-            - method: GET
-              name: listCodeScanningAnalysesForRepository
-              description: "List analyses"
-              call: "github-security.listCodeScanningAnalysesForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/dependabot/alerts
-          name: dependabot-alerts
-          description: "Dependabot alert management"
-          operations:
-            - method: GET
-              name: listDependabotAlertsForRepository
-              description: "List Dependabot alerts"
-              call: "github-security.listDependabotAlertsForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/dependabot/alerts/{alert_number}
-          name: dependabot-alert
-          description: "Individual Dependabot alert"
-          operations:
-            - method: GET
-              name: getDependabotAlert
-              description: "Get a Dependabot alert"
-              call: "github-security.getDependabotAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateDependabotAlert
-              description: "Update a Dependabot alert"
-              call: "github-security.updateDependabotAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/secret-scanning/alerts
-          name: secret-scanning-alerts
-          description: "Secret scanning alert management"
-          operations:
-            - method: GET
-              name: listSecretScanningAlertsForRepository
-              description: "List secret scanning alerts"
-              call: "github-security.listSecretScanningAlertsForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/secret-scanning/alerts/{alert_number}
-          name: secret-scanning-alert
-          description: "Individual secret scanning alert"
-          operations:
-            - method: GET
-              name: getSecretScanningAlert
-              description: "Get a secret scanning alert"
-              call: "github-security.getSecretScanningAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateSecretScanningAlert
-              description: "Update a secret scanning alert"
-              call: "github-security.updateSecretScanningAlert"
-              with:
-                alert_number: "rest.alert_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/vulnerability-alerts
-          name: vulnerability-alerts
-          description: "Vulnerability alert settings"
-          operations:
-            - method: GET
-              name: checkIfVulnerabilityAlertsAreEnabledForRepository
-              description: "Check vulnerability alert status"
-              call: "github-security.checkIfVulnerabilityAlertsAreEnabledForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PUT
-              name: enableVulnerabilityAlerts
-              description: "Enable vulnerability alerts"
-              call: "github-security.enableVulnerabilityAlerts"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9083
-      namespace: github-security-ops-mcp
-      transport: http
-      description: "MCP server for AI-assisted security operations."
-      tools:
-        - name: list-code-scanning-alerts
-          description: "List code scanning alerts for a repository"
-          call: "github-security.listCodeScanningAlertsForRepository"
-          hints:
-            readOnly: true
-        - name: get-code-scanning-alert
-          description: "Get a code scanning alert"
-          call: "github-security.getCodeScanningAlert"
-          hints:
-            readOnly: true
-        - name: update-code-scanning-alert
-          description: "Update a code scanning alert (dismiss, reopen)"
-          call: "github-security.updateCodeScanningAlert"
-          hints:
-            idempotent: true
-        - name: list-code-scanning-analyses
-          description: "List code scanning analyses"
-          call: "github-security.listCodeScanningAnalysesForRepository"
-          hints:
-            readOnly: true
-        - name: get-code-scanning-analysis
-          description: "Get a code scanning analysis"
-          call: "github-security.getCodeScanningAnalysisForRepository"
-          hints:
-            readOnly: true
-        - name: upload-sarif
-          description: "Upload SARIF analysis data"
-          call: "github-security.uploadAnAnalysisAsSarifData"
-        - name: get-default-setup
-          description: "Get code scanning default setup configuration"
-          call: "github-security.getCodeScanningDefaultSetupConfiguration"
-          hints:
-            readOnly: true
-        - name: update-default-setup
-          description: "Update code scanning default setup"
-          call: "github-security.updateCodeScanningDefaultSetupConfiguration"
-          hints:
-            idempotent: true
-        - name: list-dependabot-alerts
-          description: "List Dependabot alerts"
-          call: "github-security.listDependabotAlertsForRepository"
-          hints:
-            readOnly: true
-        - name: get-dependabot-alert
-          description: "Get a Dependabot alert"
-          call: "github-security.getDependabotAlert"
-          hints:
-            readOnly: true
-        - name: update-dependabot-alert
-          description: "Update a Dependabot alert (dismiss, reopen)"
-          call: "github-security.updateDependabotAlert"
-          hints:
-            idempotent: true
-        - name: list-dependabot-secrets
-          description: "List Dependabot secrets"
-          call: "github-security.listRepositoryDependabotSecrets"
-          hints:
-            readOnly: true
-        - name: list-secret-scanning-alerts
-          description: "List secret scanning alerts"
-          call: "github-security.listSecretScanningAlertsForRepository"
-          hints:
-            readOnly: true
-        - name: get-secret-scanning-alert
-          description: "Get a secret scanning alert"
-          call: "github-security.getSecretScanningAlert"
-          hints:
-            readOnly: true
-        - name: update-secret-scanning-alert
-          description: "Update a secret scanning alert (resolve, reopen)"
-          call: "github-security.updateSecretScanningAlert"
-          hints:
-            idempotent: true
-        - name: list-secret-scanning-locations
-          description: "List locations for a secret scanning alert"
-          call: "github-security.listLocationsForSecretScanningAlert"
-          hints:
-            readOnly: true
-        - name: check-vulnerability-alerts
-          description: "Check if vulnerability alerts are enabled"
-          call: "github-security.checkIfVulnerabilityAlertsAreEnabledForRepository"
-          hints:
-            readOnly: true
-        - name: enable-vulnerability-alerts
-          description: "Enable vulnerability alerts"
-          call: "github-security.enableVulnerabilityAlerts"
-        - name: disable-vulnerability-alerts
-          description: "Disable vulnerability alerts"
-          call: "github-security.disableVulnerabilityAlerts"
-          hints:
-            destructive: true
+  - type: rest
+    port: 8083
+    namespace: github-security-ops-api
+    description: Unified REST API for security operations combining code scanning, Dependabot, and secret scanning.
+    resources:
+    - path: /v1/repositories/{owner}/{repo}/code-scanning/alerts
+      name: code-scanning-alerts
+      description: Code scanning alert management
+      operations:
+      - method: GET
+        name: listCodeScanningAlertsForRepository
+        description: List code scanning alerts
+        call: github-security.listCodeScanningAlertsForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/code-scanning/alerts/{alert_number}
+      name: code-scanning-alert
+      description: Individual code scanning alert
+      operations:
+      - method: GET
+        name: getCodeScanningAlert
+        description: Get a code scanning alert
+        call: github-security.getCodeScanningAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateCodeScanningAlert
+        description: Update a code scanning alert
+        call: github-security.updateCodeScanningAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/code-scanning/analyses
+      name: code-scanning-analyses
+      description: Code scanning analyses
+      operations:
+      - method: GET
+        name: listCodeScanningAnalysesForRepository
+        description: List analyses
+        call: github-security.listCodeScanningAnalysesForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/dependabot/alerts
+      name: dependabot-alerts
+      description: Dependabot alert management
+      operations:
+      - method: GET
+        name: listDependabotAlertsForRepository
+        description: List Dependabot alerts
+        call: github-security.listDependabotAlertsForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/dependabot/alerts/{alert_number}
+      name: dependabot-alert
+      description: Individual Dependabot alert
+      operations:
+      - method: GET
+        name: getDependabotAlert
+        description: Get a Dependabot alert
+        call: github-security.getDependabotAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateDependabotAlert
+        description: Update a Dependabot alert
+        call: github-security.updateDependabotAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/secret-scanning/alerts
+      name: secret-scanning-alerts
+      description: Secret scanning alert management
+      operations:
+      - method: GET
+        name: listSecretScanningAlertsForRepository
+        description: List secret scanning alerts
+        call: github-security.listSecretScanningAlertsForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+      name: secret-scanning-alert
+      description: Individual secret scanning alert
+      operations:
+      - method: GET
+        name: getSecretScanningAlert
+        description: Get a secret scanning alert
+        call: github-security.getSecretScanningAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateSecretScanningAlert
+        description: Update a secret scanning alert
+        call: github-security.updateSecretScanningAlert
+        with:
+          alert_number: rest.alert_number
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/vulnerability-alerts
+      name: vulnerability-alerts
+      description: Vulnerability alert settings
+      operations:
+      - method: GET
+        name: checkIfVulnerabilityAlertsAreEnabledForRepository
+        description: Check vulnerability alert status
+        call: github-security.checkIfVulnerabilityAlertsAreEnabledForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: enableVulnerabilityAlerts
+        description: Enable vulnerability alerts
+        call: github-security.enableVulnerabilityAlerts
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9083
+    namespace: github-security-ops-mcp
+    transport: http
+    description: MCP server for AI-assisted security operations.
+    tools:
+    - name: list-code-scanning-alerts
+      description: List code scanning alerts for a repository
+      call: github-security.listCodeScanningAlertsForRepository
+      hints:
+        readOnly: true
+    - name: get-code-scanning-alert
+      description: Get a code scanning alert
+      call: github-security.getCodeScanningAlert
+      hints:
+        readOnly: true
+    - name: update-code-scanning-alert
+      description: Update a code scanning alert (dismiss, reopen)
+      call: github-security.updateCodeScanningAlert
+      hints:
+        idempotent: true
+    - name: list-code-scanning-analyses
+      description: List code scanning analyses
+      call: github-security.listCodeScanningAnalysesForRepository
+      hints:
+        readOnly: true
+    - name: get-code-scanning-analysis
+      description: Get a code scanning analysis
+      call: github-security.getCodeScanningAnalysisForRepository
+      hints:
+        readOnly: true
+    - name: upload-sarif
+      description: Upload SARIF analysis data
+      call: github-security.uploadAnAnalysisAsSarifData
+    - name: get-default-setup
+      description: Get code scanning default setup configuration
+      call: github-security.getCodeScanningDefaultSetupConfiguration
+      hints:
+        readOnly: true
+    - name: update-default-setup
+      description: Update code scanning default setup
+      call: github-security.updateCodeScanningDefaultSetupConfiguration
+      hints:
+        idempotent: true
+    - name: list-dependabot-alerts
+      description: List Dependabot alerts
+      call: github-security.listDependabotAlertsForRepository
+      hints:
+        readOnly: true
+    - name: get-dependabot-alert
+      description: Get a Dependabot alert
+      call: github-security.getDependabotAlert
+      hints:
+        readOnly: true
+    - name: update-dependabot-alert
+      description: Update a Dependabot alert (dismiss, reopen)
+      call: github-security.updateDependabotAlert
+      hints:
+        idempotent: true
+    - name: list-dependabot-secrets
+      description: List Dependabot secrets
+      call: github-security.listRepositoryDependabotSecrets
+      hints:
+        readOnly: true
+    - name: list-secret-scanning-alerts
+      description: List secret scanning alerts
+      call: github-security.listSecretScanningAlertsForRepository
+      hints:
+        readOnly: true
+    - name: get-secret-scanning-alert
+      description: Get a secret scanning alert
+      call: github-security.getSecretScanningAlert
+      hints:
+        readOnly: true
+    - name: update-secret-scanning-alert
+      description: Update a secret scanning alert (resolve, reopen)
+      call: github-security.updateSecretScanningAlert
+      hints:
+        idempotent: true
+    - name: list-secret-scanning-locations
+      description: List locations for a secret scanning alert
+      call: github-security.listLocationsForSecretScanningAlert
+      hints:
+        readOnly: true
+    - name: check-vulnerability-alerts
+      description: Check if vulnerability alerts are enabled
+      call: github-security.checkIfVulnerabilityAlertsAreEnabledForRepository
+      hints:
+        readOnly: true
+    - name: enable-vulnerability-alerts
+      description: Enable vulnerability alerts
+      call: github-security.enableVulnerabilityAlerts
+    - name: disable-vulnerability-alerts
+      description: Disable vulnerability alerts
+      call: github-security.disableVulnerabilityAlerts
+      hints:
+        destructive: true

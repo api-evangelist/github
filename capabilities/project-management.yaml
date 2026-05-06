@@ -1,273 +1,1069 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "GitHub Project Management"
-  description: "Unified workflow for project management combining issues, projects, milestones, labels, and search. Used by project managers and team leads for tracking work, organizing sprints, and managing deliverables."
+  label: GitHub Project Management
+  description: Unified workflow for project management combining issues, projects, milestones, labels, and search. Used by
+    project managers and team leads for tracking work, organizing sprints, and managing deliverables.
   tags:
-    - GitHub
-    - Project Management
-    - Issues
-    - Projects
-    - Milestones
-    - Search
+  - GitHub
+  - Project Management
+  - Issues
+  - Projects
+  - Milestones
+  - Search
   personas:
-    - project managers
-    - team leads
-    - scrum masters
-    - product owners
-  created: "2026-04-17"
-  modified: "2026-04-18"
-
+  - project managers
+  - team leads
+  - scrum masters
+  - product owners
+  created: '2026-04-17'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      GITHUB_TOKEN: GITHUB_TOKEN
-
+- namespace: env
+  keys:
+    GITHUB_TOKEN: GITHUB_TOKEN
 capability:
   consumes:
-    - import: github-issues
-      location: "./shared/issues.yaml"
-    - import: github-projects
-      location: "./shared/projects.yaml"
-    - import: github-search
-      location: "./shared/search.yaml"
-
+  - type: http
+    namespace: github-issues
+    baseUri: https://api.github.com
+    description: GitHub REST API for issues, labels, milestones, assignees, comments, and reactions.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: issues
+      path: /repos/{owner}/{repo}/issues
+      description: Issue CRUD and listing operations.
+      operations:
+      - name: listRepositoryIssues
+        method: GET
+        description: List repository issues.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnIssue
+        method: POST
+        description: Create an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnIssue
+        method: GET
+        path: /repos/{owner}/{repo}/issues/{issue_number}
+        description: Get an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnIssue
+        method: PATCH
+        path: /repos/{owner}/{repo}/issues/{issue_number}
+        description: Update an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: lockAnIssue
+        method: PUT
+        path: /repos/{owner}/{repo}/issues/{issue_number}/lock
+        description: Lock an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: unlockAnIssue
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/{issue_number}/lock
+        description: Unlock an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: issue-comments
+      path: /repos/{owner}/{repo}/issues
+      description: Issue comment management.
+      operations:
+      - name: listIssueComments
+        method: GET
+        path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+        description: List issue comments.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnIssueComment
+        method: POST
+        path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+        description: Create an issue comment.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnIssueComment
+        method: GET
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+        description: Get an issue comment.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnIssueComment
+        method: PATCH
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+        description: Update an issue comment.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnIssueComment
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+        description: Delete an issue comment.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listIssueCommentsForRepository
+        method: GET
+        path: /repos/{owner}/{repo}/issues/comments
+        description: List issue comments for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: assignees
+      path: /repos/{owner}/{repo}
+      description: Issue assignee management.
+      operations:
+      - name: listAssignees
+        method: GET
+        path: /repos/{owner}/{repo}/assignees
+        description: List assignees.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: checkIfUserCanBeAssigned
+        method: GET
+        path: /repos/{owner}/{repo}/assignees/{assignee}
+        description: Check if a user can be assigned.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addAssigneesToAnIssue
+        method: POST
+        path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+        description: Add assignees to an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeAssigneesFromAnIssue
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+        description: Remove assignees from an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: labels
+      path: /repos/{owner}/{repo}/labels
+      description: Label management for repositories and issues.
+      operations:
+      - name: listLabelsForRepository
+        method: GET
+        description: List labels for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createLabel
+        method: POST
+        description: Create a label.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getLabel
+        method: GET
+        path: /repos/{owner}/{repo}/labels/{name}
+        description: Get a label.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateLabel
+        method: PATCH
+        path: /repos/{owner}/{repo}/labels/{name}
+        description: Update a label.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteLabel
+        method: DELETE
+        path: /repos/{owner}/{repo}/labels/{name}
+        description: Delete a label.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listLabelsForAnIssue
+        method: GET
+        path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+        description: List labels for an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addLabelsToAnIssue
+        method: POST
+        path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+        description: Add labels to an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeAllLabelsFromAnIssue
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+        description: Remove all labels from an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeLabelFromAnIssue
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
+        description: Remove a label from an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: milestones
+      path: /repos/{owner}/{repo}/milestones
+      description: Milestone management.
+      operations:
+      - name: listMilestones
+        method: GET
+        description: List milestones.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createMilestone
+        method: POST
+        description: Create a milestone.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getMilestone
+        method: GET
+        path: /repos/{owner}/{repo}/milestones/{milestone_number}
+        description: Get a milestone.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateMilestone
+        method: PATCH
+        path: /repos/{owner}/{repo}/milestones/{milestone_number}
+        description: Update a milestone.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteMilestone
+        method: DELETE
+        path: /repos/{owner}/{repo}/milestones/{milestone_number}
+        description: Delete a milestone.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: reactions
+      path: /repos/{owner}/{repo}/issues
+      description: Issue and comment reaction management.
+      operations:
+      - name: listReactionsForAnIssue
+        method: GET
+        path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+        description: List reactions for an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createReactionForAnIssue
+        method: POST
+        path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+        description: Create reaction for an issue.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnIssueReaction
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
+        description: Delete an issue reaction.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listReactionsForAnIssueComment
+        method: GET
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+        description: List reactions for an issue comment.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createReactionForAnIssueComment
+        method: POST
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+        description: Create reaction for an issue comment.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnIssueCommentReaction
+        method: DELETE
+        path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
+        description: Delete an issue comment reaction.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: timeline
+      path: /repos/{owner}/{repo}/issues/{issue_number}/timeline
+      description: Issue timeline events.
+      operations:
+      - name: listTimelineEventsForAnIssue
+        method: GET
+        description: List timeline events for an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: issue-events
+      path: /repos/{owner}/{repo}/issues/events
+      description: Issue event listing.
+      operations:
+      - name: listIssueEventsForRepository
+        method: GET
+        description: List issue events for a repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnIssueEvent
+        method: GET
+        path: /repos/{owner}/{repo}/issues/events/{event_id}
+        description: Get an issue event.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listIssueEvents
+        method: GET
+        path: /repos/{owner}/{repo}/issues/{issue_number}/events
+        description: List events for an issue.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: github-projects
+    baseUri: https://api.github.com
+    description: GitHub REST API for projects, columns, cards, and collaborators.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: projects
+      path: /projects
+      description: Project CRUD operations.
+      operations:
+      - name: getProject
+        method: GET
+        path: /projects/{project_id}
+        description: Get a project.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateProject
+        method: PATCH
+        path: /projects/{project_id}
+        description: Update a project.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteProject
+        method: DELETE
+        path: /projects/{project_id}
+        description: Delete a project.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listOrganizationProjects
+        method: GET
+        path: /orgs/{org}/projects
+        description: List organization projects.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnOrganizationProject
+        method: POST
+        path: /orgs/{org}/projects
+        description: Create an organization project.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listRepositoryProjects
+        method: GET
+        path: /repos/{owner}/{repo}/projects
+        description: List repository projects.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createRepositoryProject
+        method: POST
+        path: /repos/{owner}/{repo}/projects
+        description: Create a repository project.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createUserProject
+        method: POST
+        path: /user/projects
+        description: Create a user project.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listUserProjects
+        method: GET
+        path: /users/{username}/projects
+        description: List user projects.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: columns
+      path: /projects/{project_id}/columns
+      description: Project column management.
+      operations:
+      - name: listProjectColumns
+        method: GET
+        description: List project columns.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createProjectColumn
+        method: POST
+        description: Create a project column.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getProjectColumn
+        method: GET
+        path: /projects/columns/{column_id}
+        description: Get a project column.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnExistingProjectColumn
+        method: PATCH
+        path: /projects/columns/{column_id}
+        description: Update a project column.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteProjectColumn
+        method: DELETE
+        path: /projects/columns/{column_id}
+        description: Delete a project column.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: moveProjectColumn
+        method: POST
+        path: /projects/columns/{column_id}/moves
+        description: Move a project column.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: cards
+      path: /projects/columns/{column_id}/cards
+      description: Project card management.
+      operations:
+      - name: listProjectCards
+        method: GET
+        description: List project cards.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createProjectCard
+        method: POST
+        description: Create a project card.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getProjectCard
+        method: GET
+        path: /projects/columns/cards/{card_id}
+        description: Get a project card.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnExistingProjectCard
+        method: PATCH
+        path: /projects/columns/cards/{card_id}
+        description: Update a project card.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteProjectCard
+        method: DELETE
+        path: /projects/columns/cards/{card_id}
+        description: Delete a project card.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: moveProjectCard
+        method: POST
+        path: /projects/columns/cards/{card_id}/moves
+        description: Move a project card.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: collaborators
+      path: /projects/{project_id}/collaborators
+      description: Project collaborator management.
+      operations:
+      - name: listProjectCollaborators
+        method: GET
+        description: List project collaborators.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addProjectCollaborator
+        method: PUT
+        path: /projects/{project_id}/collaborators/{username}
+        description: Add a project collaborator.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeUserAsCollaborator
+        method: DELETE
+        path: /projects/{project_id}/collaborators/{username}
+        description: Remove a user as collaborator.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getProjectPermissionForUser
+        method: GET
+        path: /projects/{project_id}/collaborators/{username}/permission
+        description: Get project permission for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: github-search
+    baseUri: https://api.github.com
+    description: GitHub REST API for searching code, commits, issues, labels, repositories, topics, and users.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: search
+      path: /search
+      description: Search operations across GitHub.
+      operations:
+      - name: searchCode
+        method: GET
+        path: /search/code
+        description: Search code.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchCommits
+        method: GET
+        path: /search/commits
+        description: Search commits.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchIssuesAndPullRequests
+        method: GET
+        path: /search/issues
+        description: Search issues and pull requests.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchLabels
+        method: GET
+        path: /search/labels
+        description: Search labels.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        - name: repository_id
+          in: query
+          type: integer
+          required: true
+          description: Repository ID to search labels in
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchRepositories
+        method: GET
+        path: /search/repositories
+        description: Search repositories.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchTopics
+        method: GET
+        path: /search/topics
+        description: Search topics.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: searchUsers
+        method: GET
+        path: /search/users
+        description: Search users.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          required: true
+          description: Search query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8082
-      namespace: github-project-management-api
-      description: "Unified REST API for project management workflows combining issues, projects, and search."
-      resources:
-        - path: /v1/repositories/{owner}/{repo}/issues
-          name: issues
-          description: "Issue management"
-          operations:
-            - method: GET
-              name: listRepositoryIssues
-              description: "List issues"
-              call: "github-issues.listRepositoryIssues"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: createAnIssue
-              description: "Create an issue"
-              call: "github-issues.createAnIssue"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/issues/{issue_number}
-          name: issue
-          description: "Individual issue operations"
-          operations:
-            - method: GET
-              name: getAnIssue
-              description: "Get an issue"
-              call: "github-issues.getAnIssue"
-              with:
-                issue_number: "rest.issue_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateAnIssue
-              description: "Update an issue"
-              call: "github-issues.updateAnIssue"
-              with:
-                issue_number: "rest.issue_number"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/milestones
-          name: milestones
-          description: "Milestone management"
-          operations:
-            - method: GET
-              name: listMilestones
-              description: "List milestones"
-              call: "github-issues.listMilestones"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: createMilestone
-              description: "Create a milestone"
-              call: "github-issues.createMilestone"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/repositories/{owner}/{repo}/labels
-          name: labels
-          description: "Label management"
-          operations:
-            - method: GET
-              name: listLabelsForRepository
-              description: "List labels"
-              call: "github-issues.listLabelsForRepository"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: createLabel
-              description: "Create a label"
-              call: "github-issues.createLabel"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/projects/{project_id}
-          name: project
-          description: "Project operations"
-          operations:
-            - method: GET
-              name: getProject
-              description: "Get a project"
-              call: "github-projects.getProject"
-              with:
-                project_id: "rest.project_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateProject
-              description: "Update a project"
-              call: "github-projects.updateProject"
-              with:
-                project_id: "rest.project_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/projects/{project_id}/columns
-          name: columns
-          description: "Project column management"
-          operations:
-            - method: GET
-              name: listProjectColumns
-              description: "List columns"
-              call: "github-projects.listProjectColumns"
-              with:
-                project_id: "rest.project_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: createProjectColumn
-              description: "Create a column"
-              call: "github-projects.createProjectColumn"
-              with:
-                project_id: "rest.project_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/search/issues
-          name: issue-search
-          description: "Issue and PR search"
-          operations:
-            - method: GET
-              name: searchIssuesAndPullRequests
-              description: "Search issues and pull requests"
-              call: "github-search.searchIssuesAndPullRequests"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9082
-      namespace: github-project-management-mcp
-      transport: http
-      description: "MCP server for AI-assisted project management workflows."
-      tools:
-        - name: list-issues
-          description: "List repository issues"
-          call: "github-issues.listRepositoryIssues"
-          hints:
-            readOnly: true
-        - name: create-issue
-          description: "Create an issue"
-          call: "github-issues.createAnIssue"
-        - name: get-issue
-          description: "Get an issue"
-          call: "github-issues.getAnIssue"
-          hints:
-            readOnly: true
-        - name: update-issue
-          description: "Update an issue"
-          call: "github-issues.updateAnIssue"
-          hints:
-            idempotent: true
-        - name: lock-issue
-          description: "Lock an issue"
-          call: "github-issues.lockAnIssue"
-        - name: list-issue-comments
-          description: "List issue comments"
-          call: "github-issues.listIssueComments"
-          hints:
-            readOnly: true
-        - name: create-issue-comment
-          description: "Create an issue comment"
-          call: "github-issues.createAnIssueComment"
-        - name: add-assignees
-          description: "Add assignees to an issue"
-          call: "github-issues.addAssigneesToAnIssue"
-        - name: add-labels
-          description: "Add labels to an issue"
-          call: "github-issues.addLabelsToAnIssue"
-        - name: list-milestones
-          description: "List milestones"
-          call: "github-issues.listMilestones"
-          hints:
-            readOnly: true
-        - name: create-milestone
-          description: "Create a milestone"
-          call: "github-issues.createMilestone"
-        - name: list-labels
-          description: "List labels"
-          call: "github-issues.listLabelsForRepository"
-          hints:
-            readOnly: true
-        - name: create-label
-          description: "Create a label"
-          call: "github-issues.createLabel"
-        - name: get-project
-          description: "Get a project"
-          call: "github-projects.getProject"
-          hints:
-            readOnly: true
-        - name: update-project
-          description: "Update a project"
-          call: "github-projects.updateProject"
-          hints:
-            idempotent: true
-        - name: list-columns
-          description: "List project columns"
-          call: "github-projects.listProjectColumns"
-          hints:
-            readOnly: true
-        - name: create-column
-          description: "Create a project column"
-          call: "github-projects.createProjectColumn"
-        - name: list-cards
-          description: "List project cards"
-          call: "github-projects.listProjectCards"
-          hints:
-            readOnly: true
-        - name: create-card
-          description: "Create a project card"
-          call: "github-projects.createProjectCard"
-        - name: move-card
-          description: "Move a project card"
-          call: "github-projects.moveProjectCard"
-        - name: search-issues
-          description: "Search issues and pull requests"
-          call: "github-search.searchIssuesAndPullRequests"
-          hints:
-            readOnly: true
-        - name: search-labels
-          description: "Search labels"
-          call: "github-search.searchLabels"
-          hints:
-            readOnly: true
-        - name: list-timeline-events
-          description: "List timeline events for an issue"
-          call: "github-issues.listTimelineEventsForAnIssue"
-          hints:
-            readOnly: true
+  - type: rest
+    port: 8082
+    namespace: github-project-management-api
+    description: Unified REST API for project management workflows combining issues, projects, and search.
+    resources:
+    - path: /v1/repositories/{owner}/{repo}/issues
+      name: issues
+      description: Issue management
+      operations:
+      - method: GET
+        name: listRepositoryIssues
+        description: List issues
+        call: github-issues.listRepositoryIssues
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createAnIssue
+        description: Create an issue
+        call: github-issues.createAnIssue
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/issues/{issue_number}
+      name: issue
+      description: Individual issue operations
+      operations:
+      - method: GET
+        name: getAnIssue
+        description: Get an issue
+        call: github-issues.getAnIssue
+        with:
+          issue_number: rest.issue_number
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateAnIssue
+        description: Update an issue
+        call: github-issues.updateAnIssue
+        with:
+          issue_number: rest.issue_number
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/milestones
+      name: milestones
+      description: Milestone management
+      operations:
+      - method: GET
+        name: listMilestones
+        description: List milestones
+        call: github-issues.listMilestones
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createMilestone
+        description: Create a milestone
+        call: github-issues.createMilestone
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories/{owner}/{repo}/labels
+      name: labels
+      description: Label management
+      operations:
+      - method: GET
+        name: listLabelsForRepository
+        description: List labels
+        call: github-issues.listLabelsForRepository
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createLabel
+        description: Create a label
+        call: github-issues.createLabel
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project_id}
+      name: project
+      description: Project operations
+      operations:
+      - method: GET
+        name: getProject
+        description: Get a project
+        call: github-projects.getProject
+        with:
+          project_id: rest.project_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateProject
+        description: Update a project
+        call: github-projects.updateProject
+        with:
+          project_id: rest.project_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project_id}/columns
+      name: columns
+      description: Project column management
+      operations:
+      - method: GET
+        name: listProjectColumns
+        description: List columns
+        call: github-projects.listProjectColumns
+        with:
+          project_id: rest.project_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createProjectColumn
+        description: Create a column
+        call: github-projects.createProjectColumn
+        with:
+          project_id: rest.project_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/search/issues
+      name: issue-search
+      description: Issue and PR search
+      operations:
+      - method: GET
+        name: searchIssuesAndPullRequests
+        description: Search issues and pull requests
+        call: github-search.searchIssuesAndPullRequests
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9082
+    namespace: github-project-management-mcp
+    transport: http
+    description: MCP server for AI-assisted project management workflows.
+    tools:
+    - name: list-issues
+      description: List repository issues
+      call: github-issues.listRepositoryIssues
+      hints:
+        readOnly: true
+    - name: create-issue
+      description: Create an issue
+      call: github-issues.createAnIssue
+    - name: get-issue
+      description: Get an issue
+      call: github-issues.getAnIssue
+      hints:
+        readOnly: true
+    - name: update-issue
+      description: Update an issue
+      call: github-issues.updateAnIssue
+      hints:
+        idempotent: true
+    - name: lock-issue
+      description: Lock an issue
+      call: github-issues.lockAnIssue
+    - name: list-issue-comments
+      description: List issue comments
+      call: github-issues.listIssueComments
+      hints:
+        readOnly: true
+    - name: create-issue-comment
+      description: Create an issue comment
+      call: github-issues.createAnIssueComment
+    - name: add-assignees
+      description: Add assignees to an issue
+      call: github-issues.addAssigneesToAnIssue
+    - name: add-labels
+      description: Add labels to an issue
+      call: github-issues.addLabelsToAnIssue
+    - name: list-milestones
+      description: List milestones
+      call: github-issues.listMilestones
+      hints:
+        readOnly: true
+    - name: create-milestone
+      description: Create a milestone
+      call: github-issues.createMilestone
+    - name: list-labels
+      description: List labels
+      call: github-issues.listLabelsForRepository
+      hints:
+        readOnly: true
+    - name: create-label
+      description: Create a label
+      call: github-issues.createLabel
+    - name: get-project
+      description: Get a project
+      call: github-projects.getProject
+      hints:
+        readOnly: true
+    - name: update-project
+      description: Update a project
+      call: github-projects.updateProject
+      hints:
+        idempotent: true
+    - name: list-columns
+      description: List project columns
+      call: github-projects.listProjectColumns
+      hints:
+        readOnly: true
+    - name: create-column
+      description: Create a project column
+      call: github-projects.createProjectColumn
+    - name: list-cards
+      description: List project cards
+      call: github-projects.listProjectCards
+      hints:
+        readOnly: true
+    - name: create-card
+      description: Create a project card
+      call: github-projects.createProjectCard
+    - name: move-card
+      description: Move a project card
+      call: github-projects.moveProjectCard
+    - name: search-issues
+      description: Search issues and pull requests
+      call: github-search.searchIssuesAndPullRequests
+      hints:
+        readOnly: true
+    - name: search-labels
+      description: Search labels
+      call: github-search.searchLabels
+      hints:
+        readOnly: true
+    - name: list-timeline-events
+      description: List timeline events for an issue
+      call: github-issues.listTimelineEventsForAnIssue
+      hints:
+        readOnly: true

@@ -1,381 +1,1186 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "GitHub Platform Administration"
-  description: "Unified workflow for platform administration combining GitHub Apps, organizations, teams, and packages. Used by platform administrators for managing app integrations, organization governance, team access control, and package registry operations."
+  label: GitHub Platform Administration
+  description: Unified workflow for platform administration combining GitHub Apps, organizations, teams, and packages. Used
+    by platform administrators for managing app integrations, organization governance, team access control, and package registry
+    operations.
   tags:
-    - GitHub
-    - Platform Administration
-    - Apps
-    - Organizations
-    - Teams
-    - Packages
+  - GitHub
+  - Platform Administration
+  - Apps
+  - Organizations
+  - Teams
+  - Packages
   personas:
-    - platform administrators
-    - IT administrators
-    - github org owners
-  created: "2026-04-17"
-  modified: "2026-04-18"
-
+  - platform administrators
+  - IT administrators
+  - github org owners
+  created: '2026-04-17'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      GITHUB_TOKEN: GITHUB_TOKEN
-
+- namespace: env
+  keys:
+    GITHUB_TOKEN: GITHUB_TOKEN
 capability:
   consumes:
-    - import: github-apps
-      location: "./shared/apps.yaml"
-    - import: github-orgs
-      location: "./shared/orgs.yaml"
-    - import: github-packages
-      location: "./shared/packages.yaml"
-
+  - type: http
+    namespace: github-apps
+    baseUri: https://api.github.com
+    description: GitHub REST API for GitHub Apps, installations, tokens, and webhooks.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: apps
+      path: /app
+      description: GitHub App management.
+      operations:
+      - name: getTheAuthenticatedApp
+        method: GET
+        description: Get the authenticated app.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: creategithubAppFrommanifest
+        method: POST
+        path: /app-manifests/{code}/conversions
+        description: Create a GitHub App from a manifest.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnApp
+        method: GET
+        path: /apps/{app_slug}
+        description: Get an app.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-webhooks
+      path: /app/hook
+      description: App webhook configuration and delivery.
+      operations:
+      - name: getwebhookConfigurationForAnApp
+        method: GET
+        path: /app/hook/config
+        description: Get webhook configuration for an app.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatewebhookConfigurationForAnApp
+        method: PATCH
+        path: /app/hook/config
+        description: Update webhook configuration for an app.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listDeliveriesForAnAppWebhook
+        method: GET
+        path: /app/hook/deliveries
+        description: List deliveries for an app webhook.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getdeliveryForAnAppWebhook
+        method: GET
+        path: /app/hook/deliveries/{delivery_id}
+        description: Get a delivery for an app webhook.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: redeliverdeliveryForAnAppWebhook
+        method: POST
+        path: /app/hook/deliveries/{delivery_id}/attempts
+        description: Redeliver a delivery for an app webhook.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: installations
+      path: /app/installations
+      description: App installation management.
+      operations:
+      - name: listInstallationRequestsForTheAuthenticatedApp
+        method: GET
+        path: /app/installation-requests
+        description: List installation requests.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listInstallationsForTheAuthenticatedApp
+        method: GET
+        description: List installations for the authenticated app.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnInstallationForTheAuthenticatedApp
+        method: GET
+        path: /app/installations/{installation_id}
+        description: Get an installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnInstallationForTheAuthenticatedApp
+        method: DELETE
+        path: /app/installations/{installation_id}
+        description: Delete an installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnInstallationAccessTokenForAnApp
+        method: POST
+        path: /app/installations/{installation_id}/access_tokens
+        description: Create an installation access token.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: suspendAnAppInstallation
+        method: PUT
+        path: /app/installations/{installation_id}/suspended
+        description: Suspend an app installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: unsuspendAnAppInstallation
+        method: DELETE
+        path: /app/installations/{installation_id}/suspended
+        description: Unsuspend an app installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: installation-repos
+      path: /installation/repositories
+      description: Installation repository access management.
+      operations:
+      - name: listRepositoriesAccessibleToTheAppInstallation
+        method: GET
+        description: List repositories accessible to the app installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: revokeAnInstallationAccessToken
+        method: DELETE
+        path: /installation/token
+        description: Revoke an installation access token.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: oauth
+      path: /applications
+      description: OAuth token management.
+      operations:
+      - name: deleteAnAppAuthorization
+        method: DELETE
+        path: /applications/{client_id}/grant
+        description: Delete an app authorization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: checktoken
+        method: POST
+        path: /applications/{client_id}/token
+        description: Check a token.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: resetToken
+        method: PATCH
+        path: /applications/{client_id}/token
+        description: Reset a token.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnAppToken
+        method: DELETE
+        path: /applications/{client_id}/token
+        description: Delete an app token.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createscopedAccessToken
+        method: POST
+        path: /applications/{client_id}/token/scoped
+        description: Create a scoped access token.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-installations
+      path: /user/installations
+      description: User installation access management.
+      operations:
+      - name: listAppInstallationsAccessibleToTheUserAccessToken
+        method: GET
+        description: List app installations accessible to the user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listRepositoriesAccessibleToTheUserAccessToken
+        method: GET
+        path: /user/installations/{installation_id}/repositories
+        description: List repositories accessible to the user access token.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addrepositoryToAnAppInstallation
+        method: PUT
+        path: /user/installations/{installation_id}/repositories/{repository_id}
+        description: Add a repository to an app installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removerepositoryFromAnAppInstallation
+        method: DELETE
+        path: /user/installations/{installation_id}/repositories/{repository_id}
+        description: Remove a repository from an app installation.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: github-orgs
+    baseUri: https://api.github.com
+    description: GitHub REST API for organizations, teams, members, and organization-level management.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: organizations
+      path: /orgs/{org}
+      description: Organization CRUD and listing.
+      operations:
+      - name: listOrganizations
+        method: GET
+        path: /organizations
+        description: List organizations.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnOrganization
+        method: GET
+        description: Get an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnOrganization
+        method: PATCH
+        description: Update an organization.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnOrganization
+        method: DELETE
+        description: Delete an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listOrganizationsForTheAuthenticatedUser
+        method: GET
+        path: /user/orgs
+        description: List organizations for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: members
+      path: /orgs/{org}/members
+      description: Organization member management.
+      operations:
+      - name: listOrganizationMembers
+        method: GET
+        description: List organization members.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: checkOrganizationMembershipForUser
+        method: GET
+        path: /orgs/{org}/members/{username}
+        description: Check organization membership for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeAnOrganizationMember
+        method: DELETE
+        path: /orgs/{org}/members/{username}
+        description: Remove an organization member.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getOrganizationMembershipForUser
+        method: GET
+        path: /orgs/{org}/memberships/{username}
+        description: Get organization membership for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setOrganizationMembershipForUser
+        method: PUT
+        path: /orgs/{org}/memberships/{username}
+        description: Set organization membership for a user.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeOrganizationMembershipForUser
+        method: DELETE
+        path: /orgs/{org}/memberships/{username}
+        description: Remove organization membership for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listOutsideCollaboratorsForAnOrganization
+        method: GET
+        path: /orgs/{org}/outside_collaborators
+        description: List outside collaborators.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listPublicOrganizationMembers
+        method: GET
+        path: /orgs/{org}/public_members
+        description: List public organization members.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams
+      path: /orgs/{org}/teams
+      description: Team CRUD and management.
+      operations:
+      - name: listTeams
+        method: GET
+        description: List teams.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createTeam
+        method: POST
+        description: Create a team.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getTeamByName
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}
+        description: Get a team by name.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateTeam
+        method: PATCH
+        path: /orgs/{org}/teams/{team_slug}
+        description: Update a team.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteTeam
+        method: DELETE
+        path: /orgs/{org}/teams/{team_slug}
+        description: Delete a team.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listTeamMembers
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}/members
+        description: List team members.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getTeamMembershipForUser
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+        description: Get team membership for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addOrUpdateTeamMembershipForUser
+        method: PUT
+        path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+        description: Add or update team membership for a user.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeTeamMembershipForUser
+        method: DELETE
+        path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+        description: Remove team membership for a user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listChildTeams
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}/teams
+        description: List child teams.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listTeamRepositories
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}/repos
+        description: List team repositories.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addOrUpdateTeamRepositoryPermissions
+        method: PUT
+        path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+        description: Add or update team repository permissions.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removeRepositoryFromTeam
+        method: DELETE
+        path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+        description: Remove a repository from a team.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: team-discussions
+      path: /orgs/{org}/teams/{team_slug}/discussions
+      description: Team discussion management.
+      operations:
+      - name: listDiscussions
+        method: GET
+        description: List discussions.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createDiscussion
+        method: POST
+        description: Create a discussion.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getDiscussion
+        method: GET
+        path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+        description: Get a discussion.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateDiscussion
+        method: PATCH
+        path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+        description: Update a discussion.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteDiscussion
+        method: DELETE
+        path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+        description: Delete a discussion.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: webhooks
+      path: /orgs/{org}/hooks
+      description: Organization webhook management.
+      operations:
+      - name: listOrganizationWebhooks
+        method: GET
+        description: List organization webhooks.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnOrganizationWebhook
+        method: POST
+        description: Create an organization webhook.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getAnOrganizationWebhook
+        method: GET
+        path: /orgs/{org}/hooks/{hook_id}
+        description: Get an organization webhook.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateAnOrganizationWebhook
+        method: PATCH
+        path: /orgs/{org}/hooks/{hook_id}
+        description: Update an organization webhook.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteAnOrganizationWebhook
+        method: DELETE
+        path: /orgs/{org}/hooks/{hook_id}
+        description: Delete an organization webhook.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: org-repos
+      path: /orgs/{org}/repos
+      description: Organization repository management.
+      operations:
+      - name: listOrganizationRepositories
+        method: GET
+        description: List organization repositories.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createAnOrganizationRepository
+        method: POST
+        description: Create an organization repository.
+        body:
+          type: json
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  - type: http
+    namespace: github-packages
+    baseUri: https://api.github.com
+    description: GitHub REST API for packages and package versions management.
+    authentication:
+      type: bearer
+      token: '{{GITHUB_TOKEN}}'
+    resources:
+    - name: org-packages
+      path: /orgs/{org}/packages
+      description: Organization package management.
+      operations:
+      - name: listPackagesForAnOrganization
+        method: GET
+        description: List packages for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getPackageForAnOrganization
+        method: GET
+        path: /orgs/{org}/packages/{package_type}/{package_name}
+        description: Get a package for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletePackageForAnOrganization
+        method: DELETE
+        path: /orgs/{org}/packages/{package_type}/{package_name}
+        description: Delete a package for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: restorePackageForAnOrganization
+        method: POST
+        path: /orgs/{org}/packages/{package_type}/{package_name}/restore
+        description: Restore a package for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listPackageVersionsForPackageOwnedByAnOrganization
+        method: GET
+        path: /orgs/{org}/packages/{package_type}/{package_name}/versions
+        description: List package versions for an organization package.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getPackageVersionForAnOrganization
+        method: GET
+        path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}
+        description: Get a package version for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletePackageVersionForAnOrganization
+        method: DELETE
+        path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}
+        description: Delete a package version for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: restorePackageVersionForAnOrganization
+        method: POST
+        path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+        description: Restore a package version for an organization.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-packages
+      path: /user/packages
+      description: Authenticated user package management.
+      operations:
+      - name: listPackagesForTheAuthenticatedUsersNamespace
+        method: GET
+        description: List packages for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getPackageForTheAuthenticatedUser
+        method: GET
+        path: /user/packages/{package_type}/{package_name}
+        description: Get a package for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletePackageForTheAuthenticatedUser
+        method: DELETE
+        path: /user/packages/{package_type}/{package_name}
+        description: Delete a package for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: restorePackageForTheAuthenticatedUser
+        method: POST
+        path: /user/packages/{package_type}/{package_name}/restore
+        description: Restore a package for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: listPackageVersionsForPackageOwnedByTheAuthenticatedUser
+        method: GET
+        path: /user/packages/{package_type}/{package_name}/versions
+        description: List package versions for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: getPackageVersionForTheAuthenticatedUser
+        method: GET
+        path: /user/packages/{package_type}/{package_name}/versions/{package_version_id}
+        description: Get a package version for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletePackageVersionForTheAuthenticatedUser
+        method: DELETE
+        path: /user/packages/{package_type}/{package_name}/versions/{package_version_id}
+        description: Delete a package version for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: restorePackageVersionForTheAuthenticatedUser
+        method: POST
+        path: /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+        description: Restore a package version for the authenticated user.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8085
-      namespace: github-platform-admin-api
-      description: "Unified REST API for platform administration combining apps, organizations, teams, and packages."
-      resources:
-        - path: /v1/app
-          name: app
-          description: "Authenticated app"
-          operations:
-            - method: GET
-              name: getTheAuthenticatedApp
-              description: "Get the authenticated app"
-              call: "github-apps.getTheAuthenticatedApp"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/app/installations
-          name: installations
-          description: "App installations"
-          operations:
-            - method: GET
-              name: listInstallationsForTheAuthenticatedApp
-              description: "List installations"
-              call: "github-apps.listInstallationsForTheAuthenticatedApp"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/app/installations/{installation_id}
-          name: installation
-          description: "Individual installation"
-          operations:
-            - method: GET
-              name: getAnInstallationForTheAuthenticatedApp
-              description: "Get an installation"
-              call: "github-apps.getAnInstallationForTheAuthenticatedApp"
-              with:
-                installation_id: "rest.installation_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: deleteAnInstallationForTheAuthenticatedApp
-              description: "Delete an installation"
-              call: "github-apps.deleteAnInstallationForTheAuthenticatedApp"
-              with:
-                installation_id: "rest.installation_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/app/installations/{installation_id}/access-tokens
-          name: installation-tokens
-          description: "Installation access tokens"
-          operations:
-            - method: POST
-              name: createAnInstallationAccessTokenForAnApp
-              description: "Create an access token"
-              call: "github-apps.createAnInstallationAccessTokenForAnApp"
-              with:
-                installation_id: "rest.installation_id"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}
-          name: organization
-          description: "Organization management"
-          operations:
-            - method: GET
-              name: getAnOrganization
-              description: "Get an organization"
-              call: "github-orgs.getAnOrganization"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateAnOrganization
-              description: "Update an organization"
-              call: "github-orgs.updateAnOrganization"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/members
-          name: members
-          description: "Member management"
-          operations:
-            - method: GET
-              name: listOrganizationMembers
-              description: "List members"
-              call: "github-orgs.listOrganizationMembers"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/teams
-          name: teams
-          description: "Team management"
-          operations:
-            - method: GET
-              name: listTeams
-              description: "List teams"
-              call: "github-orgs.listTeams"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: createTeam
-              description: "Create a team"
-              call: "github-orgs.createTeam"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/teams/{team_slug}
-          name: team
-          description: "Individual team operations"
-          operations:
-            - method: GET
-              name: getTeamByName
-              description: "Get a team"
-              call: "github-orgs.getTeamByName"
-              with:
-                org: "rest.org"
-                team_slug: "rest.team_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: PATCH
-              name: updateTeam
-              description: "Update a team"
-              call: "github-orgs.updateTeam"
-              with:
-                org: "rest.org"
-                team_slug: "rest.team_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: DELETE
-              name: deleteTeam
-              description: "Delete a team"
-              call: "github-orgs.deleteTeam"
-              with:
-                org: "rest.org"
-                team_slug: "rest.team_slug"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/packages
-          name: org-packages
-          description: "Organization packages"
-          operations:
-            - method: GET
-              name: listPackagesForAnOrganization
-              description: "List packages"
-              call: "github-packages.listPackagesForAnOrganization"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/webhooks
-          name: webhooks
-          description: "Organization webhooks"
-          operations:
-            - method: GET
-              name: listOrganizationWebhooks
-              description: "List webhooks"
-              call: "github-orgs.listOrganizationWebhooks"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/organizations/{org}/repos
-          name: org-repos
-          description: "Organization repositories"
-          operations:
-            - method: GET
-              name: listOrganizationRepositories
-              description: "List repositories"
-              call: "github-orgs.listOrganizationRepositories"
-              with:
-                org: "rest.org"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9085
-      namespace: github-platform-admin-mcp
-      transport: http
-      description: "MCP server for AI-assisted platform administration."
-      tools:
-        - name: get-authenticated-app
-          description: "Get the authenticated app"
-          call: "github-apps.getTheAuthenticatedApp"
-          hints:
-            readOnly: true
-        - name: get-app
-          description: "Get an app by slug"
-          call: "github-apps.getAnApp"
-          hints:
-            readOnly: true
-        - name: list-installations
-          description: "List app installations"
-          call: "github-apps.listInstallationsForTheAuthenticatedApp"
-          hints:
-            readOnly: true
-        - name: get-installation
-          description: "Get an app installation"
-          call: "github-apps.getAnInstallationForTheAuthenticatedApp"
-          hints:
-            readOnly: true
-        - name: create-installation-token
-          description: "Create an installation access token"
-          call: "github-apps.createAnInstallationAccessTokenForAnApp"
-        - name: suspend-installation
-          description: "Suspend an app installation"
-          call: "github-apps.suspendAnAppInstallation"
-        - name: unsuspend-installation
-          description: "Unsuspend an app installation"
-          call: "github-apps.unsuspendAnAppInstallation"
-        - name: list-installation-repos
-          description: "List repositories accessible to the installation"
-          call: "github-apps.listRepositoriesAccessibleToTheAppInstallation"
-          hints:
-            readOnly: true
-        - name: get-webhook-config
-          description: "Get app webhook configuration"
-          call: "github-apps.getwebhookConfigurationForAnApp"
-          hints:
-            readOnly: true
-        - name: update-webhook-config
-          description: "Update app webhook configuration"
-          call: "github-apps.updatewebhookConfigurationForAnApp"
-          hints:
-            idempotent: true
-        - name: get-organization
-          description: "Get an organization"
-          call: "github-orgs.getAnOrganization"
-          hints:
-            readOnly: true
-        - name: update-organization
-          description: "Update an organization"
-          call: "github-orgs.updateAnOrganization"
-          hints:
-            idempotent: true
-        - name: list-members
-          description: "List organization members"
-          call: "github-orgs.listOrganizationMembers"
-          hints:
-            readOnly: true
-        - name: set-membership
-          description: "Set organization membership"
-          call: "github-orgs.setOrganizationMembershipForUser"
-          hints:
-            idempotent: true
-        - name: remove-member
-          description: "Remove an organization member"
-          call: "github-orgs.removeAnOrganizationMember"
-          hints:
-            destructive: true
-        - name: list-teams
-          description: "List teams"
-          call: "github-orgs.listTeams"
-          hints:
-            readOnly: true
-        - name: create-team
-          description: "Create a team"
-          call: "github-orgs.createTeam"
-        - name: get-team
-          description: "Get a team"
-          call: "github-orgs.getTeamByName"
-          hints:
-            readOnly: true
-        - name: update-team
-          description: "Update a team"
-          call: "github-orgs.updateTeam"
-          hints:
-            idempotent: true
-        - name: delete-team
-          description: "Delete a team"
-          call: "github-orgs.deleteTeam"
-          hints:
-            destructive: true
-        - name: list-team-members
-          description: "List team members"
-          call: "github-orgs.listTeamMembers"
-          hints:
-            readOnly: true
-        - name: add-team-member
-          description: "Add or update team membership"
-          call: "github-orgs.addOrUpdateTeamMembershipForUser"
-          hints:
-            idempotent: true
-        - name: list-team-repos
-          description: "List team repositories"
-          call: "github-orgs.listTeamRepositories"
-          hints:
-            readOnly: true
-        - name: add-team-repo
-          description: "Add or update team repository permissions"
-          call: "github-orgs.addOrUpdateTeamRepositoryPermissions"
-          hints:
-            idempotent: true
-        - name: list-org-packages
-          description: "List organization packages"
-          call: "github-packages.listPackagesForAnOrganization"
-          hints:
-            readOnly: true
-        - name: get-org-package
-          description: "Get an organization package"
-          call: "github-packages.getPackageForAnOrganization"
-          hints:
-            readOnly: true
-        - name: delete-org-package
-          description: "Delete an organization package"
-          call: "github-packages.deletePackageForAnOrganization"
-          hints:
-            destructive: true
-        - name: list-org-package-versions
-          description: "List organization package versions"
-          call: "github-packages.listPackageVersionsForPackageOwnedByAnOrganization"
-          hints:
-            readOnly: true
-        - name: list-org-repos
-          description: "List organization repositories"
-          call: "github-orgs.listOrganizationRepositories"
-          hints:
-            readOnly: true
-        - name: create-org-repo
-          description: "Create an organization repository"
-          call: "github-orgs.createAnOrganizationRepository"
-        - name: list-webhooks
-          description: "List organization webhooks"
-          call: "github-orgs.listOrganizationWebhooks"
-          hints:
-            readOnly: true
-        - name: create-webhook
-          description: "Create an organization webhook"
-          call: "github-orgs.createAnOrganizationWebhook"
+  - type: rest
+    port: 8085
+    namespace: github-platform-admin-api
+    description: Unified REST API for platform administration combining apps, organizations, teams, and packages.
+    resources:
+    - path: /v1/app
+      name: app
+      description: Authenticated app
+      operations:
+      - method: GET
+        name: getTheAuthenticatedApp
+        description: Get the authenticated app
+        call: github-apps.getTheAuthenticatedApp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations
+      name: installations
+      description: App installations
+      operations:
+      - method: GET
+        name: listInstallationsForTheAuthenticatedApp
+        description: List installations
+        call: github-apps.listInstallationsForTheAuthenticatedApp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations/{installation_id}
+      name: installation
+      description: Individual installation
+      operations:
+      - method: GET
+        name: getAnInstallationForTheAuthenticatedApp
+        description: Get an installation
+        call: github-apps.getAnInstallationForTheAuthenticatedApp
+        with:
+          installation_id: rest.installation_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteAnInstallationForTheAuthenticatedApp
+        description: Delete an installation
+        call: github-apps.deleteAnInstallationForTheAuthenticatedApp
+        with:
+          installation_id: rest.installation_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations/{installation_id}/access-tokens
+      name: installation-tokens
+      description: Installation access tokens
+      operations:
+      - method: POST
+        name: createAnInstallationAccessTokenForAnApp
+        description: Create an access token
+        call: github-apps.createAnInstallationAccessTokenForAnApp
+        with:
+          installation_id: rest.installation_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}
+      name: organization
+      description: Organization management
+      operations:
+      - method: GET
+        name: getAnOrganization
+        description: Get an organization
+        call: github-orgs.getAnOrganization
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateAnOrganization
+        description: Update an organization
+        call: github-orgs.updateAnOrganization
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/members
+      name: members
+      description: Member management
+      operations:
+      - method: GET
+        name: listOrganizationMembers
+        description: List members
+        call: github-orgs.listOrganizationMembers
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/teams
+      name: teams
+      description: Team management
+      operations:
+      - method: GET
+        name: listTeams
+        description: List teams
+        call: github-orgs.listTeams
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createTeam
+        description: Create a team
+        call: github-orgs.createTeam
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/teams/{team_slug}
+      name: team
+      description: Individual team operations
+      operations:
+      - method: GET
+        name: getTeamByName
+        description: Get a team
+        call: github-orgs.getTeamByName
+        with:
+          org: rest.org
+          team_slug: rest.team_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateTeam
+        description: Update a team
+        call: github-orgs.updateTeam
+        with:
+          org: rest.org
+          team_slug: rest.team_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteTeam
+        description: Delete a team
+        call: github-orgs.deleteTeam
+        with:
+          org: rest.org
+          team_slug: rest.team_slug
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/packages
+      name: org-packages
+      description: Organization packages
+      operations:
+      - method: GET
+        name: listPackagesForAnOrganization
+        description: List packages
+        call: github-packages.listPackagesForAnOrganization
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/webhooks
+      name: webhooks
+      description: Organization webhooks
+      operations:
+      - method: GET
+        name: listOrganizationWebhooks
+        description: List webhooks
+        call: github-orgs.listOrganizationWebhooks
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/organizations/{org}/repos
+      name: org-repos
+      description: Organization repositories
+      operations:
+      - method: GET
+        name: listOrganizationRepositories
+        description: List repositories
+        call: github-orgs.listOrganizationRepositories
+        with:
+          org: rest.org
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9085
+    namespace: github-platform-admin-mcp
+    transport: http
+    description: MCP server for AI-assisted platform administration.
+    tools:
+    - name: get-authenticated-app
+      description: Get the authenticated app
+      call: github-apps.getTheAuthenticatedApp
+      hints:
+        readOnly: true
+    - name: get-app
+      description: Get an app by slug
+      call: github-apps.getAnApp
+      hints:
+        readOnly: true
+    - name: list-installations
+      description: List app installations
+      call: github-apps.listInstallationsForTheAuthenticatedApp
+      hints:
+        readOnly: true
+    - name: get-installation
+      description: Get an app installation
+      call: github-apps.getAnInstallationForTheAuthenticatedApp
+      hints:
+        readOnly: true
+    - name: create-installation-token
+      description: Create an installation access token
+      call: github-apps.createAnInstallationAccessTokenForAnApp
+    - name: suspend-installation
+      description: Suspend an app installation
+      call: github-apps.suspendAnAppInstallation
+    - name: unsuspend-installation
+      description: Unsuspend an app installation
+      call: github-apps.unsuspendAnAppInstallation
+    - name: list-installation-repos
+      description: List repositories accessible to the installation
+      call: github-apps.listRepositoriesAccessibleToTheAppInstallation
+      hints:
+        readOnly: true
+    - name: get-webhook-config
+      description: Get app webhook configuration
+      call: github-apps.getwebhookConfigurationForAnApp
+      hints:
+        readOnly: true
+    - name: update-webhook-config
+      description: Update app webhook configuration
+      call: github-apps.updatewebhookConfigurationForAnApp
+      hints:
+        idempotent: true
+    - name: get-organization
+      description: Get an organization
+      call: github-orgs.getAnOrganization
+      hints:
+        readOnly: true
+    - name: update-organization
+      description: Update an organization
+      call: github-orgs.updateAnOrganization
+      hints:
+        idempotent: true
+    - name: list-members
+      description: List organization members
+      call: github-orgs.listOrganizationMembers
+      hints:
+        readOnly: true
+    - name: set-membership
+      description: Set organization membership
+      call: github-orgs.setOrganizationMembershipForUser
+      hints:
+        idempotent: true
+    - name: remove-member
+      description: Remove an organization member
+      call: github-orgs.removeAnOrganizationMember
+      hints:
+        destructive: true
+    - name: list-teams
+      description: List teams
+      call: github-orgs.listTeams
+      hints:
+        readOnly: true
+    - name: create-team
+      description: Create a team
+      call: github-orgs.createTeam
+    - name: get-team
+      description: Get a team
+      call: github-orgs.getTeamByName
+      hints:
+        readOnly: true
+    - name: update-team
+      description: Update a team
+      call: github-orgs.updateTeam
+      hints:
+        idempotent: true
+    - name: delete-team
+      description: Delete a team
+      call: github-orgs.deleteTeam
+      hints:
+        destructive: true
+    - name: list-team-members
+      description: List team members
+      call: github-orgs.listTeamMembers
+      hints:
+        readOnly: true
+    - name: add-team-member
+      description: Add or update team membership
+      call: github-orgs.addOrUpdateTeamMembershipForUser
+      hints:
+        idempotent: true
+    - name: list-team-repos
+      description: List team repositories
+      call: github-orgs.listTeamRepositories
+      hints:
+        readOnly: true
+    - name: add-team-repo
+      description: Add or update team repository permissions
+      call: github-orgs.addOrUpdateTeamRepositoryPermissions
+      hints:
+        idempotent: true
+    - name: list-org-packages
+      description: List organization packages
+      call: github-packages.listPackagesForAnOrganization
+      hints:
+        readOnly: true
+    - name: get-org-package
+      description: Get an organization package
+      call: github-packages.getPackageForAnOrganization
+      hints:
+        readOnly: true
+    - name: delete-org-package
+      description: Delete an organization package
+      call: github-packages.deletePackageForAnOrganization
+      hints:
+        destructive: true
+    - name: list-org-package-versions
+      description: List organization package versions
+      call: github-packages.listPackageVersionsForPackageOwnedByAnOrganization
+      hints:
+        readOnly: true
+    - name: list-org-repos
+      description: List organization repositories
+      call: github-orgs.listOrganizationRepositories
+      hints:
+        readOnly: true
+    - name: create-org-repo
+      description: Create an organization repository
+      call: github-orgs.createAnOrganizationRepository
+    - name: list-webhooks
+      description: List organization webhooks
+      call: github-orgs.listOrganizationWebhooks
+      hints:
+        readOnly: true
+    - name: create-webhook
+      description: Create an organization webhook
+      call: github-orgs.createAnOrganizationWebhook
