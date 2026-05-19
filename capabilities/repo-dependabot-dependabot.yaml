@@ -1,0 +1,202 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Dependabot
+  description: 'github-repos-api — Dependabot. 3 operations. Lead operation: GitHub List Dependabot Alerts for Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Dependabot
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-dependabot-dependabot
+    baseUri: ''
+    description: github-repos-api — Dependabot business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-dependabot-alerts
+      path: /repos/{owner}/{repo}/dependabot/alerts
+      operations:
+      - name: listdependabotalertsforrepository
+        method: GET
+        description: GitHub List Dependabot Alerts for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: integer
+          description: '**Deprecated**. Page number of the results to fetch. Use cursor-based pagination with `before` or
+            `after` instead.'
+        - name: per_page
+          in: query
+          type: integer
+          description: The number of results per page (max 100). For more information, see "[Using pagination in the REST
+            API](https://docs.github.com/enterprise-server@3.9/rest/using
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependabot-alerts-alert_number
+      path: /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+      operations:
+      - name: getdependabotalert
+        method: GET
+        description: GitHub Get Dependabot Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatedependabotalert
+        method: PATCH
+        description: GitHub Update Dependabot Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-dependabot-dependabot-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Dependabot. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/dependabot/alerts
+      name: repos-owner-repo-dependabot-alerts
+      description: REST surface for repos-owner-repo-dependabot-alerts.
+      operations:
+      - method: GET
+        name: listdependabotalertsforrepository
+        description: GitHub List Dependabot Alerts for Repository
+        call: repo-dependabot-dependabot.listdependabotalertsforrepository
+        with:
+          page: rest.page
+          per_page: rest.per_page
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/alerts/{alert-number}
+      name: repos-owner-repo-dependabot-alerts-alert-number
+      description: REST surface for repos-owner-repo-dependabot-alerts-alert_number.
+      operations:
+      - method: GET
+        name: getdependabotalert
+        description: GitHub Get Dependabot Alert
+        call: repo-dependabot-dependabot.getdependabotalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatedependabotalert
+        description: GitHub Update Dependabot Alert
+        call: repo-dependabot-dependabot.updatedependabotalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-dependabot-dependabot-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Dependabot. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-dependabot-alerts-repository
+      description: GitHub List Dependabot Alerts for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-dependabot-dependabot.listdependabotalertsforrepository
+      with:
+        page: tools.page
+        per_page: tools.per_page
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-dependabot-alert
+      description: GitHub Get Dependabot Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-dependabot-dependabot.getdependabotalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-dependabot-alert
+      description: GitHub Update Dependabot Alert
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-dependabot-dependabot.updatedependabotalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

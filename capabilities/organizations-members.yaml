@@ -1,0 +1,158 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Members
+  description: 'GitHub Org API — Members. 3 operations. Lead operation: GitHub List Organization Members. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Members
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-members
+    baseUri: ''
+    description: GitHub Org API — Members business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-members
+      path: /orgs/{org}/members
+      operations:
+      - name: listorganizationmembers
+        method: GET
+        description: GitHub List Organization Members
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filter members returned in the list. `2fa_disabled` means that only members without [two-factor authentication](https://github.com/blog/1614-two-factor-authenti
+        - name: role
+          in: query
+          type: string
+          description: Filter members returned by their role.
+    - name: orgs-org-public_members
+      path: /orgs/{org}/public_members
+      operations:
+      - name: listpublicorganizationmembers
+        method: GET
+        description: GitHub List Public Organization Members
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-members
+      path: /orgs/{org}/teams/{team_slug}/members
+      operations:
+      - name: listteammembers
+        method: GET
+        description: GitHub List Team Members
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: role
+          in: query
+          type: string
+          description: Filters members returned by their role in the team.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-members-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Members. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/members
+      name: orgs-org-members
+      description: REST surface for orgs-org-members.
+      operations:
+      - method: GET
+        name: listorganizationmembers
+        description: GitHub List Organization Members
+        call: organizations-members.listorganizationmembers
+        with:
+          filter: rest.filter
+          role: rest.role
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/public-members
+      name: orgs-org-public-members
+      description: REST surface for orgs-org-public_members.
+      operations:
+      - method: GET
+        name: listpublicorganizationmembers
+        description: GitHub List Public Organization Members
+        call: organizations-members.listpublicorganizationmembers
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/members
+      name: orgs-org-teams-team-slug-members
+      description: REST surface for orgs-org-teams-team_slug-members.
+      operations:
+      - method: GET
+        name: listteammembers
+        description: GitHub List Team Members
+        call: organizations-members.listteammembers
+        with:
+          role: rest.role
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-members-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Members. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-organization-members
+      description: GitHub List Organization Members
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-members.listorganizationmembers
+      with:
+        filter: tools.filter
+        role: tools.role
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-organization-members
+      description: GitHub List Public Organization Members
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-members.listpublicorganizationmembers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-team-members
+      description: GitHub List Team Members
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-members.listteammembers
+      with:
+        role: tools.role
+      outputParameters:
+      - type: object
+        mapping: $.

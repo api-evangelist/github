@@ -1,0 +1,238 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Get
+  description: 'github-repos-api — Get. 4 operations. Lead operation: GitHub Get Review Comment for Pull Request. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-pulls-get
+    baseUri: ''
+    description: github-repos-api — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pulls-comments-comment_id
+      path: /repos/{owner}/{repo}/pulls/comments/{comment_id}
+      operations:
+      - name: getreviewcommentforpullrequest
+        method: GET
+        description: GitHub Get Review Comment for Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number
+      path: /repos/{owner}/{repo}/pulls/{pull_number}
+      operations:
+      - name: getpullrequest
+        method: GET
+        description: GitHub Get Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number-requested_reviewers
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+      operations:
+      - name: getallrequestedreviewersforpullrequest
+        method: GET
+        description: GitHub Get All Requested Reviewers for Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+      operations:
+      - name: getreviewforpullrequest
+        method: GET
+        description: GitHub Get Review for Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-pulls-get-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pulls/comments/{comment-id}
+      name: repos-owner-repo-pulls-comments-comment-id
+      description: REST surface for repos-owner-repo-pulls-comments-comment_id.
+      operations:
+      - method: GET
+        name: getreviewcommentforpullrequest
+        description: GitHub Get Review Comment for Pull Request
+        call: repo-pulls-get.getreviewcommentforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}
+      name: repos-owner-repo-pulls-pull-number
+      description: REST surface for repos-owner-repo-pulls-pull_number.
+      operations:
+      - method: GET
+        name: getpullrequest
+        description: GitHub Get Pull Request
+        call: repo-pulls-get.getpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/requested-reviewers
+      name: repos-owner-repo-pulls-pull-number-requested-reviewers
+      description: REST surface for repos-owner-repo-pulls-pull_number-requested_reviewers.
+      operations:
+      - method: GET
+        name: getallrequestedreviewersforpullrequest
+        description: GitHub Get All Requested Reviewers for Pull Request
+        call: repo-pulls-get.getallrequestedreviewersforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id.
+      operations:
+      - method: GET
+        name: getreviewforpullrequest
+        description: GitHub Get Review for Pull Request
+        call: repo-pulls-get.getreviewforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-pulls-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-review-comment-pull
+      description: GitHub Get Review Comment for Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-pulls-get.getreviewcommentforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-pull-request
+      description: GitHub Get Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-pulls-get.getpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-requested-reviewers
+      description: GitHub Get All Requested Reviewers for Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-pulls-get.getallrequestedreviewersforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-review-pull-request
+      description: GitHub Get Review for Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-pulls-get.getreviewforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

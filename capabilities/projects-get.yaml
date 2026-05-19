@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Get
+  description: 'GitHub Projects API — Get. 4 operations. Lead operation: GitHub Get Project Card. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-get
+    baseUri: ''
+    description: GitHub Projects API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-columns-cards-card_id
+      path: /projects/columns/cards/{card_id}
+      operations:
+      - name: getprojectcard
+        method: GET
+        description: GitHub Get Project Card
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects-columns-column_id
+      path: /projects/columns/{column_id}
+      operations:
+      - name: getprojectcolumn
+        method: GET
+        description: GitHub Get Project Column
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects-project_id
+      path: /projects/{project_id}
+      operations:
+      - name: getproject
+        method: GET
+        description: GitHub Get Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects-project_id-collaborators-username-permission
+      path: /projects/{project_id}/collaborators/{username}/permission
+      operations:
+      - name: getprojectpermissionforuser
+        method: GET
+        description: GitHub Get Project Permission for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-get-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/projects/columns/cards/{card-id}
+      name: projects-columns-cards-card-id
+      description: REST surface for projects-columns-cards-card_id.
+      operations:
+      - method: GET
+        name: getprojectcard
+        description: GitHub Get Project Card
+        call: projects-get.getprojectcard
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/columns/{column-id}
+      name: projects-columns-column-id
+      description: REST surface for projects-columns-column_id.
+      operations:
+      - method: GET
+        name: getprojectcolumn
+        description: GitHub Get Project Column
+        call: projects-get.getprojectcolumn
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}
+      name: projects-project-id
+      description: REST surface for projects-project_id.
+      operations:
+      - method: GET
+        name: getproject
+        description: GitHub Get Project
+        call: projects-get.getproject
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/collaborators/{username}/permission
+      name: projects-project-id-collaborators-username-permission
+      description: REST surface for projects-project_id-collaborators-username-permission.
+      operations:
+      - method: GET
+        name: getprojectpermissionforuser
+        description: GitHub Get Project Permission for User
+        call: projects-get.getprojectpermissionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-project-card
+      description: GitHub Get Project Card
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-get.getprojectcard
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-project-column
+      description: GitHub Get Project Column
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-get.getprojectcolumn
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-project
+      description: GitHub Get Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-get.getproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-project-permission-user
+      description: GitHub Get Project Permission for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-get.getprojectpermissionforuser
+      outputParameters:
+      - type: object
+        mapping: $.

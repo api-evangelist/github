@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Manage API — Node
+  description: 'GitHub Manage API — Node. 1 operations. Lead operation: GitHub Get Ghes Node Metadata for All Nodes. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Node
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: manage-node
+    baseUri: ''
+    description: GitHub Manage API — Node business capability. Self-contained, no shared references.
+    resources:
+    - name: manage-v1-config-nodes
+      path: /manage/v1/config/nodes
+      operations:
+      - name: getghesnodemetadataforallnodes
+        method: GET
+        description: GitHub Get Ghes Node Metadata for All Nodes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: manage-node-rest
+    port: 8080
+    description: REST adapter for GitHub Manage API — Node. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/manage/v1/config/nodes
+      name: manage-v1-config-nodes
+      description: REST surface for manage-v1-config-nodes.
+      operations:
+      - method: GET
+        name: getghesnodemetadataforallnodes
+        description: GitHub Get Ghes Node Metadata for All Nodes
+        call: manage-node.getghesnodemetadataforallnodes
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: manage-node-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Manage API — Node. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-ghes-node-metadata
+      description: GitHub Get Ghes Node Metadata for All Nodes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: manage-node.getghesnodemetadataforallnodes
+      outputParameters:
+      - type: object
+        mapping: $.

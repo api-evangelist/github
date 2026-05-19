@@ -1,0 +1,231 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Sites
+  description: 'GitHub Repos API — Sites. 4 operations. Lead operation: Get Github Enterprise Server Pages Site. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Sites
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-sites
+    baseUri: ''
+    description: GitHub Repos API — Sites business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pages
+      path: /repos/{owner}/{repo}/pages
+      operations:
+      - name: getgithubenterpriseserverpagessite
+        method: GET
+        description: Get Github Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: creategithubenterpriseserverpagessite
+        method: POST
+        description: Create Github Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: updateinformationaboutgithubenterpriseserverpagessite
+        method: PUT
+        description: Update Information About Github Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletegithubenterpriseserverpagessite
+        method: DELETE
+        description: Delete Github Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-sites-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Sites. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pages
+      name: repos-owner-repo-pages
+      description: REST surface for repos-owner-repo-pages.
+      operations:
+      - method: GET
+        name: getgithubenterpriseserverpagessite
+        description: Get Github Enterprise Server Pages Site
+        call: temp-sites.getgithubenterpriseserverpagessite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: creategithubenterpriseserverpagessite
+        description: Create Github Enterprise Server Pages Site
+        call: temp-sites.creategithubenterpriseserverpagessite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateinformationaboutgithubenterpriseserverpagessite
+        description: Update Information About Github Enterprise Server Pages Site
+        call: temp-sites.updateinformationaboutgithubenterpriseserverpagessite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletegithubenterpriseserverpagessite
+        description: Delete Github Enterprise Server Pages Site
+        call: temp-sites.deletegithubenterpriseserverpagessite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-sites-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Sites. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-github-enterprise-server-pages
+      description: Get Github Enterprise Server Pages Site
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-sites.getgithubenterpriseserverpagessite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-github-enterprise-server-pages
+      description: Create Github Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-sites.creategithubenterpriseserverpagessite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-information-about-github-enterprise
+      description: Update Information About Github Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-sites.updateinformationaboutgithubenterpriseserverpagessite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-github-enterprise-server-pages
+      description: Delete Github Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-sites.deletegithubenterpriseserverpagessite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

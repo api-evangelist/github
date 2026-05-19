@@ -1,0 +1,172 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Project
+  description: 'GitHub Org API — Project. 4 operations. Lead operation: GitHub Create an Organization Project. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Project
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-project
+    baseUri: ''
+    description: GitHub Org API — Project business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-projects
+      path: /orgs/{org}/projects
+      operations:
+      - name: createanorganizationproject
+        method: POST
+        description: GitHub Create an Organization Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforproject
+        method: GET
+        description: GitHub Check Team Permissions for Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addorupdateteamprojectpermissions
+        method: PUT
+        description: GitHub Add or Update Team Project Permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeprojectfromteam
+        method: DELETE
+        description: GitHub Remove Project from Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-project-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Project. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/projects
+      name: orgs-org-projects
+      description: REST surface for orgs-org-projects.
+      operations:
+      - method: POST
+        name: createanorganizationproject
+        description: GitHub Create an Organization Project
+        call: organizations-project.createanorganizationproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforproject
+        description: GitHub Check Team Permissions for Project
+        call: organizations-project.checkteampermissionsforproject
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteamprojectpermissions
+        description: GitHub Add or Update Team Project Permissions
+        call: organizations-project.addorupdateteamprojectpermissions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeprojectfromteam
+        description: GitHub Remove Project from Team
+        call: organizations-project.removeprojectfromteam
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-project-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Project. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-create-organization-project
+      description: GitHub Create an Organization Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-project.createanorganizationproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-project
+      description: GitHub Check Team Permissions for Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-project.checkteampermissionsforproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-project
+      description: GitHub Add or Update Team Project Permissions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-project.addorupdateteamprojectpermissions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-project-team
+      description: GitHub Remove Project from Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-project.removeprojectfromteam
+      outputParameters:
+      - type: object
+        mapping: $.

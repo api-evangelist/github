@@ -1,0 +1,300 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Download
+  description: 'GitHub Repos API — Download. 5 operations. Lead operation: Download An Artifact. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Download
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-download
+    baseUri: ''
+    description: GitHub Repos API — Download business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-artifacts-artifact_id-archive_format
+      path: /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}
+      operations:
+      - name: downloadanartifact
+        method: GET
+        description: Download An Artifact
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: archive_format
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-jobs-job_id-logs
+      path: /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
+      operations:
+      - name: downloadjoblogsforworkflowrun
+        method: GET
+        description: Download Job Logs For Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runs-run_id-attempts-attempt_number-logs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs
+      operations:
+      - name: downloadworkflowrunattemptlogs
+        method: GET
+        description: Download Workflow Run Attempt Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runs-run_id-logs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+      operations:
+      - name: downloadworkflowrunlogs
+        method: GET
+        description: Download Workflow Run Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-tarball-ref
+      path: /repos/{owner}/{repo}/tarball/{ref}
+      operations:
+      - name: downloadrepositoryarchivetar
+        method: GET
+        description: Download Repository Archive (tar)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-download-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Download. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/artifacts/{artifact-id}/{archive-format}
+      name: repos-owner-repo-actions-artifacts-artifact-id-archive-format
+      description: REST surface for repos-owner-repo-actions-artifacts-artifact_id-archive_format.
+      operations:
+      - method: GET
+        name: downloadanartifact
+        description: Download An Artifact
+        call: temp-download.downloadanartifact
+        with:
+          archive_format: rest.archive_format
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/jobs/{job-id}/logs
+      name: repos-owner-repo-actions-jobs-job-id-logs
+      description: REST surface for repos-owner-repo-actions-jobs-job_id-logs.
+      operations:
+      - method: GET
+        name: downloadjoblogsforworkflowrun
+        description: Download Job Logs For Workflow Run
+        call: temp-download.downloadjoblogsforworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/attempts/{attempt-number}/logs
+      name: repos-owner-repo-actions-runs-run-id-attempts-attempt-number-logs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-attempts-attempt_number-logs.
+      operations:
+      - method: GET
+        name: downloadworkflowrunattemptlogs
+        description: Download Workflow Run Attempt Logs
+        call: temp-download.downloadworkflowrunattemptlogs
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/logs
+      name: repos-owner-repo-actions-runs-run-id-logs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-logs.
+      operations:
+      - method: GET
+        name: downloadworkflowrunlogs
+        description: Download Workflow Run Logs
+        call: temp-download.downloadworkflowrunlogs
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tarball/{ref}
+      name: repos-owner-repo-tarball-ref
+      description: REST surface for repos-owner-repo-tarball-ref.
+      operations:
+      - method: GET
+        name: downloadrepositoryarchivetar
+        description: Download Repository Archive (tar)
+        call: temp-download.downloadrepositoryarchivetar
+        with:
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-download-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Download. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: download-artifact
+      description: Download An Artifact
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-download.downloadanartifact
+      with:
+        archive_format: tools.archive_format
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: download-job-logs-workflow-run
+      description: Download Job Logs For Workflow Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-download.downloadjoblogsforworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: download-workflow-run-attempt-logs
+      description: Download Workflow Run Attempt Logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-download.downloadworkflowrunattemptlogs
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: download-workflow-run-logs
+      description: Download Workflow Run Logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-download.downloadworkflowrunlogs
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: download-repository-archive-tar
+      description: Download Repository Archive (tar)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-download.downloadrepositoryarchivetar
+      with:
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,412 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Check Runs
+  description: 'github-repos-api — Check Runs. 7 operations. Lead operation: GitHub Create Check Run. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Check Runs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-check-runs
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Check Runs business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-check-runs
+      path: /repos/{owner}/{repo}/check-runs
+      operations:
+      - name: createcheckrun
+        method: POST
+        description: GitHub Create Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-runs-check_run_id
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}
+      operations:
+      - name: getcheckrun
+        method: GET
+        description: GitHub Get Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatecheckrun
+        method: PATCH
+        description: GitHub Update Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-runs-check_run_id-annotations
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
+      operations:
+      - name: listcheckrunannotations
+        method: GET
+        description: GitHub List Check Run Annotations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-check-runs-check_run_id-rerequest
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
+      operations:
+      - name: rerequestcheckrun
+        method: POST
+        description: GitHub Rerequest Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-check-suites-check_suite_id-check-runs
+      path: /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
+      operations:
+      - name: listcheckrunsinchecksuite
+        method: GET
+        description: GitHub List Check Runs in Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-ref-check-runs
+      path: /repos/{owner}/{repo}/commits/{ref}/check-runs
+      operations:
+      - name: listcheckrunsforgitreference
+        method: GET
+        description: GitHub List Check Runs for Git Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.
+        - name: app_id
+          in: query
+          type: integer
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-check-runs-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Check Runs. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/check-runs
+      name: repos-owner-repo-check-runs
+      description: REST surface for repos-owner-repo-check-runs.
+      operations:
+      - method: POST
+        name: createcheckrun
+        description: GitHub Create Check Run
+        call: repos-check-runs.createcheckrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}
+      name: repos-owner-repo-check-runs-check-run-id
+      description: REST surface for repos-owner-repo-check-runs-check_run_id.
+      operations:
+      - method: GET
+        name: getcheckrun
+        description: GitHub Get Check Run
+        call: repos-check-runs.getcheckrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecheckrun
+        description: GitHub Update Check Run
+        call: repos-check-runs.updatecheckrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}/annotations
+      name: repos-owner-repo-check-runs-check-run-id-annotations
+      description: REST surface for repos-owner-repo-check-runs-check_run_id-annotations.
+      operations:
+      - method: GET
+        name: listcheckrunannotations
+        description: GitHub List Check Run Annotations
+        call: repos-check-runs.listcheckrunannotations
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}/rerequest
+      name: repos-owner-repo-check-runs-check-run-id-rerequest
+      description: REST surface for repos-owner-repo-check-runs-check_run_id-rerequest.
+      operations:
+      - method: POST
+        name: rerequestcheckrun
+        description: GitHub Rerequest Check Run
+        call: repos-check-runs.rerequestcheckrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/{check-suite-id}/check-runs
+      name: repos-owner-repo-check-suites-check-suite-id-check-runs
+      description: REST surface for repos-owner-repo-check-suites-check_suite_id-check-runs.
+      operations:
+      - method: GET
+        name: listcheckrunsinchecksuite
+        description: GitHub List Check Runs in Check Suite
+        call: repos-check-runs.listcheckrunsinchecksuite
+        with:
+          filter: rest.filter
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/check-runs
+      name: repos-owner-repo-commits-ref-check-runs
+      description: REST surface for repos-owner-repo-commits-ref-check-runs.
+      operations:
+      - method: GET
+        name: listcheckrunsforgitreference
+        description: GitHub List Check Runs for Git Reference
+        call: repos-check-runs.listcheckrunsforgitreference
+        with:
+          filter: rest.filter
+          app_id: rest.app_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-check-runs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Check Runs. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-create-check-run
+      description: GitHub Create Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repos-check-runs.createcheckrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-check-run
+      description: GitHub Get Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-check-runs.getcheckrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-check-run
+      description: GitHub Update Check Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repos-check-runs.updatecheckrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-run-annotations
+      description: GitHub List Check Run Annotations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-check-runs.listcheckrunannotations
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-rerequest-check-run
+      description: GitHub Rerequest Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repos-check-runs.rerequestcheckrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-runs-check
+      description: GitHub List Check Runs in Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-check-runs.listcheckrunsinchecksuite
+      with:
+        filter: tools.filter
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-runs-git
+      description: GitHub List Check Runs for Git Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-check-runs.listcheckrunsforgitreference
+      with:
+        filter: tools.filter
+        app_id: tools.app_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,281 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Branch Policies
+  description: 'github-repos-api — Branch Policies. 5 operations. Lead operation: GitHub List Deployment Branch Policies.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Branch Policies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-branch-policies
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Branch Policies business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies
+      operations:
+      - name: listdeploymentbranchpolicies
+        method: GET
+        description: GitHub List Deployment Branch Policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createdeploymentbranchpolicy
+        method: POST
+        description: GitHub Create Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies-branch
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}
+      operations:
+      - name: getdeploymentbranchpolicy
+        method: GET
+        description: GitHub Get Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatedeploymentbranchpolicy
+        method: PUT
+        description: GitHub Update Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletedeploymentbranchpolicy
+        method: DELETE
+        description: GitHub Delete Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-branch-policies-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Branch Policies. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies.
+      operations:
+      - method: GET
+        name: listdeploymentbranchpolicies
+        description: GitHub List Deployment Branch Policies
+        call: repos-branch-policies.listdeploymentbranchpolicies
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdeploymentbranchpolicy
+        description: GitHub Create Deployment Branch Policy
+        call: repos-branch-policies.createdeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies/{branch-policy-id}
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies-branch
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies-branch.
+      operations:
+      - method: GET
+        name: getdeploymentbranchpolicy
+        description: GitHub Get Deployment Branch Policy
+        call: repos-branch-policies.getdeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatedeploymentbranchpolicy
+        description: GitHub Update Deployment Branch Policy
+        call: repos-branch-policies.updatedeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedeploymentbranchpolicy
+        description: GitHub Delete Deployment Branch Policy
+        call: repos-branch-policies.deletedeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-branch-policies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Branch Policies. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-deployment-branch-policies
+      description: GitHub List Deployment Branch Policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-branch-policies.listdeploymentbranchpolicies
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deployment-branch-policy
+      description: GitHub Create Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repos-branch-policies.createdeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deployment-branch-policy
+      description: GitHub Get Deployment Branch Policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-branch-policies.getdeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-deployment-branch-policy
+      description: GitHub Update Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repos-branch-policies.updatedeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deployment-branch-policy
+      description: GitHub Delete Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repos-branch-policies.deletedeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

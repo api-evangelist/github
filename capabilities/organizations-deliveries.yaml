@@ -1,0 +1,142 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Deliveries
+  description: 'GitHub Org API — Deliveries. 3 operations. Lead operation: GitHub List Deliveries for an Organization Webhook.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Deliveries
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-deliveries
+    baseUri: ''
+    description: GitHub Org API — Deliveries business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-hooks-hook_id-deliveries
+      path: /orgs/{org}/hooks/{hook_id}/deliveries
+      operations:
+      - name: listdeliveriesforanorganizationwebhook
+        method: GET
+        description: GitHub List Deliveries for an Organization Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: redelivery
+          in: query
+          type: boolean
+    - name: orgs-org-hooks-hook_id-deliveries-delivery_id
+      path: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}
+      operations:
+      - name: getwebhookdeliveryforanorganizationwebhook
+        method: GET
+        description: GitHub Get Webhook Delivery for an Organization Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-hooks-hook_id-deliveries-delivery_id-attempts
+      path: /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+      operations:
+      - name: redeliverdeliveryforanorganizationwebhook
+        method: POST
+        description: GitHub Redeliver Delivery for an Organization Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-deliveries-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Deliveries. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/hooks/{hook-id}/deliveries
+      name: orgs-org-hooks-hook-id-deliveries
+      description: REST surface for orgs-org-hooks-hook_id-deliveries.
+      operations:
+      - method: GET
+        name: listdeliveriesforanorganizationwebhook
+        description: GitHub List Deliveries for an Organization Webhook
+        call: organizations-deliveries.listdeliveriesforanorganizationwebhook
+        with:
+          redelivery: rest.redelivery
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/hooks/{hook-id}/deliveries/{delivery-id}
+      name: orgs-org-hooks-hook-id-deliveries-delivery-id
+      description: REST surface for orgs-org-hooks-hook_id-deliveries-delivery_id.
+      operations:
+      - method: GET
+        name: getwebhookdeliveryforanorganizationwebhook
+        description: GitHub Get Webhook Delivery for an Organization Webhook
+        call: organizations-deliveries.getwebhookdeliveryforanorganizationwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/hooks/{hook-id}/deliveries/{delivery-id}/attempts
+      name: orgs-org-hooks-hook-id-deliveries-delivery-id-attempts
+      description: REST surface for orgs-org-hooks-hook_id-deliveries-delivery_id-attempts.
+      operations:
+      - method: POST
+        name: redeliverdeliveryforanorganizationwebhook
+        description: GitHub Redeliver Delivery for an Organization Webhook
+        call: organizations-deliveries.redeliverdeliveryforanorganizationwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-deliveries-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Deliveries. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-deliveries-organization-webhook
+      description: GitHub List Deliveries for an Organization Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-deliveries.listdeliveriesforanorganizationwebhook
+      with:
+        redelivery: tools.redelivery
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-webhook-delivery-organization
+      description: GitHub Get Webhook Delivery for an Organization Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-deliveries.getwebhookdeliveryforanorganizationwebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-redeliver-delivery-organization-webhook
+      description: GitHub Redeliver Delivery for an Organization Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-deliveries.redeliverdeliveryforanorganizationwebhook
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,188 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — All
+  description: 'github-repos-api — All. 3 operations. Lead operation: GitHub Get All Contributor Commit Activity. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - All
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-all
+    baseUri: ''
+    description: github-repos-api — All business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-stats-contributors
+      path: /repos/{owner}/{repo}/stats/contributors
+      operations:
+      - name: getallcontributorcommitactivity
+        method: GET
+        description: GitHub Get All Contributor Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-topics
+      path: /repos/{owner}/{repo}/topics
+      operations:
+      - name: getallrepositorytopics
+        method: GET
+        description: GitHub Get All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: replaceallrepositorytopics
+        method: PUT
+        description: GitHub Replace All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-all-rest
+    port: 8080
+    description: REST adapter for github-repos-api — All. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/stats/contributors
+      name: repos-owner-repo-stats-contributors
+      description: REST surface for repos-owner-repo-stats-contributors.
+      operations:
+      - method: GET
+        name: getallcontributorcommitactivity
+        description: GitHub Get All Contributor Commit Activity
+        call: repo-tags-all.getallcontributorcommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/topics
+      name: repos-owner-repo-topics
+      description: REST surface for repos-owner-repo-topics.
+      operations:
+      - method: GET
+        name: getallrepositorytopics
+        description: GitHub Get All Repository Topics
+        call: repo-tags-all.getallrepositorytopics
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: replaceallrepositorytopics
+        description: GitHub Replace All Repository Topics
+        call: repo-tags-all.replaceallrepositorytopics
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-all-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — All. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-all-contributor-commit
+      description: GitHub Get All Contributor Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-all.getallcontributorcommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-repository-topics
+      description: GitHub Get All Repository Topics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-all.getallrepositorytopics
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-replace-all-repository-topics
+      description: GitHub Replace All Repository Topics
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-all.replaceallrepositorytopics
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

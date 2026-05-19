@@ -1,0 +1,909 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Repositories
+  description: 'GitHub User API — Repositories. 17 operations. Lead operation: GitHub List Repositories Accessible to the
+    User Access Token. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Repositories
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-repositories
+    baseUri: ''
+    description: GitHub User API — Repositories business capability. Self-contained, no shared references.
+    resources:
+    - name: user-installations-installation_id-repositories
+      path: /user/installations/{installation_id}/repositories
+      operations:
+      - name: listrepositoriesaccessibletotheuseraccesstoken
+        method: GET
+        description: GitHub List Repositories Accessible to the User Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-installations-installation_id-repositories-repository_id
+      path: /user/installations/{installation_id}/repositories/{repository_id}
+      operations:
+      - name: addrepositorytoanappinstallation
+        method: PUT
+        description: GitHub Add Repository to an App Installation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: removerepositoryfromanappinstallation
+        method: DELETE
+        description: GitHub Remove Repository from an App Installation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-migrations-migration_id-repositories
+      path: /user/migrations/{migration_id}/repositories
+      operations:
+      - name: listrepositoriesforusermigration
+        method: GET
+        description: GitHub List Repositories for User Migration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-repos
+      path: /user/repos
+      operations:
+      - name: listrepositoriesfortheauthenticateduser
+        method: GET
+        description: GitHub List Repositories for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Limit results to repositories with the specified visibility.
+        - name: affiliation
+          in: query
+          type: string
+          description: 'Comma-separated list of values. Can include:  '
+        - name: type
+          in: query
+          type: string
+          description: Limit results to repositories of the specified type. Will cause a `422` error if used in the same request
+            as **visibility** or **affiliation**.
+        - name: sort
+          in: query
+          type: string
+          description: The property to sort the results by.
+        - name: direction
+          in: query
+          type: string
+          description: 'The order to sort by. Default: `asc` when using `full_name`, otherwise `desc`.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createrepositoryfortheauthenticateduser
+        method: POST
+        description: GitHub Create Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-repository_invitations
+      path: /user/repository_invitations
+      operations:
+      - name: listrepositoryinvitationsfortheauthenticateduser
+        method: GET
+        description: GitHub List Repository Invitations for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-repository_invitations-invitation_id
+      path: /user/repository_invitations/{invitation_id}
+      operations:
+      - name: acceptrepositoryinvitation
+        method: PATCH
+        description: GitHub Accept Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: declinerepositoryinvitation
+        method: DELETE
+        description: GitHub Decline Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-starred
+      path: /user/starred
+      operations:
+      - name: listrepositoriesstarredbytheauthenticateduser
+        method: GET
+        description: GitHub List Repositories Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-starred-owner-repo
+      path: /user/starred/{owner}/{repo}
+      operations:
+      - name: checkifrepositoryisstarredbytheauthenticateduser
+        method: GET
+        description: GitHub Check if Repository is Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: starrepositoryfortheauthenticateduser
+        method: PUT
+        description: GitHub Star Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: unstarrepositoryfortheauthenticateduser
+        method: DELETE
+        description: GitHub Unstar Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-subscriptions
+      path: /user/subscriptions
+      operations:
+      - name: listrepositorieswatchedbytheauthenticateduser
+        method: GET
+        description: GitHub List Repositories Watched by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-repos
+      path: /users/{username}/repos
+      operations:
+      - name: listrepositoriesforuser
+        method: GET
+        description: GitHub List Repositories for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Limit results to repositories of the specified type.
+        - name: sort
+          in: query
+          type: string
+          description: The property to sort the results by.
+        - name: direction
+          in: query
+          type: string
+          description: 'The order to sort by. Default: `asc` when using `full_name`, otherwise `desc`.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-starred
+      path: /users/{username}/starred
+      operations:
+      - name: listrepositoriesstarredbyuser
+        method: GET
+        description: GitHub List Repositories Starred by User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-subscriptions
+      path: /users/{username}/subscriptions
+      operations:
+      - name: listrepositorieswatchedbyuser
+        method: GET
+        description: GitHub List Repositories Watched by User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-repositories-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Repositories. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/user/installations/{installation-id}/repositories
+      name: user-installations-installation-id-repositories
+      description: REST surface for user-installations-installation_id-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesaccessibletotheuseraccesstoken
+        description: GitHub List Repositories Accessible to the User Access Token
+        call: users-repositories.listrepositoriesaccessibletotheuseraccesstoken
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations/{installation-id}/repositories/{repository-id}
+      name: user-installations-installation-id-repositories-repository-id
+      description: REST surface for user-installations-installation_id-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addrepositorytoanappinstallation
+        description: GitHub Add Repository to an App Installation
+        call: users-repositories.addrepositorytoanappinstallation
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removerepositoryfromanappinstallation
+        description: GitHub Remove Repository from an App Installation
+        call: users-repositories.removerepositoryfromanappinstallation
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/migrations/{migration-id}/repositories
+      name: user-migrations-migration-id-repositories
+      description: REST surface for user-migrations-migration_id-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesforusermigration
+        description: GitHub List Repositories for User Migration
+        call: users-repositories.listrepositoriesforusermigration
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repos
+      name: user-repos
+      description: REST surface for user-repos.
+      operations:
+      - method: GET
+        name: listrepositoriesfortheauthenticateduser
+        description: GitHub List Repositories for the Authenticated User
+        call: users-repositories.listrepositoriesfortheauthenticateduser
+        with:
+          visibility: rest.visibility
+          affiliation: rest.affiliation
+          type: rest.type
+          sort: rest.sort
+          direction: rest.direction
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createrepositoryfortheauthenticateduser
+        description: GitHub Create Repository for the Authenticated User
+        call: users-repositories.createrepositoryfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repository-invitations
+      name: user-repository-invitations
+      description: REST surface for user-repository_invitations.
+      operations:
+      - method: GET
+        name: listrepositoryinvitationsfortheauthenticateduser
+        description: GitHub List Repository Invitations for the Authenticated User
+        call: users-repositories.listrepositoryinvitationsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repository-invitations/{invitation-id}
+      name: user-repository-invitations-invitation-id
+      description: REST surface for user-repository_invitations-invitation_id.
+      operations:
+      - method: PATCH
+        name: acceptrepositoryinvitation
+        description: GitHub Accept Repository Invitation
+        call: users-repositories.acceptrepositoryinvitation
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: declinerepositoryinvitation
+        description: GitHub Decline Repository Invitation
+        call: users-repositories.declinerepositoryinvitation
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/starred
+      name: user-starred
+      description: REST surface for user-starred.
+      operations:
+      - method: GET
+        name: listrepositoriesstarredbytheauthenticateduser
+        description: GitHub List Repositories Starred by the Authenticated User
+        call: users-repositories.listrepositoriesstarredbytheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/starred/{owner}/{repo}
+      name: user-starred-owner-repo
+      description: REST surface for user-starred-owner-repo.
+      operations:
+      - method: GET
+        name: checkifrepositoryisstarredbytheauthenticateduser
+        description: GitHub Check if Repository is Starred by the Authenticated User
+        call: users-repositories.checkifrepositoryisstarredbytheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: starrepositoryfortheauthenticateduser
+        description: GitHub Star Repository for the Authenticated User
+        call: users-repositories.starrepositoryfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: unstarrepositoryfortheauthenticateduser
+        description: GitHub Unstar Repository for the Authenticated User
+        call: users-repositories.unstarrepositoryfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/subscriptions
+      name: user-subscriptions
+      description: REST surface for user-subscriptions.
+      operations:
+      - method: GET
+        name: listrepositorieswatchedbytheauthenticateduser
+        description: GitHub List Repositories Watched by the Authenticated User
+        call: users-repositories.listrepositorieswatchedbytheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/repos
+      name: users-username-repos
+      description: REST surface for users-username-repos.
+      operations:
+      - method: GET
+        name: listrepositoriesforuser
+        description: GitHub List Repositories for User
+        call: users-repositories.listrepositoriesforuser
+        with:
+          type: rest.type
+          sort: rest.sort
+          direction: rest.direction
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/starred
+      name: users-username-starred
+      description: REST surface for users-username-starred.
+      operations:
+      - method: GET
+        name: listrepositoriesstarredbyuser
+        description: GitHub List Repositories Starred by User
+        call: users-repositories.listrepositoriesstarredbyuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/subscriptions
+      name: users-username-subscriptions
+      description: REST surface for users-username-subscriptions.
+      operations:
+      - method: GET
+        name: listrepositorieswatchedbyuser
+        description: GitHub List Repositories Watched by User
+        call: users-repositories.listrepositorieswatchedbyuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-repositories-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Repositories. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-repositories-accessible-user
+      description: GitHub List Repositories Accessible to the User Access Token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesaccessibletotheuseraccesstoken
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-repository-app-installation
+      description: GitHub Add Repository to an App Installation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-repositories.addrepositorytoanappinstallation
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-repository-app-installation
+      description: GitHub Remove Repository from an App Installation
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-repositories.removerepositoryfromanappinstallation
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-user-migration
+      description: GitHub List Repositories for User Migration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesforusermigration
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-authenticated-user
+      description: GitHub List Repositories for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesfortheauthenticateduser
+      with:
+        visibility: tools.visibility
+        affiliation: tools.affiliation
+        type: tools.type
+        sort: tools.sort
+        direction: tools.direction
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-authenticated-user
+      description: GitHub Create Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-repositories.createrepositoryfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-invitations-authenticated
+      description: GitHub List Repository Invitations for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoryinvitationsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-accept-repository-invitation
+      description: GitHub Accept Repository Invitation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-repositories.acceptrepositoryinvitation
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-decline-repository-invitation
+      description: GitHub Decline Repository Invitation
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-repositories.declinerepositoryinvitation
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-starred-authenticated
+      description: GitHub List Repositories Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesstarredbytheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-repository-is
+      description: GitHub Check if Repository is Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.checkifrepositoryisstarredbytheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-star-repository-authenticated-user
+      description: GitHub Star Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-repositories.starrepositoryfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-unstar-repository-authenticated-user
+      description: GitHub Unstar Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-repositories.unstarrepositoryfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-watched-authenticated
+      description: GitHub List Repositories Watched by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositorieswatchedbytheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-user
+      description: GitHub List Repositories for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesforuser
+      with:
+        type: tools.type
+        sort: tools.sort
+        direction: tools.direction
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-starred-user
+      description: GitHub List Repositories Starred by User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositoriesstarredbyuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-watched-user
+      description: GitHub List Repositories Watched by User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-repositories.listrepositorieswatchedbyuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

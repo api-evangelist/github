@@ -1,0 +1,266 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Update
+  description: 'GitHub User API — Update. 4 operations. Lead operation: GitHub Update Ldap Mapping for User. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Update
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-update
+    baseUri: ''
+    description: GitHub User API — Update business capability. Self-contained, no shared references.
+    resources:
+    - name: admin-ldap-users-username-mapping
+      path: /admin/ldap/users/{username}/mapping
+      operations:
+      - name: updateldapmappingforuser
+        method: PATCH
+        description: GitHub Update Ldap Mapping for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: admin-users-username
+      path: /admin/users/{username}
+      operations:
+      - name: updatetheusernameforuser
+        method: PATCH
+        description: GitHub Update the Username for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user
+      path: /user
+      operations:
+      - name: updatetheauthenticateduser
+        method: PATCH
+        description: GitHub Update the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: user-memberships-orgs-org
+      path: /user/memberships/orgs/{org}
+      operations:
+      - name: updateanorganizationmembershipfortheauthenticateduser
+        method: PATCH
+        description: GitHub Update an Organization Membership for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-update-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Update. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/admin/ldap/users/{username}/mapping
+      name: admin-ldap-users-username-mapping
+      description: REST surface for admin-ldap-users-username-mapping.
+      operations:
+      - method: PATCH
+        name: updateldapmappingforuser
+        description: GitHub Update Ldap Mapping for User
+        call: users-update.updateldapmappingforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/admin/users/{username}
+      name: admin-users-username
+      description: REST surface for admin-users-username.
+      operations:
+      - method: PATCH
+        name: updatetheusernameforuser
+        description: GitHub Update the Username for User
+        call: users-update.updatetheusernameforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user
+      name: user
+      description: REST surface for user.
+      operations:
+      - method: PATCH
+        name: updatetheauthenticateduser
+        description: GitHub Update the Authenticated User
+        call: users-update.updatetheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/memberships/orgs/{org}
+      name: user-memberships-orgs-org
+      description: REST surface for user-memberships-orgs-org.
+      operations:
+      - method: PATCH
+        name: updateanorganizationmembershipfortheauthenticateduser
+        description: GitHub Update an Organization Membership for the Authenticated User
+        call: users-update.updateanorganizationmembershipfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-update-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Update. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-update-ldap-mapping-user
+      description: GitHub Update Ldap Mapping for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-update.updateldapmappingforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-username-user
+      description: GitHub Update the Username for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-update.updatetheusernameforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-authenticated-user
+      description: GitHub Update the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-update.updatetheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-organization-membership-authenticated
+      description: GitHub Update an Organization Membership for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-update.updateanorganizationmembershipfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

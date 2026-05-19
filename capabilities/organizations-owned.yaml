@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Owned
+  description: 'GitHub Org API — Owned. 1 operations. Lead operation: GitHub List Package Versions for Package Owned by an
+    Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Owned
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-owned
+    baseUri: ''
+    description: GitHub Org API — Owned business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-packages-package_type-package_name-versions
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: listpackageversionsforpackageownedbyanorganization
+        method: GET
+        description: GitHub List Package Versions for Package Owned by an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: The state of the package, either active or deleted.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-owned-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Owned. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions
+      name: orgs-org-packages-package-type-package-name-versions
+      description: REST surface for orgs-org-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: listpackageversionsforpackageownedbyanorganization
+        description: GitHub List Package Versions for Package Owned by an Organization
+        call: organizations-owned.listpackageversionsforpackageownedbyanorganization
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-owned-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Owned. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-package-versions-package
+      description: GitHub List Package Versions for Package Owned by an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-owned.listpackageversionsforpackageownedbyanorganization
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.

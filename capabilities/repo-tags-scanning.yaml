@@ -1,0 +1,238 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Scanning
+  description: 'github-repos-api — Scanning. 4 operations. Lead operation: GitHub List Secret Scanning Alerts for Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Scanning
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-scanning
+    baseUri: ''
+    description: github-repos-api — Scanning business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-secret-scanning-alerts
+      path: /repos/{owner}/{repo}/secret-scanning/alerts
+      operations:
+      - name: listsecretscanningalertsforrepository
+        method: GET
+        description: GitHub List Secret Scanning Alerts for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-secret-scanning-alerts-alert_number
+      path: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}
+      operations:
+      - name: getsecretscanningalert
+        method: GET
+        description: GitHub Get Secret Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatesecretscanningalert
+        method: PATCH
+        description: GitHub Update Secret Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-secret-scanning-alerts-alert_number-locations
+      path: /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations
+      operations:
+      - name: listlocationsforsecretscanningalert
+        method: GET
+        description: GitHub List Locations for Secret Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-scanning-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Scanning. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/secret-scanning/alerts
+      name: repos-owner-repo-secret-scanning-alerts
+      description: REST surface for repos-owner-repo-secret-scanning-alerts.
+      operations:
+      - method: GET
+        name: listsecretscanningalertsforrepository
+        description: GitHub List Secret Scanning Alerts for Repository
+        call: repo-tags-scanning.listsecretscanningalertsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/secret-scanning/alerts/{alert-number}
+      name: repos-owner-repo-secret-scanning-alerts-alert-number
+      description: REST surface for repos-owner-repo-secret-scanning-alerts-alert_number.
+      operations:
+      - method: GET
+        name: getsecretscanningalert
+        description: GitHub Get Secret Scanning Alert
+        call: repo-tags-scanning.getsecretscanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatesecretscanningalert
+        description: GitHub Update Secret Scanning Alert
+        call: repo-tags-scanning.updatesecretscanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/secret-scanning/alerts/{alert-number}/locations
+      name: repos-owner-repo-secret-scanning-alerts-alert-number-locations
+      description: REST surface for repos-owner-repo-secret-scanning-alerts-alert_number-locations.
+      operations:
+      - method: GET
+        name: listlocationsforsecretscanningalert
+        description: GitHub List Locations for Secret Scanning Alert
+        call: repo-tags-scanning.listlocationsforsecretscanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-scanning-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Scanning. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-secret-scanning-alerts
+      description: GitHub List Secret Scanning Alerts for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-scanning.listsecretscanningalertsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-secret-scanning-alert
+      description: GitHub Get Secret Scanning Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-scanning.getsecretscanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-secret-scanning-alert
+      description: GitHub Update Secret Scanning Alert
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-scanning.updatesecretscanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-locations-secret-scanning
+      description: GitHub List Locations for Secret Scanning Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-scanning.listlocationsforsecretscanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,106 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Search API — Labels
+  description: 'GitHub Search API — Labels. 1 operations. Lead operation: GitHub Search Labels. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Labels
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: search-labels
+    baseUri: ''
+    description: GitHub Search API — Labels business capability. Self-contained, no shared references.
+    resources:
+    - name: search-labels
+      path: /search/labels
+      operations:
+      - name: searchlabels
+        method: GET
+        description: GitHub Search Labels
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: query
+          type: integer
+          description: The id of the repository.
+          required: true
+        - name: q
+          in: query
+          type: string
+          description: The search keywords. This endpoint does not accept qualifiers in the query. To learn more about the
+            format of the query, see [Constructing a search query](https
+          required: true
+        - name: sort
+          in: query
+          type: string
+          description: 'Sorts the results of your query by when the label was `created` or `updated`. Default: [best match](https://docs.github.com/enterprise-server@3.9/rest/search/se'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+  exposes:
+  - type: rest
+    namespace: search-labels-rest
+    port: 8080
+    description: REST adapter for GitHub Search API — Labels. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/search/labels
+      name: search-labels
+      description: REST surface for search-labels.
+      operations:
+      - method: GET
+        name: searchlabels
+        description: GitHub Search Labels
+        call: search-labels.searchlabels
+        with:
+          repository_id: rest.repository_id
+          q: rest.q
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: search-labels-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Search API — Labels. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-search-labels
+      description: GitHub Search Labels
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-labels.searchlabels
+      with:
+        repository_id: tools.repository_id
+        q: tools.q
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

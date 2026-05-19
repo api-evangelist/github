@@ -1,0 +1,191 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Lists
+  description: 'GitHub Application API — Lists. 4 operations. Lead operation: GitHub List Deliveries for an App Webhook. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-lists
+    baseUri: ''
+    description: GitHub Application API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: app-hook-deliveries
+      path: /app/hook/deliveries
+      operations:
+      - name: listdeliveriesforanappwebhook
+        method: GET
+        description: GitHub List Deliveries for an App Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: redelivery
+          in: query
+          type: boolean
+    - name: app-installation-requests
+      path: /app/installation-requests
+      operations:
+      - name: listinstallationrequestsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installation Requests for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-installations
+      path: /app/installations
+      operations:
+      - name: listinstallationsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installations for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: outdated
+          in: query
+          type: string
+    - name: applications-grants
+      path: /applications/grants
+      operations:
+      - name: listyourgrants
+        method: GET
+        description: GitHub List Your Grants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_id
+          in: query
+          type: string
+          description: The client ID of your GitHub app.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-lists-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Lists. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app/hook/deliveries
+      name: app-hook-deliveries
+      description: REST surface for app-hook-deliveries.
+      operations:
+      - method: GET
+        name: listdeliveriesforanappwebhook
+        description: GitHub List Deliveries for an App Webhook
+        call: app-lists.listdeliveriesforanappwebhook
+        with:
+          redelivery: rest.redelivery
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installation-requests
+      name: app-installation-requests
+      description: REST surface for app-installation-requests.
+      operations:
+      - method: GET
+        name: listinstallationrequestsfortheauthenticatedapp
+        description: GitHub List Installation Requests for the Authenticated App
+        call: app-lists.listinstallationrequestsfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations
+      name: app-installations
+      description: REST surface for app-installations.
+      operations:
+      - method: GET
+        name: listinstallationsfortheauthenticatedapp
+        description: GitHub List Installations for the Authenticated App
+        call: app-lists.listinstallationsfortheauthenticatedapp
+        with:
+          outdated: rest.outdated
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/grants
+      name: applications-grants
+      description: REST surface for applications-grants.
+      operations:
+      - method: GET
+        name: listyourgrants
+        description: GitHub List Your Grants
+        call: app-lists.listyourgrants
+        with:
+          client_id: rest.client_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Lists. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-deliveries-app-webhook
+      description: GitHub List Deliveries for an App Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-lists.listdeliveriesforanappwebhook
+      with:
+        redelivery: tools.redelivery
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-installation-requests-authenticated
+      description: GitHub List Installation Requests for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-lists.listinstallationrequestsfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-installations-authenticated-app
+      description: GitHub List Installations for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-lists.listinstallationsfortheauthenticatedapp
+      with:
+        outdated: tools.outdated
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-your-grants
+      description: GitHub List Your Grants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-lists.listyourgrants
+      with:
+        client_id: tools.client_id
+      outputParameters:
+      - type: object
+        mapping: $.

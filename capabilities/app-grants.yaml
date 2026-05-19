@@ -1,0 +1,136 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Grants
+  description: 'GitHub Application API — Grants. 3 operations. Lead operation: GitHub List Your Grants. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Grants
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-grants
+    baseUri: ''
+    description: GitHub Application API — Grants business capability. Self-contained, no shared references.
+    resources:
+    - name: applications-grants
+      path: /applications/grants
+      operations:
+      - name: listyourgrants
+        method: GET
+        description: GitHub List Your Grants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_id
+          in: query
+          type: string
+          description: The client ID of your GitHub app.
+    - name: applications-grants-grant_id
+      path: /applications/grants/{grant_id}
+      operations:
+      - name: getsinglegrant
+        method: GET
+        description: GitHub Getsingle Grant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletegrant
+        method: DELETE
+        description: GitHub Deletegrant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-grants-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Grants. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/applications/grants
+      name: applications-grants
+      description: REST surface for applications-grants.
+      operations:
+      - method: GET
+        name: listyourgrants
+        description: GitHub List Your Grants
+        call: app-grants.listyourgrants
+        with:
+          client_id: rest.client_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/grants/{grant-id}
+      name: applications-grants-grant-id
+      description: REST surface for applications-grants-grant_id.
+      operations:
+      - method: GET
+        name: getsinglegrant
+        description: GitHub Getsingle Grant
+        call: app-grants.getsinglegrant
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletegrant
+        description: GitHub Deletegrant
+        call: app-grants.deletegrant
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-grants-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Grants. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-your-grants
+      description: GitHub List Your Grants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-grants.listyourgrants
+      with:
+        client_id: tools.client_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getsingle-grant
+      description: GitHub Getsingle Grant
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-grants.getsinglegrant
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-deletegrant
+      description: GitHub Deletegrant
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: app-grants.deletegrant
+      outputParameters:
+      - type: object
+        mapping: $.

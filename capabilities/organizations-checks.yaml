@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Checks
+  description: 'GitHub Org API — Checks. 4 operations. Lead operation: GitHub Check Organization Membership for User. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Checks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-checks
+    baseUri: ''
+    description: GitHub Org API — Checks business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-members-username
+      path: /orgs/{org}/members/{username}
+      operations:
+      - name: checkorganizationmembershipforuser
+        method: GET
+        description: GitHub Check Organization Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-public_members-username
+      path: /orgs/{org}/public_members/{username}
+      operations:
+      - name: checkpublicorganizationmembershipforuser
+        method: GET
+        description: GitHub Check Public Organization Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforproject
+        method: GET
+        description: GitHub Check Team Permissions for Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-repos-owner-repo
+      path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+      operations:
+      - name: checkteampermissionsforrepository
+        method: GET
+        description: GitHub Check Team Permissions for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-checks-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Checks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/members/{username}
+      name: orgs-org-members-username
+      description: REST surface for orgs-org-members-username.
+      operations:
+      - method: GET
+        name: checkorganizationmembershipforuser
+        description: GitHub Check Organization Membership for User
+        call: organizations-checks.checkorganizationmembershipforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/public-members/{username}
+      name: orgs-org-public-members-username
+      description: REST surface for orgs-org-public_members-username.
+      operations:
+      - method: GET
+        name: checkpublicorganizationmembershipforuser
+        description: GitHub Check Public Organization Membership for User
+        call: organizations-checks.checkpublicorganizationmembershipforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforproject
+        description: GitHub Check Team Permissions for Project
+        call: organizations-checks.checkteampermissionsforproject
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/repos/{owner}/{repo}
+      name: orgs-org-teams-team-slug-repos-owner-repo
+      description: REST surface for orgs-org-teams-team_slug-repos-owner-repo.
+      operations:
+      - method: GET
+        name: checkteampermissionsforrepository
+        description: GitHub Check Team Permissions for Repository
+        call: organizations-checks.checkteampermissionsforrepository
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-checks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Checks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-check-organization-membership-user
+      description: GitHub Check Organization Membership for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-checks.checkorganizationmembershipforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-public-organization-membership
+      description: GitHub Check Public Organization Membership for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-checks.checkpublicorganizationmembershipforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-project
+      description: GitHub Check Team Permissions for Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-checks.checkteampermissionsforproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-repository
+      description: GitHub Check Team Permissions for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-checks.checkteampermissionsforrepository
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,437 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Create
+  description: 'GitHub User API — Create. 7 operations. Lead operation: GitHub Create User. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Create
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-create
+    baseUri: ''
+    description: GitHub User API — Create business capability. Self-contained, no shared references.
+    resources:
+    - name: admin-users
+      path: /admin/users
+      operations:
+      - name: createuser
+        method: POST
+        description: GitHub Create User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: admin-users-username-authorizations
+      path: /admin/users/{username}/authorizations
+      operations:
+      - name: createanimpersonationoauthtoken
+        method: POST
+        description: GitHub Create an Impersonation Oauth Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-gpg_keys
+      path: /user/gpg_keys
+      operations:
+      - name: creategpgkeyfortheauthenticateduser
+        method: POST
+        description: GitHub Create Gpg Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-keys
+      path: /user/keys
+      operations:
+      - name: createpublicsshkeyfortheauthenticateduser
+        method: POST
+        description: GitHub Create Public Ssh Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-projects
+      path: /user/projects
+      operations:
+      - name: createuserproject
+        method: POST
+        description: GitHub Create User Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-repos
+      path: /user/repos
+      operations:
+      - name: createrepositoryfortheauthenticateduser
+        method: POST
+        description: GitHub Create Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-ssh_signing_keys
+      path: /user/ssh_signing_keys
+      operations:
+      - name: createsshsigningkeyfortheauthenticateduser
+        method: POST
+        description: GitHub Create Ssh Signing Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-create-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Create. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/admin/users
+      name: admin-users
+      description: REST surface for admin-users.
+      operations:
+      - method: POST
+        name: createuser
+        description: GitHub Create User
+        call: users-create.createuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/admin/users/{username}/authorizations
+      name: admin-users-username-authorizations
+      description: REST surface for admin-users-username-authorizations.
+      operations:
+      - method: POST
+        name: createanimpersonationoauthtoken
+        description: GitHub Create an Impersonation Oauth Token
+        call: users-create.createanimpersonationoauthtoken
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/gpg-keys
+      name: user-gpg-keys
+      description: REST surface for user-gpg_keys.
+      operations:
+      - method: POST
+        name: creategpgkeyfortheauthenticateduser
+        description: GitHub Create Gpg Key for the Authenticated User
+        call: users-create.creategpgkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/keys
+      name: user-keys
+      description: REST surface for user-keys.
+      operations:
+      - method: POST
+        name: createpublicsshkeyfortheauthenticateduser
+        description: GitHub Create Public Ssh Key for the Authenticated User
+        call: users-create.createpublicsshkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/projects
+      name: user-projects
+      description: REST surface for user-projects.
+      operations:
+      - method: POST
+        name: createuserproject
+        description: GitHub Create User Project
+        call: users-create.createuserproject
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repos
+      name: user-repos
+      description: REST surface for user-repos.
+      operations:
+      - method: POST
+        name: createrepositoryfortheauthenticateduser
+        description: GitHub Create Repository for the Authenticated User
+        call: users-create.createrepositoryfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/ssh-signing-keys
+      name: user-ssh-signing-keys
+      description: REST surface for user-ssh_signing_keys.
+      operations:
+      - method: POST
+        name: createsshsigningkeyfortheauthenticateduser
+        description: GitHub Create Ssh Signing Key for the Authenticated User
+        call: users-create.createsshsigningkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-create-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Create. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-create-user
+      description: GitHub Create User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-impersonation-oauth-token
+      description: GitHub Create an Impersonation Oauth Token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createanimpersonationoauthtoken
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-gpg-key-authenticated
+      description: GitHub Create Gpg Key for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.creategpgkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-public-ssh-key
+      description: GitHub Create Public Ssh Key for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createpublicsshkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-user-project
+      description: GitHub Create User Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createuserproject
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-authenticated-user
+      description: GitHub Create Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createrepositoryfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-ssh-signing-key
+      description: GitHub Create Ssh Signing Key for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-create.createsshsigningkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

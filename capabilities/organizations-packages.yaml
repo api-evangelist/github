@@ -1,0 +1,126 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Packages
+  description: 'GitHub Org API — Packages. 2 operations. Lead operation: GitHub Get List of Conflicting Packages During Docker
+    Migration for Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Packages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-packages
+    baseUri: ''
+    description: GitHub Org API — Packages business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-docker-conflicts
+      path: /orgs/{org}/docker/conflicts
+      operations:
+      - name: getlistofconflictingpackagesduringdockermigrationfororganization
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-packages
+      path: /orgs/{org}/packages
+      operations:
+      - name: listpackagesforanorganization
+        method: GET
+        description: GitHub List Packages for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+        - name: page
+          in: query
+          type: integer
+          description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-
+        - name: per_page
+          in: query
+          type: integer
+          description: The number of results per page (max 100). For more information, see "[Using pagination in the REST
+            API](https://docs.github.com/enterprise-server@3.9/rest/using
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-packages-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Packages. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/docker/conflicts
+      name: orgs-org-docker-conflicts
+      description: REST surface for orgs-org-docker-conflicts.
+      operations:
+      - method: GET
+        name: getlistofconflictingpackagesduringdockermigrationfororganization
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+        call: organizations-packages.getlistofconflictingpackagesduringdockermigrationfororganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages
+      name: orgs-org-packages
+      description: REST surface for orgs-org-packages.
+      operations:
+      - method: GET
+        name: listpackagesforanorganization
+        description: GitHub List Packages for an Organization
+        call: organizations-packages.listpackagesforanorganization
+        with:
+          package_type: rest.package_type
+          page: rest.page
+          per_page: rest.per_page
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-packages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Packages. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-list-conflicting-packages
+      description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-packages.getlistofconflictingpackagesduringdockermigrationfororganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-organization
+      description: GitHub List Packages for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-packages.listpackagesforanorganization
+      with:
+        package_type: tools.package_type
+        page: tools.page
+        per_page: tools.per_page
+      outputParameters:
+      - type: object
+        mapping: $.

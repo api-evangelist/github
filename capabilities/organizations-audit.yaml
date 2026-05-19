@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Audit
+  description: 'GitHub Org API — Audit. 1 operations. Lead operation: GitHub Get the Audit Log for an Organization. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Audit
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-audit
+    baseUri: ''
+    description: GitHub Org API — Audit business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-audit-log
+      path: /orgs/{org}/audit-log
+      operations:
+      - name: gettheauditlogforanorganization
+        method: GET
+        description: GitHub Get the Audit Log for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-audit-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Audit. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/audit-log
+      name: orgs-org-audit-log
+      description: REST surface for orgs-org-audit-log.
+      operations:
+      - method: GET
+        name: gettheauditlogforanorganization
+        description: GitHub Get the Audit Log for an Organization
+        call: organizations-audit.gettheauditlogforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-audit-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Audit. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-audit-log-organization
+      description: GitHub Get the Audit Log for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-audit.gettheauditlogforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

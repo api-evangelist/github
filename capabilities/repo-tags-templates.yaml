@@ -1,0 +1,109 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Templates
+  description: 'github-repos-api — Templates. 1 operations. Lead operation: GitHub Create Repository Using Template. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Templates
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-templates
+    baseUri: ''
+    description: github-repos-api — Templates business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-template_owner-template_repo-generate
+      path: /repos/{template_owner}/{template_repo}/generate
+      operations:
+      - name: createrepositoryusingtemplate
+        method: POST
+        description: GitHub Create Repository Using Template
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: template_owner
+          in: path
+          type: string
+          description: The account owner of the template repository. The name is not case sensitive.
+          required: true
+        - name: template_repo
+          in: path
+          type: string
+          description: The name of the template repository without the `.git` extension. The name is not case sensitive.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-templates-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Templates. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{template-owner}/{template-repo}/generate
+      name: repos-template-owner-template-repo-generate
+      description: REST surface for repos-template_owner-template_repo-generate.
+      operations:
+      - method: POST
+        name: createrepositoryusingtemplate
+        description: GitHub Create Repository Using Template
+        call: repo-tags-templates.createrepositoryusingtemplate
+        with:
+          template_owner: rest.template_owner
+          template_repo: rest.template_repo
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-templates-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Templates. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-create-repository-using-template
+      description: GitHub Create Repository Using Template
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-templates.createrepositoryusingtemplate
+      with:
+        template_owner: tools.template_owner
+        template_repo: tools.template_repo
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,234 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Tokens
+  description: 'GitHub Application API — Tokens. 5 operations. Lead operation: GitHub Create an Installation Access Token
+    for an App. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Tokens
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-tokens
+    baseUri: ''
+    description: GitHub Application API — Tokens business capability. Self-contained, no shared references.
+    resources:
+    - name: app-installations-installation_id-access_tokens
+      path: /app/installations/{installation_id}/access_tokens
+      operations:
+      - name: createaninstallationaccesstokenforanapp
+        method: POST
+        description: GitHub Create an Installation Access Token for an App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: applications-client_id-token
+      path: /applications/{client_id}/token
+      operations:
+      - name: checktoken
+        method: POST
+        description: GitHub Checktoken
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: resettoken
+        method: PATCH
+        description: GitHub Reset Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteanapptoken
+        method: DELETE
+        description: GitHub Delete an App Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: applications-client_id-token-scoped
+      path: /applications/{client_id}/token/scoped
+      operations:
+      - name: createscopedaccesstoken
+        method: POST
+        description: GitHub Createscoped Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-tokens-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Tokens. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app/installations/{installation-id}/access-tokens
+      name: app-installations-installation-id-access-tokens
+      description: REST surface for app-installations-installation_id-access_tokens.
+      operations:
+      - method: POST
+        name: createaninstallationaccesstokenforanapp
+        description: GitHub Create an Installation Access Token for an App
+        call: app-tokens.createaninstallationaccesstokenforanapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/{client-id}/token
+      name: applications-client-id-token
+      description: REST surface for applications-client_id-token.
+      operations:
+      - method: POST
+        name: checktoken
+        description: GitHub Checktoken
+        call: app-tokens.checktoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: resettoken
+        description: GitHub Reset Token
+        call: app-tokens.resettoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteanapptoken
+        description: GitHub Delete an App Token
+        call: app-tokens.deleteanapptoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/{client-id}/token/scoped
+      name: applications-client-id-token-scoped
+      description: REST surface for applications-client_id-token-scoped.
+      operations:
+      - method: POST
+        name: createscopedaccesstoken
+        description: GitHub Createscoped Access Token
+        call: app-tokens.createscopedaccesstoken
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-tokens-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Tokens. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-create-installation-access-token
+      description: GitHub Create an Installation Access Token for an App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-tokens.createaninstallationaccesstokenforanapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-checktoken
+      description: GitHub Checktoken
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-tokens.checktoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-reset-token
+      description: GitHub Reset Token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: app-tokens.resettoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-app-token
+      description: GitHub Delete an App Token
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: app-tokens.deleteanapptoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-createscoped-access-token
+      description: GitHub Createscoped Access Token
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-tokens.createscopedaccesstoken
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

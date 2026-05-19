@@ -1,0 +1,201 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Remove
+  description: 'github-repos-api — Remove. 3 operations. Lead operation: GitHub Remove Assignees from an Issue. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Remove
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-issues-remove
+    baseUri: ''
+    description: github-repos-api — Remove business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-issue_number-assignees
+      path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+      operations:
+      - name: removeassigneesfromanissue
+        method: DELETE
+        description: GitHub Remove Assignees from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-issues-issue_number-labels
+      path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+      operations:
+      - name: removealllabelsfromanissue
+        method: DELETE
+        description: GitHub Remove All Labels from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-issue_number-labels-name
+      path: /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
+      operations:
+      - name: removelabelfromanissue
+        method: DELETE
+        description: GitHub Remove Label from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-issues-remove-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Remove. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/assignees
+      name: repos-owner-repo-issues-issue-number-assignees
+      description: REST surface for repos-owner-repo-issues-issue_number-assignees.
+      operations:
+      - method: DELETE
+        name: removeassigneesfromanissue
+        description: GitHub Remove Assignees from an Issue
+        call: repo-issues-remove.removeassigneesfromanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/labels
+      name: repos-owner-repo-issues-issue-number-labels
+      description: REST surface for repos-owner-repo-issues-issue_number-labels.
+      operations:
+      - method: DELETE
+        name: removealllabelsfromanissue
+        description: GitHub Remove All Labels from an Issue
+        call: repo-issues-remove.removealllabelsfromanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/labels/{name}
+      name: repos-owner-repo-issues-issue-number-labels-name
+      description: REST surface for repos-owner-repo-issues-issue_number-labels-name.
+      operations:
+      - method: DELETE
+        name: removelabelfromanissue
+        description: GitHub Remove Label from an Issue
+        call: repo-issues-remove.removelabelfromanissue
+        with:
+          name: rest.name
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-issues-remove-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Remove. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-remove-assignees-issue
+      description: GitHub Remove Assignees from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-issues-remove.removeassigneesfromanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-all-labels-issue
+      description: GitHub Remove All Labels from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-issues-remove.removealllabelsfromanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-label-issue
+      description: GitHub Remove Label from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-issues-remove.removelabelfromanissue
+      with:
+        name: tools.name
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

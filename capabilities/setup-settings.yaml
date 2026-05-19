@@ -1,0 +1,105 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Setup API — Settings
+  description: 'GitHub Setup API — Settings. 2 operations. Lead operation: GitHub Get Settings. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Settings
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: setup-settings
+    baseUri: ''
+    description: GitHub Setup API — Settings business capability. Self-contained, no shared references.
+    resources:
+    - name: setup-api-settings
+      path: /setup/api/settings
+      operations:
+      - name: getsettings
+        method: GET
+        description: GitHub Get Settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setsettings
+        method: PUT
+        description: GitHub Set Settings
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: setup-settings-rest
+    port: 8080
+    description: REST adapter for GitHub Setup API — Settings. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/setup/api/settings
+      name: setup-api-settings
+      description: REST surface for setup-api-settings.
+      operations:
+      - method: GET
+        name: getsettings
+        description: GitHub Get Settings
+        call: setup-settings.getsettings
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setsettings
+        description: GitHub Set Settings
+        call: setup-settings.setsettings
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: setup-settings-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Setup API — Settings. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-settings
+      description: GitHub Get Settings
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: setup-settings.getsettings
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-settings
+      description: GitHub Set Settings
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: setup-settings.setsettings
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,128 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Specific
+  description: 'GitHub Auth API — Specific. 2 operations. Lead operation: GitHub Get or Create an Authorization Forspecific
+    App. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Specific
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-specific
+    baseUri: ''
+    description: GitHub Auth API — Specific business capability. Self-contained, no shared references.
+    resources:
+    - name: authorizations-clients-client_id
+      path: /authorizations/clients/{client_id}
+      operations:
+      - name: getorcreateanauthorizationforspecificapp
+        method: PUT
+        description: GitHub Get or Create an Authorization Forspecific App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: authorizations-clients-client_id-fingerprint
+      path: /authorizations/clients/{client_id}/{fingerprint}
+      operations:
+      - name: getorcreateanauthorizationforspecificappandfingerprint
+        method: PUT
+        description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fingerprint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-specific-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Specific. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/authorizations/clients/{client-id}
+      name: authorizations-clients-client-id
+      description: REST surface for authorizations-clients-client_id.
+      operations:
+      - method: PUT
+        name: getorcreateanauthorizationforspecificapp
+        description: GitHub Get or Create an Authorization Forspecific App
+        call: auth-specific.getorcreateanauthorizationforspecificapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authorizations/clients/{client-id}/{fingerprint}
+      name: authorizations-clients-client-id-fingerprint
+      description: REST surface for authorizations-clients-client_id-fingerprint.
+      operations:
+      - method: PUT
+        name: getorcreateanauthorizationforspecificappandfingerprint
+        description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+        call: auth-specific.getorcreateanauthorizationforspecificappandfingerprint
+        with:
+          fingerprint: rest.fingerprint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-specific-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Specific. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-create-authorization-forspecific
+      description: GitHub Get or Create an Authorization Forspecific App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: auth-specific.getorcreateanauthorizationforspecificapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-create-authorization-forspecific-2
+      description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: auth-specific.getorcreateanauthorizationforspecificappandfingerprint
+      with:
+        fingerprint: tools.fingerprint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

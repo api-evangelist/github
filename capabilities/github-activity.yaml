@@ -1,0 +1,1013 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Activity
+  description: 'GitHub v3 REST API — Activity. 31 operations. Lead operation: GitHub List Public Events. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Activity
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-activity
+    baseUri: ''
+    description: GitHub v3 REST API — Activity business capability. Self-contained, no shared references.
+    resources:
+    - name: events
+      path: /events
+      operations:
+      - name: activitylistpublicevents
+        method: GET
+        description: GitHub List Public Events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: feeds
+      path: /feeds
+      operations:
+      - name: activitygetfeeds
+        method: GET
+        description: GitHub Get Feeds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: networks-owner-repo-events
+      path: /networks/{owner}/{repo}/events
+      operations:
+      - name: activitylistpubliceventsforreponetwork
+        method: GET
+        description: GitHub List Public Events for a Network of Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: notifications
+      path: /notifications
+      operations:
+      - name: activitylistnotificationsforauthenticateduser
+        method: GET
+        description: GitHub List Notifications for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: per_page
+          in: query
+          type: integer
+          description: The number of results per page (max 50). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-
+      - name: activitymarknotificationsasread
+        method: PUT
+        description: GitHub Mark Notifications as Read
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: notifications-threads-thread_id
+      path: /notifications/threads/{thread_id}
+      operations:
+      - name: activitygetthread
+        method: GET
+        description: GitHub Get a Thread
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activitymarkthreadasread
+        method: PATCH
+        description: GitHub Mark a Thread as Read
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: notifications-threads-thread_id-subscription
+      path: /notifications/threads/{thread_id}/subscription
+      operations:
+      - name: activitygetthreadsubscriptionforauthenticateduser
+        method: GET
+        description: GitHub Get a Thread Subscription for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activitysetthreadsubscription
+        method: PUT
+        description: GitHub Set a Thread Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: activitydeletethreadsubscription
+        method: DELETE
+        description: GitHub Delete a Thread Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-events
+      path: /orgs/{org}/events
+      operations:
+      - name: activitylistpublicorgevents
+        method: GET
+        description: GitHub List Public Organization Events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-events
+      path: /repos/{owner}/{repo}/events
+      operations:
+      - name: activitylistrepoevents
+        method: GET
+        description: GitHub List Repository Events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-notifications
+      path: /repos/{owner}/{repo}/notifications
+      operations:
+      - name: activitylistreponotificationsforauthenticateduser
+        method: GET
+        description: GitHub List Repository Notifications for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activitymarkreponotificationsasread
+        method: PUT
+        description: GitHub Mark Repository Notifications as Read
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-stargazers
+      path: /repos/{owner}/{repo}/stargazers
+      operations:
+      - name: activityliststargazersforrepo
+        method: GET
+        description: GitHub List Stargazers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-subscribers
+      path: /repos/{owner}/{repo}/subscribers
+      operations:
+      - name: activitylistwatchersforrepo
+        method: GET
+        description: GitHub List Watchers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-subscription
+      path: /repos/{owner}/{repo}/subscription
+      operations:
+      - name: activitygetreposubscription
+        method: GET
+        description: GitHub Get a Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activitysetreposubscription
+        method: PUT
+        description: GitHub Set a Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: activitydeletereposubscription
+        method: DELETE
+        description: GitHub Delete a Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-starred
+      path: /user/starred
+      operations:
+      - name: activitylistreposstarredbyauthenticateduser
+        method: GET
+        description: GitHub List Repositories Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-starred-owner-repo
+      path: /user/starred/{owner}/{repo}
+      operations:
+      - name: activitycheckrepoisstarredbyauthenticateduser
+        method: GET
+        description: GitHub Check if a Repository is Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activitystarrepoforauthenticateduser
+        method: PUT
+        description: GitHub Star a Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: activityunstarrepoforauthenticateduser
+        method: DELETE
+        description: GitHub Unstar a Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-subscriptions
+      path: /user/subscriptions
+      operations:
+      - name: activitylistwatchedreposforauthenticateduser
+        method: GET
+        description: GitHub List Repositories Watched by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-events
+      path: /users/{username}/events
+      operations:
+      - name: activitylisteventsforauthenticateduser
+        method: GET
+        description: GitHub List Events for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-events-orgs-org
+      path: /users/{username}/events/orgs/{org}
+      operations:
+      - name: activitylistorgeventsforauthenticateduser
+        method: GET
+        description: GitHub List Organization Events for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-events-public
+      path: /users/{username}/events/public
+      operations:
+      - name: activitylistpubliceventsforuser
+        method: GET
+        description: GitHub List Public Events for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-received_events
+      path: /users/{username}/received_events
+      operations:
+      - name: activitylistreceivedeventsforuser
+        method: GET
+        description: GitHub List Events Received by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-received_events-public
+      path: /users/{username}/received_events/public
+      operations:
+      - name: activitylistreceivedpubliceventsforuser
+        method: GET
+        description: GitHub List Public Events Received by a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-starred
+      path: /users/{username}/starred
+      operations:
+      - name: activitylistreposstarredbyuser
+        method: GET
+        description: GitHub List Repositories Starred by a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-subscriptions
+      path: /users/{username}/subscriptions
+      operations:
+      - name: activitylistreposwatchedbyuser
+        method: GET
+        description: GitHub List Repositories Watched by a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-activity-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Activity. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/events
+      name: events
+      description: REST surface for events.
+      operations:
+      - method: GET
+        name: activitylistpublicevents
+        description: GitHub List Public Events
+        call: github-activity.activitylistpublicevents
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/feeds
+      name: feeds
+      description: REST surface for feeds.
+      operations:
+      - method: GET
+        name: activitygetfeeds
+        description: GitHub Get Feeds
+        call: github-activity.activitygetfeeds
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/networks/{owner}/{repo}/events
+      name: networks-owner-repo-events
+      description: REST surface for networks-owner-repo-events.
+      operations:
+      - method: GET
+        name: activitylistpubliceventsforreponetwork
+        description: GitHub List Public Events for a Network of Repositories
+        call: github-activity.activitylistpubliceventsforreponetwork
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/notifications
+      name: notifications
+      description: REST surface for notifications.
+      operations:
+      - method: GET
+        name: activitylistnotificationsforauthenticateduser
+        description: GitHub List Notifications for the Authenticated User
+        call: github-activity.activitylistnotificationsforauthenticateduser
+        with:
+          per_page: rest.per_page
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: activitymarknotificationsasread
+        description: GitHub Mark Notifications as Read
+        call: github-activity.activitymarknotificationsasread
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/notifications/threads/{thread-id}
+      name: notifications-threads-thread-id
+      description: REST surface for notifications-threads-thread_id.
+      operations:
+      - method: GET
+        name: activitygetthread
+        description: GitHub Get a Thread
+        call: github-activity.activitygetthread
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: activitymarkthreadasread
+        description: GitHub Mark a Thread as Read
+        call: github-activity.activitymarkthreadasread
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/notifications/threads/{thread-id}/subscription
+      name: notifications-threads-thread-id-subscription
+      description: REST surface for notifications-threads-thread_id-subscription.
+      operations:
+      - method: GET
+        name: activitygetthreadsubscriptionforauthenticateduser
+        description: GitHub Get a Thread Subscription for the Authenticated User
+        call: github-activity.activitygetthreadsubscriptionforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: activitysetthreadsubscription
+        description: GitHub Set a Thread Subscription
+        call: github-activity.activitysetthreadsubscription
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: activitydeletethreadsubscription
+        description: GitHub Delete a Thread Subscription
+        call: github-activity.activitydeletethreadsubscription
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/events
+      name: orgs-org-events
+      description: REST surface for orgs-org-events.
+      operations:
+      - method: GET
+        name: activitylistpublicorgevents
+        description: GitHub List Public Organization Events
+        call: github-activity.activitylistpublicorgevents
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/events
+      name: repos-owner-repo-events
+      description: REST surface for repos-owner-repo-events.
+      operations:
+      - method: GET
+        name: activitylistrepoevents
+        description: GitHub List Repository Events
+        call: github-activity.activitylistrepoevents
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/notifications
+      name: repos-owner-repo-notifications
+      description: REST surface for repos-owner-repo-notifications.
+      operations:
+      - method: GET
+        name: activitylistreponotificationsforauthenticateduser
+        description: GitHub List Repository Notifications for the Authenticated User
+        call: github-activity.activitylistreponotificationsforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: activitymarkreponotificationsasread
+        description: GitHub Mark Repository Notifications as Read
+        call: github-activity.activitymarkreponotificationsasread
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stargazers
+      name: repos-owner-repo-stargazers
+      description: REST surface for repos-owner-repo-stargazers.
+      operations:
+      - method: GET
+        name: activityliststargazersforrepo
+        description: GitHub List Stargazers
+        call: github-activity.activityliststargazersforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/subscribers
+      name: repos-owner-repo-subscribers
+      description: REST surface for repos-owner-repo-subscribers.
+      operations:
+      - method: GET
+        name: activitylistwatchersforrepo
+        description: GitHub List Watchers
+        call: github-activity.activitylistwatchersforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/subscription
+      name: repos-owner-repo-subscription
+      description: REST surface for repos-owner-repo-subscription.
+      operations:
+      - method: GET
+        name: activitygetreposubscription
+        description: GitHub Get a Repository Subscription
+        call: github-activity.activitygetreposubscription
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: activitysetreposubscription
+        description: GitHub Set a Repository Subscription
+        call: github-activity.activitysetreposubscription
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: activitydeletereposubscription
+        description: GitHub Delete a Repository Subscription
+        call: github-activity.activitydeletereposubscription
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/starred
+      name: user-starred
+      description: REST surface for user-starred.
+      operations:
+      - method: GET
+        name: activitylistreposstarredbyauthenticateduser
+        description: GitHub List Repositories Starred by the Authenticated User
+        call: github-activity.activitylistreposstarredbyauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/starred/{owner}/{repo}
+      name: user-starred-owner-repo
+      description: REST surface for user-starred-owner-repo.
+      operations:
+      - method: GET
+        name: activitycheckrepoisstarredbyauthenticateduser
+        description: GitHub Check if a Repository is Starred by the Authenticated User
+        call: github-activity.activitycheckrepoisstarredbyauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: activitystarrepoforauthenticateduser
+        description: GitHub Star a Repository for the Authenticated User
+        call: github-activity.activitystarrepoforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: activityunstarrepoforauthenticateduser
+        description: GitHub Unstar a Repository for the Authenticated User
+        call: github-activity.activityunstarrepoforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/subscriptions
+      name: user-subscriptions
+      description: REST surface for user-subscriptions.
+      operations:
+      - method: GET
+        name: activitylistwatchedreposforauthenticateduser
+        description: GitHub List Repositories Watched by the Authenticated User
+        call: github-activity.activitylistwatchedreposforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/events
+      name: users-username-events
+      description: REST surface for users-username-events.
+      operations:
+      - method: GET
+        name: activitylisteventsforauthenticateduser
+        description: GitHub List Events for the Authenticated User
+        call: github-activity.activitylisteventsforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/events/orgs/{org}
+      name: users-username-events-orgs-org
+      description: REST surface for users-username-events-orgs-org.
+      operations:
+      - method: GET
+        name: activitylistorgeventsforauthenticateduser
+        description: GitHub List Organization Events for the Authenticated User
+        call: github-activity.activitylistorgeventsforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/events/public
+      name: users-username-events-public
+      description: REST surface for users-username-events-public.
+      operations:
+      - method: GET
+        name: activitylistpubliceventsforuser
+        description: GitHub List Public Events for a User
+        call: github-activity.activitylistpubliceventsforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/received-events
+      name: users-username-received-events
+      description: REST surface for users-username-received_events.
+      operations:
+      - method: GET
+        name: activitylistreceivedeventsforuser
+        description: GitHub List Events Received by the Authenticated User
+        call: github-activity.activitylistreceivedeventsforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/received-events/public
+      name: users-username-received-events-public
+      description: REST surface for users-username-received_events-public.
+      operations:
+      - method: GET
+        name: activitylistreceivedpubliceventsforuser
+        description: GitHub List Public Events Received by a User
+        call: github-activity.activitylistreceivedpubliceventsforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/starred
+      name: users-username-starred
+      description: REST surface for users-username-starred.
+      operations:
+      - method: GET
+        name: activitylistreposstarredbyuser
+        description: GitHub List Repositories Starred by a User
+        call: github-activity.activitylistreposstarredbyuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/subscriptions
+      name: users-username-subscriptions
+      description: REST surface for users-username-subscriptions.
+      operations:
+      - method: GET
+        name: activitylistreposwatchedbyuser
+        description: GitHub List Repositories Watched by a User
+        call: github-activity.activitylistreposwatchedbyuser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-activity-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Activity. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-public-events
+      description: GitHub List Public Events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistpublicevents
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-feeds
+      description: GitHub Get Feeds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitygetfeeds
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-events-network
+      description: GitHub List Public Events for a Network of Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistpubliceventsforreponetwork
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-notifications-authenticated-user
+      description: GitHub List Notifications for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistnotificationsforauthenticateduser
+      with:
+        per_page: tools.per_page
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-mark-notifications-read
+      description: GitHub Mark Notifications as Read
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitymarknotificationsasread
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-thread
+      description: GitHub Get a Thread
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitygetthread
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-mark-thread-read
+      description: GitHub Mark a Thread as Read
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitymarkthreadasread
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-thread-subscription-authenticated
+      description: GitHub Get a Thread Subscription for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitygetthreadsubscriptionforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-thread-subscription
+      description: GitHub Set a Thread Subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitysetthreadsubscription
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-thread-subscription
+      description: GitHub Delete a Thread Subscription
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-activity.activitydeletethreadsubscription
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-organization-events
+      description: GitHub List Public Organization Events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistpublicorgevents
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-events
+      description: GitHub List Repository Events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistrepoevents
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-notifications-authenticated
+      description: GitHub List Repository Notifications for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreponotificationsforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-mark-repository-notifications-read
+      description: GitHub Mark Repository Notifications as Read
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitymarkreponotificationsasread
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-stargazers
+      description: GitHub List Stargazers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activityliststargazersforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-watchers
+      description: GitHub List Watchers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistwatchersforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-subscription
+      description: GitHub Get a Repository Subscription
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitygetreposubscription
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-repository-subscription
+      description: GitHub Set a Repository Subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitysetreposubscription
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository-subscription
+      description: GitHub Delete a Repository Subscription
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-activity.activitydeletereposubscription
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-starred-authenticated
+      description: GitHub List Repositories Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreposstarredbyauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-repository-is
+      description: GitHub Check if a Repository is Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitycheckrepoisstarredbyauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-star-repository-authenticated-user
+      description: GitHub Star a Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-activity.activitystarrepoforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-unstar-repository-authenticated-user
+      description: GitHub Unstar a Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-activity.activityunstarrepoforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-watched-authenticated
+      description: GitHub List Repositories Watched by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistwatchedreposforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-events-authenticated-user
+      description: GitHub List Events for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylisteventsforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-organization-events-authenticated
+      description: GitHub List Organization Events for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistorgeventsforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-events-user
+      description: GitHub List Public Events for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistpubliceventsforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-events-received-authenticated
+      description: GitHub List Events Received by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreceivedeventsforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-events-received
+      description: GitHub List Public Events Received by a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreceivedpubliceventsforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-starred-user
+      description: GitHub List Repositories Starred by a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreposstarredbyuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-watched-user
+      description: GitHub List Repositories Watched by a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-activity.activitylistreposwatchedbyuser
+      outputParameters:
+      - type: object
+        mapping: $.

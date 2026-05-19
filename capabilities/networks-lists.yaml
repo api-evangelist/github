@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Networks API — Lists
+  description: 'GitHub Networks API — Lists. 1 operations. Lead operation: GitHub List Public Events for Network of Repositories.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: networks-lists
+    baseUri: ''
+    description: GitHub Networks API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: networks-owner-repo-events
+      path: /networks/{owner}/{repo}/events
+      operations:
+      - name: listpubliceventsfornetworkofrepositories
+        method: GET
+        description: GitHub List Public Events for Network of Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: networks-lists-rest
+    port: 8080
+    description: REST adapter for GitHub Networks API — Lists. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/networks/{owner}/{repo}/events
+      name: networks-owner-repo-events
+      description: REST surface for networks-owner-repo-events.
+      operations:
+      - method: GET
+        name: listpubliceventsfornetworkofrepositories
+        description: GitHub List Public Events for Network of Repositories
+        call: networks-lists.listpubliceventsfornetworkofrepositories
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: networks-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Networks API — Lists. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-public-events-network
+      description: GitHub List Public Events for Network of Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: networks-lists.listpubliceventsfornetworkofrepositories
+      outputParameters:
+      - type: object
+        mapping: $.

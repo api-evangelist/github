@@ -1,0 +1,198 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Gists API — Lists
+  description: 'GitHub Gists API — Lists. 5 operations. Lead operation: GitHub List Public Gists. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gists-lists
+    baseUri: ''
+    description: GitHub Gists API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: gists-public
+      path: /gists/public
+      operations:
+      - name: listpublicgists
+        method: GET
+        description: GitHub List Public Gists
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-starred
+      path: /gists/starred
+      operations:
+      - name: liststarredgists
+        method: GET
+        description: GitHub List Starred Gists
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-comments
+      path: /gists/{gist_id}/comments
+      operations:
+      - name: listgistcomments
+        method: GET
+        description: GitHub List Gist Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-commits
+      path: /gists/{gist_id}/commits
+      operations:
+      - name: listgistcommits
+        method: GET
+        description: GitHub List Gist Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-forks
+      path: /gists/{gist_id}/forks
+      operations:
+      - name: listgistforks
+        method: GET
+        description: GitHub List Gist Forks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: gists-lists-rest
+    port: 8080
+    description: REST adapter for GitHub Gists API — Lists. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/gists/public
+      name: gists-public
+      description: REST surface for gists-public.
+      operations:
+      - method: GET
+        name: listpublicgists
+        description: GitHub List Public Gists
+        call: gists-lists.listpublicgists
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/starred
+      name: gists-starred
+      description: REST surface for gists-starred.
+      operations:
+      - method: GET
+        name: liststarredgists
+        description: GitHub List Starred Gists
+        call: gists-lists.liststarredgists
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/comments
+      name: gists-gist-id-comments
+      description: REST surface for gists-gist_id-comments.
+      operations:
+      - method: GET
+        name: listgistcomments
+        description: GitHub List Gist Comments
+        call: gists-lists.listgistcomments
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/commits
+      name: gists-gist-id-commits
+      description: REST surface for gists-gist_id-commits.
+      operations:
+      - method: GET
+        name: listgistcommits
+        description: GitHub List Gist Commits
+        call: gists-lists.listgistcommits
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/forks
+      name: gists-gist-id-forks
+      description: REST surface for gists-gist_id-forks.
+      operations:
+      - method: GET
+        name: listgistforks
+        description: GitHub List Gist Forks
+        call: gists-lists.listgistforks
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gists-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Gists API — Lists. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-public-gists
+      description: GitHub List Public Gists
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-lists.listpublicgists
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-starred-gists
+      description: GitHub List Starred Gists
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-lists.liststarredgists
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-gist-comments
+      description: GitHub List Gist Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-lists.listgistcomments
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-gist-commits
+      description: GitHub List Gist Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-lists.listgistcommits
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-gist-forks
+      description: GitHub List Gist Forks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-lists.listgistforks
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Download
+  description: 'GitHub Org API — Download. 1 operations. Lead operation: GitHub Download an Organization Migration Archive.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Download
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-download
+    baseUri: ''
+    description: GitHub Org API — Download business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-migrations-migration_id-archive
+      path: /orgs/{org}/migrations/{migration_id}/archive
+      operations:
+      - name: downloadanorganizationmigrationarchive
+        method: GET
+        description: GitHub Download an Organization Migration Archive
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-download-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Download. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/migrations/{migration-id}/archive
+      name: orgs-org-migrations-migration-id-archive
+      description: REST surface for orgs-org-migrations-migration_id-archive.
+      operations:
+      - method: GET
+        name: downloadanorganizationmigrationarchive
+        description: GitHub Download an Organization Migration Archive
+        call: organizations-download.downloadanorganizationmigrationarchive
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-download-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Download. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-download-organization-migration-archive
+      description: GitHub Download an Organization Migration Archive
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-download.downloadanorganizationmigrationarchive
+      outputParameters:
+      - type: object
+        mapping: $.

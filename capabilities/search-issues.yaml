@@ -1,0 +1,100 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Search API — Issues
+  description: 'GitHub Search API — Issues. 1 operations. Lead operation: GitHub Search Issues and Pull Requests. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Issues
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: search-issues
+    baseUri: ''
+    description: GitHub Search API — Issues business capability. Self-contained, no shared references.
+    resources:
+    - name: search-issues
+      path: /search/issues
+      operations:
+      - name: searchissuesandpullrequests
+        method: GET
+        description: GitHub Search Issues and Pull Requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search
+            to specific areas of GitHub Enterprise Server. The REST
+          required: true
+        - name: sort
+          in: query
+          type: string
+          description: Sorts the results of your query by the number of `comments`, `reactions`, `reactions-+1`, `reactions--1`,
+            `reactions-smile`, `reactions-thinking_face`, `reactio
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+  exposes:
+  - type: rest
+    namespace: search-issues-rest
+    port: 8080
+    description: REST adapter for GitHub Search API — Issues. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/search/issues
+      name: search-issues
+      description: REST surface for search-issues.
+      operations:
+      - method: GET
+        name: searchissuesandpullrequests
+        description: GitHub Search Issues and Pull Requests
+        call: search-issues.searchissuesandpullrequests
+        with:
+          q: rest.q
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: search-issues-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Search API — Issues. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-search-issues-and-pull
+      description: GitHub Search Issues and Pull Requests
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: search-issues.searchissuesandpullrequests
+      with:
+        q: tools.q
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

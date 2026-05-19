@@ -1,0 +1,474 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Runners
+  description: 'github-repo-actions-api — Runners. 9 operations. Lead operation: GitHub List Self-hosted Runners for Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Runners
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-runners
+    baseUri: ''
+    description: github-repo-actions-api — Runners business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-runners
+      path: /repos/{owner}/{repo}/actions/runners
+      operations:
+      - name: listselfhostedrunnersforrepository
+        method: GET
+        description: GitHub List Self-hosted Runners for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runners-downloads
+      path: /repos/{owner}/{repo}/actions/runners/downloads
+      operations:
+      - name: listrunnerapplicationsforrepository
+        method: GET
+        description: GitHub List Runner Applications for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runners-runner_id
+      path: /repos/{owner}/{repo}/actions/runners/{runner_id}
+      operations:
+      - name: getselfhostedrunnerforrepository
+        method: GET
+        description: GitHub Get Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deleteselfhostedrunnerfromrepository
+        method: DELETE
+        description: GitHub Delete Self-hosted Runner from Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runners-runner_id-labels
+      path: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+      operations:
+      - name: listlabelsforselfhostedrunnerforrepository
+        method: GET
+        description: GitHub List Labels for Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addcustomlabelstoselfhostedrunnerforrepository
+        method: POST
+        description: GitHub Add Custom Labels to Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: setcustomlabelsforselfhostedrunnerforrepository
+        method: PUT
+        description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: removeallcustomlabelsfromselfhostedrunnerforrepository
+        method: DELETE
+        description: GitHub Remove All Custom Labels from Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runners-runner_id-labels-name
+      path: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}
+      operations:
+      - name: removecustomlabelfromselfhostedrunnerforrepository
+        method: DELETE
+        description: GitHub Remove Custom Label from Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-runners-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Runners. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/runners
+      name: repos-owner-repo-actions-runners
+      description: REST surface for repos-owner-repo-actions-runners.
+      operations:
+      - method: GET
+        name: listselfhostedrunnersforrepository
+        description: GitHub List Self-hosted Runners for Repository
+        call: repo-actions-runners.listselfhostedrunnersforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/downloads
+      name: repos-owner-repo-actions-runners-downloads
+      description: REST surface for repos-owner-repo-actions-runners-downloads.
+      operations:
+      - method: GET
+        name: listrunnerapplicationsforrepository
+        description: GitHub List Runner Applications for Repository
+        call: repo-actions-runners.listrunnerapplicationsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/{runner-id}
+      name: repos-owner-repo-actions-runners-runner-id
+      description: REST surface for repos-owner-repo-actions-runners-runner_id.
+      operations:
+      - method: GET
+        name: getselfhostedrunnerforrepository
+        description: GitHub Get Self-hosted Runner for Repository
+        call: repo-actions-runners.getselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteselfhostedrunnerfromrepository
+        description: GitHub Delete Self-hosted Runner from Repository
+        call: repo-actions-runners.deleteselfhostedrunnerfromrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/{runner-id}/labels
+      name: repos-owner-repo-actions-runners-runner-id-labels
+      description: REST surface for repos-owner-repo-actions-runners-runner_id-labels.
+      operations:
+      - method: GET
+        name: listlabelsforselfhostedrunnerforrepository
+        description: GitHub List Labels for Self-hosted Runner for Repository
+        call: repo-actions-runners.listlabelsforselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addcustomlabelstoselfhostedrunnerforrepository
+        description: GitHub Add Custom Labels to Self-hosted Runner for Repository
+        call: repo-actions-runners.addcustomlabelstoselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setcustomlabelsforselfhostedrunnerforrepository
+        description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+        call: repo-actions-runners.setcustomlabelsforselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeallcustomlabelsfromselfhostedrunnerforrepository
+        description: GitHub Remove All Custom Labels from Self-hosted Runner for Repository
+        call: repo-actions-runners.removeallcustomlabelsfromselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/{runner-id}/labels/{name}
+      name: repos-owner-repo-actions-runners-runner-id-labels-name
+      description: REST surface for repos-owner-repo-actions-runners-runner_id-labels-name.
+      operations:
+      - method: DELETE
+        name: removecustomlabelfromselfhostedrunnerforrepository
+        description: GitHub Remove Custom Label from Self-hosted Runner for Repository
+        call: repo-actions-runners.removecustomlabelfromselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-runners-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Runners. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-self-hosted-runners
+      description: GitHub List Self-hosted Runners for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-runners.listselfhostedrunnersforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-runner-applications-repository
+      description: GitHub List Runner Applications for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-runners.listrunnerapplicationsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-self-hosted-runner
+      description: GitHub Get Self-hosted Runner for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-runners.getselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-self-hosted-runner
+      description: GitHub Delete Self-hosted Runner from Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-actions-runners.deleteselfhostedrunnerfromrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-labels-self-hosted
+      description: GitHub List Labels for Self-hosted Runner for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-runners.listlabelsforselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-custom-labels-self
+      description: GitHub Add Custom Labels to Self-hosted Runner for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-runners.addcustomlabelstoselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-custom-labels-self
+      description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-runners.setcustomlabelsforselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-all-custom-labels
+      description: GitHub Remove All Custom Labels from Self-hosted Runner for Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-actions-runners.removeallcustomlabelsfromselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-custom-label-self
+      description: GitHub Remove Custom Label from Self-hosted Runner for Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-actions-runners.removecustomlabelfromselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

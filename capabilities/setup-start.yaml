@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Setup API — Start
+  description: 'GitHub Setup API — Start. 1 operations. Lead operation: GitHub Start Configuration Process. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Start
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: setup-start
+    baseUri: ''
+    description: GitHub Setup API — Start business capability. Self-contained, no shared references.
+    resources:
+    - name: setup-api-configure
+      path: /setup/api/configure
+      operations:
+      - name: startconfigurationprocess
+        method: POST
+        description: GitHub Start Configuration Process
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: setup-start-rest
+    port: 8080
+    description: REST adapter for GitHub Setup API — Start. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/setup/api/configure
+      name: setup-api-configure
+      description: REST surface for setup-api-configure.
+      operations:
+      - method: POST
+        name: startconfigurationprocess
+        description: GitHub Start Configuration Process
+        call: setup-start.startconfigurationprocess
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: setup-start-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Setup API — Start. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-start-configuration-process
+      description: GitHub Start Configuration Process
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: setup-start.startconfigurationprocess
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,596 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Packages
+  description: 'GitHub User API — Packages. 11 operations. Lead operation: GitHub Get List of Conflicting Packages During
+    Docker Migration for Authenticated-user. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Packages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-packages
+    baseUri: ''
+    description: GitHub User API — Packages business capability. Self-contained, no shared references.
+    resources:
+    - name: user-docker-conflicts
+      path: /user/docker/conflicts
+      operations:
+      - name: getlistofconflictingpackagesduringdockermigrationforauthenticateduser
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-packages
+      path: /user/packages
+      operations:
+      - name: listpackagesfortheauthenticatedusersnamespace
+        method: GET
+        description: GitHub List Packages for the Authenticated User's Namespace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-docker-conflicts
+      path: /users/{username}/docker/conflicts
+      operations:
+      - name: getlistofconflictingpackagesduringdockermigrationforuser
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages
+      path: /users/{username}/packages
+      operations:
+      - name: listpackagesforuser
+        method: GET
+        description: GitHub List Packages for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages-package_type-package_name
+      path: /users/{username}/packages/{package_type}/{package_name}
+      operations:
+      - name: getpackageforuser
+        method: GET
+        description: GitHub Get Package for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletepackageforuser
+        method: DELETE
+        description: GitHub Delete Package for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages-package_type-package_name-restore
+      path: /users/{username}/packages/{package_type}/{package_name}/restore
+      operations:
+      - name: restorepackageforuser
+        method: POST
+        description: GitHub Restore Package for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: query
+          type: string
+          description: package token
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages-package_type-package_name-versions
+      path: /users/{username}/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: listpackageversionsforpackageownedbyuser
+        method: GET
+        description: GitHub List Package Versions for Package Owned by User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages-package_type-package_name-versions-package_version_id
+      path: /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}
+      operations:
+      - name: getpackageversionforuser
+        method: GET
+        description: GitHub Get Package Version for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletepackageversionforuser
+        method: DELETE
+        description: GitHub Delete Package Version for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-packages-package_type-package_name-versions-package_version_id-re
+      path: /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+      operations:
+      - name: restorepackageversionforuser
+        method: POST
+        description: GitHub Restore Package Version for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-packages-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Packages. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/docker/conflicts
+      name: user-docker-conflicts
+      description: REST surface for user-docker-conflicts.
+      operations:
+      - method: GET
+        name: getlistofconflictingpackagesduringdockermigrationforauthenticateduser
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+        call: users-packages.getlistofconflictingpackagesduringdockermigrationforauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages
+      name: user-packages
+      description: REST surface for user-packages.
+      operations:
+      - method: GET
+        name: listpackagesfortheauthenticatedusersnamespace
+        description: GitHub List Packages for the Authenticated User's Namespace
+        call: users-packages.listpackagesfortheauthenticatedusersnamespace
+        with:
+          package_type: rest.package_type
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/docker/conflicts
+      name: users-username-docker-conflicts
+      description: REST surface for users-username-docker-conflicts.
+      operations:
+      - method: GET
+        name: getlistofconflictingpackagesduringdockermigrationforuser
+        description: GitHub Get List of Conflicting Packages During Docker Migration for User
+        call: users-packages.getlistofconflictingpackagesduringdockermigrationforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages
+      name: users-username-packages
+      description: REST surface for users-username-packages.
+      operations:
+      - method: GET
+        name: listpackagesforuser
+        description: GitHub List Packages for User
+        call: users-packages.listpackagesforuser
+        with:
+          package_type: rest.package_type
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}
+      name: users-username-packages-package-type-package-name
+      description: REST surface for users-username-packages-package_type-package_name.
+      operations:
+      - method: GET
+        name: getpackageforuser
+        description: GitHub Get Package for User
+        call: users-packages.getpackageforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepackageforuser
+        description: GitHub Delete Package for User
+        call: users-packages.deletepackageforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/restore
+      name: users-username-packages-package-type-package-name-restore
+      description: REST surface for users-username-packages-package_type-package_name-restore.
+      operations:
+      - method: POST
+        name: restorepackageforuser
+        description: GitHub Restore Package for User
+        call: users-packages.restorepackageforuser
+        with:
+          token: rest.token
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions
+      name: users-username-packages-package-type-package-name-versions
+      description: REST surface for users-username-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: listpackageversionsforpackageownedbyuser
+        description: GitHub List Package Versions for Package Owned by User
+        call: users-packages.listpackageversionsforpackageownedbyuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions/{package-version-id}
+      name: users-username-packages-package-type-package-name-versions-package-version-id
+      description: REST surface for users-username-packages-package_type-package_name-versions-package_version_id.
+      operations:
+      - method: GET
+        name: getpackageversionforuser
+        description: GitHub Get Package Version for User
+        call: users-packages.getpackageversionforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepackageversionforuser
+        description: GitHub Delete Package Version for User
+        call: users-packages.deletepackageversionforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions/{package-version-id}/restore
+      name: users-username-packages-package-type-package-name-versions-package-version-id-re
+      description: REST surface for users-username-packages-package_type-package_name-versions-package_version_id-re.
+      operations:
+      - method: POST
+        name: restorepackageversionforuser
+        description: GitHub Restore Package Version for User
+        call: users-packages.restorepackageversionforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-packages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Packages. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-list-conflicting-packages
+      description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.getlistofconflictingpackagesduringdockermigrationforauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-authenticated-user-s
+      description: GitHub List Packages for the Authenticated User's Namespace
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.listpackagesfortheauthenticatedusersnamespace
+      with:
+        package_type: tools.package_type
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-list-conflicting-packages-2
+      description: GitHub Get List of Conflicting Packages During Docker Migration for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.getlistofconflictingpackagesduringdockermigrationforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-user
+      description: GitHub List Packages for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.listpackagesforuser
+      with:
+        package_type: tools.package_type
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-user
+      description: GitHub Get Package for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.getpackageforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-user
+      description: GitHub Delete Package for User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-packages.deletepackageforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-user
+      description: GitHub Restore Package for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-packages.restorepackageforuser
+      with:
+        token: tools.token
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-package-versions-package
+      description: GitHub List Package Versions for Package Owned by User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.listpackageversionsforpackageownedbyuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-version-user
+      description: GitHub Get Package Version for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-packages.getpackageversionforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-version-user
+      description: GitHub Delete Package Version for User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-packages.deletepackageversionforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-version-user
+      description: GitHub Restore Package Version for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-packages.restorepackageversionforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

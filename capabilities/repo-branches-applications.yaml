@@ -1,0 +1,238 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Applications
+  description: 'github-repos-api — Applications. 4 operations. Lead operation: GitHub Get Apps with Access to the Protected
+    Branch. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Applications
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-branches-applications
+    baseUri: ''
+    description: github-repos-api — Applications business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: getappswithaccesstotheprotectedbranch
+        method: GET
+        description: GitHub Get Apps with Access to the Protected Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addappaccessrestrictions
+        method: POST
+        description: GitHub Add App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: setappaccessrestrictions
+        method: PUT
+        description: GitHub Set App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeappaccessrestrictions
+        method: DELETE
+        description: GitHub Remove App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-branches-applications-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Applications. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: GET
+        name: getappswithaccesstotheprotectedbranch
+        description: GitHub Get Apps with Access to the Protected Branch
+        call: repo-branches-applications.getappswithaccesstotheprotectedbranch
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addappaccessrestrictions
+        description: GitHub Add App Access Restrictions
+        call: repo-branches-applications.addappaccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setappaccessrestrictions
+        description: GitHub Set App Access Restrictions
+        call: repo-branches-applications.setappaccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeappaccessrestrictions
+        description: GitHub Remove App Access Restrictions
+        call: repo-branches-applications.removeappaccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-branches-applications-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Applications. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-apps-access-protected
+      description: GitHub Get Apps with Access to the Protected Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-branches-applications.getappswithaccesstotheprotectedbranch
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-app-access-restrictions
+      description: GitHub Add App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-branches-applications.addappaccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-app-access-restrictions
+      description: GitHub Set App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-branches-applications.setappaccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-app-access-restrictions
+      description: GitHub Remove App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-branches-applications.removeappaccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

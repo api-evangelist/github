@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Octocat API — Get
+  description: 'GitHub Octocat API — Get. 1 operations. Lead operation: GitHub Get Octocat. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: octocat-get
+    baseUri: ''
+    description: GitHub Octocat API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: octocat
+      path: /octocat
+      operations:
+      - name: getoctocat
+        method: GET
+        description: GitHub Get Octocat
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: s
+          in: query
+          type: string
+          description: The words to show in Octocat's speech bubble
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: octocat-get-rest
+    port: 8080
+    description: REST adapter for GitHub Octocat API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/octocat
+      name: octocat
+      description: REST surface for octocat.
+      operations:
+      - method: GET
+        name: getoctocat
+        description: GitHub Get Octocat
+        call: octocat-get.getoctocat
+        with:
+          s: rest.s
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: octocat-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Octocat API — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-octocat
+      description: GitHub Get Octocat
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: octocat-get.getoctocat
+      with:
+        s: tools.s
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,1550 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Issues
+  description: 'GitHub v3 REST API — Issues. 40 operations. Lead operation: GitHub List Issues Assigned to the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Issues
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-issues
+    baseUri: ''
+    description: GitHub v3 REST API — Issues business capability. Self-contained, no shared references.
+    resources:
+    - name: issues
+      path: /issues
+      operations:
+      - name: issueslist
+        method: GET
+        description: GitHub List Issues Assigned to the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Indicates which sorts of issues to return. `assigned` means issues assigned to you. `created` means
+            issues created by you. `mentioned` means issues mentioning y
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the issues to return.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by.
+        - name: collab
+          in: query
+          type: boolean
+        - name: orgs
+          in: query
+          type: boolean
+        - name: owned
+          in: query
+          type: boolean
+        - name: pulls
+          in: query
+          type: boolean
+    - name: orgs-org-issues
+      path: /orgs/{org}/issues
+      operations:
+      - name: issueslistfororg
+        method: GET
+        description: GitHub List Organization Issues Assigned to the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Indicates which sorts of issues to return. `assigned` means issues assigned to you. `created` means
+            issues created by you. `mentioned` means issues mentioning y
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the issues to return.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by.
+    - name: repos-owner-repo-assignees
+      path: /repos/{owner}/{repo}/assignees
+      operations:
+      - name: issueslistassignees
+        method: GET
+        description: GitHub List Assignees
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-assignees-assignee
+      path: /repos/{owner}/{repo}/assignees/{assignee}
+      operations:
+      - name: issuescheckusercanbeassigned
+        method: GET
+        description: GitHub Check if a User Can Be Assigned
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assignee
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-issues
+      path: /repos/{owner}/{repo}/issues
+      operations:
+      - name: issueslistforrepo
+        method: GET
+        description: GitHub List Repository Issues
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: milestone
+          in: query
+          type: string
+          description: If an `integer` is passed, it should refer to a milestone by its `number` field. If the string `*`
+            is passed, issues with any milestone are accepted. If the str
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the issues to return.
+        - name: assignee
+          in: query
+          type: string
+          description: Can be the name of a user. Pass in `none` for issues with no assigned user, and `*` for issues assigned
+            to any user.
+        - name: creator
+          in: query
+          type: string
+          description: The user that created the issue.
+        - name: mentioned
+          in: query
+          type: string
+          description: A user that's mentioned in the issue.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by.
+      - name: issuescreate
+        method: POST
+        description: GitHub Create an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-comments
+      path: /repos/{owner}/{repo}/issues/comments
+      operations:
+      - name: issueslistcommentsforrepo
+        method: GET
+        description: GitHub List Issue Comments for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: direction
+          in: query
+          type: string
+          description: Either `asc` or `desc`. Ignored without the `sort` parameter.
+    - name: repos-owner-repo-issues-comments-comment_id
+      path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+      operations:
+      - name: issuesgetcomment
+        method: GET
+        description: GitHub Get an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuesupdatecomment
+        method: PATCH
+        description: GitHub Update an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: issuesdeletecomment
+        method: DELETE
+        description: GitHub Delete an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-issues-events
+      path: /repos/{owner}/{repo}/issues/events
+      operations:
+      - name: issueslisteventsforrepo
+        method: GET
+        description: GitHub List Issue Events for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-issues-events-event_id
+      path: /repos/{owner}/{repo}/issues/events/{event_id}
+      operations:
+      - name: issuesgetevent
+        method: GET
+        description: GitHub Get an Issue Event
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_id
+          in: path
+          type: integer
+          required: true
+    - name: repos-owner-repo-issues-issue_number
+      path: /repos/{owner}/{repo}/issues/{issue_number}
+      operations:
+      - name: issuesget
+        method: GET
+        description: GitHub Get an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuesupdate
+        method: PATCH
+        description: GitHub Update an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-issues-issue_number-assignees
+      path: /repos/{owner}/{repo}/issues/{issue_number}/assignees
+      operations:
+      - name: issuesaddassignees
+        method: POST
+        description: GitHub Add Assignees to an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuesremoveassignees
+        method: DELETE
+        description: GitHub Remove Assignees from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-issues-issue_number-assignees-assignee
+      path: /repos/{owner}/{repo}/issues/{issue_number}/assignees/{assignee}
+      operations:
+      - name: issuescheckusercanbeassignedtoissue
+        method: GET
+        description: GitHub Check if a User Can Be Assigned to a Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assignee
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-issues-issue_number-comments
+      path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+      operations:
+      - name: issueslistcomments
+        method: GET
+        description: GitHub List Issue Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuescreatecomment
+        method: POST
+        description: GitHub Create an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-issue_number-events
+      path: /repos/{owner}/{repo}/issues/{issue_number}/events
+      operations:
+      - name: issueslistevents
+        method: GET
+        description: GitHub List Issue Events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-issues-issue_number-labels
+      path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+      operations:
+      - name: issueslistlabelsonissue
+        method: GET
+        description: GitHub List Labels for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuesaddlabels
+        method: POST
+        description: GitHub Add Labels to an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuessetlabels
+        method: PUT
+        description: GitHub Set Labels for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuesremovealllabels
+        method: DELETE
+        description: GitHub Remove All Labels from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-issues-issue_number-labels-name
+      path: /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}
+      operations:
+      - name: issuesremovelabel
+        method: DELETE
+        description: GitHub Remove a Label from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-issues-issue_number-lock
+      path: /repos/{owner}/{repo}/issues/{issue_number}/lock
+      operations:
+      - name: issueslock
+        method: PUT
+        description: GitHub Lock an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuesunlock
+        method: DELETE
+        description: GitHub Unlock an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-issues-issue_number-timeline
+      path: /repos/{owner}/{repo}/issues/{issue_number}/timeline
+      operations:
+      - name: issueslisteventsfortimeline
+        method: GET
+        description: GitHub List Timeline Events for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-labels
+      path: /repos/{owner}/{repo}/labels
+      operations:
+      - name: issueslistlabelsforrepo
+        method: GET
+        description: GitHub List Labels for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuescreatelabel
+        method: POST
+        description: GitHub Create a Label
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-labels-name
+      path: /repos/{owner}/{repo}/labels/{name}
+      operations:
+      - name: issuesgetlabel
+        method: GET
+        description: GitHub Get a Label
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+      - name: issuesupdatelabel
+        method: PATCH
+        description: GitHub Update a Label
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuesdeletelabel
+        method: DELETE
+        description: GitHub Delete a Label
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-milestones
+      path: /repos/{owner}/{repo}/milestones
+      operations:
+      - name: issueslistmilestones
+        method: GET
+        description: GitHub List Milestones
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: The state of the milestone. Either `open`, `closed`, or `all`.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by. Either `due_on` or `completeness`.
+        - name: direction
+          in: query
+          type: string
+          description: The direction of the sort. Either `asc` or `desc`.
+      - name: issuescreatemilestone
+        method: POST
+        description: GitHub Create a Milestone
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-milestones-milestone_number
+      path: /repos/{owner}/{repo}/milestones/{milestone_number}
+      operations:
+      - name: issuesgetmilestone
+        method: GET
+        description: GitHub Get a Milestone
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: issuesupdatemilestone
+        method: PATCH
+        description: GitHub Update a Milestone
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: issuesdeletemilestone
+        method: DELETE
+        description: GitHub Delete a Milestone
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-milestones-milestone_number-labels
+      path: /repos/{owner}/{repo}/milestones/{milestone_number}/labels
+      operations:
+      - name: issueslistlabelsformilestone
+        method: GET
+        description: GitHub List Labels for Issues in a Milestone
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-issues
+      path: /user/issues
+      operations:
+      - name: issueslistforauthenticateduser
+        method: GET
+        description: GitHub List User Account Issues Assigned to the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Indicates which sorts of issues to return. `assigned` means issues assigned to you. `created` means
+            issues created by you. `mentioned` means issues mentioning y
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the issues to return.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by.
+  exposes:
+  - type: rest
+    namespace: github-issues-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Issues. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/issues
+      name: issues
+      description: REST surface for issues.
+      operations:
+      - method: GET
+        name: issueslist
+        description: GitHub List Issues Assigned to the Authenticated User
+        call: github-issues.issueslist
+        with:
+          filter: rest.filter
+          state: rest.state
+          sort: rest.sort
+          collab: rest.collab
+          orgs: rest.orgs
+          owned: rest.owned
+          pulls: rest.pulls
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/issues
+      name: orgs-org-issues
+      description: REST surface for orgs-org-issues.
+      operations:
+      - method: GET
+        name: issueslistfororg
+        description: GitHub List Organization Issues Assigned to the Authenticated User
+        call: github-issues.issueslistfororg
+        with:
+          filter: rest.filter
+          state: rest.state
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/assignees
+      name: repos-owner-repo-assignees
+      description: REST surface for repos-owner-repo-assignees.
+      operations:
+      - method: GET
+        name: issueslistassignees
+        description: GitHub List Assignees
+        call: github-issues.issueslistassignees
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/assignees/{assignee}
+      name: repos-owner-repo-assignees-assignee
+      description: REST surface for repos-owner-repo-assignees-assignee.
+      operations:
+      - method: GET
+        name: issuescheckusercanbeassigned
+        description: GitHub Check if a User Can Be Assigned
+        call: github-issues.issuescheckusercanbeassigned
+        with:
+          assignee: rest.assignee
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues
+      name: repos-owner-repo-issues
+      description: REST surface for repos-owner-repo-issues.
+      operations:
+      - method: GET
+        name: issueslistforrepo
+        description: GitHub List Repository Issues
+        call: github-issues.issueslistforrepo
+        with:
+          milestone: rest.milestone
+          state: rest.state
+          assignee: rest.assignee
+          creator: rest.creator
+          mentioned: rest.mentioned
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: issuescreate
+        description: GitHub Create an Issue
+        call: github-issues.issuescreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/comments
+      name: repos-owner-repo-issues-comments
+      description: REST surface for repos-owner-repo-issues-comments.
+      operations:
+      - method: GET
+        name: issueslistcommentsforrepo
+        description: GitHub List Issue Comments for a Repository
+        call: github-issues.issueslistcommentsforrepo
+        with:
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/comments/{comment-id}
+      name: repos-owner-repo-issues-comments-comment-id
+      description: REST surface for repos-owner-repo-issues-comments-comment_id.
+      operations:
+      - method: GET
+        name: issuesgetcomment
+        description: GitHub Get an Issue Comment
+        call: github-issues.issuesgetcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: issuesupdatecomment
+        description: GitHub Update an Issue Comment
+        call: github-issues.issuesupdatecomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesdeletecomment
+        description: GitHub Delete an Issue Comment
+        call: github-issues.issuesdeletecomment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/events
+      name: repos-owner-repo-issues-events
+      description: REST surface for repos-owner-repo-issues-events.
+      operations:
+      - method: GET
+        name: issueslisteventsforrepo
+        description: GitHub List Issue Events for a Repository
+        call: github-issues.issueslisteventsforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/events/{event-id}
+      name: repos-owner-repo-issues-events-event-id
+      description: REST surface for repos-owner-repo-issues-events-event_id.
+      operations:
+      - method: GET
+        name: issuesgetevent
+        description: GitHub Get an Issue Event
+        call: github-issues.issuesgetevent
+        with:
+          event_id: rest.event_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}
+      name: repos-owner-repo-issues-issue-number
+      description: REST surface for repos-owner-repo-issues-issue_number.
+      operations:
+      - method: GET
+        name: issuesget
+        description: GitHub Get an Issue
+        call: github-issues.issuesget
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: issuesupdate
+        description: GitHub Update an Issue
+        call: github-issues.issuesupdate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/assignees
+      name: repos-owner-repo-issues-issue-number-assignees
+      description: REST surface for repos-owner-repo-issues-issue_number-assignees.
+      operations:
+      - method: POST
+        name: issuesaddassignees
+        description: GitHub Add Assignees to an Issue
+        call: github-issues.issuesaddassignees
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesremoveassignees
+        description: GitHub Remove Assignees from an Issue
+        call: github-issues.issuesremoveassignees
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/assignees/{assignee}
+      name: repos-owner-repo-issues-issue-number-assignees-assignee
+      description: REST surface for repos-owner-repo-issues-issue_number-assignees-assignee.
+      operations:
+      - method: GET
+        name: issuescheckusercanbeassignedtoissue
+        description: GitHub Check if a User Can Be Assigned to a Issue
+        call: github-issues.issuescheckusercanbeassignedtoissue
+        with:
+          assignee: rest.assignee
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/comments
+      name: repos-owner-repo-issues-issue-number-comments
+      description: REST surface for repos-owner-repo-issues-issue_number-comments.
+      operations:
+      - method: GET
+        name: issueslistcomments
+        description: GitHub List Issue Comments
+        call: github-issues.issueslistcomments
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: issuescreatecomment
+        description: GitHub Create an Issue Comment
+        call: github-issues.issuescreatecomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/events
+      name: repos-owner-repo-issues-issue-number-events
+      description: REST surface for repos-owner-repo-issues-issue_number-events.
+      operations:
+      - method: GET
+        name: issueslistevents
+        description: GitHub List Issue Events
+        call: github-issues.issueslistevents
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/labels
+      name: repos-owner-repo-issues-issue-number-labels
+      description: REST surface for repos-owner-repo-issues-issue_number-labels.
+      operations:
+      - method: GET
+        name: issueslistlabelsonissue
+        description: GitHub List Labels for an Issue
+        call: github-issues.issueslistlabelsonissue
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: issuesaddlabels
+        description: GitHub Add Labels to an Issue
+        call: github-issues.issuesaddlabels
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: issuessetlabels
+        description: GitHub Set Labels for an Issue
+        call: github-issues.issuessetlabels
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesremovealllabels
+        description: GitHub Remove All Labels from an Issue
+        call: github-issues.issuesremovealllabels
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/labels/{name}
+      name: repos-owner-repo-issues-issue-number-labels-name
+      description: REST surface for repos-owner-repo-issues-issue_number-labels-name.
+      operations:
+      - method: DELETE
+        name: issuesremovelabel
+        description: GitHub Remove a Label from an Issue
+        call: github-issues.issuesremovelabel
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/lock
+      name: repos-owner-repo-issues-issue-number-lock
+      description: REST surface for repos-owner-repo-issues-issue_number-lock.
+      operations:
+      - method: PUT
+        name: issueslock
+        description: GitHub Lock an Issue
+        call: github-issues.issueslock
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesunlock
+        description: GitHub Unlock an Issue
+        call: github-issues.issuesunlock
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/timeline
+      name: repos-owner-repo-issues-issue-number-timeline
+      description: REST surface for repos-owner-repo-issues-issue_number-timeline.
+      operations:
+      - method: GET
+        name: issueslisteventsfortimeline
+        description: GitHub List Timeline Events for an Issue
+        call: github-issues.issueslisteventsfortimeline
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/labels
+      name: repos-owner-repo-labels
+      description: REST surface for repos-owner-repo-labels.
+      operations:
+      - method: GET
+        name: issueslistlabelsforrepo
+        description: GitHub List Labels for a Repository
+        call: github-issues.issueslistlabelsforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: issuescreatelabel
+        description: GitHub Create a Label
+        call: github-issues.issuescreatelabel
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/labels/{name}
+      name: repos-owner-repo-labels-name
+      description: REST surface for repos-owner-repo-labels-name.
+      operations:
+      - method: GET
+        name: issuesgetlabel
+        description: GitHub Get a Label
+        call: github-issues.issuesgetlabel
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: issuesupdatelabel
+        description: GitHub Update a Label
+        call: github-issues.issuesupdatelabel
+        with:
+          name: rest.name
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesdeletelabel
+        description: GitHub Delete a Label
+        call: github-issues.issuesdeletelabel
+        with:
+          name: rest.name
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/milestones
+      name: repos-owner-repo-milestones
+      description: REST surface for repos-owner-repo-milestones.
+      operations:
+      - method: GET
+        name: issueslistmilestones
+        description: GitHub List Milestones
+        call: github-issues.issueslistmilestones
+        with:
+          state: rest.state
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: issuescreatemilestone
+        description: GitHub Create a Milestone
+        call: github-issues.issuescreatemilestone
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/milestones/{milestone-number}
+      name: repos-owner-repo-milestones-milestone-number
+      description: REST surface for repos-owner-repo-milestones-milestone_number.
+      operations:
+      - method: GET
+        name: issuesgetmilestone
+        description: GitHub Get a Milestone
+        call: github-issues.issuesgetmilestone
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: issuesupdatemilestone
+        description: GitHub Update a Milestone
+        call: github-issues.issuesupdatemilestone
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: issuesdeletemilestone
+        description: GitHub Delete a Milestone
+        call: github-issues.issuesdeletemilestone
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/milestones/{milestone-number}/labels
+      name: repos-owner-repo-milestones-milestone-number-labels
+      description: REST surface for repos-owner-repo-milestones-milestone_number-labels.
+      operations:
+      - method: GET
+        name: issueslistlabelsformilestone
+        description: GitHub List Labels for Issues in a Milestone
+        call: github-issues.issueslistlabelsformilestone
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/issues
+      name: user-issues
+      description: REST surface for user-issues.
+      operations:
+      - method: GET
+        name: issueslistforauthenticateduser
+        description: GitHub List User Account Issues Assigned to the Authenticated User
+        call: github-issues.issueslistforauthenticateduser
+        with:
+          filter: rest.filter
+          state: rest.state
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-issues-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Issues. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-issues-assigned-authenticated
+      description: GitHub List Issues Assigned to the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslist
+      with:
+        filter: tools.filter
+        state: tools.state
+        sort: tools.sort
+        collab: tools.collab
+        orgs: tools.orgs
+        owned: tools.owned
+        pulls: tools.pulls
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-organization-issues-assigned
+      description: GitHub List Organization Issues Assigned to the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistfororg
+      with:
+        filter: tools.filter
+        state: tools.state
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-assignees
+      description: GitHub List Assignees
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistassignees
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-user-can
+      description: GitHub Check if a User Can Be Assigned
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuescheckusercanbeassigned
+      with:
+        assignee: tools.assignee
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-issues
+      description: GitHub List Repository Issues
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistforrepo
+      with:
+        milestone: tools.milestone
+        state: tools.state
+        assignee: tools.assignee
+        creator: tools.creator
+        mentioned: tools.mentioned
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-issue
+      description: GitHub Create an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuescreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-issue-comments-repository
+      description: GitHub List Issue Comments for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistcommentsforrepo
+      with:
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-issue-comment
+      description: GitHub Get an Issue Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesgetcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-issue-comment
+      description: GitHub Update an Issue Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesupdatecomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-issue-comment
+      description: GitHub Delete an Issue Comment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesdeletecomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-issue-events-repository
+      description: GitHub List Issue Events for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslisteventsforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-issue-event
+      description: GitHub Get an Issue Event
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesgetevent
+      with:
+        event_id: tools.event_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-issue
+      description: GitHub Get an Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesget
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-issue
+      description: GitHub Update an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesupdate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-assignees-issue
+      description: GitHub Add Assignees to an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuesaddassignees
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-assignees-issue
+      description: GitHub Remove Assignees from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesremoveassignees
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-user-can-2
+      description: GitHub Check if a User Can Be Assigned to a Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuescheckusercanbeassignedtoissue
+      with:
+        assignee: tools.assignee
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-issue-comments
+      description: GitHub List Issue Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistcomments
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-issue-comment
+      description: GitHub Create an Issue Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuescreatecomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-issue-events
+      description: GitHub List Issue Events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistevents
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-labels-issue
+      description: GitHub List Labels for an Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistlabelsonissue
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-labels-issue
+      description: GitHub Add Labels to an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuesaddlabels
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-labels-issue
+      description: GitHub Set Labels for an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issuessetlabels
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-all-labels-issue
+      description: GitHub Remove All Labels from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesremovealllabels
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-label-issue
+      description: GitHub Remove a Label from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesremovelabel
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-lock-issue
+      description: GitHub Lock an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslock
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-unlock-issue
+      description: GitHub Unlock an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesunlock
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-timeline-events-issue
+      description: GitHub List Timeline Events for an Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslisteventsfortimeline
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-labels-repository
+      description: GitHub List Labels for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistlabelsforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-label
+      description: GitHub Create a Label
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuescreatelabel
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-label
+      description: GitHub Get a Label
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesgetlabel
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-label
+      description: GitHub Update a Label
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesupdatelabel
+      with:
+        name: tools.name
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-label
+      description: GitHub Delete a Label
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesdeletelabel
+      with:
+        name: tools.name
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-milestones
+      description: GitHub List Milestones
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistmilestones
+      with:
+        state: tools.state
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-milestone
+      description: GitHub Create a Milestone
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-issues.issuescreatemilestone
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-milestone
+      description: GitHub Get a Milestone
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesgetmilestone
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-milestone
+      description: GitHub Update a Milestone
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-issues.issuesupdatemilestone
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-milestone
+      description: GitHub Delete a Milestone
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-issues.issuesdeletemilestone
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-labels-issues-milestone
+      description: GitHub List Labels for Issues in a Milestone
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistlabelsformilestone
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-user-account-issues
+      description: GitHub List User Account Issues Assigned to the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-issues.issueslistforauthenticateduser
+      with:
+        filter: tools.filter
+        state: tools.state
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.

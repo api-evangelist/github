@@ -1,0 +1,538 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Permissions
+  description: 'GitHub Repos API — Permissions. 10 operations. Lead operation: List Repository Fine-grained Permissions For
+    An Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Permissions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-permissions
+    baseUri: ''
+    description: GitHub Repos API — Permissions business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-repository-fine-grained-permissions
+      path: /orgs/{org}/repository-fine-grained-permissions
+      operations:
+      - name: listrepositoryfinegrainedpermissionsforanorganization
+        method: GET
+        description: List Repository Fine-grained Permissions For An Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: orgs-org-teams-team_slug-repos-owner-repo
+      path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+      operations:
+      - name: checkteampermissionsforrepository
+        method: GET
+        description: Check Team Permissions For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addorupdateteamrepositorypermissions
+        method: PUT
+        description: Add Or Update Team Repository Permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-actions-permissions
+      path: /repos/{owner}/{repo}/actions/permissions
+      operations:
+      - name: getgithubactionspermissionsforrepository
+        method: GET
+        description: Get Github Actions Permissions For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: setgithubactionspermissionsforrepository
+        method: PUT
+        description: Set Github Actions Permissions For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-permissions-workflow
+      path: /repos/{owner}/{repo}/actions/permissions/workflow
+      operations:
+      - name: getdefaultworkflowpermissionsforrepository
+        method: GET
+        description: Get Default Workflow Permissions For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: setdefaultworkflowpermissionsforrepository
+        method: PUT
+        description: Set Default Workflow Permissions For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-collaborators-username-permission
+      path: /repos/{owner}/{repo}/collaborators/{username}/permission
+      operations:
+      - name: getrepositorypermissionsforuser
+        method: GET
+        description: Get Repository Permissions For User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: teams-team_id-repos-owner-repo
+      path: /teams/{team_id}/repos/{owner}/{repo}
+      operations:
+      - name: checkteampermissionsforrepositorylegacy
+        method: GET
+        description: Check Team Permissions For Repository (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addorupdateteamrepositorypermissionslegacy
+        method: PUT
+        description: Add Or Update Team Repository Permissions (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-permissions-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Permissions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/orgs/{org}/repository-fine-grained-permissions
+      name: orgs-org-repository-fine-grained-permissions
+      description: REST surface for orgs-org-repository-fine-grained-permissions.
+      operations:
+      - method: GET
+        name: listrepositoryfinegrainedpermissionsforanorganization
+        description: List Repository Fine-grained Permissions For An Organization
+        call: temp-permissions.listrepositoryfinegrainedpermissionsforanorganization
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/repos/{owner}/{repo}
+      name: orgs-org-teams-team-slug-repos-owner-repo
+      description: REST surface for orgs-org-teams-team_slug-repos-owner-repo.
+      operations:
+      - method: GET
+        name: checkteampermissionsforrepository
+        description: Check Team Permissions For Repository
+        call: temp-permissions.checkteampermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteamrepositorypermissions
+        description: Add Or Update Team Repository Permissions
+        call: temp-permissions.addorupdateteamrepositorypermissions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions
+      name: repos-owner-repo-actions-permissions
+      description: REST surface for repos-owner-repo-actions-permissions.
+      operations:
+      - method: GET
+        name: getgithubactionspermissionsforrepository
+        description: Get Github Actions Permissions For Repository
+        call: temp-permissions.getgithubactionspermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setgithubactionspermissionsforrepository
+        description: Set Github Actions Permissions For Repository
+        call: temp-permissions.setgithubactionspermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions/workflow
+      name: repos-owner-repo-actions-permissions-workflow
+      description: REST surface for repos-owner-repo-actions-permissions-workflow.
+      operations:
+      - method: GET
+        name: getdefaultworkflowpermissionsforrepository
+        description: Get Default Workflow Permissions For Repository
+        call: temp-permissions.getdefaultworkflowpermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setdefaultworkflowpermissionsforrepository
+        description: Set Default Workflow Permissions For Repository
+        call: temp-permissions.setdefaultworkflowpermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/collaborators/{username}/permission
+      name: repos-owner-repo-collaborators-username-permission
+      description: REST surface for repos-owner-repo-collaborators-username-permission.
+      operations:
+      - method: GET
+        name: getrepositorypermissionsforuser
+        description: Get Repository Permissions For User
+        call: temp-permissions.getrepositorypermissionsforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/repos/{owner}/{repo}
+      name: teams-team-id-repos-owner-repo
+      description: REST surface for teams-team_id-repos-owner-repo.
+      operations:
+      - method: GET
+        name: checkteampermissionsforrepositorylegacy
+        description: Check Team Permissions For Repository (legacy)
+        call: temp-permissions.checkteampermissionsforrepositorylegacy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteamrepositorypermissionslegacy
+        description: Add Or Update Team Repository Permissions (legacy)
+        call: temp-permissions.addorupdateteamrepositorypermissionslegacy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-permissions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Permissions. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-repository-fine-grained-permissions
+      description: List Repository Fine-grained Permissions For An Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.listrepositoryfinegrainedpermissionsforanorganization
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: check-team-permissions-repository
+      description: Check Team Permissions For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.checkteampermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-update-team-repository-permissions
+      description: Add Or Update Team Repository Permissions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-permissions.addorupdateteamrepositorypermissions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-github-actions-permissions-repository
+      description: Get Github Actions Permissions For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.getgithubactionspermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-github-actions-permissions-repository
+      description: Set Github Actions Permissions For Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-permissions.setgithubactionspermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-default-workflow-permissions-repository
+      description: Get Default Workflow Permissions For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.getdefaultworkflowpermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-default-workflow-permissions-repository
+      description: Set Default Workflow Permissions For Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-permissions.setdefaultworkflowpermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-repository-permissions-user
+      description: Get Repository Permissions For User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.getrepositorypermissionsforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: check-team-permissions-repository-legacy
+      description: Check Team Permissions For Repository (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-permissions.checkteampermissionsforrepositorylegacy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-update-team-repository-permissions-2
+      description: Add Or Update Team Repository Permissions (legacy)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-permissions.addorupdateteamrepositorypermissionslegacy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

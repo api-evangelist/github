@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Permission
+  description: 'GitHub Projects API — Permission. 1 operations. Lead operation: GitHub Get Project Permission for User. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Permission
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-permission
+    baseUri: ''
+    description: GitHub Projects API — Permission business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-project_id-collaborators-username-permission
+      path: /projects/{project_id}/collaborators/{username}/permission
+      operations:
+      - name: getprojectpermissionforuser
+        method: GET
+        description: GitHub Get Project Permission for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-permission-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Permission. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/projects/{project-id}/collaborators/{username}/permission
+      name: projects-project-id-collaborators-username-permission
+      description: REST surface for projects-project_id-collaborators-username-permission.
+      operations:
+      - method: GET
+        name: getprojectpermissionforuser
+        description: GitHub Get Project Permission for User
+        call: projects-permission.getprojectpermissionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-permission-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Permission. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-get-project-permission-user
+      description: GitHub Get Project Permission for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-permission.getprojectpermissionforuser
+      outputParameters:
+      - type: object
+        mapping: $.

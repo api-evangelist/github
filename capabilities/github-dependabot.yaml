@@ -1,0 +1,669 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Dependabot
+  description: 'GitHub v3 REST API — Dependabot. 19 operations. Lead operation: GitHub List Dependabot Alerts for an Enterprise.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Dependabot
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-dependabot
+    baseUri: ''
+    description: GitHub v3 REST API — Dependabot business capability. Self-contained, no shared references.
+    resources:
+    - name: enterprises-enterprise-dependabot-alerts
+      path: /enterprises/{enterprise}/dependabot/alerts
+      operations:
+      - name: dependabotlistalertsforenterprise
+        method: GET
+        description: GitHub List Dependabot Alerts for an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-dependabot-alerts
+      path: /orgs/{org}/dependabot/alerts
+      operations:
+      - name: dependabotlistalertsfororg
+        method: GET
+        description: GitHub List Dependabot Alerts for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-dependabot-secrets
+      path: /orgs/{org}/dependabot/secrets
+      operations:
+      - name: dependabotlistorgsecrets
+        method: GET
+        description: GitHub List Organization Secrets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-dependabot-secrets-public-key
+      path: /orgs/{org}/dependabot/secrets/public-key
+      operations:
+      - name: dependabotgetorgpublickey
+        method: GET
+        description: GitHub Get an Organization Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-dependabot-secrets-secret_name
+      path: /orgs/{org}/dependabot/secrets/{secret_name}
+      operations:
+      - name: dependabotgetorgsecret
+        method: GET
+        description: GitHub Get an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: dependabotcreateorupdateorgsecret
+        method: PUT
+        description: GitHub Create or Update an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: dependabotdeleteorgsecret
+        method: DELETE
+        description: GitHub Delete an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-dependabot-secrets-secret_name-repositories
+      path: /orgs/{org}/dependabot/secrets/{secret_name}/repositories
+      operations:
+      - name: dependabotlistselectedreposfororgsecret
+        method: GET
+        description: GitHub List Selected Repositories for an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: dependabotsetselectedreposfororgsecret
+        method: PUT
+        description: GitHub Set Selected Repositories for an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org-dependabot-secrets-secret_name-repositories-repository_id
+      path: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
+      operations:
+      - name: dependabotaddselectedrepotoorgsecret
+        method: PUT
+        description: GitHub Add Selected Repository to an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: path
+          type: integer
+          required: true
+      - name: dependabotremoveselectedrepofromorgsecret
+        method: DELETE
+        description: GitHub Remove Selected Repository from an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: path
+          type: integer
+          required: true
+    - name: repos-owner-repo-dependabot-alerts
+      path: /repos/{owner}/{repo}/dependabot/alerts
+      operations:
+      - name: dependabotlistalertsforrepo
+        method: GET
+        description: GitHub List Dependabot Alerts for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: page
+          in: query
+          type: integer
+          description: '**Deprecated**. Page number of the results to fetch. Use cursor-based pagination with `before` or
+            `after` instead.'
+        - name: per_page
+          in: query
+          type: integer
+          description: The number of results per page (max 100). For more information, see "[Using pagination in the REST
+            API](https://docs.github.com/enterprise-server@3.9/rest/using
+    - name: repos-owner-repo-dependabot-alerts-alert_number
+      path: /repos/{owner}/{repo}/dependabot/alerts/{alert_number}
+      operations:
+      - name: dependabotgetalert
+        method: GET
+        description: GitHub Get a Dependabot Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: dependabotupdatealert
+        method: PATCH
+        description: GitHub Update a Dependabot Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-dependabot-secrets
+      path: /repos/{owner}/{repo}/dependabot/secrets
+      operations:
+      - name: dependabotlistreposecrets
+        method: GET
+        description: GitHub List Repository Secrets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-dependabot-secrets-public-key
+      path: /repos/{owner}/{repo}/dependabot/secrets/public-key
+      operations:
+      - name: dependabotgetrepopublickey
+        method: GET
+        description: GitHub Get a Repository Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-dependabot-secrets-secret_name
+      path: /repos/{owner}/{repo}/dependabot/secrets/{secret_name}
+      operations:
+      - name: dependabotgetreposecret
+        method: GET
+        description: GitHub Get a Repository Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: dependabotcreateorupdatereposecret
+        method: PUT
+        description: GitHub Create or Update a Repository Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: dependabotdeletereposecret
+        method: DELETE
+        description: GitHub Delete a Repository Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-dependabot-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Dependabot. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/enterprises/{enterprise}/dependabot/alerts
+      name: enterprises-enterprise-dependabot-alerts
+      description: REST surface for enterprises-enterprise-dependabot-alerts.
+      operations:
+      - method: GET
+        name: dependabotlistalertsforenterprise
+        description: GitHub List Dependabot Alerts for an Enterprise
+        call: github-dependabot.dependabotlistalertsforenterprise
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/alerts
+      name: orgs-org-dependabot-alerts
+      description: REST surface for orgs-org-dependabot-alerts.
+      operations:
+      - method: GET
+        name: dependabotlistalertsfororg
+        description: GitHub List Dependabot Alerts for an Organization
+        call: github-dependabot.dependabotlistalertsfororg
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets
+      name: orgs-org-dependabot-secrets
+      description: REST surface for orgs-org-dependabot-secrets.
+      operations:
+      - method: GET
+        name: dependabotlistorgsecrets
+        description: GitHub List Organization Secrets
+        call: github-dependabot.dependabotlistorgsecrets
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets/public-key
+      name: orgs-org-dependabot-secrets-public-key
+      description: REST surface for orgs-org-dependabot-secrets-public-key.
+      operations:
+      - method: GET
+        name: dependabotgetorgpublickey
+        description: GitHub Get an Organization Public Key
+        call: github-dependabot.dependabotgetorgpublickey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets/{secret-name}
+      name: orgs-org-dependabot-secrets-secret-name
+      description: REST surface for orgs-org-dependabot-secrets-secret_name.
+      operations:
+      - method: GET
+        name: dependabotgetorgsecret
+        description: GitHub Get an Organization Secret
+        call: github-dependabot.dependabotgetorgsecret
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: dependabotcreateorupdateorgsecret
+        description: GitHub Create or Update an Organization Secret
+        call: github-dependabot.dependabotcreateorupdateorgsecret
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: dependabotdeleteorgsecret
+        description: GitHub Delete an Organization Secret
+        call: github-dependabot.dependabotdeleteorgsecret
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets/{secret-name}/repositories
+      name: orgs-org-dependabot-secrets-secret-name-repositories
+      description: REST surface for orgs-org-dependabot-secrets-secret_name-repositories.
+      operations:
+      - method: GET
+        name: dependabotlistselectedreposfororgsecret
+        description: GitHub List Selected Repositories for an Organization Secret
+        call: github-dependabot.dependabotlistselectedreposfororgsecret
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: dependabotsetselectedreposfororgsecret
+        description: GitHub Set Selected Repositories for an Organization Secret
+        call: github-dependabot.dependabotsetselectedreposfororgsecret
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets/{secret-name}/repositories/{repository-id}
+      name: orgs-org-dependabot-secrets-secret-name-repositories-repository-id
+      description: REST surface for orgs-org-dependabot-secrets-secret_name-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: dependabotaddselectedrepotoorgsecret
+        description: GitHub Add Selected Repository to an Organization Secret
+        call: github-dependabot.dependabotaddselectedrepotoorgsecret
+        with:
+          repository_id: rest.repository_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: dependabotremoveselectedrepofromorgsecret
+        description: GitHub Remove Selected Repository from an Organization Secret
+        call: github-dependabot.dependabotremoveselectedrepofromorgsecret
+        with:
+          repository_id: rest.repository_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/alerts
+      name: repos-owner-repo-dependabot-alerts
+      description: REST surface for repos-owner-repo-dependabot-alerts.
+      operations:
+      - method: GET
+        name: dependabotlistalertsforrepo
+        description: GitHub List Dependabot Alerts for a Repository
+        call: github-dependabot.dependabotlistalertsforrepo
+        with:
+          page: rest.page
+          per_page: rest.per_page
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/alerts/{alert-number}
+      name: repos-owner-repo-dependabot-alerts-alert-number
+      description: REST surface for repos-owner-repo-dependabot-alerts-alert_number.
+      operations:
+      - method: GET
+        name: dependabotgetalert
+        description: GitHub Get a Dependabot Alert
+        call: github-dependabot.dependabotgetalert
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: dependabotupdatealert
+        description: GitHub Update a Dependabot Alert
+        call: github-dependabot.dependabotupdatealert
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/secrets
+      name: repos-owner-repo-dependabot-secrets
+      description: REST surface for repos-owner-repo-dependabot-secrets.
+      operations:
+      - method: GET
+        name: dependabotlistreposecrets
+        description: GitHub List Repository Secrets
+        call: github-dependabot.dependabotlistreposecrets
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/secrets/public-key
+      name: repos-owner-repo-dependabot-secrets-public-key
+      description: REST surface for repos-owner-repo-dependabot-secrets-public-key.
+      operations:
+      - method: GET
+        name: dependabotgetrepopublickey
+        description: GitHub Get a Repository Public Key
+        call: github-dependabot.dependabotgetrepopublickey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/secrets/{secret-name}
+      name: repos-owner-repo-dependabot-secrets-secret-name
+      description: REST surface for repos-owner-repo-dependabot-secrets-secret_name.
+      operations:
+      - method: GET
+        name: dependabotgetreposecret
+        description: GitHub Get a Repository Secret
+        call: github-dependabot.dependabotgetreposecret
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: dependabotcreateorupdatereposecret
+        description: GitHub Create or Update a Repository Secret
+        call: github-dependabot.dependabotcreateorupdatereposecret
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: dependabotdeletereposecret
+        description: GitHub Delete a Repository Secret
+        call: github-dependabot.dependabotdeletereposecret
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-dependabot-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Dependabot. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-dependabot-alerts-enterprise
+      description: GitHub List Dependabot Alerts for an Enterprise
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistalertsforenterprise
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-dependabot-alerts-organization
+      description: GitHub List Dependabot Alerts for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistalertsfororg
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-organization-secrets
+      description: GitHub List Organization Secrets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistorgsecrets
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-organization-public-key
+      description: GitHub Get an Organization Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotgetorgpublickey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-organization-secret
+      description: GitHub Get an Organization Secret
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotgetorgsecret
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-update-organization-secret
+      description: GitHub Create or Update an Organization Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotcreateorupdateorgsecret
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-organization-secret
+      description: GitHub Delete an Organization Secret
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-dependabot.dependabotdeleteorgsecret
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-selected-repositories-organization
+      description: GitHub List Selected Repositories for an Organization Secret
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistselectedreposfororgsecret
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-selected-repositories-organization
+      description: GitHub Set Selected Repositories for an Organization Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotsetselectedreposfororgsecret
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-selected-repository-organization
+      description: GitHub Add Selected Repository to an Organization Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotaddselectedrepotoorgsecret
+      with:
+        repository_id: tools.repository_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-selected-repository-organization
+      description: GitHub Remove Selected Repository from an Organization Secret
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-dependabot.dependabotremoveselectedrepofromorgsecret
+      with:
+        repository_id: tools.repository_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-dependabot-alerts-repository
+      description: GitHub List Dependabot Alerts for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistalertsforrepo
+      with:
+        page: tools.page
+        per_page: tools.per_page
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-dependabot-alert
+      description: GitHub Get a Dependabot Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotgetalert
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-dependabot-alert
+      description: GitHub Update a Dependabot Alert
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotupdatealert
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-secrets
+      description: GitHub List Repository Secrets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotlistreposecrets
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-public-key
+      description: GitHub Get a Repository Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotgetrepopublickey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-secret
+      description: GitHub Get a Repository Secret
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotgetreposecret
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-update-repository-secret
+      description: GitHub Create or Update a Repository Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-dependabot.dependabotcreateorupdatereposecret
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository-secret
+      description: GitHub Delete a Repository Secret
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-dependabot.dependabotdeletereposecret
+      outputParameters:
+      - type: object
+        mapping: $.

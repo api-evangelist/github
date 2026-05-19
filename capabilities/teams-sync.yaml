@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Sync
+  description: 'GitHub Teams API — Sync. 1 operations. Lead operation: GitHub Sync Ldap Mapping for Team. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Sync
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-sync
+    baseUri: ''
+    description: GitHub Teams API — Sync business capability. Self-contained, no shared references.
+    resources:
+    - name: admin-ldap-teams-team_id-sync
+      path: /admin/ldap/teams/{team_id}/sync
+      operations:
+      - name: syncldapmappingforteam
+        method: POST
+        description: GitHub Sync Ldap Mapping for Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-sync-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Sync. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/admin/ldap/teams/{team-id}/sync
+      name: admin-ldap-teams-team-id-sync
+      description: REST surface for admin-ldap-teams-team_id-sync.
+      operations:
+      - method: POST
+        name: syncldapmappingforteam
+        description: GitHub Sync Ldap Mapping for Team
+        call: teams-sync.syncldapmappingforteam
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-sync-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Sync. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-sync-ldap-mapping-team
+      description: GitHub Sync Ldap Mapping for Team
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: teams-sync.syncldapmappingforteam
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,286 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Projects
+  description: 'GitHub Teams API — Projects. 8 operations. Lead operation: GitHub List Team Projects. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Projects
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-projects
+    baseUri: ''
+    description: GitHub Teams API — Projects business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug-projects
+      path: /orgs/{org}/teams/{team_slug}/projects
+      operations:
+      - name: listteamprojects
+        method: GET
+        description: GitHub List Team Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforproject
+        method: GET
+        description: GitHub Check Team Permissions for Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addorupdateteamprojectpermissions
+        method: PUT
+        description: GitHub Add or Update Team Project Permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeprojectfromteam
+        method: DELETE
+        description: GitHub Remove Project from Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-projects
+      path: /teams/{team_id}/projects
+      operations:
+      - name: listteamprojectslegacy
+        method: GET
+        description: GitHub List Team Projects (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-projects-project_id
+      path: /teams/{team_id}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforprojectlegacy
+        method: GET
+        description: GitHub Check Team Permissions for Project (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addorupdateteamprojectpermissionslegacy
+        method: PUT
+        description: GitHub Add or Update Team Project Permissions (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeprojectfromteamlegacy
+        method: DELETE
+        description: GitHub Remove Project from Team (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-projects-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Projects. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects
+      name: orgs-org-teams-team-slug-projects
+      description: REST surface for orgs-org-teams-team_slug-projects.
+      operations:
+      - method: GET
+        name: listteamprojects
+        description: GitHub List Team Projects
+        call: teams-projects.listteamprojects
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforproject
+        description: GitHub Check Team Permissions for Project
+        call: teams-projects.checkteampermissionsforproject
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteamprojectpermissions
+        description: GitHub Add or Update Team Project Permissions
+        call: teams-projects.addorupdateteamprojectpermissions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeprojectfromteam
+        description: GitHub Remove Project from Team
+        call: teams-projects.removeprojectfromteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/projects
+      name: teams-team-id-projects
+      description: REST surface for teams-team_id-projects.
+      operations:
+      - method: GET
+        name: listteamprojectslegacy
+        description: GitHub List Team Projects (legacy)
+        call: teams-projects.listteamprojectslegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/projects/{project-id}
+      name: teams-team-id-projects-project-id
+      description: REST surface for teams-team_id-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforprojectlegacy
+        description: GitHub Check Team Permissions for Project (legacy)
+        call: teams-projects.checkteampermissionsforprojectlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteamprojectpermissionslegacy
+        description: GitHub Add or Update Team Project Permissions (legacy)
+        call: teams-projects.addorupdateteamprojectpermissionslegacy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeprojectfromteamlegacy
+        description: GitHub Remove Project from Team (legacy)
+        call: teams-projects.removeprojectfromteamlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-projects-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Projects. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-team-projects
+      description: GitHub List Team Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-projects.listteamprojects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-project
+      description: GitHub Check Team Permissions for Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-projects.checkteampermissionsforproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-project
+      description: GitHub Add or Update Team Project Permissions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: teams-projects.addorupdateteamprojectpermissions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-project-team
+      description: GitHub Remove Project from Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-projects.removeprojectfromteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-team-projects-legacy
+      description: GitHub List Team Projects (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-projects.listteamprojectslegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-project-2
+      description: GitHub Check Team Permissions for Project (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-projects.checkteampermissionsforprojectlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-project-2
+      description: GitHub Add or Update Team Project Permissions (legacy)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: teams-projects.addorupdateteamprojectpermissionslegacy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-project-team-legacy
+      description: GitHub Remove Project from Team (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-projects.removeprojectfromteamlegacy
+      outputParameters:
+      - type: object
+        mapping: $.

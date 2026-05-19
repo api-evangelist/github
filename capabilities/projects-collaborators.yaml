@@ -1,0 +1,147 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Collaborators
+  description: 'GitHub Projects API — Collaborators. 3 operations. Lead operation: GitHub List Project Collaborators. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Collaborators
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-collaborators
+    baseUri: ''
+    description: GitHub Projects API — Collaborators business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-project_id-collaborators
+      path: /projects/{project_id}/collaborators
+      operations:
+      - name: listprojectcollaborators
+        method: GET
+        description: GitHub List Project Collaborators
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: affiliation
+          in: query
+          type: string
+          description: Filters the collaborators by their affiliation. `outside` means outside collaborators of a project
+            that are not a member of the project's organization. `direct`
+    - name: projects-project_id-collaborators-username
+      path: /projects/{project_id}/collaborators/{username}
+      operations:
+      - name: addprojectcollaborator
+        method: PUT
+        description: GitHub Add Project Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeuserascollaborator
+        method: DELETE
+        description: GitHub Remove User as Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-collaborators-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Collaborators. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/projects/{project-id}/collaborators
+      name: projects-project-id-collaborators
+      description: REST surface for projects-project_id-collaborators.
+      operations:
+      - method: GET
+        name: listprojectcollaborators
+        description: GitHub List Project Collaborators
+        call: projects-collaborators.listprojectcollaborators
+        with:
+          affiliation: rest.affiliation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/collaborators/{username}
+      name: projects-project-id-collaborators-username
+      description: REST surface for projects-project_id-collaborators-username.
+      operations:
+      - method: PUT
+        name: addprojectcollaborator
+        description: GitHub Add Project Collaborator
+        call: projects-collaborators.addprojectcollaborator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeuserascollaborator
+        description: GitHub Remove User as Collaborator
+        call: projects-collaborators.removeuserascollaborator
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-collaborators-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Collaborators. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-project-collaborators
+      description: GitHub List Project Collaborators
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-collaborators.listprojectcollaborators
+      with:
+        affiliation: tools.affiliation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-project-collaborator
+      description: GitHub Add Project Collaborator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: projects-collaborators.addprojectcollaborator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-user-collaborator
+      description: GitHub Remove User as Collaborator
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: projects-collaborators.removeuserascollaborator
+      outputParameters:
+      - type: object
+        mapping: $.

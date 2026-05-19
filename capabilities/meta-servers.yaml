@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Meta API — Servers
+  description: 'GitHub Meta API — Servers. 1 operations. Lead operation: GitHub Get Github Enterprise Server Meta Information.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Servers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: meta-servers
+    baseUri: ''
+    description: GitHub Meta API — Servers business capability. Self-contained, no shared references.
+    resources:
+    - name: meta
+      path: /meta
+      operations:
+      - name: getgithubenterpriseservermetainformation
+        method: GET
+        description: GitHub Get Github Enterprise Server Meta Information
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: meta-servers-rest
+    port: 8080
+    description: REST adapter for GitHub Meta API — Servers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/meta
+      name: meta
+      description: REST surface for meta.
+      operations:
+      - method: GET
+        name: getgithubenterpriseservermetainformation
+        description: GitHub Get Github Enterprise Server Meta Information
+        call: meta-servers.getgithubenterpriseservermetainformation
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: meta-servers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Meta API — Servers. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-github-enterprise-server
+      description: GitHub Get Github Enterprise Server Meta Information
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: meta-servers.getgithubenterpriseservermetainformation
+      outputParameters:
+      - type: object
+        mapping: $.

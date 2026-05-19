@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Authenticated
+  description: 'GitHub Teams API — Authenticated. 1 operations. Lead operation: GitHub List Teams for the Authenticated User.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Authenticated
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-authenticated
+    baseUri: ''
+    description: GitHub Teams API — Authenticated business capability. Self-contained, no shared references.
+    resources:
+    - name: user-teams
+      path: /user/teams
+      operations:
+      - name: listteamsfortheauthenticateduser
+        method: GET
+        description: GitHub List Teams for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-authenticated-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Authenticated. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/user/teams
+      name: user-teams
+      description: REST surface for user-teams.
+      operations:
+      - method: GET
+        name: listteamsfortheauthenticateduser
+        description: GitHub List Teams for the Authenticated User
+        call: teams-authenticated.listteamsfortheauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-authenticated-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Authenticated. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-teams-authenticated-user
+      description: GitHub List Teams for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-authenticated.listteamsfortheauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.

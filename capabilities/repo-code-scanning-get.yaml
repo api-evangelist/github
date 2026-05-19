@@ -1,0 +1,252 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Get
+  description: 'github-repos-api — Get. 4 operations. Lead operation: GitHub Get Code Scanning Alert. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-code-scanning-get
+    baseUri: ''
+    description: github-repos-api — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-code-scanning-alerts-alert_number
+      path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+      operations:
+      - name: getcodescanningalert
+        method: GET
+        description: GitHub Get Code Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-analyses-analysis_id
+      path: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+      operations:
+      - name: getcodescanninganalysisforrepository
+        method: GET
+        description: GitHub Get Code Scanning Analysis for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: analysis_id
+          in: path
+          type: integer
+          description: The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-default-setup
+      path: /repos/{owner}/{repo}/code-scanning/default-setup
+      operations:
+      - name: getcodescanningdefaultsetupconfiguration
+        method: GET
+        description: GitHub Get Code Scanning Default Setup Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-sarifs-sarif_id
+      path: /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
+      operations:
+      - name: getinformationaboutsarifupload
+        method: GET
+        description: GitHub Get Information About Sarif Upload
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sarif_id
+          in: path
+          type: string
+          description: The SARIF ID obtained after uploading.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-code-scanning-get-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/code-scanning/alerts/{alert-number}
+      name: repos-owner-repo-code-scanning-alerts-alert-number
+      description: REST surface for repos-owner-repo-code-scanning-alerts-alert_number.
+      operations:
+      - method: GET
+        name: getcodescanningalert
+        description: GitHub Get Code Scanning Alert
+        call: repo-code-scanning-get.getcodescanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/analyses/{analysis-id}
+      name: repos-owner-repo-code-scanning-analyses-analysis-id
+      description: REST surface for repos-owner-repo-code-scanning-analyses-analysis_id.
+      operations:
+      - method: GET
+        name: getcodescanninganalysisforrepository
+        description: GitHub Get Code Scanning Analysis for Repository
+        call: repo-code-scanning-get.getcodescanninganalysisforrepository
+        with:
+          analysis_id: rest.analysis_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/default-setup
+      name: repos-owner-repo-code-scanning-default-setup
+      description: REST surface for repos-owner-repo-code-scanning-default-setup.
+      operations:
+      - method: GET
+        name: getcodescanningdefaultsetupconfiguration
+        description: GitHub Get Code Scanning Default Setup Configuration
+        call: repo-code-scanning-get.getcodescanningdefaultsetupconfiguration
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/sarifs/{sarif-id}
+      name: repos-owner-repo-code-scanning-sarifs-sarif-id
+      description: REST surface for repos-owner-repo-code-scanning-sarifs-sarif_id.
+      operations:
+      - method: GET
+        name: getinformationaboutsarifupload
+        description: GitHub Get Information About Sarif Upload
+        call: repo-code-scanning-get.getinformationaboutsarifupload
+        with:
+          sarif_id: rest.sarif_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-code-scanning-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-code-scanning-alert
+      description: GitHub Get Code Scanning Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-code-scanning-get.getcodescanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-code-scanning-analysis
+      description: GitHub Get Code Scanning Analysis for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-code-scanning-get.getcodescanninganalysisforrepository
+      with:
+        analysis_id: tools.analysis_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-code-scanning-default
+      description: GitHub Get Code Scanning Default Setup Configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-code-scanning-get.getcodescanningdefaultsetupconfiguration
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-information-about-sarif
+      description: GitHub Get Information About Sarif Upload
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-code-scanning-get.getinformationaboutsarifupload
+      with:
+        sarif_id: tools.sarif_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

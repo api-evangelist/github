@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Add
+  description: 'GitHub Application API — Add. 1 operations. Lead operation: GitHub Add App Access Restrictions. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-add
+    baseUri: ''
+    description: GitHub Application API — Add business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: addappaccessrestrictions
+        method: POST
+        description: GitHub Add App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-add-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Add. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: POST
+        name: addappaccessrestrictions
+        description: GitHub Add App Access Restrictions
+        call: app-add.addappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Add. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-add-app-access-restrictions
+      description: GitHub Add App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-add.addappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Markdown API — Render
+  description: 'GitHub Markdown API — Render. 2 operations. Lead operation: GitHub Render Markdown Document. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Render
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: markdown-render
+    baseUri: ''
+    description: GitHub Markdown API — Render business capability. Self-contained, no shared references.
+    resources:
+    - name: markdown
+      path: /markdown
+      operations:
+      - name: rendermarkdowndocument
+        method: POST
+        description: GitHub Render Markdown Document
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: markdown-raw
+      path: /markdown/raw
+      operations:
+      - name: rendermarkdowndocumentinrawmode
+        method: POST
+        description: GitHub Render Markdown Document in Raw Mode
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: markdown-render-rest
+    port: 8080
+    description: REST adapter for GitHub Markdown API — Render. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/markdown
+      name: markdown
+      description: REST surface for markdown.
+      operations:
+      - method: POST
+        name: rendermarkdowndocument
+        description: GitHub Render Markdown Document
+        call: markdown-render.rendermarkdowndocument
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/markdown/raw
+      name: markdown-raw
+      description: REST surface for markdown-raw.
+      operations:
+      - method: POST
+        name: rendermarkdowndocumentinrawmode
+        description: GitHub Render Markdown Document in Raw Mode
+        call: markdown-render.rendermarkdowndocumentinrawmode
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: markdown-render-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Markdown API — Render. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-render-markdown-document
+      description: GitHub Render Markdown Document
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: markdown-render.rendermarkdowndocument
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-render-markdown-document-raw
+      description: GitHub Render Markdown Document in Raw Mode
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: markdown-render.rendermarkdowndocumentinrawmode
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

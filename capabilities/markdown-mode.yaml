@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Markdown API — Mode
+  description: 'GitHub Markdown API — Mode. 1 operations. Lead operation: GitHub Render Markdown Document in Raw Mode. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Mode
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: markdown-mode
+    baseUri: ''
+    description: GitHub Markdown API — Mode business capability. Self-contained, no shared references.
+    resources:
+    - name: markdown-raw
+      path: /markdown/raw
+      operations:
+      - name: rendermarkdowndocumentinrawmode
+        method: POST
+        description: GitHub Render Markdown Document in Raw Mode
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: markdown-mode-rest
+    port: 8080
+    description: REST adapter for GitHub Markdown API — Mode. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/markdown/raw
+      name: markdown-raw
+      description: REST surface for markdown-raw.
+      operations:
+      - method: POST
+        name: rendermarkdowndocumentinrawmode
+        description: GitHub Render Markdown Document in Raw Mode
+        call: markdown-mode.rendermarkdowndocumentinrawmode
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: markdown-mode-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Markdown API — Mode. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-render-markdown-document-raw
+      description: GitHub Render Markdown Document in Raw Mode
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: markdown-mode.rendermarkdowndocumentinrawmode
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

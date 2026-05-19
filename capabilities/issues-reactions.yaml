@@ -1,0 +1,352 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Issues API — Reactions
+  description: 'GitHub Issues API — Reactions. 6 operations. Lead operation: GitHub List Reactions for an Issue Comment. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Reactions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: issues-reactions
+    baseUri: ''
+    description: GitHub Issues API — Reactions business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-comments-comment_id-reactions
+      path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+      operations:
+      - name: listreactionsforanissuecomment
+        method: GET
+        description: GitHub List Reactions for an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: content
+          in: query
+          type: string
+          description: Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions).
+            Omit this parameter to list all reacti
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createreactionforanissuecomment
+        method: POST
+        description: GitHub Create Reaction for an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-comments-comment_id-reactions-reaction_id
+      path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}
+      operations:
+      - name: deleteanissuecommentreaction
+        method: DELETE
+        description: GitHub Delete an Issue Comment Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-issue_number-reactions
+      path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+      operations:
+      - name: listreactionsforanissue
+        method: GET
+        description: GitHub List Reactions for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: content
+          in: query
+          type: string
+          description: Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions).
+            Omit this parameter to list all reacti
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createreactionforanissue
+        method: POST
+        description: GitHub Create Reaction for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-issue_number-reactions-reaction_id
+      path: /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}
+      operations:
+      - name: deleteanissuereaction
+        method: DELETE
+        description: GitHub Delete an Issue Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: issues-reactions-rest
+    port: 8080
+    description: REST adapter for GitHub Issues API — Reactions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/comments/{comment-id}/reactions
+      name: repos-owner-repo-issues-comments-comment-id-reactions
+      description: REST surface for repos-owner-repo-issues-comments-comment_id-reactions.
+      operations:
+      - method: GET
+        name: listreactionsforanissuecomment
+        description: GitHub List Reactions for an Issue Comment
+        call: issues-reactions.listreactionsforanissuecomment
+        with:
+          content: rest.content
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createreactionforanissuecomment
+        description: GitHub Create Reaction for an Issue Comment
+        call: issues-reactions.createreactionforanissuecomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/comments/{comment-id}/reactions/{reaction-id}
+      name: repos-owner-repo-issues-comments-comment-id-reactions-reaction-id
+      description: REST surface for repos-owner-repo-issues-comments-comment_id-reactions-reaction_id.
+      operations:
+      - method: DELETE
+        name: deleteanissuecommentreaction
+        description: GitHub Delete an Issue Comment Reaction
+        call: issues-reactions.deleteanissuecommentreaction
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/reactions
+      name: repos-owner-repo-issues-issue-number-reactions
+      description: REST surface for repos-owner-repo-issues-issue_number-reactions.
+      operations:
+      - method: GET
+        name: listreactionsforanissue
+        description: GitHub List Reactions for an Issue
+        call: issues-reactions.listreactionsforanissue
+        with:
+          content: rest.content
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createreactionforanissue
+        description: GitHub Create Reaction for an Issue
+        call: issues-reactions.createreactionforanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/reactions/{reaction-id}
+      name: repos-owner-repo-issues-issue-number-reactions-reaction-id
+      description: REST surface for repos-owner-repo-issues-issue_number-reactions-reaction_id.
+      operations:
+      - method: DELETE
+        name: deleteanissuereaction
+        description: GitHub Delete an Issue Reaction
+        call: issues-reactions.deleteanissuereaction
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: issues-reactions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Issues API — Reactions. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-reactions-issue-comment
+      description: GitHub List Reactions for an Issue Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issues-reactions.listreactionsforanissuecomment
+      with:
+        content: tools.content
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-reaction-issue-comment
+      description: GitHub Create Reaction for an Issue Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issues-reactions.createreactionforanissuecomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-issue-comment-reaction
+      description: GitHub Delete an Issue Comment Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: issues-reactions.deleteanissuecommentreaction
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-reactions-issue
+      description: GitHub List Reactions for an Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: issues-reactions.listreactionsforanissue
+      with:
+        content: tools.content
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-reaction-issue
+      description: GitHub Create Reaction for an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issues-reactions.createreactionforanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-issue-reaction
+      description: GitHub Delete an Issue Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: issues-reactions.deleteanissuereaction
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

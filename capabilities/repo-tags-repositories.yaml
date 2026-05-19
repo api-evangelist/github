@@ -1,0 +1,2139 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Repositories
+  description: 'github-repos-api — Repositories. 40 operations. Lead operation: GitHub Get Repository. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Repositories
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-repositories
+    baseUri: ''
+    description: github-repos-api — Repositories business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo
+      path: /repos/{owner}/{repo}
+      operations:
+      - name: getrepository
+        method: GET
+        description: GitHub Get Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updaterepository
+        method: PATCH
+        description: GitHub Update Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleterepository
+        method: DELETE
+        description: GitHub Delete Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-check-suites-preferences
+      path: /repos/{owner}/{repo}/check-suites/preferences
+      operations:
+      - name: updaterepositorypreferencesforchecksuites
+        method: PATCH
+        description: GitHub Update Repository Preferences for Check Suites
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-comments
+      path: /repos/{owner}/{repo}/comments
+      operations:
+      - name: listcommitcommentsforrepository
+        method: GET
+        description: GitHub List Commit Comments for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-contents-path
+      path: /repos/{owner}/{repo}/contents/{path}
+      operations:
+      - name: getrepositorycontent
+        method: GET
+        description: GitHub Get Repository Content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: path
+          in: path
+          type: string
+          description: path parameter
+          required: true
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repositorys default branch.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-contributors
+      path: /repos/{owner}/{repo}/contributors
+      operations:
+      - name: listrepositorycontributors
+        method: GET
+        description: GitHub List Repository Contributors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: anon
+          in: query
+          type: string
+          description: Set to `1` or `true` to include anonymous contributors in results.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependency-graph-sbom
+      path: /repos/{owner}/{repo}/dependency-graph/sbom
+      operations:
+      - name: exportsoftwarebillofmaterialssbomforrepository
+        method: GET
+        description: GitHub Export Software Bill of Materials (sbom) for Repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependency-graph-snapshots
+      path: /repos/{owner}/{repo}/dependency-graph/snapshots
+      operations:
+      - name: createsnapshotofdependenciesforrepository
+        method: POST
+        description: GitHub Create Snapshot of Dependencies for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-dispatches
+      path: /repos/{owner}/{repo}/dispatches
+      operations:
+      - name: createrepositorydispatchevent
+        method: POST
+        description: GitHub Create Repository Dispatch Event
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-events
+      path: /repos/{owner}/{repo}/events
+      operations:
+      - name: listrepositoryevents
+        method: GET
+        description: GitHub List Repository Events
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-installation
+      path: /repos/{owner}/{repo}/installation
+      operations:
+      - name: getrepositoryinstallationfortheauthenticatedapp
+        method: GET
+        description: GitHub Get Repository Installation for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-labels
+      path: /repos/{owner}/{repo}/labels
+      operations:
+      - name: listlabelsforrepository
+        method: GET
+        description: GitHub List Labels for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-languages
+      path: /repos/{owner}/{repo}/languages
+      operations:
+      - name: listrepositorylanguages
+        method: GET
+        description: GitHub List Repository Languages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-lfs
+      path: /repos/{owner}/{repo}/lfs
+      operations:
+      - name: enablegitlfsforrepository
+        method: PUT
+        description: GitHub Enable Git Lfs for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: disablegitlfsforrepository
+        method: DELETE
+        description: GitHub Disable Git Lfs for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-license
+      path: /repos/{owner}/{repo}/license
+      operations:
+      - name: getthelicenseforrepository
+        method: GET
+        description: GitHub Get the License for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-merge-upstream
+      path: /repos/{owner}/{repo}/merge-upstream
+      operations:
+      - name: syncforkbranchwiththeupstreamrepository
+        method: POST
+        description: GitHub Sync Fork Branch with the Upstream Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-notifications
+      path: /repos/{owner}/{repo}/notifications
+      operations:
+      - name: listrepositorynotificationsfortheauthenticateduser
+        method: GET
+        description: GitHub List Repository Notifications for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: markrepositorynotificationsasread
+        method: PUT
+        description: GitHub Mark Repository Notifications as Read
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-readme
+      path: /repos/{owner}/{repo}/readme
+      operations:
+      - name: getrepositoryreadme
+        method: GET
+        description: GitHub Get Repository Readme
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repositorys default branch.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-readme-dir
+      path: /repos/{owner}/{repo}/readme/{dir}
+      operations:
+      - name: getrepositoryreadmefordirectory
+        method: GET
+        description: GitHub Get Repository Readme for Directory
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dir
+          in: path
+          type: string
+          description: The alternate path to look for a README file
+          required: true
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repositorys default branch.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-replicas-caches
+      path: /repos/{owner}/{repo}/replicas/caches
+      operations:
+      - name: listrepositorycachereplicationstatus
+        method: GET
+        description: GitHub List Repository Cache Replication Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-secret-scanning-alerts
+      path: /repos/{owner}/{repo}/secret-scanning/alerts
+      operations:
+      - name: listsecretscanningalertsforrepository
+        method: GET
+        description: GitHub List Secret Scanning Alerts for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-subscription
+      path: /repos/{owner}/{repo}/subscription
+      operations:
+      - name: getrepositorysubscription
+        method: GET
+        description: GitHub Get Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: setrepositorysubscription
+        method: PUT
+        description: GitHub Set Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleterepositorysubscription
+        method: DELETE
+        description: GitHub Delete Repository Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-tags
+      path: /repos/{owner}/{repo}/tags
+      operations:
+      - name: listrepositorytags
+        method: GET
+        description: GitHub List Repository Tags
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-tags-protection
+      path: /repos/{owner}/{repo}/tags/protection
+      operations:
+      - name: listtagprotectionstatesforrepository
+        method: GET
+        description: GitHub List Tag Protection States for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createtagprotectionstateforrepository
+        method: POST
+        description: GitHub Create Tag Protection State for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-tags-protection-tag_protection_id
+      path: /repos/{owner}/{repo}/tags/protection/{tag_protection_id}
+      operations:
+      - name: deletetagprotectionstateforrepository
+        method: DELETE
+        description: GitHub Delete Tag Protection State for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-tarball-ref
+      path: /repos/{owner}/{repo}/tarball/{ref}
+      operations:
+      - name: downloadrepositoryarchivetar
+        method: GET
+        description: GitHub Download Repository Archive (tar)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-teams
+      path: /repos/{owner}/{repo}/teams
+      operations:
+      - name: listrepositoryteams
+        method: GET
+        description: GitHub List Repository Teams
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-topics
+      path: /repos/{owner}/{repo}/topics
+      operations:
+      - name: getallrepositorytopics
+        method: GET
+        description: GitHub Get All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: replaceallrepositorytopics
+        method: PUT
+        description: GitHub Replace All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-transfer
+      path: /repos/{owner}/{repo}/transfer
+      operations:
+      - name: transferrepository
+        method: POST
+        description: GitHub Transfer Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-vulnerability-alerts
+      path: /repos/{owner}/{repo}/vulnerability-alerts
+      operations:
+      - name: checkifvulnerabilityalertsareenabledforrepository
+        method: GET
+        description: GitHub Check if Vulnerability Alerts Are Enabled for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-template_owner-template_repo-generate
+      path: /repos/{template_owner}/{template_repo}/generate
+      operations:
+      - name: createrepositoryusingtemplate
+        method: POST
+        description: GitHub Create Repository Using Template
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: template_owner
+          in: path
+          type: string
+          description: The account owner of the template repository. The name is not case sensitive.
+          required: true
+        - name: template_repo
+          in: path
+          type: string
+          description: The name of the template repository without the `.git` extension. The name is not case sensitive.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repositories
+      path: /repositories
+      operations:
+      - name: listpublicrepositories
+        method: GET
+        description: GitHub List Public Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Specifies the types of repositories to return. This endpoint will only list repositories available
+            to all users on the enterprise.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: search-repositories
+      path: /search/repositories
+      operations:
+      - name: searchrepositories
+        method: GET
+        description: GitHub Search Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: q
+          in: query
+          type: string
+          description: The query contains one or more search keywords and qualifiers. Qualifiers allow you to limit your search
+            to specific areas of GitHub Enterprise Server. The REST
+          required: true
+        - name: sort
+          in: query
+          type: string
+          description: 'Sorts the results of your query by number of `stars`, `forks`, or `help-wanted-issues` or how recently
+            the items were `updated`. Default: [best match](https://d'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-repositories-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Repositories. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}
+      name: repos-owner-repo
+      description: REST surface for repos-owner-repo.
+      operations:
+      - method: GET
+        name: getrepository
+        description: GitHub Get Repository
+        call: repo-tags-repositories.getrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updaterepository
+        description: GitHub Update Repository
+        call: repo-tags-repositories.updaterepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleterepository
+        description: GitHub Delete Repository
+        call: repo-tags-repositories.deleterepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/preferences
+      name: repos-owner-repo-check-suites-preferences
+      description: REST surface for repos-owner-repo-check-suites-preferences.
+      operations:
+      - method: PATCH
+        name: updaterepositorypreferencesforchecksuites
+        description: GitHub Update Repository Preferences for Check Suites
+        call: repo-tags-repositories.updaterepositorypreferencesforchecksuites
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments
+      name: repos-owner-repo-comments
+      description: REST surface for repos-owner-repo-comments.
+      operations:
+      - method: GET
+        name: listcommitcommentsforrepository
+        description: GitHub List Commit Comments for Repository
+        call: repo-tags-repositories.listcommitcommentsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/contents/{path}
+      name: repos-owner-repo-contents-path
+      description: REST surface for repos-owner-repo-contents-path.
+      operations:
+      - method: GET
+        name: getrepositorycontent
+        description: GitHub Get Repository Content
+        call: repo-tags-repositories.getrepositorycontent
+        with:
+          path: rest.path
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/contributors
+      name: repos-owner-repo-contributors
+      description: REST surface for repos-owner-repo-contributors.
+      operations:
+      - method: GET
+        name: listrepositorycontributors
+        description: GitHub List Repository Contributors
+        call: repo-tags-repositories.listrepositorycontributors
+        with:
+          anon: rest.anon
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/sbom
+      name: repos-owner-repo-dependency-graph-sbom
+      description: REST surface for repos-owner-repo-dependency-graph-sbom.
+      operations:
+      - method: GET
+        name: exportsoftwarebillofmaterialssbomforrepository
+        description: GitHub Export Software Bill of Materials (sbom) for Repository.
+        call: repo-tags-repositories.exportsoftwarebillofmaterialssbomforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/snapshots
+      name: repos-owner-repo-dependency-graph-snapshots
+      description: REST surface for repos-owner-repo-dependency-graph-snapshots.
+      operations:
+      - method: POST
+        name: createsnapshotofdependenciesforrepository
+        description: GitHub Create Snapshot of Dependencies for Repository
+        call: repo-tags-repositories.createsnapshotofdependenciesforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dispatches
+      name: repos-owner-repo-dispatches
+      description: REST surface for repos-owner-repo-dispatches.
+      operations:
+      - method: POST
+        name: createrepositorydispatchevent
+        description: GitHub Create Repository Dispatch Event
+        call: repo-tags-repositories.createrepositorydispatchevent
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/events
+      name: repos-owner-repo-events
+      description: REST surface for repos-owner-repo-events.
+      operations:
+      - method: GET
+        name: listrepositoryevents
+        description: GitHub List Repository Events
+        call: repo-tags-repositories.listrepositoryevents
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/installation
+      name: repos-owner-repo-installation
+      description: REST surface for repos-owner-repo-installation.
+      operations:
+      - method: GET
+        name: getrepositoryinstallationfortheauthenticatedapp
+        description: GitHub Get Repository Installation for the Authenticated App
+        call: repo-tags-repositories.getrepositoryinstallationfortheauthenticatedapp
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/labels
+      name: repos-owner-repo-labels
+      description: REST surface for repos-owner-repo-labels.
+      operations:
+      - method: GET
+        name: listlabelsforrepository
+        description: GitHub List Labels for Repository
+        call: repo-tags-repositories.listlabelsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/languages
+      name: repos-owner-repo-languages
+      description: REST surface for repos-owner-repo-languages.
+      operations:
+      - method: GET
+        name: listrepositorylanguages
+        description: GitHub List Repository Languages
+        call: repo-tags-repositories.listrepositorylanguages
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/lfs
+      name: repos-owner-repo-lfs
+      description: REST surface for repos-owner-repo-lfs.
+      operations:
+      - method: PUT
+        name: enablegitlfsforrepository
+        description: GitHub Enable Git Lfs for Repository
+        call: repo-tags-repositories.enablegitlfsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: disablegitlfsforrepository
+        description: GitHub Disable Git Lfs for Repository
+        call: repo-tags-repositories.disablegitlfsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/license
+      name: repos-owner-repo-license
+      description: REST surface for repos-owner-repo-license.
+      operations:
+      - method: GET
+        name: getthelicenseforrepository
+        description: GitHub Get the License for Repository
+        call: repo-tags-repositories.getthelicenseforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/merge-upstream
+      name: repos-owner-repo-merge-upstream
+      description: REST surface for repos-owner-repo-merge-upstream.
+      operations:
+      - method: POST
+        name: syncforkbranchwiththeupstreamrepository
+        description: GitHub Sync Fork Branch with the Upstream Repository
+        call: repo-tags-repositories.syncforkbranchwiththeupstreamrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/notifications
+      name: repos-owner-repo-notifications
+      description: REST surface for repos-owner-repo-notifications.
+      operations:
+      - method: GET
+        name: listrepositorynotificationsfortheauthenticateduser
+        description: GitHub List Repository Notifications for the Authenticated User
+        call: repo-tags-repositories.listrepositorynotificationsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: markrepositorynotificationsasread
+        description: GitHub Mark Repository Notifications as Read
+        call: repo-tags-repositories.markrepositorynotificationsasread
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/readme
+      name: repos-owner-repo-readme
+      description: REST surface for repos-owner-repo-readme.
+      operations:
+      - method: GET
+        name: getrepositoryreadme
+        description: GitHub Get Repository Readme
+        call: repo-tags-repositories.getrepositoryreadme
+        with:
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/readme/{dir}
+      name: repos-owner-repo-readme-dir
+      description: REST surface for repos-owner-repo-readme-dir.
+      operations:
+      - method: GET
+        name: getrepositoryreadmefordirectory
+        description: GitHub Get Repository Readme for Directory
+        call: repo-tags-repositories.getrepositoryreadmefordirectory
+        with:
+          dir: rest.dir
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/replicas/caches
+      name: repos-owner-repo-replicas-caches
+      description: REST surface for repos-owner-repo-replicas-caches.
+      operations:
+      - method: GET
+        name: listrepositorycachereplicationstatus
+        description: GitHub List Repository Cache Replication Status
+        call: repo-tags-repositories.listrepositorycachereplicationstatus
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/secret-scanning/alerts
+      name: repos-owner-repo-secret-scanning-alerts
+      description: REST surface for repos-owner-repo-secret-scanning-alerts.
+      operations:
+      - method: GET
+        name: listsecretscanningalertsforrepository
+        description: GitHub List Secret Scanning Alerts for Repository
+        call: repo-tags-repositories.listsecretscanningalertsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/subscription
+      name: repos-owner-repo-subscription
+      description: REST surface for repos-owner-repo-subscription.
+      operations:
+      - method: GET
+        name: getrepositorysubscription
+        description: GitHub Get Repository Subscription
+        call: repo-tags-repositories.getrepositorysubscription
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setrepositorysubscription
+        description: GitHub Set Repository Subscription
+        call: repo-tags-repositories.setrepositorysubscription
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleterepositorysubscription
+        description: GitHub Delete Repository Subscription
+        call: repo-tags-repositories.deleterepositorysubscription
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags
+      name: repos-owner-repo-tags
+      description: REST surface for repos-owner-repo-tags.
+      operations:
+      - method: GET
+        name: listrepositorytags
+        description: GitHub List Repository Tags
+        call: repo-tags-repositories.listrepositorytags
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags/protection
+      name: repos-owner-repo-tags-protection
+      description: REST surface for repos-owner-repo-tags-protection.
+      operations:
+      - method: GET
+        name: listtagprotectionstatesforrepository
+        description: GitHub List Tag Protection States for Repository
+        call: repo-tags-repositories.listtagprotectionstatesforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createtagprotectionstateforrepository
+        description: GitHub Create Tag Protection State for Repository
+        call: repo-tags-repositories.createtagprotectionstateforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags/protection/{tag-protection-id}
+      name: repos-owner-repo-tags-protection-tag-protection-id
+      description: REST surface for repos-owner-repo-tags-protection-tag_protection_id.
+      operations:
+      - method: DELETE
+        name: deletetagprotectionstateforrepository
+        description: GitHub Delete Tag Protection State for Repository
+        call: repo-tags-repositories.deletetagprotectionstateforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tarball/{ref}
+      name: repos-owner-repo-tarball-ref
+      description: REST surface for repos-owner-repo-tarball-ref.
+      operations:
+      - method: GET
+        name: downloadrepositoryarchivetar
+        description: GitHub Download Repository Archive (tar)
+        call: repo-tags-repositories.downloadrepositoryarchivetar
+        with:
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/teams
+      name: repos-owner-repo-teams
+      description: REST surface for repos-owner-repo-teams.
+      operations:
+      - method: GET
+        name: listrepositoryteams
+        description: GitHub List Repository Teams
+        call: repo-tags-repositories.listrepositoryteams
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/topics
+      name: repos-owner-repo-topics
+      description: REST surface for repos-owner-repo-topics.
+      operations:
+      - method: GET
+        name: getallrepositorytopics
+        description: GitHub Get All Repository Topics
+        call: repo-tags-repositories.getallrepositorytopics
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: replaceallrepositorytopics
+        description: GitHub Replace All Repository Topics
+        call: repo-tags-repositories.replaceallrepositorytopics
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/transfer
+      name: repos-owner-repo-transfer
+      description: REST surface for repos-owner-repo-transfer.
+      operations:
+      - method: POST
+        name: transferrepository
+        description: GitHub Transfer Repository
+        call: repo-tags-repositories.transferrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/vulnerability-alerts
+      name: repos-owner-repo-vulnerability-alerts
+      description: REST surface for repos-owner-repo-vulnerability-alerts.
+      operations:
+      - method: GET
+        name: checkifvulnerabilityalertsareenabledforrepository
+        description: GitHub Check if Vulnerability Alerts Are Enabled for Repository
+        call: repo-tags-repositories.checkifvulnerabilityalertsareenabledforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{template-owner}/{template-repo}/generate
+      name: repos-template-owner-template-repo-generate
+      description: REST surface for repos-template_owner-template_repo-generate.
+      operations:
+      - method: POST
+        name: createrepositoryusingtemplate
+        description: GitHub Create Repository Using Template
+        call: repo-tags-repositories.createrepositoryusingtemplate
+        with:
+          template_owner: rest.template_owner
+          template_repo: rest.template_repo
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories
+      name: repositories
+      description: REST surface for repositories.
+      operations:
+      - method: GET
+        name: listpublicrepositories
+        description: GitHub List Public Repositories
+        call: repo-tags-repositories.listpublicrepositories
+        with:
+          visibility: rest.visibility
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/search/repositories
+      name: search-repositories
+      description: REST surface for search-repositories.
+      operations:
+      - method: GET
+        name: searchrepositories
+        description: GitHub Search Repositories
+        call: repo-tags-repositories.searchrepositories
+        with:
+          q: rest.q
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-repositories-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Repositories. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-repository
+      description: GitHub Get Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository
+      description: GitHub Update Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.updaterepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository
+      description: GitHub Delete Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-repositories.deleterepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository-preferences-check
+      description: GitHub Update Repository Preferences for Check Suites
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.updaterepositorypreferencesforchecksuites
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commit-comments-repository
+      description: GitHub List Commit Comments for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listcommitcommentsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-content
+      description: GitHub Get Repository Content
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepositorycontent
+      with:
+        path: tools.path
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-contributors
+      description: GitHub List Repository Contributors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositorycontributors
+      with:
+        anon: tools.anon
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-export-software-bill-materials
+      description: GitHub Export Software Bill of Materials (sbom) for Repository.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.exportsoftwarebillofmaterialssbomforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-snapshot-dependencies-repository
+      description: GitHub Create Snapshot of Dependencies for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.createsnapshotofdependenciesforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-dispatch-event
+      description: GitHub Create Repository Dispatch Event
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.createrepositorydispatchevent
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-events
+      description: GitHub List Repository Events
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositoryevents
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-installation-authenticated
+      description: GitHub Get Repository Installation for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepositoryinstallationfortheauthenticatedapp
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-labels-repository
+      description: GitHub List Labels for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listlabelsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-languages
+      description: GitHub List Repository Languages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositorylanguages
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-enable-git-lfs-repository
+      description: GitHub Enable Git Lfs for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.enablegitlfsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-disable-git-lfs-repository
+      description: GitHub Disable Git Lfs for Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-repositories.disablegitlfsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-license-repository
+      description: GitHub Get the License for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getthelicenseforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-sync-fork-branch-upstream
+      description: GitHub Sync Fork Branch with the Upstream Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.syncforkbranchwiththeupstreamrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-notifications-authenticated
+      description: GitHub List Repository Notifications for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositorynotificationsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-mark-repository-notifications-read
+      description: GitHub Mark Repository Notifications as Read
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.markrepositorynotificationsasread
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-readme
+      description: GitHub Get Repository Readme
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepositoryreadme
+      with:
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-readme-directory
+      description: GitHub Get Repository Readme for Directory
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepositoryreadmefordirectory
+      with:
+        dir: tools.dir
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-cache-replication
+      description: GitHub List Repository Cache Replication Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositorycachereplicationstatus
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-secret-scanning-alerts
+      description: GitHub List Secret Scanning Alerts for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listsecretscanningalertsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-subscription
+      description: GitHub Get Repository Subscription
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getrepositorysubscription
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-repository-subscription
+      description: GitHub Set Repository Subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.setrepositorysubscription
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository-subscription
+      description: GitHub Delete Repository Subscription
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-repositories.deleterepositorysubscription
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-tags
+      description: GitHub List Repository Tags
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositorytags
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-tag-protection-states
+      description: GitHub List Tag Protection States for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listtagprotectionstatesforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-tag-protection-state
+      description: GitHub Create Tag Protection State for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.createtagprotectionstateforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-tag-protection-state
+      description: GitHub Delete Tag Protection State for Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-repositories.deletetagprotectionstateforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-download-repository-archive-tar
+      description: GitHub Download Repository Archive (tar)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.downloadrepositoryarchivetar
+      with:
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-teams
+      description: GitHub List Repository Teams
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listrepositoryteams
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-repository-topics
+      description: GitHub Get All Repository Topics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.getallrepositorytopics
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-replace-all-repository-topics
+      description: GitHub Replace All Repository Topics
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.replaceallrepositorytopics
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-transfer-repository
+      description: GitHub Transfer Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.transferrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-vulnerability-alerts
+      description: GitHub Check if Vulnerability Alerts Are Enabled for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.checkifvulnerabilityalertsareenabledforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-using-template
+      description: GitHub Create Repository Using Template
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-repositories.createrepositoryusingtemplate
+      with:
+        template_owner: tools.template_owner
+        template_repo: tools.template_repo
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-repositories
+      description: GitHub List Public Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.listpublicrepositories
+      with:
+        visibility: tools.visibility
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-search-repositories
+      description: GitHub Search Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-repositories.searchrepositories
+      with:
+        q: tools.q
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

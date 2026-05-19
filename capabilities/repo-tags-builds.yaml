@@ -1,0 +1,237 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Builds
+  description: 'github-repos-api — Builds. 4 operations. Lead operation: GitHub List Github Enterprise Server Pages Builds.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Builds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-builds
+    baseUri: ''
+    description: github-repos-api — Builds business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pages-builds
+      path: /repos/{owner}/{repo}/pages/builds
+      operations:
+      - name: listgithubenterpriseserverpagesbuilds
+        method: GET
+        description: GitHub List Github Enterprise Server Pages Builds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: requestgithubenterpriseserverpagesbuild
+        method: POST
+        description: GitHub Request Github Enterprise Server Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pages-builds-latest
+      path: /repos/{owner}/{repo}/pages/builds/latest
+      operations:
+      - name: getlatestpagesbuild
+        method: GET
+        description: GitHub Get Latest Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pages-builds-build_id
+      path: /repos/{owner}/{repo}/pages/builds/{build_id}
+      operations:
+      - name: getgithubenterpriseserverpagesbuild
+        method: GET
+        description: GitHub Get Github Enterprise Server Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: build_id
+          in: path
+          type: integer
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-builds-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Builds. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pages/builds
+      name: repos-owner-repo-pages-builds
+      description: REST surface for repos-owner-repo-pages-builds.
+      operations:
+      - method: GET
+        name: listgithubenterpriseserverpagesbuilds
+        description: GitHub List Github Enterprise Server Pages Builds
+        call: repo-tags-builds.listgithubenterpriseserverpagesbuilds
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: requestgithubenterpriseserverpagesbuild
+        description: GitHub Request Github Enterprise Server Pages Build
+        call: repo-tags-builds.requestgithubenterpriseserverpagesbuild
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/builds/latest
+      name: repos-owner-repo-pages-builds-latest
+      description: REST surface for repos-owner-repo-pages-builds-latest.
+      operations:
+      - method: GET
+        name: getlatestpagesbuild
+        description: GitHub Get Latest Pages Build
+        call: repo-tags-builds.getlatestpagesbuild
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/builds/{build-id}
+      name: repos-owner-repo-pages-builds-build-id
+      description: REST surface for repos-owner-repo-pages-builds-build_id.
+      operations:
+      - method: GET
+        name: getgithubenterpriseserverpagesbuild
+        description: GitHub Get Github Enterprise Server Pages Build
+        call: repo-tags-builds.getgithubenterpriseserverpagesbuild
+        with:
+          build_id: rest.build_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-builds-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Builds. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-github-enterprise-server
+      description: GitHub List Github Enterprise Server Pages Builds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-builds.listgithubenterpriseserverpagesbuilds
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-request-github-enterprise-server
+      description: GitHub Request Github Enterprise Server Pages Build
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-builds.requestgithubenterpriseserverpagesbuild
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-latest-pages-build
+      description: GitHub Get Latest Pages Build
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-builds.getlatestpagesbuild
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-github-enterprise-server
+      description: GitHub Get Github Enterprise Server Pages Build
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-builds.getgithubenterpriseserverpagesbuild
+      with:
+        build_id: tools.build_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,5649 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Repos
+  description: 'GitHub v3 REST API — Repos. 163 operations. Lead operation: GitHub List Organization Repositories. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Repos
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-repos
+    baseUri: ''
+    description: GitHub v3 REST API — Repos business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-repos
+      path: /orgs/{org}/repos
+      operations:
+      - name: reposlistfororg
+        method: GET
+        description: GitHub List Organization Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Specifies the types of repositories you want returned. `internal` is not yet supported when a GitHub
+            App calls this endpoint with an installation access token.
+        - name: sort
+          in: query
+          type: string
+          description: The property to sort the results by.
+        - name: direction
+          in: query
+          type: string
+          description: 'The order to sort by. Default: `asc` when using `full_name`, otherwise `desc`.'
+      - name: reposcreateinorg
+        method: POST
+        description: GitHub Create an Organization Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo
+      path: /repos/{owner}/{repo}
+      operations:
+      - name: reposget
+        method: GET
+        description: GitHub Get a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdate
+        method: PATCH
+        description: GitHub Update a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdelete
+        method: DELETE
+        description: GitHub Delete a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-autolinks
+      path: /repos/{owner}/{repo}/autolinks
+      operations:
+      - name: reposlistautolinks
+        method: GET
+        description: GitHub Get All Autolinks of a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreateautolink
+        method: POST
+        description: GitHub Create an Autolink Reference for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-autolinks-autolink_id
+      path: /repos/{owner}/{repo}/autolinks/{autolink_id}
+      operations:
+      - name: reposgetautolink
+        method: GET
+        description: GitHub Get an Autolink Reference of a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeleteautolink
+        method: DELETE
+        description: GitHub Delete an Autolink Reference from a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches
+      path: /repos/{owner}/{repo}/branches
+      operations:
+      - name: reposlistbranches
+        method: GET
+        description: GitHub List Branches
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: protected
+          in: query
+          type: boolean
+          description: Setting to `true` returns only protected branches. When set to `false`, only unprotected branches are
+            returned. Omitting this parameter returns all branches.
+    - name: repos-owner-repo-branches-branch
+      path: /repos/{owner}/{repo}/branches/{branch}
+      operations:
+      - name: reposgetbranch
+        method: GET
+        description: GitHub Get a Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection
+      path: /repos/{owner}/{repo}/branches/{branch}/protection
+      operations:
+      - name: reposgetbranchprotection
+        method: GET
+        description: GitHub Get Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatebranchprotection
+        method: PUT
+        description: GitHub Update Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletebranchprotection
+        method: DELETE
+        description: GitHub Delete Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-enforce_admins
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins
+      operations:
+      - name: reposgetadminbranchprotection
+        method: GET
+        description: GitHub Get Admin Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: repossetadminbranchprotection
+        method: POST
+        description: GitHub Set Admin Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeleteadminbranchprotection
+        method: DELETE
+        description: GitHub Delete Admin Branch Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-required_pull_request_reviews
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews
+      operations:
+      - name: reposgetpullrequestreviewprotection
+        method: GET
+        description: GitHub Get Pull Request Review Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatepullrequestreviewprotection
+        method: PATCH
+        description: GitHub Update Pull Request Review Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdeletepullrequestreviewprotection
+        method: DELETE
+        description: GitHub Delete Pull Request Review Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-required_signatures
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+      operations:
+      - name: reposgetcommitsignatureprotection
+        method: GET
+        description: GitHub Get Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatecommitsignatureprotection
+        method: POST
+        description: GitHub Create Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeletecommitsignatureprotection
+        method: DELETE
+        description: GitHub Delete Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+      operations:
+      - name: reposgetstatuschecksprotection
+        method: GET
+        description: GitHub Get Status Checks Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatestatuscheckprotection
+        method: PATCH
+        description: GitHub Update Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremovestatuscheckprotection
+        method: DELETE
+        description: GitHub Remove Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks-contexts
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+      operations:
+      - name: reposgetallstatuscheckcontexts
+        method: GET
+        description: GitHub Get All Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposaddstatuscheckcontexts
+        method: POST
+        description: GitHub Add Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: repossetstatuscheckcontexts
+        method: PUT
+        description: GitHub Set Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremovestatuscheckcontexts
+        method: DELETE
+        description: GitHub Remove Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+      operations:
+      - name: reposgetaccessrestrictions
+        method: GET
+        description: GitHub Get Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeleteaccessrestrictions
+        method: DELETE
+        description: GitHub Delete Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: reposgetappswithaccesstoprotectedbranch
+        method: GET
+        description: GitHub Get Apps with Access to the Protected Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposaddappaccessrestrictions
+        method: POST
+        description: GitHub Add App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: repossetappaccessrestrictions
+        method: PUT
+        description: GitHub Set App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremoveappaccessrestrictions
+        method: DELETE
+        description: GitHub Remove App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      operations:
+      - name: reposgetteamswithaccesstoprotectedbranch
+        method: GET
+        description: GitHub Get Teams with Access to the Protected Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposaddteamaccessrestrictions
+        method: POST
+        description: GitHub Add Team Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: repossetteamaccessrestrictions
+        method: PUT
+        description: GitHub Set Team Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremoveteamaccessrestrictions
+        method: DELETE
+        description: GitHub Remove Team Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions-users
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      operations:
+      - name: reposgetuserswithaccesstoprotectedbranch
+        method: GET
+        description: GitHub Get Users with Access to the Protected Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposadduseraccessrestrictions
+        method: POST
+        description: GitHub Add User Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: repossetuseraccessrestrictions
+        method: PUT
+        description: GitHub Set User Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremoveuseraccessrestrictions
+        method: DELETE
+        description: GitHub Remove User Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-rename
+      path: /repos/{owner}/{repo}/branches/{branch}/rename
+      operations:
+      - name: reposrenamebranch
+        method: POST
+        description: GitHub Rename a Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-codeowners-errors
+      path: /repos/{owner}/{repo}/codeowners/errors
+      operations:
+      - name: reposcodeownerserrors
+        method: GET
+        description: GitHub List CODEOWNERS Errors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: query
+          type: string
+          description: 'A branch, tag or commit name used to determine which version of the CODEOWNERS file to use. Default:
+            the repository''s default branch (e.g. `main`)'
+    - name: repos-owner-repo-collaborators
+      path: /repos/{owner}/{repo}/collaborators
+      operations:
+      - name: reposlistcollaborators
+        method: GET
+        description: GitHub List Repository Collaborators
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: affiliation
+          in: query
+          type: string
+          description: Filter collaborators returned by their affiliation. `outside` means all outside collaborators of an
+            organization-owned repository. `direct` means all collaborat
+        - name: permission
+          in: query
+          type: string
+          description: Filter collaborators by the permissions they have on the repository. If not specified, all collaborators
+            will be returned.
+    - name: repos-owner-repo-collaborators-username
+      path: /repos/{owner}/{repo}/collaborators/{username}
+      operations:
+      - name: reposcheckcollaborator
+        method: GET
+        description: GitHub Check if a User is a Repository Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposaddcollaborator
+        method: PUT
+        description: GitHub Add a Repository Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposremovecollaborator
+        method: DELETE
+        description: GitHub Remove a Repository Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-collaborators-username-permission
+      path: /repos/{owner}/{repo}/collaborators/{username}/permission
+      operations:
+      - name: reposgetcollaboratorpermissionlevel
+        method: GET
+        description: GitHub Get Repository Permissions for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-comments
+      path: /repos/{owner}/{repo}/comments
+      operations:
+      - name: reposlistcommitcommentsforrepo
+        method: GET
+        description: GitHub List Commit Comments for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-comments-comment_id
+      path: /repos/{owner}/{repo}/comments/{comment_id}
+      operations:
+      - name: reposgetcommitcomment
+        method: GET
+        description: GitHub Get a Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatecommitcomment
+        method: PATCH
+        description: GitHub Update a Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletecommitcomment
+        method: DELETE
+        description: GitHub Delete a Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits
+      path: /repos/{owner}/{repo}/commits
+      operations:
+      - name: reposlistcommits
+        method: GET
+        description: GitHub List Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: query
+          type: string
+          description: 'SHA or branch to start listing commits from. Default: the repository’s default branch (usually `main`).'
+        - name: path
+          in: query
+          type: string
+          description: Only commits containing this file path will be returned.
+        - name: author
+          in: query
+          type: string
+          description: GitHub username or email address to use to filter by commit author.
+        - name: committer
+          in: query
+          type: string
+          description: GitHub username or email address to use to filter by commit committer.
+        - name: until
+          in: query
+          type: string
+          description: 'Only commits before this date will be returned. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
+            format: `YYYY-MM-DDTHH:MM:SSZ`.'
+    - name: repos-owner-repo-commits-commit_sha-branches-where-head
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head
+      operations:
+      - name: reposlistbranchesforheadcommit
+        method: GET
+        description: GitHub List Branches for HEAD Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits-commit_sha-comments
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/comments
+      operations:
+      - name: reposlistcommentsforcommit
+        method: GET
+        description: GitHub List Commit Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatecommitcomment
+        method: POST
+        description: GitHub Create a Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-commits-commit_sha-pulls
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/pulls
+      operations:
+      - name: reposlistpullrequestsassociatedwithcommit
+        method: GET
+        description: GitHub List Pull Requests Associated with a Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits-ref
+      path: /repos/{owner}/{repo}/commits/{ref}
+      operations:
+      - name: reposgetcommit
+        method: GET
+        description: GitHub Get a Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits-ref-status
+      path: /repos/{owner}/{repo}/commits/{ref}/status
+      operations:
+      - name: reposgetcombinedstatusforref
+        method: GET
+        description: GitHub Get the Combined Status for a Specific Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits-ref-statuses
+      path: /repos/{owner}/{repo}/commits/{ref}/statuses
+      operations:
+      - name: reposlistcommitstatusesforref
+        method: GET
+        description: GitHub List Commit Statuses for a Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-compare-basehead
+      path: /repos/{owner}/{repo}/compare/{basehead}
+      operations:
+      - name: reposcomparecommits
+        method: GET
+        description: GitHub Compare Two Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: basehead
+          in: path
+          type: string
+          description: 'The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both
+            must be branch names in `repo`. To compare with a branch that '
+          required: true
+    - name: repos-owner-repo-contents-path
+      path: /repos/{owner}/{repo}/contents/{path}
+      operations:
+      - name: reposgetcontent
+        method: GET
+        description: GitHub Get Repository Content
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: path
+          in: path
+          type: string
+          description: path parameter
+          required: true
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repository’s default branch.'
+      - name: reposcreateorupdatefilecontents
+        method: PUT
+        description: GitHub Create or Update File Contents
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: path
+          in: path
+          type: string
+          description: path parameter
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletefile
+        method: DELETE
+        description: GitHub Delete a File
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: path
+          in: path
+          type: string
+          description: path parameter
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-contributors
+      path: /repos/{owner}/{repo}/contributors
+      operations:
+      - name: reposlistcontributors
+        method: GET
+        description: GitHub List Repository Contributors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: anon
+          in: query
+          type: string
+          description: Set to `1` or `true` to include anonymous contributors in results.
+    - name: repos-owner-repo-deployments
+      path: /repos/{owner}/{repo}/deployments
+      operations:
+      - name: reposlistdeployments
+        method: GET
+        description: GitHub List Deployments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: query
+          type: string
+          description: The SHA recorded at creation time.
+        - name: ref
+          in: query
+          type: string
+          description: The name of the ref. This can be a branch, tag, or SHA.
+        - name: task
+          in: query
+          type: string
+          description: The name of the task for the deployment (e.g., `deploy` or `deploy:migrations`).
+        - name: environment
+          in: query
+          type: string
+          description: The name of the environment that was deployed to (e.g., `staging` or `production`).
+      - name: reposcreatedeployment
+        method: POST
+        description: GitHub Create a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-deployments-deployment_id
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}
+      operations:
+      - name: reposgetdeployment
+        method: GET
+        description: GitHub Get a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeletedeployment
+        method: DELETE
+        description: GitHub Delete a Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-deployments-deployment_id-statuses
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+      operations:
+      - name: reposlistdeploymentstatuses
+        method: GET
+        description: GitHub List Deployment Statuses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatedeploymentstatus
+        method: POST
+        description: GitHub Create a Deployment Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-deployments-deployment_id-statuses-status_id
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}
+      operations:
+      - name: reposgetdeploymentstatus
+        method: GET
+        description: GitHub Get a Deployment Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status_id
+          in: path
+          type: integer
+          required: true
+    - name: repos-owner-repo-dispatches
+      path: /repos/{owner}/{repo}/dispatches
+      operations:
+      - name: reposcreatedispatchevent
+        method: POST
+        description: GitHub Create a Repository Dispatch Event
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-environments
+      path: /repos/{owner}/{repo}/environments
+      operations:
+      - name: reposgetallenvironments
+        method: GET
+        description: GitHub List Environments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-environments-environment_name
+      path: /repos/{owner}/{repo}/environments/{environment_name}
+      operations:
+      - name: reposgetenvironment
+        method: GET
+        description: GitHub Get an Environment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreateorupdateenvironment
+        method: PUT
+        description: GitHub Create or Update an Environment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdeleteanenvironment
+        method: DELETE
+        description: GitHub Delete an Environment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies
+      operations:
+      - name: reposlistdeploymentbranchpolicies
+        method: GET
+        description: GitHub List Deployment Branch Policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatedeploymentbranchpolicy
+        method: POST
+        description: GitHub Create a Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies-branch
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}
+      operations:
+      - name: reposgetdeploymentbranchpolicy
+        method: GET
+        description: GitHub Get a Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatedeploymentbranchpolicy
+        method: PUT
+        description: GitHub Update a Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletedeploymentbranchpolicy
+        method: DELETE
+        description: GitHub Delete a Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-forks
+      path: /repos/{owner}/{repo}/forks
+      operations:
+      - name: reposlistforks
+        method: GET
+        description: GitHub List Forks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+          description: The sort order. `stargazers` will sort by star count.
+      - name: reposcreatefork
+        method: POST
+        description: GitHub Create a Fork
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-hooks
+      path: /repos/{owner}/{repo}/hooks
+      operations:
+      - name: reposlistwebhooks
+        method: GET
+        description: GitHub List Repository Webhooks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatewebhook
+        method: POST
+        description: GitHub Create a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-hooks-hook_id
+      path: /repos/{owner}/{repo}/hooks/{hook_id}
+      operations:
+      - name: reposgetwebhook
+        method: GET
+        description: GitHub Get a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatewebhook
+        method: PATCH
+        description: GitHub Update a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletewebhook
+        method: DELETE
+        description: GitHub Delete a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-hooks-hook_id-config
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/config
+      operations:
+      - name: reposgetwebhookconfigforrepo
+        method: GET
+        description: GitHub Get a Webhook Configuration for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatewebhookconfigforrepo
+        method: PATCH
+        description: GitHub Update a Webhook Configuration for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-hooks-hook_id-deliveries
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
+      operations:
+      - name: reposlistwebhookdeliveries
+        method: GET
+        description: GitHub List Deliveries for a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: redelivery
+          in: query
+          type: boolean
+    - name: repos-owner-repo-hooks-hook_id-deliveries-delivery_id
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}
+      operations:
+      - name: reposgetwebhookdelivery
+        method: GET
+        description: GitHub Get a Delivery for a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-hooks-hook_id-deliveries-delivery_id-attempts
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts
+      operations:
+      - name: reposredeliverwebhookdelivery
+        method: POST
+        description: GitHub Redeliver a Delivery for a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-hooks-hook_id-pings
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/pings
+      operations:
+      - name: repospingwebhook
+        method: POST
+        description: GitHub Ping a Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-hooks-hook_id-tests
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/tests
+      operations:
+      - name: repostestpushwebhook
+        method: POST
+        description: GitHub Test the Push Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-invitations
+      path: /repos/{owner}/{repo}/invitations
+      operations:
+      - name: reposlistinvitations
+        method: GET
+        description: GitHub List Repository Invitations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-invitations-invitation_id
+      path: /repos/{owner}/{repo}/invitations/{invitation_id}
+      operations:
+      - name: reposupdateinvitation
+        method: PATCH
+        description: GitHub Update a Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdeleteinvitation
+        method: DELETE
+        description: GitHub Delete a Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-keys
+      path: /repos/{owner}/{repo}/keys
+      operations:
+      - name: reposlistdeploykeys
+        method: GET
+        description: GitHub List Deploy Keys
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatedeploykey
+        method: POST
+        description: GitHub Create a Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-keys-key_id
+      path: /repos/{owner}/{repo}/keys/{key_id}
+      operations:
+      - name: reposgetdeploykey
+        method: GET
+        description: GitHub Get a Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeletedeploykey
+        method: DELETE
+        description: GitHub Delete a Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-languages
+      path: /repos/{owner}/{repo}/languages
+      operations:
+      - name: reposlistlanguages
+        method: GET
+        description: GitHub List Repository Languages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-lfs
+      path: /repos/{owner}/{repo}/lfs
+      operations:
+      - name: reposenablelfsforrepo
+        method: PUT
+        description: GitHub Enable Git LFS for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdisablelfsforrepo
+        method: DELETE
+        description: GitHub Disable Git LFS for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-merge-upstream
+      path: /repos/{owner}/{repo}/merge-upstream
+      operations:
+      - name: reposmergeupstream
+        method: POST
+        description: GitHub Sync a Fork Branch with the Upstream Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-merges
+      path: /repos/{owner}/{repo}/merges
+      operations:
+      - name: reposmerge
+        method: POST
+        description: GitHub Merge a Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pages
+      path: /repos/{owner}/{repo}/pages
+      operations:
+      - name: reposgetpages
+        method: GET
+        description: GitHub Get a GitHub Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatepagessite
+        method: POST
+        description: GitHub Create a GitHub Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposupdateinformationaboutpagessite
+        method: PUT
+        description: GitHub Update Information About a GitHub Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: reposdeletepagessite
+        method: DELETE
+        description: GitHub Delete a GitHub Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pages-builds
+      path: /repos/{owner}/{repo}/pages/builds
+      operations:
+      - name: reposlistpagesbuilds
+        method: GET
+        description: GitHub List GitHub Enterprise Server Pages Builds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposrequestpagesbuild
+        method: POST
+        description: GitHub Request a GitHub Enterprise Server Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pages-builds-latest
+      path: /repos/{owner}/{repo}/pages/builds/latest
+      operations:
+      - name: reposgetlatestpagesbuild
+        method: GET
+        description: GitHub Get Latest Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pages-builds-build_id
+      path: /repos/{owner}/{repo}/pages/builds/{build_id}
+      operations:
+      - name: reposgetpagesbuild
+        method: GET
+        description: GitHub Get GitHub Enterprise Server Pages Build
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: build_id
+          in: path
+          type: integer
+          required: true
+    - name: repos-owner-repo-pages-deployments
+      path: /repos/{owner}/{repo}/pages/deployments
+      operations:
+      - name: reposcreatepagesdeployment
+        method: POST
+        description: GitHub Create a GitHub Pages Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-readme
+      path: /repos/{owner}/{repo}/readme
+      operations:
+      - name: reposgetreadme
+        method: GET
+        description: GitHub Get a Repository README
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repository’s default branch.'
+    - name: repos-owner-repo-readme-dir
+      path: /repos/{owner}/{repo}/readme/{dir}
+      operations:
+      - name: reposgetreadmeindirectory
+        method: GET
+        description: GitHub Get a Repository README for a Directory
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dir
+          in: path
+          type: string
+          description: The alternate path to look for a README file
+          required: true
+        - name: ref
+          in: query
+          type: string
+          description: 'The name of the commit/branch/tag. Default: the repository’s default branch.'
+    - name: repos-owner-repo-releases
+      path: /repos/{owner}/{repo}/releases
+      operations:
+      - name: reposlistreleases
+        method: GET
+        description: GitHub List Releases
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreaterelease
+        method: POST
+        description: GitHub Create a Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-releases-assets-asset_id
+      path: /repos/{owner}/{repo}/releases/assets/{asset_id}
+      operations:
+      - name: reposgetreleaseasset
+        method: GET
+        description: GitHub Get a Release Asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdatereleaseasset
+        method: PATCH
+        description: GitHub Update a Release Asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdeletereleaseasset
+        method: DELETE
+        description: GitHub Delete a Release Asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-releases-generate-notes
+      path: /repos/{owner}/{repo}/releases/generate-notes
+      operations:
+      - name: reposgeneratereleasenotes
+        method: POST
+        description: GitHub Generate Release Notes Content for a Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-releases-latest
+      path: /repos/{owner}/{repo}/releases/latest
+      operations:
+      - name: reposgetlatestrelease
+        method: GET
+        description: GitHub Get the Latest Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-releases-tags-tag
+      path: /repos/{owner}/{repo}/releases/tags/{tag}
+      operations:
+      - name: reposgetreleasebytag
+        method: GET
+        description: GitHub Get a Release by Tag Name
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tag
+          in: path
+          type: string
+          description: tag parameter
+          required: true
+    - name: repos-owner-repo-releases-release_id
+      path: /repos/{owner}/{repo}/releases/{release_id}
+      operations:
+      - name: reposgetrelease
+        method: GET
+        description: GitHub Get a Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposupdaterelease
+        method: PATCH
+        description: GitHub Update a Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: reposdeleterelease
+        method: DELETE
+        description: GitHub Delete a Release
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-releases-release_id-assets
+      path: /repos/{owner}/{repo}/releases/{release_id}/assets
+      operations:
+      - name: reposlistreleaseassets
+        method: GET
+        description: GitHub List Release Assets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposuploadreleaseasset
+        method: POST
+        description: GitHub Upload a Release Asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: name
+          in: query
+          type: string
+          required: true
+        - name: label
+          in: query
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-replicas-caches
+      path: /repos/{owner}/{repo}/replicas/caches
+      operations:
+      - name: reposlistcacheinfo
+        method: GET
+        description: GitHub List Repository Cache Replication Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-stats-code_frequency
+      path: /repos/{owner}/{repo}/stats/code_frequency
+      operations:
+      - name: reposgetcodefrequencystats
+        method: GET
+        description: GitHub Get the Weekly Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-stats-commit_activity
+      path: /repos/{owner}/{repo}/stats/commit_activity
+      operations:
+      - name: reposgetcommitactivitystats
+        method: GET
+        description: GitHub Get the Last Year of Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-stats-contributors
+      path: /repos/{owner}/{repo}/stats/contributors
+      operations:
+      - name: reposgetcontributorsstats
+        method: GET
+        description: GitHub Get All Contributor Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-stats-participation
+      path: /repos/{owner}/{repo}/stats/participation
+      operations:
+      - name: reposgetparticipationstats
+        method: GET
+        description: GitHub Get the Weekly Commit Count
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-stats-punch_card
+      path: /repos/{owner}/{repo}/stats/punch_card
+      operations:
+      - name: reposgetpunchcardstats
+        method: GET
+        description: GitHub Get the Hourly Commit Count for Each Day
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-statuses-sha
+      path: /repos/{owner}/{repo}/statuses/{sha}
+      operations:
+      - name: reposcreatecommitstatus
+        method: POST
+        description: GitHub Create a Commit Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-tags
+      path: /repos/{owner}/{repo}/tags
+      operations:
+      - name: reposlisttags
+        method: GET
+        description: GitHub List Repository Tags
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-tags-protection
+      path: /repos/{owner}/{repo}/tags/protection
+      operations:
+      - name: reposlisttagprotection
+        method: GET
+        description: GitHub List Tag Protection States for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposcreatetagprotection
+        method: POST
+        description: GitHub Create a Tag Protection State for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-tags-protection-tag_protection_id
+      path: /repos/{owner}/{repo}/tags/protection/{tag_protection_id}
+      operations:
+      - name: reposdeletetagprotection
+        method: DELETE
+        description: GitHub Delete a Tag Protection State for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-tarball-ref
+      path: /repos/{owner}/{repo}/tarball/{ref}
+      operations:
+      - name: reposdownloadtarballarchive
+        method: GET
+        description: GitHub Download a Repository Archive (tar)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-teams
+      path: /repos/{owner}/{repo}/teams
+      operations:
+      - name: reposlistteams
+        method: GET
+        description: GitHub List Repository Teams
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-topics
+      path: /repos/{owner}/{repo}/topics
+      operations:
+      - name: reposgetalltopics
+        method: GET
+        description: GitHub Get All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposreplacealltopics
+        method: PUT
+        description: GitHub Replace All Repository Topics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-transfer
+      path: /repos/{owner}/{repo}/transfer
+      operations:
+      - name: repostransfer
+        method: POST
+        description: GitHub Transfer a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-vulnerability-alerts
+      path: /repos/{owner}/{repo}/vulnerability-alerts
+      operations:
+      - name: reposcheckvulnerabilityalerts
+        method: GET
+        description: GitHub Check if Vulnerability Alerts Are Enabled for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposenablevulnerabilityalerts
+        method: PUT
+        description: GitHub Enable Vulnerability Alerts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdisablevulnerabilityalerts
+        method: DELETE
+        description: GitHub Disable Vulnerability Alerts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-zipball-ref
+      path: /repos/{owner}/{repo}/zipball/{ref}
+      operations:
+      - name: reposdownloadzipballarchive
+        method: GET
+        description: GitHub Download a Repository Archive (zip)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: path
+          type: string
+          required: true
+    - name: repos-template_owner-template_repo-generate
+      path: /repos/{template_owner}/{template_repo}/generate
+      operations:
+      - name: reposcreateusingtemplate
+        method: POST
+        description: GitHub Create a Repository Using a Template
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: template_owner
+          in: path
+          type: string
+          description: The account owner of the template repository. The name is not case sensitive.
+          required: true
+        - name: template_repo
+          in: path
+          type: string
+          description: The name of the template repository without the `.git` extension. The name is not case sensitive.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repositories
+      path: /repositories
+      operations:
+      - name: reposlistpublic
+        method: GET
+        description: GitHub List Public Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Specifies the types of repositories to return. This endpoint will only list repositories available
+            to all users on the enterprise.
+    - name: user-repos
+      path: /user/repos
+      operations:
+      - name: reposlistforauthenticateduser
+        method: GET
+        description: GitHub List Repositories for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Limit results to repositories with the specified visibility.
+        - name: affiliation
+          in: query
+          type: string
+          description: 'Comma-separated list of values. Can include:  '
+        - name: type
+          in: query
+          type: string
+          description: Limit results to repositories of the specified type. Will cause a `422` error if used in the same request
+            as **visibility** or **affiliation**.
+        - name: sort
+          in: query
+          type: string
+          description: The property to sort the results by.
+        - name: direction
+          in: query
+          type: string
+          description: 'The order to sort by. Default: `asc` when using `full_name`, otherwise `desc`.'
+      - name: reposcreateforauthenticateduser
+        method: POST
+        description: GitHub Create a Repository for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-repository_invitations
+      path: /user/repository_invitations
+      operations:
+      - name: reposlistinvitationsforauthenticateduser
+        method: GET
+        description: GitHub List Repository Invitations for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-repository_invitations-invitation_id
+      path: /user/repository_invitations/{invitation_id}
+      operations:
+      - name: reposacceptinvitationforauthenticateduser
+        method: PATCH
+        description: GitHub Accept a Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: reposdeclineinvitationforauthenticateduser
+        method: DELETE
+        description: GitHub Decline a Repository Invitation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-repos
+      path: /users/{username}/repos
+      operations:
+      - name: reposlistforuser
+        method: GET
+        description: GitHub List Repositories for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: type
+          in: query
+          type: string
+          description: Limit results to repositories of the specified type.
+        - name: sort
+          in: query
+          type: string
+          description: The property to sort the results by.
+        - name: direction
+          in: query
+          type: string
+          description: 'The order to sort by. Default: `asc` when using `full_name`, otherwise `desc`.'
+  exposes:
+  - type: rest
+    namespace: github-repos-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Repos. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/repos
+      name: orgs-org-repos
+      description: REST surface for orgs-org-repos.
+      operations:
+      - method: GET
+        name: reposlistfororg
+        description: GitHub List Organization Repositories
+        call: github-repos.reposlistfororg
+        with:
+          type: rest.type
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreateinorg
+        description: GitHub Create an Organization Repository
+        call: github-repos.reposcreateinorg
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}
+      name: repos-owner-repo
+      description: REST surface for repos-owner-repo.
+      operations:
+      - method: GET
+        name: reposget
+        description: GitHub Get a Repository
+        call: github-repos.reposget
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdate
+        description: GitHub Update a Repository
+        call: github-repos.reposupdate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdelete
+        description: GitHub Delete a Repository
+        call: github-repos.reposdelete
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/autolinks
+      name: repos-owner-repo-autolinks
+      description: REST surface for repos-owner-repo-autolinks.
+      operations:
+      - method: GET
+        name: reposlistautolinks
+        description: GitHub Get All Autolinks of a Repository
+        call: github-repos.reposlistautolinks
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreateautolink
+        description: GitHub Create an Autolink Reference for a Repository
+        call: github-repos.reposcreateautolink
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/autolinks/{autolink-id}
+      name: repos-owner-repo-autolinks-autolink-id
+      description: REST surface for repos-owner-repo-autolinks-autolink_id.
+      operations:
+      - method: GET
+        name: reposgetautolink
+        description: GitHub Get an Autolink Reference of a Repository
+        call: github-repos.reposgetautolink
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleteautolink
+        description: GitHub Delete an Autolink Reference from a Repository
+        call: github-repos.reposdeleteautolink
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches
+      name: repos-owner-repo-branches
+      description: REST surface for repos-owner-repo-branches.
+      operations:
+      - method: GET
+        name: reposlistbranches
+        description: GitHub List Branches
+        call: github-repos.reposlistbranches
+        with:
+          protected: rest.protected
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}
+      name: repos-owner-repo-branches-branch
+      description: REST surface for repos-owner-repo-branches-branch.
+      operations:
+      - method: GET
+        name: reposgetbranch
+        description: GitHub Get a Branch
+        call: github-repos.reposgetbranch
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection
+      name: repos-owner-repo-branches-branch-protection
+      description: REST surface for repos-owner-repo-branches-branch-protection.
+      operations:
+      - method: GET
+        name: reposgetbranchprotection
+        description: GitHub Get Branch Protection
+        call: github-repos.reposgetbranchprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposupdatebranchprotection
+        description: GitHub Update Branch Protection
+        call: github-repos.reposupdatebranchprotection
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletebranchprotection
+        description: GitHub Delete Branch Protection
+        call: github-repos.reposdeletebranchprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/enforce-admins
+      name: repos-owner-repo-branches-branch-protection-enforce-admins
+      description: REST surface for repos-owner-repo-branches-branch-protection-enforce_admins.
+      operations:
+      - method: GET
+        name: reposgetadminbranchprotection
+        description: GitHub Get Admin Branch Protection
+        call: github-repos.reposgetadminbranchprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: repossetadminbranchprotection
+        description: GitHub Set Admin Branch Protection
+        call: github-repos.repossetadminbranchprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleteadminbranchprotection
+        description: GitHub Delete Admin Branch Protection
+        call: github-repos.reposdeleteadminbranchprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-pull-request-reviews
+      name: repos-owner-repo-branches-branch-protection-required-pull-request-reviews
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_pull_request_reviews.
+      operations:
+      - method: GET
+        name: reposgetpullrequestreviewprotection
+        description: GitHub Get Pull Request Review Protection
+        call: github-repos.reposgetpullrequestreviewprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatepullrequestreviewprotection
+        description: GitHub Update Pull Request Review Protection
+        call: github-repos.reposupdatepullrequestreviewprotection
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletepullrequestreviewprotection
+        description: GitHub Delete Pull Request Review Protection
+        call: github-repos.reposdeletepullrequestreviewprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-signatures
+      name: repos-owner-repo-branches-branch-protection-required-signatures
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_signatures.
+      operations:
+      - method: GET
+        name: reposgetcommitsignatureprotection
+        description: GitHub Get Commit Signature Protection
+        call: github-repos.reposgetcommitsignatureprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatecommitsignatureprotection
+        description: GitHub Create Commit Signature Protection
+        call: github-repos.reposcreatecommitsignatureprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletecommitsignatureprotection
+        description: GitHub Delete Commit Signature Protection
+        call: github-repos.reposdeletecommitsignatureprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks
+      name: repos-owner-repo-branches-branch-protection-required-status-checks
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks.
+      operations:
+      - method: GET
+        name: reposgetstatuschecksprotection
+        description: GitHub Get Status Checks Protection
+        call: github-repos.reposgetstatuschecksprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatestatuscheckprotection
+        description: GitHub Update Status Check Protection
+        call: github-repos.reposupdatestatuscheckprotection
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremovestatuscheckprotection
+        description: GitHub Remove Status Check Protection
+        call: github-repos.reposremovestatuscheckprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks/contexts
+      name: repos-owner-repo-branches-branch-protection-required-status-checks-contexts
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks-contexts.
+      operations:
+      - method: GET
+        name: reposgetallstatuscheckcontexts
+        description: GitHub Get All Status Check Contexts
+        call: github-repos.reposgetallstatuscheckcontexts
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposaddstatuscheckcontexts
+        description: GitHub Add Status Check Contexts
+        call: github-repos.reposaddstatuscheckcontexts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: repossetstatuscheckcontexts
+        description: GitHub Set Status Check Contexts
+        call: github-repos.repossetstatuscheckcontexts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremovestatuscheckcontexts
+        description: GitHub Remove Status Check Contexts
+        call: github-repos.reposremovestatuscheckcontexts
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions
+      name: repos-owner-repo-branches-branch-protection-restrictions
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions.
+      operations:
+      - method: GET
+        name: reposgetaccessrestrictions
+        description: GitHub Get Access Restrictions
+        call: github-repos.reposgetaccessrestrictions
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleteaccessrestrictions
+        description: GitHub Delete Access Restrictions
+        call: github-repos.reposdeleteaccessrestrictions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: GET
+        name: reposgetappswithaccesstoprotectedbranch
+        description: GitHub Get Apps with Access to the Protected Branch
+        call: github-repos.reposgetappswithaccesstoprotectedbranch
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposaddappaccessrestrictions
+        description: GitHub Add App Access Restrictions
+        call: github-repos.reposaddappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: repossetappaccessrestrictions
+        description: GitHub Set App Access Restrictions
+        call: github-repos.repossetappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremoveappaccessrestrictions
+        description: GitHub Remove App Access Restrictions
+        call: github-repos.reposremoveappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-teams.
+      operations:
+      - method: GET
+        name: reposgetteamswithaccesstoprotectedbranch
+        description: GitHub Get Teams with Access to the Protected Branch
+        call: github-repos.reposgetteamswithaccesstoprotectedbranch
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposaddteamaccessrestrictions
+        description: GitHub Add Team Access Restrictions
+        call: github-repos.reposaddteamaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: repossetteamaccessrestrictions
+        description: GitHub Set Team Access Restrictions
+        call: github-repos.repossetteamaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremoveteamaccessrestrictions
+        description: GitHub Remove Team Access Restrictions
+        call: github-repos.reposremoveteamaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      name: repos-owner-repo-branches-branch-protection-restrictions-users
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-users.
+      operations:
+      - method: GET
+        name: reposgetuserswithaccesstoprotectedbranch
+        description: GitHub Get Users with Access to the Protected Branch
+        call: github-repos.reposgetuserswithaccesstoprotectedbranch
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposadduseraccessrestrictions
+        description: GitHub Add User Access Restrictions
+        call: github-repos.reposadduseraccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: repossetuseraccessrestrictions
+        description: GitHub Set User Access Restrictions
+        call: github-repos.repossetuseraccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremoveuseraccessrestrictions
+        description: GitHub Remove User Access Restrictions
+        call: github-repos.reposremoveuseraccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/rename
+      name: repos-owner-repo-branches-branch-rename
+      description: REST surface for repos-owner-repo-branches-branch-rename.
+      operations:
+      - method: POST
+        name: reposrenamebranch
+        description: GitHub Rename a Branch
+        call: github-repos.reposrenamebranch
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/codeowners/errors
+      name: repos-owner-repo-codeowners-errors
+      description: REST surface for repos-owner-repo-codeowners-errors.
+      operations:
+      - method: GET
+        name: reposcodeownerserrors
+        description: GitHub List CODEOWNERS Errors
+        call: github-repos.reposcodeownerserrors
+        with:
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/collaborators
+      name: repos-owner-repo-collaborators
+      description: REST surface for repos-owner-repo-collaborators.
+      operations:
+      - method: GET
+        name: reposlistcollaborators
+        description: GitHub List Repository Collaborators
+        call: github-repos.reposlistcollaborators
+        with:
+          affiliation: rest.affiliation
+          permission: rest.permission
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/collaborators/{username}
+      name: repos-owner-repo-collaborators-username
+      description: REST surface for repos-owner-repo-collaborators-username.
+      operations:
+      - method: GET
+        name: reposcheckcollaborator
+        description: GitHub Check if a User is a Repository Collaborator
+        call: github-repos.reposcheckcollaborator
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposaddcollaborator
+        description: GitHub Add a Repository Collaborator
+        call: github-repos.reposaddcollaborator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposremovecollaborator
+        description: GitHub Remove a Repository Collaborator
+        call: github-repos.reposremovecollaborator
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/collaborators/{username}/permission
+      name: repos-owner-repo-collaborators-username-permission
+      description: REST surface for repos-owner-repo-collaborators-username-permission.
+      operations:
+      - method: GET
+        name: reposgetcollaboratorpermissionlevel
+        description: GitHub Get Repository Permissions for a User
+        call: github-repos.reposgetcollaboratorpermissionlevel
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments
+      name: repos-owner-repo-comments
+      description: REST surface for repos-owner-repo-comments.
+      operations:
+      - method: GET
+        name: reposlistcommitcommentsforrepo
+        description: GitHub List Commit Comments for a Repository
+        call: github-repos.reposlistcommitcommentsforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}
+      name: repos-owner-repo-comments-comment-id
+      description: REST surface for repos-owner-repo-comments-comment_id.
+      operations:
+      - method: GET
+        name: reposgetcommitcomment
+        description: GitHub Get a Commit Comment
+        call: github-repos.reposgetcommitcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatecommitcomment
+        description: GitHub Update a Commit Comment
+        call: github-repos.reposupdatecommitcomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletecommitcomment
+        description: GitHub Delete a Commit Comment
+        call: github-repos.reposdeletecommitcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits
+      name: repos-owner-repo-commits
+      description: REST surface for repos-owner-repo-commits.
+      operations:
+      - method: GET
+        name: reposlistcommits
+        description: GitHub List Commits
+        call: github-repos.reposlistcommits
+        with:
+          sha: rest.sha
+          path: rest.path
+          author: rest.author
+          committer: rest.committer
+          until: rest.until
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/branches-where-head
+      name: repos-owner-repo-commits-commit-sha-branches-where-head
+      description: REST surface for repos-owner-repo-commits-commit_sha-branches-where-head.
+      operations:
+      - method: GET
+        name: reposlistbranchesforheadcommit
+        description: GitHub List Branches for HEAD Commit
+        call: github-repos.reposlistbranchesforheadcommit
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/comments
+      name: repos-owner-repo-commits-commit-sha-comments
+      description: REST surface for repos-owner-repo-commits-commit_sha-comments.
+      operations:
+      - method: GET
+        name: reposlistcommentsforcommit
+        description: GitHub List Commit Comments
+        call: github-repos.reposlistcommentsforcommit
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatecommitcomment
+        description: GitHub Create a Commit Comment
+        call: github-repos.reposcreatecommitcomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/pulls
+      name: repos-owner-repo-commits-commit-sha-pulls
+      description: REST surface for repos-owner-repo-commits-commit_sha-pulls.
+      operations:
+      - method: GET
+        name: reposlistpullrequestsassociatedwithcommit
+        description: GitHub List Pull Requests Associated with a Commit
+        call: github-repos.reposlistpullrequestsassociatedwithcommit
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}
+      name: repos-owner-repo-commits-ref
+      description: REST surface for repos-owner-repo-commits-ref.
+      operations:
+      - method: GET
+        name: reposgetcommit
+        description: GitHub Get a Commit
+        call: github-repos.reposgetcommit
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/status
+      name: repos-owner-repo-commits-ref-status
+      description: REST surface for repos-owner-repo-commits-ref-status.
+      operations:
+      - method: GET
+        name: reposgetcombinedstatusforref
+        description: GitHub Get the Combined Status for a Specific Reference
+        call: github-repos.reposgetcombinedstatusforref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/statuses
+      name: repos-owner-repo-commits-ref-statuses
+      description: REST surface for repos-owner-repo-commits-ref-statuses.
+      operations:
+      - method: GET
+        name: reposlistcommitstatusesforref
+        description: GitHub List Commit Statuses for a Reference
+        call: github-repos.reposlistcommitstatusesforref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/compare/{basehead}
+      name: repos-owner-repo-compare-basehead
+      description: REST surface for repos-owner-repo-compare-basehead.
+      operations:
+      - method: GET
+        name: reposcomparecommits
+        description: GitHub Compare Two Commits
+        call: github-repos.reposcomparecommits
+        with:
+          basehead: rest.basehead
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/contents/{path}
+      name: repos-owner-repo-contents-path
+      description: REST surface for repos-owner-repo-contents-path.
+      operations:
+      - method: GET
+        name: reposgetcontent
+        description: GitHub Get Repository Content
+        call: github-repos.reposgetcontent
+        with:
+          path: rest.path
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposcreateorupdatefilecontents
+        description: GitHub Create or Update File Contents
+        call: github-repos.reposcreateorupdatefilecontents
+        with:
+          path: rest.path
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletefile
+        description: GitHub Delete a File
+        call: github-repos.reposdeletefile
+        with:
+          path: rest.path
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/contributors
+      name: repos-owner-repo-contributors
+      description: REST surface for repos-owner-repo-contributors.
+      operations:
+      - method: GET
+        name: reposlistcontributors
+        description: GitHub List Repository Contributors
+        call: github-repos.reposlistcontributors
+        with:
+          anon: rest.anon
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments
+      name: repos-owner-repo-deployments
+      description: REST surface for repos-owner-repo-deployments.
+      operations:
+      - method: GET
+        name: reposlistdeployments
+        description: GitHub List Deployments
+        call: github-repos.reposlistdeployments
+        with:
+          sha: rest.sha
+          ref: rest.ref
+          task: rest.task
+          environment: rest.environment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatedeployment
+        description: GitHub Create a Deployment
+        call: github-repos.reposcreatedeployment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}
+      name: repos-owner-repo-deployments-deployment-id
+      description: REST surface for repos-owner-repo-deployments-deployment_id.
+      operations:
+      - method: GET
+        name: reposgetdeployment
+        description: GitHub Get a Deployment
+        call: github-repos.reposgetdeployment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletedeployment
+        description: GitHub Delete a Deployment
+        call: github-repos.reposdeletedeployment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}/statuses
+      name: repos-owner-repo-deployments-deployment-id-statuses
+      description: REST surface for repos-owner-repo-deployments-deployment_id-statuses.
+      operations:
+      - method: GET
+        name: reposlistdeploymentstatuses
+        description: GitHub List Deployment Statuses
+        call: github-repos.reposlistdeploymentstatuses
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatedeploymentstatus
+        description: GitHub Create a Deployment Status
+        call: github-repos.reposcreatedeploymentstatus
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}/statuses/{status-id}
+      name: repos-owner-repo-deployments-deployment-id-statuses-status-id
+      description: REST surface for repos-owner-repo-deployments-deployment_id-statuses-status_id.
+      operations:
+      - method: GET
+        name: reposgetdeploymentstatus
+        description: GitHub Get a Deployment Status
+        call: github-repos.reposgetdeploymentstatus
+        with:
+          status_id: rest.status_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dispatches
+      name: repos-owner-repo-dispatches
+      description: REST surface for repos-owner-repo-dispatches.
+      operations:
+      - method: POST
+        name: reposcreatedispatchevent
+        description: GitHub Create a Repository Dispatch Event
+        call: github-repos.reposcreatedispatchevent
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments
+      name: repos-owner-repo-environments
+      description: REST surface for repos-owner-repo-environments.
+      operations:
+      - method: GET
+        name: reposgetallenvironments
+        description: GitHub List Environments
+        call: github-repos.reposgetallenvironments
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}
+      name: repos-owner-repo-environments-environment-name
+      description: REST surface for repos-owner-repo-environments-environment_name.
+      operations:
+      - method: GET
+        name: reposgetenvironment
+        description: GitHub Get an Environment
+        call: github-repos.reposgetenvironment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposcreateorupdateenvironment
+        description: GitHub Create or Update an Environment
+        call: github-repos.reposcreateorupdateenvironment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleteanenvironment
+        description: GitHub Delete an Environment
+        call: github-repos.reposdeleteanenvironment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies.
+      operations:
+      - method: GET
+        name: reposlistdeploymentbranchpolicies
+        description: GitHub List Deployment Branch Policies
+        call: github-repos.reposlistdeploymentbranchpolicies
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatedeploymentbranchpolicy
+        description: GitHub Create a Deployment Branch Policy
+        call: github-repos.reposcreatedeploymentbranchpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies/{branch-policy-id}
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies-branch
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies-branch.
+      operations:
+      - method: GET
+        name: reposgetdeploymentbranchpolicy
+        description: GitHub Get a Deployment Branch Policy
+        call: github-repos.reposgetdeploymentbranchpolicy
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposupdatedeploymentbranchpolicy
+        description: GitHub Update a Deployment Branch Policy
+        call: github-repos.reposupdatedeploymentbranchpolicy
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletedeploymentbranchpolicy
+        description: GitHub Delete a Deployment Branch Policy
+        call: github-repos.reposdeletedeploymentbranchpolicy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/forks
+      name: repos-owner-repo-forks
+      description: REST surface for repos-owner-repo-forks.
+      operations:
+      - method: GET
+        name: reposlistforks
+        description: GitHub List Forks
+        call: github-repos.reposlistforks
+        with:
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatefork
+        description: GitHub Create a Fork
+        call: github-repos.reposcreatefork
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks
+      name: repos-owner-repo-hooks
+      description: REST surface for repos-owner-repo-hooks.
+      operations:
+      - method: GET
+        name: reposlistwebhooks
+        description: GitHub List Repository Webhooks
+        call: github-repos.reposlistwebhooks
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatewebhook
+        description: GitHub Create a Repository Webhook
+        call: github-repos.reposcreatewebhook
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}
+      name: repos-owner-repo-hooks-hook-id
+      description: REST surface for repos-owner-repo-hooks-hook_id.
+      operations:
+      - method: GET
+        name: reposgetwebhook
+        description: GitHub Get a Repository Webhook
+        call: github-repos.reposgetwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatewebhook
+        description: GitHub Update a Repository Webhook
+        call: github-repos.reposupdatewebhook
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletewebhook
+        description: GitHub Delete a Repository Webhook
+        call: github-repos.reposdeletewebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/config
+      name: repos-owner-repo-hooks-hook-id-config
+      description: REST surface for repos-owner-repo-hooks-hook_id-config.
+      operations:
+      - method: GET
+        name: reposgetwebhookconfigforrepo
+        description: GitHub Get a Webhook Configuration for a Repository
+        call: github-repos.reposgetwebhookconfigforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatewebhookconfigforrepo
+        description: GitHub Update a Webhook Configuration for a Repository
+        call: github-repos.reposupdatewebhookconfigforrepo
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/deliveries
+      name: repos-owner-repo-hooks-hook-id-deliveries
+      description: REST surface for repos-owner-repo-hooks-hook_id-deliveries.
+      operations:
+      - method: GET
+        name: reposlistwebhookdeliveries
+        description: GitHub List Deliveries for a Repository Webhook
+        call: github-repos.reposlistwebhookdeliveries
+        with:
+          redelivery: rest.redelivery
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/deliveries/{delivery-id}
+      name: repos-owner-repo-hooks-hook-id-deliveries-delivery-id
+      description: REST surface for repos-owner-repo-hooks-hook_id-deliveries-delivery_id.
+      operations:
+      - method: GET
+        name: reposgetwebhookdelivery
+        description: GitHub Get a Delivery for a Repository Webhook
+        call: github-repos.reposgetwebhookdelivery
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/deliveries/{delivery-id}/attempts
+      name: repos-owner-repo-hooks-hook-id-deliveries-delivery-id-attempts
+      description: REST surface for repos-owner-repo-hooks-hook_id-deliveries-delivery_id-attempts.
+      operations:
+      - method: POST
+        name: reposredeliverwebhookdelivery
+        description: GitHub Redeliver a Delivery for a Repository Webhook
+        call: github-repos.reposredeliverwebhookdelivery
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/pings
+      name: repos-owner-repo-hooks-hook-id-pings
+      description: REST surface for repos-owner-repo-hooks-hook_id-pings.
+      operations:
+      - method: POST
+        name: repospingwebhook
+        description: GitHub Ping a Repository Webhook
+        call: github-repos.repospingwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/tests
+      name: repos-owner-repo-hooks-hook-id-tests
+      description: REST surface for repos-owner-repo-hooks-hook_id-tests.
+      operations:
+      - method: POST
+        name: repostestpushwebhook
+        description: GitHub Test the Push Repository Webhook
+        call: github-repos.repostestpushwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/invitations
+      name: repos-owner-repo-invitations
+      description: REST surface for repos-owner-repo-invitations.
+      operations:
+      - method: GET
+        name: reposlistinvitations
+        description: GitHub List Repository Invitations
+        call: github-repos.reposlistinvitations
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/invitations/{invitation-id}
+      name: repos-owner-repo-invitations-invitation-id
+      description: REST surface for repos-owner-repo-invitations-invitation_id.
+      operations:
+      - method: PATCH
+        name: reposupdateinvitation
+        description: GitHub Update a Repository Invitation
+        call: github-repos.reposupdateinvitation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleteinvitation
+        description: GitHub Delete a Repository Invitation
+        call: github-repos.reposdeleteinvitation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys
+      name: repos-owner-repo-keys
+      description: REST surface for repos-owner-repo-keys.
+      operations:
+      - method: GET
+        name: reposlistdeploykeys
+        description: GitHub List Deploy Keys
+        call: github-repos.reposlistdeploykeys
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatedeploykey
+        description: GitHub Create a Deploy Key
+        call: github-repos.reposcreatedeploykey
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys/{key-id}
+      name: repos-owner-repo-keys-key-id
+      description: REST surface for repos-owner-repo-keys-key_id.
+      operations:
+      - method: GET
+        name: reposgetdeploykey
+        description: GitHub Get a Deploy Key
+        call: github-repos.reposgetdeploykey
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletedeploykey
+        description: GitHub Delete a Deploy Key
+        call: github-repos.reposdeletedeploykey
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/languages
+      name: repos-owner-repo-languages
+      description: REST surface for repos-owner-repo-languages.
+      operations:
+      - method: GET
+        name: reposlistlanguages
+        description: GitHub List Repository Languages
+        call: github-repos.reposlistlanguages
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/lfs
+      name: repos-owner-repo-lfs
+      description: REST surface for repos-owner-repo-lfs.
+      operations:
+      - method: PUT
+        name: reposenablelfsforrepo
+        description: GitHub Enable Git LFS for a Repository
+        call: github-repos.reposenablelfsforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdisablelfsforrepo
+        description: GitHub Disable Git LFS for a Repository
+        call: github-repos.reposdisablelfsforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/merge-upstream
+      name: repos-owner-repo-merge-upstream
+      description: REST surface for repos-owner-repo-merge-upstream.
+      operations:
+      - method: POST
+        name: reposmergeupstream
+        description: GitHub Sync a Fork Branch with the Upstream Repository
+        call: github-repos.reposmergeupstream
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/merges
+      name: repos-owner-repo-merges
+      description: REST surface for repos-owner-repo-merges.
+      operations:
+      - method: POST
+        name: reposmerge
+        description: GitHub Merge a Branch
+        call: github-repos.reposmerge
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages
+      name: repos-owner-repo-pages
+      description: REST surface for repos-owner-repo-pages.
+      operations:
+      - method: GET
+        name: reposgetpages
+        description: GitHub Get a GitHub Enterprise Server Pages Site
+        call: github-repos.reposgetpages
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatepagessite
+        description: GitHub Create a GitHub Enterprise Server Pages Site
+        call: github-repos.reposcreatepagessite
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposupdateinformationaboutpagessite
+        description: GitHub Update Information About a GitHub Enterprise Server Pages Site
+        call: github-repos.reposupdateinformationaboutpagessite
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletepagessite
+        description: GitHub Delete a GitHub Enterprise Server Pages Site
+        call: github-repos.reposdeletepagessite
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/builds
+      name: repos-owner-repo-pages-builds
+      description: REST surface for repos-owner-repo-pages-builds.
+      operations:
+      - method: GET
+        name: reposlistpagesbuilds
+        description: GitHub List GitHub Enterprise Server Pages Builds
+        call: github-repos.reposlistpagesbuilds
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposrequestpagesbuild
+        description: GitHub Request a GitHub Enterprise Server Pages Build
+        call: github-repos.reposrequestpagesbuild
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/builds/latest
+      name: repos-owner-repo-pages-builds-latest
+      description: REST surface for repos-owner-repo-pages-builds-latest.
+      operations:
+      - method: GET
+        name: reposgetlatestpagesbuild
+        description: GitHub Get Latest Pages Build
+        call: github-repos.reposgetlatestpagesbuild
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/builds/{build-id}
+      name: repos-owner-repo-pages-builds-build-id
+      description: REST surface for repos-owner-repo-pages-builds-build_id.
+      operations:
+      - method: GET
+        name: reposgetpagesbuild
+        description: GitHub Get GitHub Enterprise Server Pages Build
+        call: github-repos.reposgetpagesbuild
+        with:
+          build_id: rest.build_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/deployments
+      name: repos-owner-repo-pages-deployments
+      description: REST surface for repos-owner-repo-pages-deployments.
+      operations:
+      - method: POST
+        name: reposcreatepagesdeployment
+        description: GitHub Create a GitHub Pages Deployment
+        call: github-repos.reposcreatepagesdeployment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/readme
+      name: repos-owner-repo-readme
+      description: REST surface for repos-owner-repo-readme.
+      operations:
+      - method: GET
+        name: reposgetreadme
+        description: GitHub Get a Repository README
+        call: github-repos.reposgetreadme
+        with:
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/readme/{dir}
+      name: repos-owner-repo-readme-dir
+      description: REST surface for repos-owner-repo-readme-dir.
+      operations:
+      - method: GET
+        name: reposgetreadmeindirectory
+        description: GitHub Get a Repository README for a Directory
+        call: github-repos.reposgetreadmeindirectory
+        with:
+          dir: rest.dir
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases
+      name: repos-owner-repo-releases
+      description: REST surface for repos-owner-repo-releases.
+      operations:
+      - method: GET
+        name: reposlistreleases
+        description: GitHub List Releases
+        call: github-repos.reposlistreleases
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreaterelease
+        description: GitHub Create a Release
+        call: github-repos.reposcreaterelease
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/assets/{asset-id}
+      name: repos-owner-repo-releases-assets-asset-id
+      description: REST surface for repos-owner-repo-releases-assets-asset_id.
+      operations:
+      - method: GET
+        name: reposgetreleaseasset
+        description: GitHub Get a Release Asset
+        call: github-repos.reposgetreleaseasset
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdatereleaseasset
+        description: GitHub Update a Release Asset
+        call: github-repos.reposupdatereleaseasset
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeletereleaseasset
+        description: GitHub Delete a Release Asset
+        call: github-repos.reposdeletereleaseasset
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/generate-notes
+      name: repos-owner-repo-releases-generate-notes
+      description: REST surface for repos-owner-repo-releases-generate-notes.
+      operations:
+      - method: POST
+        name: reposgeneratereleasenotes
+        description: GitHub Generate Release Notes Content for a Release
+        call: github-repos.reposgeneratereleasenotes
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/latest
+      name: repos-owner-repo-releases-latest
+      description: REST surface for repos-owner-repo-releases-latest.
+      operations:
+      - method: GET
+        name: reposgetlatestrelease
+        description: GitHub Get the Latest Release
+        call: github-repos.reposgetlatestrelease
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/tags/{tag}
+      name: repos-owner-repo-releases-tags-tag
+      description: REST surface for repos-owner-repo-releases-tags-tag.
+      operations:
+      - method: GET
+        name: reposgetreleasebytag
+        description: GitHub Get a Release by Tag Name
+        call: github-repos.reposgetreleasebytag
+        with:
+          tag: rest.tag
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/{release-id}
+      name: repos-owner-repo-releases-release-id
+      description: REST surface for repos-owner-repo-releases-release_id.
+      operations:
+      - method: GET
+        name: reposgetrelease
+        description: GitHub Get a Release
+        call: github-repos.reposgetrelease
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: reposupdaterelease
+        description: GitHub Update a Release
+        call: github-repos.reposupdaterelease
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeleterelease
+        description: GitHub Delete a Release
+        call: github-repos.reposdeleterelease
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/releases/{release-id}/assets
+      name: repos-owner-repo-releases-release-id-assets
+      description: REST surface for repos-owner-repo-releases-release_id-assets.
+      operations:
+      - method: GET
+        name: reposlistreleaseassets
+        description: GitHub List Release Assets
+        call: github-repos.reposlistreleaseassets
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposuploadreleaseasset
+        description: GitHub Upload a Release Asset
+        call: github-repos.reposuploadreleaseasset
+        with:
+          name: rest.name
+          label: rest.label
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/replicas/caches
+      name: repos-owner-repo-replicas-caches
+      description: REST surface for repos-owner-repo-replicas-caches.
+      operations:
+      - method: GET
+        name: reposlistcacheinfo
+        description: GitHub List Repository Cache Replication Status
+        call: github-repos.reposlistcacheinfo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/code-frequency
+      name: repos-owner-repo-stats-code-frequency
+      description: REST surface for repos-owner-repo-stats-code_frequency.
+      operations:
+      - method: GET
+        name: reposgetcodefrequencystats
+        description: GitHub Get the Weekly Commit Activity
+        call: github-repos.reposgetcodefrequencystats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/commit-activity
+      name: repos-owner-repo-stats-commit-activity
+      description: REST surface for repos-owner-repo-stats-commit_activity.
+      operations:
+      - method: GET
+        name: reposgetcommitactivitystats
+        description: GitHub Get the Last Year of Commit Activity
+        call: github-repos.reposgetcommitactivitystats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/contributors
+      name: repos-owner-repo-stats-contributors
+      description: REST surface for repos-owner-repo-stats-contributors.
+      operations:
+      - method: GET
+        name: reposgetcontributorsstats
+        description: GitHub Get All Contributor Commit Activity
+        call: github-repos.reposgetcontributorsstats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/participation
+      name: repos-owner-repo-stats-participation
+      description: REST surface for repos-owner-repo-stats-participation.
+      operations:
+      - method: GET
+        name: reposgetparticipationstats
+        description: GitHub Get the Weekly Commit Count
+        call: github-repos.reposgetparticipationstats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/punch-card
+      name: repos-owner-repo-stats-punch-card
+      description: REST surface for repos-owner-repo-stats-punch_card.
+      operations:
+      - method: GET
+        name: reposgetpunchcardstats
+        description: GitHub Get the Hourly Commit Count for Each Day
+        call: github-repos.reposgetpunchcardstats
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/statuses/{sha}
+      name: repos-owner-repo-statuses-sha
+      description: REST surface for repos-owner-repo-statuses-sha.
+      operations:
+      - method: POST
+        name: reposcreatecommitstatus
+        description: GitHub Create a Commit Status
+        call: github-repos.reposcreatecommitstatus
+        with:
+          sha: rest.sha
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags
+      name: repos-owner-repo-tags
+      description: REST surface for repos-owner-repo-tags.
+      operations:
+      - method: GET
+        name: reposlisttags
+        description: GitHub List Repository Tags
+        call: github-repos.reposlisttags
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags/protection
+      name: repos-owner-repo-tags-protection
+      description: REST surface for repos-owner-repo-tags-protection.
+      operations:
+      - method: GET
+        name: reposlisttagprotection
+        description: GitHub List Tag Protection States for a Repository
+        call: github-repos.reposlisttagprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreatetagprotection
+        description: GitHub Create a Tag Protection State for a Repository
+        call: github-repos.reposcreatetagprotection
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tags/protection/{tag-protection-id}
+      name: repos-owner-repo-tags-protection-tag-protection-id
+      description: REST surface for repos-owner-repo-tags-protection-tag_protection_id.
+      operations:
+      - method: DELETE
+        name: reposdeletetagprotection
+        description: GitHub Delete a Tag Protection State for a Repository
+        call: github-repos.reposdeletetagprotection
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/tarball/{ref}
+      name: repos-owner-repo-tarball-ref
+      description: REST surface for repos-owner-repo-tarball-ref.
+      operations:
+      - method: GET
+        name: reposdownloadtarballarchive
+        description: GitHub Download a Repository Archive (tar)
+        call: github-repos.reposdownloadtarballarchive
+        with:
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/teams
+      name: repos-owner-repo-teams
+      description: REST surface for repos-owner-repo-teams.
+      operations:
+      - method: GET
+        name: reposlistteams
+        description: GitHub List Repository Teams
+        call: github-repos.reposlistteams
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/topics
+      name: repos-owner-repo-topics
+      description: REST surface for repos-owner-repo-topics.
+      operations:
+      - method: GET
+        name: reposgetalltopics
+        description: GitHub Get All Repository Topics
+        call: github-repos.reposgetalltopics
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposreplacealltopics
+        description: GitHub Replace All Repository Topics
+        call: github-repos.reposreplacealltopics
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/transfer
+      name: repos-owner-repo-transfer
+      description: REST surface for repos-owner-repo-transfer.
+      operations:
+      - method: POST
+        name: repostransfer
+        description: GitHub Transfer a Repository
+        call: github-repos.repostransfer
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/vulnerability-alerts
+      name: repos-owner-repo-vulnerability-alerts
+      description: REST surface for repos-owner-repo-vulnerability-alerts.
+      operations:
+      - method: GET
+        name: reposcheckvulnerabilityalerts
+        description: GitHub Check if Vulnerability Alerts Are Enabled for a Repository
+        call: github-repos.reposcheckvulnerabilityalerts
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: reposenablevulnerabilityalerts
+        description: GitHub Enable Vulnerability Alerts
+        call: github-repos.reposenablevulnerabilityalerts
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdisablevulnerabilityalerts
+        description: GitHub Disable Vulnerability Alerts
+        call: github-repos.reposdisablevulnerabilityalerts
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/zipball/{ref}
+      name: repos-owner-repo-zipball-ref
+      description: REST surface for repos-owner-repo-zipball-ref.
+      operations:
+      - method: GET
+        name: reposdownloadzipballarchive
+        description: GitHub Download a Repository Archive (zip)
+        call: github-repos.reposdownloadzipballarchive
+        with:
+          ref: rest.ref
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{template-owner}/{template-repo}/generate
+      name: repos-template-owner-template-repo-generate
+      description: REST surface for repos-template_owner-template_repo-generate.
+      operations:
+      - method: POST
+        name: reposcreateusingtemplate
+        description: GitHub Create a Repository Using a Template
+        call: github-repos.reposcreateusingtemplate
+        with:
+          template_owner: rest.template_owner
+          template_repo: rest.template_repo
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories
+      name: repositories
+      description: REST surface for repositories.
+      operations:
+      - method: GET
+        name: reposlistpublic
+        description: GitHub List Public Repositories
+        call: github-repos.reposlistpublic
+        with:
+          visibility: rest.visibility
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repos
+      name: user-repos
+      description: REST surface for user-repos.
+      operations:
+      - method: GET
+        name: reposlistforauthenticateduser
+        description: GitHub List Repositories for the Authenticated User
+        call: github-repos.reposlistforauthenticateduser
+        with:
+          visibility: rest.visibility
+          affiliation: rest.affiliation
+          type: rest.type
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reposcreateforauthenticateduser
+        description: GitHub Create a Repository for the Authenticated User
+        call: github-repos.reposcreateforauthenticateduser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repository-invitations
+      name: user-repository-invitations
+      description: REST surface for user-repository_invitations.
+      operations:
+      - method: GET
+        name: reposlistinvitationsforauthenticateduser
+        description: GitHub List Repository Invitations for the Authenticated User
+        call: github-repos.reposlistinvitationsforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/repository-invitations/{invitation-id}
+      name: user-repository-invitations-invitation-id
+      description: REST surface for user-repository_invitations-invitation_id.
+      operations:
+      - method: PATCH
+        name: reposacceptinvitationforauthenticateduser
+        description: GitHub Accept a Repository Invitation
+        call: github-repos.reposacceptinvitationforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: reposdeclineinvitationforauthenticateduser
+        description: GitHub Decline a Repository Invitation
+        call: github-repos.reposdeclineinvitationforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/repos
+      name: users-username-repos
+      description: REST surface for users-username-repos.
+      operations:
+      - method: GET
+        name: reposlistforuser
+        description: GitHub List Repositories for a User
+        call: github-repos.reposlistforuser
+        with:
+          type: rest.type
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-repos-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Repos. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-organization-repositories
+      description: GitHub List Organization Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistfororg
+      with:
+        type: tools.type
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-organization-repository
+      description: GitHub Create an Organization Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreateinorg
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository
+      description: GitHub Get a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposget
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository
+      description: GitHub Update a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository
+      description: GitHub Delete a Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdelete
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-autolinks-repository
+      description: GitHub Get All Autolinks of a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistautolinks
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-autolink-reference-repository
+      description: GitHub Create an Autolink Reference for a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreateautolink
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-autolink-reference-repository
+      description: GitHub Get an Autolink Reference of a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetautolink
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-autolink-reference-repository
+      description: GitHub Delete an Autolink Reference from a Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleteautolink
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-branches
+      description: GitHub List Branches
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistbranches
+      with:
+        protected: tools.protected
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-branch
+      description: GitHub Get a Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetbranch
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-branch-protection
+      description: GitHub Get Branch Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetbranchprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-branch-protection
+      description: GitHub Update Branch Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatebranchprotection
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-branch-protection
+      description: GitHub Delete Branch Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletebranchprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-admin-branch-protection
+      description: GitHub Get Admin Branch Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetadminbranchprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-admin-branch-protection
+      description: GitHub Set Admin Branch Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.repossetadminbranchprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-admin-branch-protection
+      description: GitHub Delete Admin Branch Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleteadminbranchprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-pull-request-review
+      description: GitHub Get Pull Request Review Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetpullrequestreviewprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-pull-request-review
+      description: GitHub Update Pull Request Review Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatepullrequestreviewprotection
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-pull-request-review
+      description: GitHub Delete Pull Request Review Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletepullrequestreviewprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-commit-signature-protection
+      description: GitHub Get Commit Signature Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcommitsignatureprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-commit-signature-protection
+      description: GitHub Create Commit Signature Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatecommitsignatureprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-commit-signature-protection
+      description: GitHub Delete Commit Signature Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletecommitsignatureprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-status-checks-protection
+      description: GitHub Get Status Checks Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetstatuschecksprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-status-check-protection
+      description: GitHub Update Status Check Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatestatuscheckprotection
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-status-check-protection
+      description: GitHub Remove Status Check Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremovestatuscheckprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-status-check
+      description: GitHub Get All Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetallstatuscheckcontexts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-status-check-contexts
+      description: GitHub Add Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-repos.reposaddstatuscheckcontexts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-status-check-contexts
+      description: GitHub Set Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.repossetstatuscheckcontexts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-status-check-contexts
+      description: GitHub Remove Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremovestatuscheckcontexts
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-access-restrictions
+      description: GitHub Get Access Restrictions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetaccessrestrictions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-access-restrictions
+      description: GitHub Delete Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleteaccessrestrictions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-apps-access-protected
+      description: GitHub Get Apps with Access to the Protected Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetappswithaccesstoprotectedbranch
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-app-access-restrictions
+      description: GitHub Add App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposaddappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-app-access-restrictions
+      description: GitHub Set App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.repossetappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-app-access-restrictions
+      description: GitHub Remove App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremoveappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-teams-access-protected
+      description: GitHub Get Teams with Access to the Protected Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetteamswithaccesstoprotectedbranch
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-team-access-restrictions
+      description: GitHub Add Team Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposaddteamaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-team-access-restrictions
+      description: GitHub Set Team Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.repossetteamaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-access-restrictions
+      description: GitHub Remove Team Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremoveteamaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-users-access-protected
+      description: GitHub Get Users with Access to the Protected Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetuserswithaccesstoprotectedbranch
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-user-access-restrictions
+      description: GitHub Add User Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposadduseraccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-user-access-restrictions
+      description: GitHub Set User Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.repossetuseraccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-user-access-restrictions
+      description: GitHub Remove User Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremoveuseraccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-rename-branch
+      description: GitHub Rename a Branch
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposrenamebranch
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-codeowners-errors
+      description: GitHub List CODEOWNERS Errors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcodeownerserrors
+      with:
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-collaborators
+      description: GitHub List Repository Collaborators
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcollaborators
+      with:
+        affiliation: tools.affiliation
+        permission: tools.permission
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-user-is
+      description: GitHub Check if a User is a Repository Collaborator
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcheckcollaborator
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-repository-collaborator
+      description: GitHub Add a Repository Collaborator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposaddcollaborator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-repository-collaborator
+      description: GitHub Remove a Repository Collaborator
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposremovecollaborator
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-permissions-user
+      description: GitHub Get Repository Permissions for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcollaboratorpermissionlevel
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commit-comments-repository
+      description: GitHub List Commit Comments for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcommitcommentsforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-commit-comment
+      description: GitHub Get a Commit Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcommitcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-commit-comment
+      description: GitHub Update a Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatecommitcomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-commit-comment
+      description: GitHub Delete a Commit Comment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletecommitcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commits
+      description: GitHub List Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcommits
+      with:
+        sha: tools.sha
+        path: tools.path
+        author: tools.author
+        committer: tools.committer
+        until: tools.until
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-branches-head-commit
+      description: GitHub List Branches for HEAD Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistbranchesforheadcommit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commit-comments
+      description: GitHub List Commit Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcommentsforcommit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-commit-comment
+      description: GitHub Create a Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatecommitcomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-pull-requests-associated
+      description: GitHub List Pull Requests Associated with a Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistpullrequestsassociatedwithcommit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-commit
+      description: GitHub Get a Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcommit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-combined-status-specific
+      description: GitHub Get the Combined Status for a Specific Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcombinedstatusforref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commit-statuses-reference
+      description: GitHub List Commit Statuses for a Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcommitstatusesforref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-compare-two-commits
+      description: GitHub Compare Two Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcomparecommits
+      with:
+        basehead: tools.basehead
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-content
+      description: GitHub Get Repository Content
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcontent
+      with:
+        path: tools.path
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-update-file-contents
+      description: GitHub Create or Update File Contents
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcreateorupdatefilecontents
+      with:
+        path: tools.path
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-file
+      description: GitHub Delete a File
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletefile
+      with:
+        path: tools.path
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-contributors
+      description: GitHub List Repository Contributors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcontributors
+      with:
+        anon: tools.anon
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deployments
+      description: GitHub List Deployments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistdeployments
+      with:
+        sha: tools.sha
+        ref: tools.ref
+        task: tools.task
+        environment: tools.environment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deployment
+      description: GitHub Create a Deployment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatedeployment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deployment
+      description: GitHub Get a Deployment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetdeployment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deployment
+      description: GitHub Delete a Deployment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletedeployment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deployment-statuses
+      description: GitHub List Deployment Statuses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistdeploymentstatuses
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deployment-status
+      description: GitHub Create a Deployment Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatedeploymentstatus
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deployment-status
+      description: GitHub Get a Deployment Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetdeploymentstatus
+      with:
+        status_id: tools.status_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-dispatch-event
+      description: GitHub Create a Repository Dispatch Event
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatedispatchevent
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-environments
+      description: GitHub List Environments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetallenvironments
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-environment
+      description: GitHub Get an Environment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetenvironment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-update-environment
+      description: GitHub Create or Update an Environment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcreateorupdateenvironment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-environment
+      description: GitHub Delete an Environment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleteanenvironment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deployment-branch-policies
+      description: GitHub List Deployment Branch Policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistdeploymentbranchpolicies
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deployment-branch-policy
+      description: GitHub Create a Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatedeploymentbranchpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deployment-branch-policy
+      description: GitHub Get a Deployment Branch Policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetdeploymentbranchpolicy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-deployment-branch-policy
+      description: GitHub Update a Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatedeploymentbranchpolicy
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deployment-branch-policy
+      description: GitHub Delete a Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletedeploymentbranchpolicy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-forks
+      description: GitHub List Forks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistforks
+      with:
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-fork
+      description: GitHub Create a Fork
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatefork
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-webhooks
+      description: GitHub List Repository Webhooks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistwebhooks
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-webhook
+      description: GitHub Create a Repository Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatewebhook
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-webhook
+      description: GitHub Get a Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetwebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository-webhook
+      description: GitHub Update a Repository Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatewebhook
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository-webhook
+      description: GitHub Delete a Repository Webhook
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletewebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-webhook-configuration-repository
+      description: GitHub Get a Webhook Configuration for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetwebhookconfigforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-webhook-configuration-repository
+      description: GitHub Update a Webhook Configuration for a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatewebhookconfigforrepo
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deliveries-repository-webhook
+      description: GitHub List Deliveries for a Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistwebhookdeliveries
+      with:
+        redelivery: tools.redelivery
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-delivery-repository-webhook
+      description: GitHub Get a Delivery for a Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetwebhookdelivery
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-redeliver-delivery-repository-webhook
+      description: GitHub Redeliver a Delivery for a Repository Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposredeliverwebhookdelivery
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-ping-repository-webhook
+      description: GitHub Ping a Repository Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.repospingwebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-test-push-repository-webhook
+      description: GitHub Test the Push Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-repos.repostestpushwebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-invitations
+      description: GitHub List Repository Invitations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistinvitations
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository-invitation
+      description: GitHub Update a Repository Invitation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdateinvitation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository-invitation
+      description: GitHub Delete a Repository Invitation
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleteinvitation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deploy-keys
+      description: GitHub List Deploy Keys
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistdeploykeys
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deploy-key
+      description: GitHub Create a Deploy Key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatedeploykey
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deploy-key
+      description: GitHub Get a Deploy Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetdeploykey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deploy-key
+      description: GitHub Delete a Deploy Key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletedeploykey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-languages
+      description: GitHub List Repository Languages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistlanguages
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-enable-git-lfs-repository
+      description: GitHub Enable Git LFS for a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposenablelfsforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-disable-git-lfs-repository
+      description: GitHub Disable Git LFS for a Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdisablelfsforrepo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-sync-fork-branch-upstream
+      description: GitHub Sync a Fork Branch with the Upstream Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposmergeupstream
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-merge-branch
+      description: GitHub Merge a Branch
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposmerge
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-github-enterprise-server
+      description: GitHub Get a GitHub Enterprise Server Pages Site
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetpages
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-github-enterprise-server
+      description: GitHub Create a GitHub Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatepagessite
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-information-about-github
+      description: GitHub Update Information About a GitHub Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdateinformationaboutpagessite
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-github-enterprise-server
+      description: GitHub Delete a GitHub Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletepagessite
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-github-enterprise-server
+      description: GitHub List GitHub Enterprise Server Pages Builds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistpagesbuilds
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-request-github-enterprise-server
+      description: GitHub Request a GitHub Enterprise Server Pages Build
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposrequestpagesbuild
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-latest-pages-build
+      description: GitHub Get Latest Pages Build
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetlatestpagesbuild
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-github-enterprise-server-2
+      description: GitHub Get GitHub Enterprise Server Pages Build
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetpagesbuild
+      with:
+        build_id: tools.build_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-github-pages-deployment
+      description: GitHub Create a GitHub Pages Deployment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatepagesdeployment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-readme
+      description: GitHub Get a Repository README
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetreadme
+      with:
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-repository-readme-directory
+      description: GitHub Get a Repository README for a Directory
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetreadmeindirectory
+      with:
+        dir: tools.dir
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-releases
+      description: GitHub List Releases
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistreleases
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-release
+      description: GitHub Create a Release
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreaterelease
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-release-asset
+      description: GitHub Get a Release Asset
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetreleaseasset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-release-asset
+      description: GitHub Update a Release Asset
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdatereleaseasset
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-release-asset
+      description: GitHub Delete a Release Asset
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletereleaseasset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-generate-release-notes-content
+      description: GitHub Generate Release Notes Content for a Release
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposgeneratereleasenotes
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-latest-release
+      description: GitHub Get the Latest Release
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetlatestrelease
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-release-tag-name
+      description: GitHub Get a Release by Tag Name
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetreleasebytag
+      with:
+        tag: tools.tag
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-release
+      description: GitHub Get a Release
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetrelease
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-release
+      description: GitHub Update a Release
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposupdaterelease
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-release
+      description: GitHub Delete a Release
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeleterelease
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-release-assets
+      description: GitHub List Release Assets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistreleaseassets
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-upload-release-asset
+      description: GitHub Upload a Release Asset
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposuploadreleaseasset
+      with:
+        name: tools.name
+        label: tools.label
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-cache-replication
+      description: GitHub List Repository Cache Replication Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistcacheinfo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-weekly-commit-activity
+      description: GitHub Get the Weekly Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcodefrequencystats
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-last-year-commit
+      description: GitHub Get the Last Year of Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcommitactivitystats
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-contributor-commit
+      description: GitHub Get All Contributor Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetcontributorsstats
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-weekly-commit-count
+      description: GitHub Get the Weekly Commit Count
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetparticipationstats
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-hourly-commit-count
+      description: GitHub Get the Hourly Commit Count for Each Day
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetpunchcardstats
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-commit-status
+      description: GitHub Create a Commit Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatecommitstatus
+      with:
+        sha: tools.sha
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-tags
+      description: GitHub List Repository Tags
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlisttags
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-tag-protection-states
+      description: GitHub List Tag Protection States for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlisttagprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-tag-protection-state
+      description: GitHub Create a Tag Protection State for a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreatetagprotection
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-tag-protection-state
+      description: GitHub Delete a Tag Protection State for a Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeletetagprotection
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-download-repository-archive-tar
+      description: GitHub Download a Repository Archive (tar)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposdownloadtarballarchive
+      with:
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-teams
+      description: GitHub List Repository Teams
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistteams
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-repository-topics
+      description: GitHub Get All Repository Topics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposgetalltopics
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-replace-all-repository-topics
+      description: GitHub Replace All Repository Topics
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposreplacealltopics
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-transfer-repository
+      description: GitHub Transfer a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.repostransfer
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-vulnerability-alerts
+      description: GitHub Check if Vulnerability Alerts Are Enabled for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposcheckvulnerabilityalerts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-enable-vulnerability-alerts
+      description: GitHub Enable Vulnerability Alerts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposenablevulnerabilityalerts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-disable-vulnerability-alerts
+      description: GitHub Disable Vulnerability Alerts
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdisablevulnerabilityalerts
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-download-repository-archive-zip
+      description: GitHub Download a Repository Archive (zip)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposdownloadzipballarchive
+      with:
+        ref: tools.ref
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-using-template
+      description: GitHub Create a Repository Using a Template
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreateusingtemplate
+      with:
+        template_owner: tools.template_owner
+        template_repo: tools.template_repo
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-repositories
+      description: GitHub List Public Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistpublic
+      with:
+        visibility: tools.visibility
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-authenticated-user
+      description: GitHub List Repositories for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistforauthenticateduser
+      with:
+        visibility: tools.visibility
+        affiliation: tools.affiliation
+        type: tools.type
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-repository-authenticated-user
+      description: GitHub Create a Repository for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-repos.reposcreateforauthenticateduser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-invitations-authenticated
+      description: GitHub List Repository Invitations for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistinvitationsforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-accept-repository-invitation
+      description: GitHub Accept a Repository Invitation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-repos.reposacceptinvitationforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-decline-repository-invitation
+      description: GitHub Decline a Repository Invitation
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-repos.reposdeclineinvitationforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-user
+      description: GitHub List Repositories for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-repos.reposlistforuser
+      with:
+        type: tools.type
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.

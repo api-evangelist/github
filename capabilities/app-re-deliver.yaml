@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Re-Deliver
+  description: 'GitHub Application API — Re-Deliver. 1 operations. Lead operation: GitHub Redeliverdelivery for an App Webhook.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Re-Deliver
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-re-deliver
+    baseUri: ''
+    description: GitHub Application API — Re-Deliver business capability. Self-contained, no shared references.
+    resources:
+    - name: app-hook-deliveries-delivery_id-attempts
+      path: /app/hook/deliveries/{delivery_id}/attempts
+      operations:
+      - name: redeliverdeliveryforanappwebhook
+        method: POST
+        description: GitHub Redeliverdelivery for an App Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-re-deliver-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Re-Deliver. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app/hook/deliveries/{delivery-id}/attempts
+      name: app-hook-deliveries-delivery-id-attempts
+      description: REST surface for app-hook-deliveries-delivery_id-attempts.
+      operations:
+      - method: POST
+        name: redeliverdeliveryforanappwebhook
+        description: GitHub Redeliverdelivery for an App Webhook
+        call: app-re-deliver.redeliverdeliveryforanappwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-re-deliver-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Re-Deliver. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-redeliverdelivery-app-webhook
+      description: GitHub Redeliverdelivery for an App Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-re-deliver.redeliverdeliveryforanappwebhook
+      outputParameters:
+      - type: object
+        mapping: $.

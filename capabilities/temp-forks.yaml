@@ -1,0 +1,201 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Forks
+  description: 'GitHub Repos API — Forks. 3 operations. Lead operation: List Forks. Self-contained Naftiko capability covering
+    one Github business surface.'
+  tags:
+  - Github
+  - Forks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-forks
+    baseUri: ''
+    description: GitHub Repos API — Forks business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-forks
+      path: /repos/{owner}/{repo}/forks
+      operations:
+      - name: listforks
+        method: GET
+        description: List Forks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+          description: The sort order. `stargazers` will sort by star count.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createfork
+        method: POST
+        description: Create Fork
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-merge-upstream
+      path: /repos/{owner}/{repo}/merge-upstream
+      operations:
+      - name: syncforkbranchwiththeupstreamrepository
+        method: POST
+        description: Sync Fork Branch With The Upstream Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-forks-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Forks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/forks
+      name: repos-owner-repo-forks
+      description: REST surface for repos-owner-repo-forks.
+      operations:
+      - method: GET
+        name: listforks
+        description: List Forks
+        call: temp-forks.listforks
+        with:
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createfork
+        description: Create Fork
+        call: temp-forks.createfork
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/merge-upstream
+      name: repos-owner-repo-merge-upstream
+      description: REST surface for repos-owner-repo-merge-upstream.
+      operations:
+      - method: POST
+        name: syncforkbranchwiththeupstreamrepository
+        description: Sync Fork Branch With The Upstream Repository
+        call: temp-forks.syncforkbranchwiththeupstreamrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-forks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Forks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-forks
+      description: List Forks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-forks.listforks
+      with:
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-fork
+      description: Create Fork
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-forks.createfork
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: sync-fork-branch-upstream-repository
+      description: Sync Fork Branch With The Upstream Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-forks.syncforkbranchwiththeupstreamrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

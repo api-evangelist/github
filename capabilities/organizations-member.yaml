@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Member
+  description: 'GitHub Org API — Member. 2 operations. Lead operation: GitHub Remove an Organization Member. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Member
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-member
+    baseUri: ''
+    description: GitHub Org API — Member business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-members-username
+      path: /orgs/{org}/members/{username}
+      operations:
+      - name: removeanorganizationmember
+        method: DELETE
+        description: GitHub Remove an Organization Member
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-outside_collaborators-username
+      path: /orgs/{org}/outside_collaborators/{username}
+      operations:
+      - name: convertanorganizationmembertooutsidecollaborator
+        method: PUT
+        description: GitHub Convert an Organization Member to Outside Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-member-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Member. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/members/{username}
+      name: orgs-org-members-username
+      description: REST surface for orgs-org-members-username.
+      operations:
+      - method: DELETE
+        name: removeanorganizationmember
+        description: GitHub Remove an Organization Member
+        call: organizations-member.removeanorganizationmember
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/outside-collaborators/{username}
+      name: orgs-org-outside-collaborators-username
+      description: REST surface for orgs-org-outside_collaborators-username.
+      operations:
+      - method: PUT
+        name: convertanorganizationmembertooutsidecollaborator
+        description: GitHub Convert an Organization Member to Outside Collaborator
+        call: organizations-member.convertanorganizationmembertooutsidecollaborator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-member-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Member. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-remove-organization-member
+      description: GitHub Remove an Organization Member
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-member.removeanorganizationmember
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-convert-organization-member-outside
+      description: GitHub Convert an Organization Member to Outside Collaborator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-member.convertanorganizationmembertooutsidecollaborator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

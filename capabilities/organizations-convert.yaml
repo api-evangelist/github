@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Convert
+  description: 'GitHub Org API — Convert. 1 operations. Lead operation: GitHub Convert an Organization Member to Outside Collaborator.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Convert
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-convert
+    baseUri: ''
+    description: GitHub Org API — Convert business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-outside_collaborators-username
+      path: /orgs/{org}/outside_collaborators/{username}
+      operations:
+      - name: convertanorganizationmembertooutsidecollaborator
+        method: PUT
+        description: GitHub Convert an Organization Member to Outside Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-convert-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Convert. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/outside-collaborators/{username}
+      name: orgs-org-outside-collaborators-username
+      description: REST surface for orgs-org-outside_collaborators-username.
+      operations:
+      - method: PUT
+        name: convertanorganizationmembertooutsidecollaborator
+        description: GitHub Convert an Organization Member to Outside Collaborator
+        call: organizations-convert.convertanorganizationmembertooutsidecollaborator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-convert-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Convert. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-convert-organization-member-outside
+      description: GitHub Convert an Organization Member to Outside Collaborator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-convert.convertanorganizationmembertooutsidecollaborator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

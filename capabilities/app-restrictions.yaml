@@ -1,0 +1,150 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Restrictions
+  description: 'GitHub Application API — Restrictions. 3 operations. Lead operation: GitHub Add App Access Restrictions. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Restrictions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-restrictions
+    baseUri: ''
+    description: GitHub Application API — Restrictions business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: addappaccessrestrictions
+        method: POST
+        description: GitHub Add App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: setappaccessrestrictions
+        method: PUT
+        description: GitHub Set App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeappaccessrestrictions
+        method: DELETE
+        description: GitHub Remove App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-restrictions-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Restrictions. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: POST
+        name: addappaccessrestrictions
+        description: GitHub Add App Access Restrictions
+        call: app-restrictions.addappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setappaccessrestrictions
+        description: GitHub Set App Access Restrictions
+        call: app-restrictions.setappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeappaccessrestrictions
+        description: GitHub Remove App Access Restrictions
+        call: app-restrictions.removeappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-restrictions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Restrictions. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-add-app-access-restrictions
+      description: GitHub Add App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: app-restrictions.addappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-app-access-restrictions
+      description: GitHub Set App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: app-restrictions.setappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-app-access-restrictions
+      description: GitHub Remove App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: app-restrictions.removeappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

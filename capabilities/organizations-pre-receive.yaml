@@ -1,0 +1,171 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Pre-Receive
+  description: 'GitHub Org API — Pre-Receive. 4 operations. Lead operation: GitHub List Pre-receive Hooks for an Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Pre-Receive
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-pre-receive
+    baseUri: ''
+    description: GitHub Org API — Pre-Receive business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-pre-receive-hooks
+      path: /orgs/{org}/pre-receive-hooks
+      operations:
+      - name: listprereceivehooksforanorganization
+        method: GET
+        description: GitHub List Pre-receive Hooks for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+          description: The sort order for the response collection.
+    - name: orgs-org-pre-receive-hooks-pre_receive_hook_id
+      path: /orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}
+      operations:
+      - name: getprereceivehookforanorganization
+        method: GET
+        description: GitHub Get Pre-receive Hook for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateprereceivehookenforcementforanorganization
+        method: PATCH
+        description: GitHub Update Pre-receive Hook Enforcement for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeprereceivehookenforcementforanorganization
+        method: DELETE
+        description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-pre-receive-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Pre-Receive. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/pre-receive-hooks
+      name: orgs-org-pre-receive-hooks
+      description: REST surface for orgs-org-pre-receive-hooks.
+      operations:
+      - method: GET
+        name: listprereceivehooksforanorganization
+        description: GitHub List Pre-receive Hooks for an Organization
+        call: organizations-pre-receive.listprereceivehooksforanorganization
+        with:
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/pre-receive-hooks/{pre-receive-hook-id}
+      name: orgs-org-pre-receive-hooks-pre-receive-hook-id
+      description: REST surface for orgs-org-pre-receive-hooks-pre_receive_hook_id.
+      operations:
+      - method: GET
+        name: getprereceivehookforanorganization
+        description: GitHub Get Pre-receive Hook for an Organization
+        call: organizations-pre-receive.getprereceivehookforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateprereceivehookenforcementforanorganization
+        description: GitHub Update Pre-receive Hook Enforcement for an Organization
+        call: organizations-pre-receive.updateprereceivehookenforcementforanorganization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeprereceivehookenforcementforanorganization
+        description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+        call: organizations-pre-receive.removeprereceivehookenforcementforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-pre-receive-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Pre-Receive. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-pre-receive-hooks
+      description: GitHub List Pre-receive Hooks for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-pre-receive.listprereceivehooksforanorganization
+      with:
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-pre-receive-hook
+      description: GitHub Get Pre-receive Hook for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-pre-receive.getprereceivehookforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-pre-receive-hook
+      description: GitHub Update Pre-receive Hook Enforcement for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-pre-receive.updateprereceivehookenforcementforanorganization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-pre-receive-hook
+      description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-pre-receive.removeprereceivehookenforcementforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

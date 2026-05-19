@@ -1,0 +1,185 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Users
+  description: 'GitHub Projects API — Users. 4 operations. Lead operation: GitHub Remove User as Collaborator. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Users
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-users
+    baseUri: ''
+    description: GitHub Projects API — Users business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-project_id-collaborators-username
+      path: /projects/{project_id}/collaborators/{username}
+      operations:
+      - name: removeuserascollaborator
+        method: DELETE
+        description: GitHub Remove User as Collaborator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects-project_id-collaborators-username-permission
+      path: /projects/{project_id}/collaborators/{username}/permission
+      operations:
+      - name: getprojectpermissionforuser
+        method: GET
+        description: GitHub Get Project Permission for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-projects
+      path: /user/projects
+      operations:
+      - name: createuserproject
+        method: POST
+        description: GitHub Create User Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: users-username-projects
+      path: /users/{username}/projects
+      operations:
+      - name: listuserprojects
+        method: GET
+        description: GitHub List User Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the projects to return.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-users-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Users. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/projects/{project-id}/collaborators/{username}
+      name: projects-project-id-collaborators-username
+      description: REST surface for projects-project_id-collaborators-username.
+      operations:
+      - method: DELETE
+        name: removeuserascollaborator
+        description: GitHub Remove User as Collaborator
+        call: projects-users.removeuserascollaborator
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/collaborators/{username}/permission
+      name: projects-project-id-collaborators-username-permission
+      description: REST surface for projects-project_id-collaborators-username-permission.
+      operations:
+      - method: GET
+        name: getprojectpermissionforuser
+        description: GitHub Get Project Permission for User
+        call: projects-users.getprojectpermissionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/projects
+      name: user-projects
+      description: REST surface for user-projects.
+      operations:
+      - method: POST
+        name: createuserproject
+        description: GitHub Create User Project
+        call: projects-users.createuserproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/projects
+      name: users-username-projects
+      description: REST surface for users-username-projects.
+      operations:
+      - method: GET
+        name: listuserprojects
+        description: GitHub List User Projects
+        call: projects-users.listuserprojects
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-users-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Users. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-remove-user-collaborator
+      description: GitHub Remove User as Collaborator
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: projects-users.removeuserascollaborator
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-project-permission-user
+      description: GitHub Get Project Permission for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-users.getprojectpermissionforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-user-project
+      description: GitHub Create User Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: projects-users.createuserproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-user-projects
+      description: GitHub List User Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-users.listuserprojects
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.

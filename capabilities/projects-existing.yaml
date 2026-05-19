@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Existing
+  description: 'GitHub Projects API — Existing. 2 operations. Lead operation: GitHub Update an Existing Project Card. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Existing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-existing
+    baseUri: ''
+    description: GitHub Projects API — Existing business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-columns-cards-card_id
+      path: /projects/columns/cards/{card_id}
+      operations:
+      - name: updateanexistingprojectcard
+        method: PATCH
+        description: GitHub Update an Existing Project Card
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: projects-columns-column_id
+      path: /projects/columns/{column_id}
+      operations:
+      - name: updateanexistingprojectcolumn
+        method: PATCH
+        description: GitHub Update an Existing Project Column
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-existing-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Existing. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/projects/columns/cards/{card-id}
+      name: projects-columns-cards-card-id
+      description: REST surface for projects-columns-cards-card_id.
+      operations:
+      - method: PATCH
+        name: updateanexistingprojectcard
+        description: GitHub Update an Existing Project Card
+        call: projects-existing.updateanexistingprojectcard
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/columns/{column-id}
+      name: projects-columns-column-id
+      description: REST surface for projects-columns-column_id.
+      operations:
+      - method: PATCH
+        name: updateanexistingprojectcolumn
+        description: GitHub Update an Existing Project Column
+        call: projects-existing.updateanexistingprojectcolumn
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-existing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Existing. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-update-existing-project-card
+      description: GitHub Update an Existing Project Card
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: projects-existing.updateanexistingprojectcard
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-existing-project-column
+      description: GitHub Update an Existing Project Column
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: projects-existing.updateanexistingprojectcolumn
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

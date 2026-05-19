@@ -1,0 +1,431 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Keys
+  description: 'GitHub Repos API — Keys. 8 operations. Lead operation: Delete Github Actions Caches For Repository (using
+    Cache Key). Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Keys
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-keys
+    baseUri: ''
+    description: GitHub Repos API — Keys business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-caches
+      path: /repos/{owner}/{repo}/actions/caches
+      operations:
+      - name: deletegithubactionscachesforrepositoryusingcachekey
+        method: DELETE
+        description: Delete Github Actions Caches For Repository (using Cache Key)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-secrets-public-key
+      path: /repos/{owner}/{repo}/actions/secrets/public-key
+      operations:
+      - name: getrepositorypublickey
+        method: GET
+        description: Get Repository Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependabot-secrets-public-key
+      path: /repos/{owner}/{repo}/dependabot/secrets/public-key
+      operations:
+      - name: getrepositorypublickey
+        method: GET
+        description: Get Repository Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-environments-environment_name-secrets-public-key
+      path: /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key
+      operations:
+      - name: getanenvironmentpublickey
+        method: GET
+        description: Get An Environment Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-keys
+      path: /repos/{owner}/{repo}/keys
+      operations:
+      - name: listdeploykeys
+        method: GET
+        description: List Deploy Keys
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createdeploykey
+        method: POST
+        description: Create Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-keys-key_id
+      path: /repos/{owner}/{repo}/keys/{key_id}
+      operations:
+      - name: getdeploykey
+        method: GET
+        description: Get Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletedeploykey
+        method: DELETE
+        description: Delete Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-keys-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Keys. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/caches
+      name: repos-owner-repo-actions-caches
+      description: REST surface for repos-owner-repo-actions-caches.
+      operations:
+      - method: DELETE
+        name: deletegithubactionscachesforrepositoryusingcachekey
+        description: Delete Github Actions Caches For Repository (using Cache Key)
+        call: temp-keys.deletegithubactionscachesforrepositoryusingcachekey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/secrets/public-key
+      name: repos-owner-repo-actions-secrets-public-key
+      description: REST surface for repos-owner-repo-actions-secrets-public-key.
+      operations:
+      - method: GET
+        name: getrepositorypublickey
+        description: Get Repository Public Key
+        call: temp-keys.getrepositorypublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/secrets/public-key
+      name: repos-owner-repo-dependabot-secrets-public-key
+      description: REST surface for repos-owner-repo-dependabot-secrets-public-key.
+      operations:
+      - method: GET
+        name: getrepositorypublickey
+        description: Get Repository Public Key
+        call: temp-keys.getrepositorypublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/secrets/public-key
+      name: repos-owner-repo-environments-environment-name-secrets-public-key
+      description: REST surface for repos-owner-repo-environments-environment_name-secrets-public-key.
+      operations:
+      - method: GET
+        name: getanenvironmentpublickey
+        description: Get An Environment Public Key
+        call: temp-keys.getanenvironmentpublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys
+      name: repos-owner-repo-keys
+      description: REST surface for repos-owner-repo-keys.
+      operations:
+      - method: GET
+        name: listdeploykeys
+        description: List Deploy Keys
+        call: temp-keys.listdeploykeys
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdeploykey
+        description: Create Deploy Key
+        call: temp-keys.createdeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys/{key-id}
+      name: repos-owner-repo-keys-key-id
+      description: REST surface for repos-owner-repo-keys-key_id.
+      operations:
+      - method: GET
+        name: getdeploykey
+        description: Get Deploy Key
+        call: temp-keys.getdeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedeploykey
+        description: Delete Deploy Key
+        call: temp-keys.deletedeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-keys-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Keys. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: delete-github-actions-caches-repository
+      description: Delete Github Actions Caches For Repository (using Cache Key)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-keys.deletegithubactionscachesforrepositoryusingcachekey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-repository-public-key
+      description: Get Repository Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-keys.getrepositorypublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-repository-public-key-2
+      description: Get Repository Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-keys.getrepositorypublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-environment-public-key
+      description: Get An Environment Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-keys.getanenvironmentpublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-deploy-keys
+      description: List Deploy Keys
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-keys.listdeploykeys
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-deploy-key
+      description: Create Deploy Key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-keys.createdeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-deploy-key
+      description: Get Deploy Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-keys.getdeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-deploy-key
+      description: Delete Deploy Key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-keys.deletedeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

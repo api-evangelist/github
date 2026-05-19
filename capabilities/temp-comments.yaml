@@ -1,0 +1,411 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Comments
+  description: 'GitHub Repos API — Comments. 7 operations. Lead operation: List Commit Comments For Repository. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Comments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-comments
+    baseUri: ''
+    description: GitHub Repos API — Comments business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-comments
+      path: /repos/{owner}/{repo}/comments
+      operations:
+      - name: listcommitcommentsforrepository
+        method: GET
+        description: List Commit Comments For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-commit_sha-comments
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/comments
+      operations:
+      - name: listcommitcomments
+        method: GET
+        description: List Commit Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-comments
+      path: /repos/{owner}/{repo}/issues/comments
+      operations:
+      - name: listissuecommentsforrepository
+        method: GET
+        description: List Issue Comments For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: direction
+          in: query
+          type: string
+          description: Either `asc` or `desc`. Ignored without the `sort` parameter.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-issue_number-comments
+      path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+      operations:
+      - name: listissuecomments
+        method: GET
+        description: List Issue Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-comments
+      path: /repos/{owner}/{repo}/pulls/comments
+      operations:
+      - name: listreviewcommentsinrepository
+        method: GET
+        description: List Review Comments In Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+        - name: direction
+          in: query
+          type: string
+          description: The direction to sort results. Ignored without `sort` parameter.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number-comments
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/comments
+      operations:
+      - name: listreviewcommentsonpullrequest
+        method: GET
+        description: List Review Comments On Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: direction
+          in: query
+          type: string
+          description: The direction to sort results. Ignored without `sort` parameter.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id-comments
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
+      operations:
+      - name: listcommentsforpullrequestreview
+        method: GET
+        description: List Comments For Pull Request Review
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-comments-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Comments. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/comments
+      name: repos-owner-repo-comments
+      description: REST surface for repos-owner-repo-comments.
+      operations:
+      - method: GET
+        name: listcommitcommentsforrepository
+        description: List Commit Comments For Repository
+        call: temp-comments.listcommitcommentsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/comments
+      name: repos-owner-repo-commits-commit-sha-comments
+      description: REST surface for repos-owner-repo-commits-commit_sha-comments.
+      operations:
+      - method: GET
+        name: listcommitcomments
+        description: List Commit Comments
+        call: temp-comments.listcommitcomments
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/comments
+      name: repos-owner-repo-issues-comments
+      description: REST surface for repos-owner-repo-issues-comments.
+      operations:
+      - method: GET
+        name: listissuecommentsforrepository
+        description: List Issue Comments For Repository
+        call: temp-comments.listissuecommentsforrepository
+        with:
+          direction: rest.direction
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/comments
+      name: repos-owner-repo-issues-issue-number-comments
+      description: REST surface for repos-owner-repo-issues-issue_number-comments.
+      operations:
+      - method: GET
+        name: listissuecomments
+        description: List Issue Comments
+        call: temp-comments.listissuecomments
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/comments
+      name: repos-owner-repo-pulls-comments
+      description: REST surface for repos-owner-repo-pulls-comments.
+      operations:
+      - method: GET
+        name: listreviewcommentsinrepository
+        description: List Review Comments In Repository
+        call: temp-comments.listreviewcommentsinrepository
+        with:
+          sort: rest.sort
+          direction: rest.direction
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/comments
+      name: repos-owner-repo-pulls-pull-number-comments
+      description: REST surface for repos-owner-repo-pulls-pull_number-comments.
+      operations:
+      - method: GET
+        name: listreviewcommentsonpullrequest
+        description: List Review Comments On Pull Request
+        call: temp-comments.listreviewcommentsonpullrequest
+        with:
+          direction: rest.direction
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}/comments
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id-comments
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id-comments.
+      operations:
+      - method: GET
+        name: listcommentsforpullrequestreview
+        description: List Comments For Pull Request Review
+        call: temp-comments.listcommentsforpullrequestreview
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-comments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Comments. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-commit-comments-repository
+      description: List Commit Comments For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listcommitcommentsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commit-comments
+      description: List Commit Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listcommitcomments
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-issue-comments-repository
+      description: List Issue Comments For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listissuecommentsforrepository
+      with:
+        direction: tools.direction
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-issue-comments
+      description: List Issue Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listissuecomments
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-review-comments-repository
+      description: List Review Comments In Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listreviewcommentsinrepository
+      with:
+        sort: tools.sort
+        direction: tools.direction
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-review-comments-pull-request
+      description: List Review Comments On Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listreviewcommentsonpullrequest
+      with:
+        direction: tools.direction
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-comments-pull-request-review
+      description: List Comments For Pull Request Review
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-comments.listcommentsforpullrequestreview
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

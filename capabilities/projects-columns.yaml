@@ -1,0 +1,147 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Columns
+  description: 'GitHub Projects API — Columns. 3 operations. Lead operation: GitHub Move Project Column. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Columns
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-columns
+    baseUri: ''
+    description: GitHub Projects API — Columns business capability. Self-contained, no shared references.
+    resources:
+    - name: projects-columns-column_id-moves
+      path: /projects/columns/{column_id}/moves
+      operations:
+      - name: moveprojectcolumn
+        method: POST
+        description: GitHub Move Project Column
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: projects-project_id-columns
+      path: /projects/{project_id}/columns
+      operations:
+      - name: listprojectcolumns
+        method: GET
+        description: GitHub List Project Columns
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createprojectcolumn
+        method: POST
+        description: GitHub Create Project Column
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-columns-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Columns. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/projects/columns/{column-id}/moves
+      name: projects-columns-column-id-moves
+      description: REST surface for projects-columns-column_id-moves.
+      operations:
+      - method: POST
+        name: moveprojectcolumn
+        description: GitHub Move Project Column
+        call: projects-columns.moveprojectcolumn
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/columns
+      name: projects-project-id-columns
+      description: REST surface for projects-project_id-columns.
+      operations:
+      - method: GET
+        name: listprojectcolumns
+        description: GitHub List Project Columns
+        call: projects-columns.listprojectcolumns
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createprojectcolumn
+        description: GitHub Create Project Column
+        call: projects-columns.createprojectcolumn
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-columns-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Columns. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-move-project-column
+      description: GitHub Move Project Column
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: projects-columns.moveprojectcolumn
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-project-columns
+      description: GitHub List Project Columns
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-columns.listprojectcolumns
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-project-column
+      description: GitHub Create Project Column
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: projects-columns.createprojectcolumn
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,138 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — People
+  description: 'GitHub User API — People. 2 operations. Lead operation: GitHub List the People the Authenticated User Follows.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - People
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-people
+    baseUri: ''
+    description: GitHub User API — People business capability. Self-contained, no shared references.
+    resources:
+    - name: user-following
+      path: /user/following
+      operations:
+      - name: listthepeopletheauthenticateduserfollows
+        method: GET
+        description: GitHub List the People the Authenticated User Follows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-following
+      path: /users/{username}/following
+      operations:
+      - name: listthepeopleuserfollows
+        method: GET
+        description: GitHub List the People User Follows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-people-rest
+    port: 8080
+    description: REST adapter for GitHub User API — People. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/following
+      name: user-following
+      description: REST surface for user-following.
+      operations:
+      - method: GET
+        name: listthepeopletheauthenticateduserfollows
+        description: GitHub List the People the Authenticated User Follows
+        call: users-people.listthepeopletheauthenticateduserfollows
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/following
+      name: users-username-following
+      description: REST surface for users-username-following.
+      operations:
+      - method: GET
+        name: listthepeopleuserfollows
+        description: GitHub List the People User Follows
+        call: users-people.listthepeopleuserfollows
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-people-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — People. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-people-authenticated-user
+      description: GitHub List the People the Authenticated User Follows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-people.listthepeopletheauthenticateduserfollows
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-people-user-follows
+      description: GitHub List the People User Follows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-people.listthepeopleuserfollows
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

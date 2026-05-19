@@ -1,0 +1,288 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Statistics
+  description: 'github-repos-api — Statistics. 5 operations. Lead operation: GitHub Get the Weekly Commit Activity. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Statistics
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-statistics
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Statistics business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-stats-code_frequency
+      path: /repos/{owner}/{repo}/stats/code_frequency
+      operations:
+      - name: gettheweeklycommitactivity
+        method: GET
+        description: GitHub Get the Weekly Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-commit_activity
+      path: /repos/{owner}/{repo}/stats/commit_activity
+      operations:
+      - name: getthelastyearofcommitactivity
+        method: GET
+        description: GitHub Get the Last Year of Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-contributors
+      path: /repos/{owner}/{repo}/stats/contributors
+      operations:
+      - name: getallcontributorcommitactivity
+        method: GET
+        description: GitHub Get All Contributor Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-participation
+      path: /repos/{owner}/{repo}/stats/participation
+      operations:
+      - name: gettheweeklycommitcount
+        method: GET
+        description: GitHub Get the Weekly Commit Count
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-punch_card
+      path: /repos/{owner}/{repo}/stats/punch_card
+      operations:
+      - name: getthehourlycommitcountforeachday
+        method: GET
+        description: GitHub Get the Hourly Commit Count for Each Day
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-statistics-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Statistics. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/stats/code-frequency
+      name: repos-owner-repo-stats-code-frequency
+      description: REST surface for repos-owner-repo-stats-code_frequency.
+      operations:
+      - method: GET
+        name: gettheweeklycommitactivity
+        description: GitHub Get the Weekly Commit Activity
+        call: repos-statistics.gettheweeklycommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/commit-activity
+      name: repos-owner-repo-stats-commit-activity
+      description: REST surface for repos-owner-repo-stats-commit_activity.
+      operations:
+      - method: GET
+        name: getthelastyearofcommitactivity
+        description: GitHub Get the Last Year of Commit Activity
+        call: repos-statistics.getthelastyearofcommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/contributors
+      name: repos-owner-repo-stats-contributors
+      description: REST surface for repos-owner-repo-stats-contributors.
+      operations:
+      - method: GET
+        name: getallcontributorcommitactivity
+        description: GitHub Get All Contributor Commit Activity
+        call: repos-statistics.getallcontributorcommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/participation
+      name: repos-owner-repo-stats-participation
+      description: REST surface for repos-owner-repo-stats-participation.
+      operations:
+      - method: GET
+        name: gettheweeklycommitcount
+        description: GitHub Get the Weekly Commit Count
+        call: repos-statistics.gettheweeklycommitcount
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/punch-card
+      name: repos-owner-repo-stats-punch-card
+      description: REST surface for repos-owner-repo-stats-punch_card.
+      operations:
+      - method: GET
+        name: getthehourlycommitcountforeachday
+        description: GitHub Get the Hourly Commit Count for Each Day
+        call: repos-statistics.getthehourlycommitcountforeachday
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-statistics-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Statistics. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-weekly-commit-activity
+      description: GitHub Get the Weekly Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-statistics.gettheweeklycommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-last-year-commit
+      description: GitHub Get the Last Year of Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-statistics.getthelastyearofcommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-contributor-commit
+      description: GitHub Get All Contributor Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-statistics.getallcontributorcommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-weekly-commit-count
+      description: GitHub Get the Weekly Commit Count
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-statistics.gettheweeklycommitcount
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-hourly-commit-count
+      description: GitHub Get the Hourly Commit Count for Each Day
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-statistics.getthehourlycommitcountforeachday
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

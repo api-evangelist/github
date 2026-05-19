@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Feeds API — Feeds
+  description: 'GitHub Feeds API — Feeds. 1 operations. Lead operation: GitHub Get Feeds. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Feeds
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: feeds-feeds
+    baseUri: ''
+    description: GitHub Feeds API — Feeds business capability. Self-contained, no shared references.
+    resources:
+    - name: feeds
+      path: /feeds
+      operations:
+      - name: getfeeds
+        method: GET
+        description: GitHub Get Feeds
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: feeds-feeds-rest
+    port: 8080
+    description: REST adapter for GitHub Feeds API — Feeds. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/feeds
+      name: feeds
+      description: REST surface for feeds.
+      operations:
+      - method: GET
+        name: getfeeds
+        description: GitHub Get Feeds
+        call: feeds-feeds.getfeeds
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: feeds-feeds-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Feeds API — Feeds. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-feeds
+      description: GitHub Get Feeds
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: feeds-feeds.getfeeds
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Events API — Organizations
+  description: 'GitHub Events API — Organizations. 1 operations. Lead operation: GitHub List Organization Events for the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Organizations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: events-organizations
+    baseUri: ''
+    description: GitHub Events API — Organizations business capability. Self-contained, no shared references.
+    resources:
+    - name: users-username-events-orgs-org
+      path: /users/{username}/events/orgs/{org}
+      operations:
+      - name: listorganizationeventsfortheauthenticateduser
+        method: GET
+        description: GitHub List Organization Events for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: events-organizations-rest
+    port: 8080
+    description: REST adapter for GitHub Events API — Organizations. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/users/{username}/events/orgs/{org}
+      name: users-username-events-orgs-org
+      description: REST surface for users-username-events-orgs-org.
+      operations:
+      - method: GET
+        name: listorganizationeventsfortheauthenticateduser
+        description: GitHub List Organization Events for the Authenticated User
+        call: events-organizations.listorganizationeventsfortheauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: events-organizations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Events API — Organizations. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-organization-events-authenticated
+      description: GitHub List Organization Events for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: events-organizations.listorganizationeventsfortheauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.

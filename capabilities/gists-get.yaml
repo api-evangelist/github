@@ -1,0 +1,143 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Gists API — Get
+  description: 'GitHub Gists API — Get. 3 operations. Lead operation: GitHub Getgist. Self-contained Naftiko capability covering
+    one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gists-get
+    baseUri: ''
+    description: GitHub Gists API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: gists-gist_id
+      path: /gists/{gist_id}
+      operations:
+      - name: getgist
+        method: GET
+        description: GitHub Getgist
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-comments-comment_id
+      path: /gists/{gist_id}/comments/{comment_id}
+      operations:
+      - name: getgistcomment
+        method: GET
+        description: GitHub Getgist Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-sha
+      path: /gists/{gist_id}/{sha}
+      operations:
+      - name: getgistrevision
+        method: GET
+        description: GitHub Getgist Revision
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: path
+          type: string
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: gists-get-rest
+    port: 8080
+    description: REST adapter for GitHub Gists API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/gists/{gist-id}
+      name: gists-gist-id
+      description: REST surface for gists-gist_id.
+      operations:
+      - method: GET
+        name: getgist
+        description: GitHub Getgist
+        call: gists-get.getgist
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/comments/{comment-id}
+      name: gists-gist-id-comments-comment-id
+      description: REST surface for gists-gist_id-comments-comment_id.
+      operations:
+      - method: GET
+        name: getgistcomment
+        description: GitHub Getgist Comment
+        call: gists-get.getgistcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/{sha}
+      name: gists-gist-id-sha
+      description: REST surface for gists-gist_id-sha.
+      operations:
+      - method: GET
+        name: getgistrevision
+        description: GitHub Getgist Revision
+        call: gists-get.getgistrevision
+        with:
+          sha: rest.sha
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gists-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Gists API — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-getgist
+      description: GitHub Getgist
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-get.getgist
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getgist-comment
+      description: GitHub Getgist Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-get.getgistcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getgist-revision
+      description: GitHub Getgist Revision
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-get.getgistrevision
+      with:
+        sha: tools.sha
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Reaction
+  description: 'GitHub Repos API — Reaction. 1 operations. Lead operation: Create Reaction For Commit Comment. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Reaction
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-reaction
+    baseUri: ''
+    description: GitHub Repos API — Reaction business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-comments-comment_id-reactions
+      path: /repos/{owner}/{repo}/comments/{comment_id}/reactions
+      operations:
+      - name: createreactionforcommitcomment
+        method: POST
+        description: Create Reaction For Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-reaction-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Reaction. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}/reactions
+      name: repos-owner-repo-comments-comment-id-reactions
+      description: REST surface for repos-owner-repo-comments-comment_id-reactions.
+      operations:
+      - method: POST
+        name: createreactionforcommitcomment
+        description: Create Reaction For Commit Comment
+        call: temp-reaction.createreactionforcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-reaction-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Reaction. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: create-reaction-commit-comment
+      description: Create Reaction For Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-reaction.createreactionforcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

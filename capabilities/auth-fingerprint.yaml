@@ -1,0 +1,86 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Fingerprint
+  description: 'GitHub Auth API — Fingerprint. 1 operations. Lead operation: GitHub Get or Create an Authorization Forspecific
+    App and Fingerprint. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Fingerprint
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-fingerprint
+    baseUri: ''
+    description: GitHub Auth API — Fingerprint business capability. Self-contained, no shared references.
+    resources:
+    - name: authorizations-clients-client_id-fingerprint
+      path: /authorizations/clients/{client_id}/{fingerprint}
+      operations:
+      - name: getorcreateanauthorizationforspecificappandfingerprint
+        method: PUT
+        description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fingerprint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-fingerprint-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Fingerprint. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/authorizations/clients/{client-id}/{fingerprint}
+      name: authorizations-clients-client-id-fingerprint
+      description: REST surface for authorizations-clients-client_id-fingerprint.
+      operations:
+      - method: PUT
+        name: getorcreateanauthorizationforspecificappandfingerprint
+        description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+        call: auth-fingerprint.getorcreateanauthorizationforspecificappandfingerprint
+        with:
+          fingerprint: rest.fingerprint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-fingerprint-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Fingerprint. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-create-authorization-forspecific
+      description: GitHub Get or Create an Authorization Forspecific App and Fingerprint
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: auth-fingerprint.getorcreateanauthorizationforspecificappandfingerprint
+      with:
+        fingerprint: tools.fingerprint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Feature
+  description: 'GitHub Org API — Feature. 1 operations. Lead operation: GitHub Enable or Disable Security Feature for an Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Feature
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-feature
+    baseUri: ''
+    description: GitHub Org API — Feature business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-security_product-enablement
+      path: /orgs/{org}/{security_product}/{enablement}
+      operations:
+      - name: enableordisablesecurityfeatureforanorganization
+        method: POST
+        description: GitHub Enable or Disable Security Feature for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-feature-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Feature. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/{security-product}/{enablement}
+      name: orgs-org-security-product-enablement
+      description: REST surface for orgs-org-security_product-enablement.
+      operations:
+      - method: POST
+        name: enableordisablesecurityfeatureforanorganization
+        description: GitHub Enable or Disable Security Feature for an Organization
+        call: organizations-feature.enableordisablesecurityfeatureforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-feature-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Feature. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-enable-disable-security-feature
+      description: GitHub Enable or Disable Security Feature for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-feature.enableordisablesecurityfeatureforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

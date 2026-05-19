@@ -1,0 +1,138 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Rerequest
+  description: 'github-repos-api — Rerequest. 2 operations. Lead operation: GitHub Rerequest Check Run. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Rerequest
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-rerequest
+    baseUri: ''
+    description: github-repos-api — Rerequest business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-check-runs-check_run_id-rerequest
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
+      operations:
+      - name: rerequestcheckrun
+        method: POST
+        description: GitHub Rerequest Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-check-suites-check_suite_id-rerequest
+      path: /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
+      operations:
+      - name: rerequestchecksuite
+        method: POST
+        description: GitHub Rerequest Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-rerequest-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Rerequest. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}/rerequest
+      name: repos-owner-repo-check-runs-check-run-id-rerequest
+      description: REST surface for repos-owner-repo-check-runs-check_run_id-rerequest.
+      operations:
+      - method: POST
+        name: rerequestcheckrun
+        description: GitHub Rerequest Check Run
+        call: repo-tags-rerequest.rerequestcheckrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/{check-suite-id}/rerequest
+      name: repos-owner-repo-check-suites-check-suite-id-rerequest
+      description: REST surface for repos-owner-repo-check-suites-check_suite_id-rerequest.
+      operations:
+      - method: POST
+        name: rerequestchecksuite
+        description: GitHub Rerequest Check Suite
+        call: repo-tags-rerequest.rerequestchecksuite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-rerequest-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Rerequest. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-rerequest-check-run
+      description: GitHub Rerequest Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repo-tags-rerequest.rerequestcheckrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-rerequest-check-suite
+      description: GitHub Rerequest Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repo-tags-rerequest.rerequestchecksuite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

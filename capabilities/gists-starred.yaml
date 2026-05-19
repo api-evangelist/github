@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Gists API — Starred
+  description: 'GitHub Gists API — Starred. 2 operations. Lead operation: GitHub List Starred Gists. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Starred
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gists-starred
+    baseUri: ''
+    description: GitHub Gists API — Starred business capability. Self-contained, no shared references.
+    resources:
+    - name: gists-starred
+      path: /gists/starred
+      operations:
+      - name: liststarredgists
+        method: GET
+        description: GitHub List Starred Gists
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: gists-gist_id-star
+      path: /gists/{gist_id}/star
+      operations:
+      - name: checkifgistisstarred
+        method: GET
+        description: GitHub Check Ifgist is Starred
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: gists-starred-rest
+    port: 8080
+    description: REST adapter for GitHub Gists API — Starred. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/gists/starred
+      name: gists-starred
+      description: REST surface for gists-starred.
+      operations:
+      - method: GET
+        name: liststarredgists
+        description: GitHub List Starred Gists
+        call: gists-starred.liststarredgists
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/gists/{gist-id}/star
+      name: gists-gist-id-star
+      description: REST surface for gists-gist_id-star.
+      operations:
+      - method: GET
+        name: checkifgistisstarred
+        description: GitHub Check Ifgist is Starred
+        call: gists-starred.checkifgistisstarred
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gists-starred-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Gists API — Starred. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-starred-gists
+      description: GitHub List Starred Gists
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-starred.liststarredgists
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-ifgist-is-starred
+      description: GitHub Check Ifgist is Starred
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-starred.checkifgistisstarred
+      outputParameters:
+      - type: object
+        mapping: $.

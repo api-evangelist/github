@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Installation API — Revoke
+  description: 'GitHub Installation API — Revoke. 1 operations. Lead operation: GitHub Revoke an Installation Access Token.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Revoke
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: installation-revoke
+    baseUri: ''
+    description: GitHub Installation API — Revoke business capability. Self-contained, no shared references.
+    resources:
+    - name: installation-token
+      path: /installation/token
+      operations:
+      - name: revokeaninstallationaccesstoken
+        method: DELETE
+        description: GitHub Revoke an Installation Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: installation-revoke-rest
+    port: 8080
+    description: REST adapter for GitHub Installation API — Revoke. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/installation/token
+      name: installation-token
+      description: REST surface for installation-token.
+      operations:
+      - method: DELETE
+        name: revokeaninstallationaccesstoken
+        description: GitHub Revoke an Installation Access Token
+        call: installation-revoke.revokeaninstallationaccesstoken
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: installation-revoke-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Installation API — Revoke. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-revoke-installation-access-token
+      description: GitHub Revoke an Installation Access Token
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: installation-revoke.revokeaninstallationaccesstoken
+      outputParameters:
+      - type: object
+        mapping: $.

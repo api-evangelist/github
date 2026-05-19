@@ -1,0 +1,259 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Add
+  description: 'GitHub User API — Add. 4 operations. Lead operation: GitHub Add User Access Restrictions. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-add
+    baseUri: ''
+    description: GitHub User API — Add business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-restrictions-users
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      operations:
+      - name: adduseraccessrestrictions
+        method: POST
+        description: GitHub Add User Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: user-emails
+      path: /user/emails
+      operations:
+      - name: addanemailaddressfortheauthenticateduser
+        method: POST
+        description: GitHub Add an Email Address for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: user-installations-installation_id-repositories-repository_id
+      path: /user/installations/{installation_id}/repositories/{repository_id}
+      operations:
+      - name: addrepositorytoanappinstallation
+        method: PUT
+        description: GitHub Add Repository to an App Installation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-social_accounts
+      path: /user/social_accounts
+      operations:
+      - name: addsocialaccountsfortheauthenticateduser
+        method: POST
+        description: GitHub Add Social Accounts for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-add-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Add. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      name: repos-owner-repo-branches-branch-protection-restrictions-users
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-users.
+      operations:
+      - method: POST
+        name: adduseraccessrestrictions
+        description: GitHub Add User Access Restrictions
+        call: users-add.adduseraccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/emails
+      name: user-emails
+      description: REST surface for user-emails.
+      operations:
+      - method: POST
+        name: addanemailaddressfortheauthenticateduser
+        description: GitHub Add an Email Address for the Authenticated User
+        call: users-add.addanemailaddressfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations/{installation-id}/repositories/{repository-id}
+      name: user-installations-installation-id-repositories-repository-id
+      description: REST surface for user-installations-installation_id-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addrepositorytoanappinstallation
+        description: GitHub Add Repository to an App Installation
+        call: users-add.addrepositorytoanappinstallation
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/social-accounts
+      name: user-social-accounts
+      description: REST surface for user-social_accounts.
+      operations:
+      - method: POST
+        name: addsocialaccountsfortheauthenticateduser
+        description: GitHub Add Social Accounts for the Authenticated User
+        call: users-add.addsocialaccountsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Add. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-add-user-access-restrictions
+      description: GitHub Add User Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-add.adduseraccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-email-address-authenticated
+      description: GitHub Add an Email Address for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-add.addanemailaddressfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-repository-app-installation
+      description: GitHub Add Repository to an App Installation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: users-add.addrepositorytoanappinstallation
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-social-accounts-authenticated
+      description: GitHub Add Social Accounts for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-add.addsocialaccountsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

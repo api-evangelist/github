@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Status
+  description: 'GitHub Org API — Status. 1 operations. Lead operation: GitHub Get an Organization Migration Status. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-status
+    baseUri: ''
+    description: GitHub Org API — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-migrations-migration_id
+      path: /orgs/{org}/migrations/{migration_id}
+      operations:
+      - name: getanorganizationmigrationstatus
+        method: GET
+        description: GitHub Get an Organization Migration Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: exclude
+          in: query
+          type: array
+          description: Exclude attributes from the API response to improve performance
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-status-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/migrations/{migration-id}
+      name: orgs-org-migrations-migration-id
+      description: REST surface for orgs-org-migrations-migration_id.
+      operations:
+      - method: GET
+        name: getanorganizationmigrationstatus
+        description: GitHub Get an Organization Migration Status
+        call: organizations-status.getanorganizationmigrationstatus
+        with:
+          exclude: rest.exclude
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Status. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-organization-migration-status
+      description: GitHub Get an Organization Migration Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-status.getanorganizationmigrationstatus
+      with:
+        exclude: tools.exclude
+      outputParameters:
+      - type: object
+        mapping: $.

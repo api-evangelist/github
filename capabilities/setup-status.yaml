@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Setup API — Status
+  description: 'GitHub Setup API — Status. 2 operations. Lead operation: GitHub Get the Configuration Status. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: setup-status
+    baseUri: ''
+    description: GitHub Setup API — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: setup-api-configcheck
+      path: /setup/api/configcheck
+      operations:
+      - name: gettheconfigurationstatus
+        method: GET
+        description: GitHub Get the Configuration Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: setup-api-maintenance
+      path: /setup/api/maintenance
+      operations:
+      - name: getthemaintenancestatus
+        method: GET
+        description: GitHub Get the Maintenance Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: setup-status-rest
+    port: 8080
+    description: REST adapter for GitHub Setup API — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/setup/api/configcheck
+      name: setup-api-configcheck
+      description: REST surface for setup-api-configcheck.
+      operations:
+      - method: GET
+        name: gettheconfigurationstatus
+        description: GitHub Get the Configuration Status
+        call: setup-status.gettheconfigurationstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/setup/api/maintenance
+      name: setup-api-maintenance
+      description: REST surface for setup-api-maintenance.
+      operations:
+      - method: GET
+        name: getthemaintenancestatus
+        description: GitHub Get the Maintenance Status
+        call: setup-status.getthemaintenancestatus
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: setup-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Setup API — Status. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-configuration-status
+      description: GitHub Get the Configuration Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: setup-status.gettheconfigurationstatus
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-maintenance-status
+      description: GitHub Get the Maintenance Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: setup-status.getthemaintenancestatus
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,112 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Ldap
+  description: 'GitHub Teams API — Ldap. 2 operations. Lead operation: GitHub Update Ldap Mapping for Team. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Ldap
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-ldap
+    baseUri: ''
+    description: GitHub Teams API — Ldap business capability. Self-contained, no shared references.
+    resources:
+    - name: admin-ldap-teams-team_id-mapping
+      path: /admin/ldap/teams/{team_id}/mapping
+      operations:
+      - name: updateldapmappingforteam
+        method: PATCH
+        description: GitHub Update Ldap Mapping for Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: admin-ldap-teams-team_id-sync
+      path: /admin/ldap/teams/{team_id}/sync
+      operations:
+      - name: syncldapmappingforteam
+        method: POST
+        description: GitHub Sync Ldap Mapping for Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-ldap-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Ldap. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/admin/ldap/teams/{team-id}/mapping
+      name: admin-ldap-teams-team-id-mapping
+      description: REST surface for admin-ldap-teams-team_id-mapping.
+      operations:
+      - method: PATCH
+        name: updateldapmappingforteam
+        description: GitHub Update Ldap Mapping for Team
+        call: teams-ldap.updateldapmappingforteam
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/admin/ldap/teams/{team-id}/sync
+      name: admin-ldap-teams-team-id-sync
+      description: REST surface for admin-ldap-teams-team_id-sync.
+      operations:
+      - method: POST
+        name: syncldapmappingforteam
+        description: GitHub Sync Ldap Mapping for Team
+        call: teams-ldap.syncldapmappingforteam
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-ldap-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Ldap. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-update-ldap-mapping-team
+      description: GitHub Update Ldap Mapping for Team
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: teams-ldap.updateldapmappingforteam
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-sync-ldap-mapping-team
+      description: GitHub Sync Ldap Mapping for Team
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: teams-ldap.syncldapmappingforteam
+      outputParameters:
+      - type: object
+        mapping: $.

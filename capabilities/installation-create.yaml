@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Installation API — Create
+  description: 'GitHub Installation API — Create. 1 operations. Lead operation: GitHub Create an Installation Access Token
+    for an App. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Create
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: installation-create
+    baseUri: ''
+    description: GitHub Installation API — Create business capability. Self-contained, no shared references.
+    resources:
+    - name: app-installations-installation_id-access_tokens
+      path: /app/installations/{installation_id}/access_tokens
+      operations:
+      - name: createaninstallationaccesstokenforanapp
+        method: POST
+        description: GitHub Create an Installation Access Token for an App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: installation-create-rest
+    port: 8080
+    description: REST adapter for GitHub Installation API — Create. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app/installations/{installation-id}/access-tokens
+      name: app-installations-installation-id-access-tokens
+      description: REST surface for app-installations-installation_id-access_tokens.
+      operations:
+      - method: POST
+        name: createaninstallationaccesstokenforanapp
+        description: GitHub Create an Installation Access Token for an App
+        call: installation-create.createaninstallationaccesstokenforanapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: installation-create-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Installation API — Create. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-create-installation-access-token
+      description: GitHub Create an Installation Access Token for an App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: installation-create.createaninstallationaccesstokenforanapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

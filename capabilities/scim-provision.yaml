@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub SCIM API — Provision
+  description: 'GitHub SCIM API — Provision. 2 operations. Lead operation: GitHub Provision Scim Enterprise Group. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Provision
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: scim-provision
+    baseUri: ''
+    description: GitHub SCIM API — Provision business capability. Self-contained, no shared references.
+    resources:
+    - name: scim-v2-Groups
+      path: /scim/v2/Groups
+      operations:
+      - name: provisionscimenterprisegroup
+        method: POST
+        description: GitHub Provision Scim Enterprise Group
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: scim-v2-Users
+      path: /scim/v2/Users
+      operations:
+      - name: provisionscimenterpriseuser
+        method: POST
+        description: GitHub Provision Scim Enterprise User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: scim-provision-rest
+    port: 8080
+    description: REST adapter for GitHub SCIM API — Provision. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/scim/v2/groups
+      name: scim-v2-groups
+      description: REST surface for scim-v2-Groups.
+      operations:
+      - method: POST
+        name: provisionscimenterprisegroup
+        description: GitHub Provision Scim Enterprise Group
+        call: scim-provision.provisionscimenterprisegroup
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scim/v2/users
+      name: scim-v2-users
+      description: REST surface for scim-v2-Users.
+      operations:
+      - method: POST
+        name: provisionscimenterpriseuser
+        description: GitHub Provision Scim Enterprise User
+        call: scim-provision.provisionscimenterpriseuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: scim-provision-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub SCIM API — Provision. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-provision-scim-enterprise-group
+      description: GitHub Provision Scim Enterprise Group
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: scim-provision.provisionscimenterprisegroup
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-provision-scim-enterprise-user
+      description: GitHub Provision Scim Enterprise User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: scim-provision.provisionscimenterpriseuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

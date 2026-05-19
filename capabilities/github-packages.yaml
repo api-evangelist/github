@@ -1,0 +1,948 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Packages
+  description: 'GitHub v3 REST API — Packages. 27 operations. Lead operation: GitHub Get List of Conflicting Packages During
+    Docker Migration for Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Packages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-packages
+    baseUri: ''
+    description: GitHub v3 REST API — Packages business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-docker-conflicts
+      path: /orgs/{org}/docker/conflicts
+      operations:
+      - name: packageslistdockermigrationconflictingpackagesfororganization
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-packages
+      path: /orgs/{org}/packages
+      operations:
+      - name: packageslistpackagesfororganization
+        method: GET
+        description: GitHub List Packages for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+        - name: page
+          in: query
+          type: integer
+          description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-
+        - name: per_page
+          in: query
+          type: integer
+          description: The number of results per page (max 100). For more information, see "[Using pagination in the REST
+            API](https://docs.github.com/enterprise-server@3.9/rest/using
+    - name: orgs-org-packages-package_type-package_name
+      path: /orgs/{org}/packages/{package_type}/{package_name}
+      operations:
+      - name: packagesgetpackagefororganization
+        method: GET
+        description: GitHub Get a Package for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackagefororg
+        method: DELETE
+        description: GitHub Delete a Package for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-packages-package_type-package_name-restore
+      path: /orgs/{org}/packages/{package_type}/{package_name}/restore
+      operations:
+      - name: packagesrestorepackagefororg
+        method: POST
+        description: GitHub Restore a Package for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: query
+          type: string
+          description: package token
+    - name: orgs-org-packages-package_type-package_name-versions
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: packagesgetallpackageversionsforpackageownedbyorg
+        method: GET
+        description: GitHub List Package Versions for a Package Owned by an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: The state of the package, either active or deleted.
+    - name: orgs-org-packages-package_type-package_name-versions-package_version_id
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}
+      operations:
+      - name: packagesgetpackageversionfororganization
+        method: GET
+        description: GitHub Get a Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackageversionfororg
+        method: DELETE
+        description: GitHub Delete Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-packages-package_type-package_name-versions-package_version_id-restore
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+      operations:
+      - name: packagesrestorepackageversionfororg
+        method: POST
+        description: GitHub Restore Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-docker-conflicts
+      path: /user/docker/conflicts
+      operations:
+      - name: packageslistdockermigrationconflictingpackagesforauthenticateduser
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-packages
+      path: /user/packages
+      operations:
+      - name: packageslistpackagesforauthenticateduser
+        method: GET
+        description: GitHub List Packages for the Authenticated User's Namespace
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+    - name: user-packages-package_type-package_name
+      path: /user/packages/{package_type}/{package_name}
+      operations:
+      - name: packagesgetpackageforauthenticateduser
+        method: GET
+        description: GitHub Get a Package for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackageforauthenticateduser
+        method: DELETE
+        description: GitHub Delete a Package for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-packages-package_type-package_name-restore
+      path: /user/packages/{package_type}/{package_name}/restore
+      operations:
+      - name: packagesrestorepackageforauthenticateduser
+        method: POST
+        description: GitHub Restore a Package for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: query
+          type: string
+          description: package token
+    - name: user-packages-package_type-package_name-versions
+      path: /user/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: packagesgetallpackageversionsforpackageownedbyauthenticateduser
+        method: GET
+        description: GitHub List Package Versions for a Package Owned by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: The state of the package, either active or deleted.
+    - name: user-packages-package_type-package_name-versions-package_version_id
+      path: /user/packages/{package_type}/{package_name}/versions/{package_version_id}
+      operations:
+      - name: packagesgetpackageversionforauthenticateduser
+        method: GET
+        description: GitHub Get a Package Version for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackageversionforauthenticateduser
+        method: DELETE
+        description: GitHub Delete a Package Version for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-packages-package_type-package_name-versions-package_version_id-restore
+      path: /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+      operations:
+      - name: packagesrestorepackageversionforauthenticateduser
+        method: POST
+        description: GitHub Restore a Package Version for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-docker-conflicts
+      path: /users/{username}/docker/conflicts
+      operations:
+      - name: packageslistdockermigrationconflictingpackagesforuser
+        method: GET
+        description: GitHub Get List of Conflicting Packages During Docker Migration for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-packages
+      path: /users/{username}/packages
+      operations:
+      - name: packageslistpackagesforuser
+        method: GET
+        description: GitHub List Packages for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: package_type
+          in: query
+          type: string
+          description: 'The type of supported package. Packages in GitHub''s Gradle registry have the type `maven`. Docker
+            images pushed to GitHub''s Container registry (`ghcr.io`) have '
+          required: true
+    - name: users-username-packages-package_type-package_name
+      path: /users/{username}/packages/{package_type}/{package_name}
+      operations:
+      - name: packagesgetpackageforuser
+        method: GET
+        description: GitHub Get a Package for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackageforuser
+        method: DELETE
+        description: GitHub Delete a Package for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-packages-package_type-package_name-restore
+      path: /users/{username}/packages/{package_type}/{package_name}/restore
+      operations:
+      - name: packagesrestorepackageforuser
+        method: POST
+        description: GitHub Restore a Package for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: token
+          in: query
+          type: string
+          description: package token
+    - name: users-username-packages-package_type-package_name-versions
+      path: /users/{username}/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: packagesgetallpackageversionsforpackageownedbyuser
+        method: GET
+        description: GitHub List Package Versions for a Package Owned by a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-packages-package_type-package_name-versions-package_version_id
+      path: /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}
+      operations:
+      - name: packagesgetpackageversionforuser
+        method: GET
+        description: GitHub Get a Package Version for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: packagesdeletepackageversionforuser
+        method: DELETE
+        description: GitHub Delete Package Version for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-packages-package_type-package_name-versions-package_version_id-re
+      path: /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+      operations:
+      - name: packagesrestorepackageversionforuser
+        method: POST
+        description: GitHub Restore Package Version for a User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-packages-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Packages. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/docker/conflicts
+      name: orgs-org-docker-conflicts
+      description: REST surface for orgs-org-docker-conflicts.
+      operations:
+      - method: GET
+        name: packageslistdockermigrationconflictingpackagesfororganization
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+        call: github-packages.packageslistdockermigrationconflictingpackagesfororganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages
+      name: orgs-org-packages
+      description: REST surface for orgs-org-packages.
+      operations:
+      - method: GET
+        name: packageslistpackagesfororganization
+        description: GitHub List Packages for an Organization
+        call: github-packages.packageslistpackagesfororganization
+        with:
+          package_type: rest.package_type
+          page: rest.page
+          per_page: rest.per_page
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}
+      name: orgs-org-packages-package-type-package-name
+      description: REST surface for orgs-org-packages-package_type-package_name.
+      operations:
+      - method: GET
+        name: packagesgetpackagefororganization
+        description: GitHub Get a Package for an Organization
+        call: github-packages.packagesgetpackagefororganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackagefororg
+        description: GitHub Delete a Package for an Organization
+        call: github-packages.packagesdeletepackagefororg
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/restore
+      name: orgs-org-packages-package-type-package-name-restore
+      description: REST surface for orgs-org-packages-package_type-package_name-restore.
+      operations:
+      - method: POST
+        name: packagesrestorepackagefororg
+        description: GitHub Restore a Package for an Organization
+        call: github-packages.packagesrestorepackagefororg
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions
+      name: orgs-org-packages-package-type-package-name-versions
+      description: REST surface for orgs-org-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: packagesgetallpackageversionsforpackageownedbyorg
+        description: GitHub List Package Versions for a Package Owned by an Organization
+        call: github-packages.packagesgetallpackageversionsforpackageownedbyorg
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions/{package-version-id}
+      name: orgs-org-packages-package-type-package-name-versions-package-version-id
+      description: REST surface for orgs-org-packages-package_type-package_name-versions-package_version_id.
+      operations:
+      - method: GET
+        name: packagesgetpackageversionfororganization
+        description: GitHub Get a Package Version for an Organization
+        call: github-packages.packagesgetpackageversionfororganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackageversionfororg
+        description: GitHub Delete Package Version for an Organization
+        call: github-packages.packagesdeletepackageversionfororg
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions/{package-version-id}/restore
+      name: orgs-org-packages-package-type-package-name-versions-package-version-id-restore
+      description: REST surface for orgs-org-packages-package_type-package_name-versions-package_version_id-restore.
+      operations:
+      - method: POST
+        name: packagesrestorepackageversionfororg
+        description: GitHub Restore Package Version for an Organization
+        call: github-packages.packagesrestorepackageversionfororg
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/docker/conflicts
+      name: user-docker-conflicts
+      description: REST surface for user-docker-conflicts.
+      operations:
+      - method: GET
+        name: packageslistdockermigrationconflictingpackagesforauthenticateduser
+        description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+        call: github-packages.packageslistdockermigrationconflictingpackagesforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages
+      name: user-packages
+      description: REST surface for user-packages.
+      operations:
+      - method: GET
+        name: packageslistpackagesforauthenticateduser
+        description: GitHub List Packages for the Authenticated User's Namespace
+        call: github-packages.packageslistpackagesforauthenticateduser
+        with:
+          package_type: rest.package_type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages/{package-type}/{package-name}
+      name: user-packages-package-type-package-name
+      description: REST surface for user-packages-package_type-package_name.
+      operations:
+      - method: GET
+        name: packagesgetpackageforauthenticateduser
+        description: GitHub Get a Package for the Authenticated User
+        call: github-packages.packagesgetpackageforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackageforauthenticateduser
+        description: GitHub Delete a Package for the Authenticated User
+        call: github-packages.packagesdeletepackageforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages/{package-type}/{package-name}/restore
+      name: user-packages-package-type-package-name-restore
+      description: REST surface for user-packages-package_type-package_name-restore.
+      operations:
+      - method: POST
+        name: packagesrestorepackageforauthenticateduser
+        description: GitHub Restore a Package for the Authenticated User
+        call: github-packages.packagesrestorepackageforauthenticateduser
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages/{package-type}/{package-name}/versions
+      name: user-packages-package-type-package-name-versions
+      description: REST surface for user-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: packagesgetallpackageversionsforpackageownedbyauthenticateduser
+        description: GitHub List Package Versions for a Package Owned by the Authenticated User
+        call: github-packages.packagesgetallpackageversionsforpackageownedbyauthenticateduser
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages/{package-type}/{package-name}/versions/{package-version-id}
+      name: user-packages-package-type-package-name-versions-package-version-id
+      description: REST surface for user-packages-package_type-package_name-versions-package_version_id.
+      operations:
+      - method: GET
+        name: packagesgetpackageversionforauthenticateduser
+        description: GitHub Get a Package Version for the Authenticated User
+        call: github-packages.packagesgetpackageversionforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackageversionforauthenticateduser
+        description: GitHub Delete a Package Version for the Authenticated User
+        call: github-packages.packagesdeletepackageversionforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/packages/{package-type}/{package-name}/versions/{package-version-id}/restore
+      name: user-packages-package-type-package-name-versions-package-version-id-restore
+      description: REST surface for user-packages-package_type-package_name-versions-package_version_id-restore.
+      operations:
+      - method: POST
+        name: packagesrestorepackageversionforauthenticateduser
+        description: GitHub Restore a Package Version for the Authenticated User
+        call: github-packages.packagesrestorepackageversionforauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/docker/conflicts
+      name: users-username-docker-conflicts
+      description: REST surface for users-username-docker-conflicts.
+      operations:
+      - method: GET
+        name: packageslistdockermigrationconflictingpackagesforuser
+        description: GitHub Get List of Conflicting Packages During Docker Migration for User
+        call: github-packages.packageslistdockermigrationconflictingpackagesforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages
+      name: users-username-packages
+      description: REST surface for users-username-packages.
+      operations:
+      - method: GET
+        name: packageslistpackagesforuser
+        description: GitHub List Packages for a User
+        call: github-packages.packageslistpackagesforuser
+        with:
+          package_type: rest.package_type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}
+      name: users-username-packages-package-type-package-name
+      description: REST surface for users-username-packages-package_type-package_name.
+      operations:
+      - method: GET
+        name: packagesgetpackageforuser
+        description: GitHub Get a Package for a User
+        call: github-packages.packagesgetpackageforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackageforuser
+        description: GitHub Delete a Package for a User
+        call: github-packages.packagesdeletepackageforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/restore
+      name: users-username-packages-package-type-package-name-restore
+      description: REST surface for users-username-packages-package_type-package_name-restore.
+      operations:
+      - method: POST
+        name: packagesrestorepackageforuser
+        description: GitHub Restore a Package for a User
+        call: github-packages.packagesrestorepackageforuser
+        with:
+          token: rest.token
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions
+      name: users-username-packages-package-type-package-name-versions
+      description: REST surface for users-username-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: packagesgetallpackageversionsforpackageownedbyuser
+        description: GitHub List Package Versions for a Package Owned by a User
+        call: github-packages.packagesgetallpackageversionsforpackageownedbyuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions/{package-version-id}
+      name: users-username-packages-package-type-package-name-versions-package-version-id
+      description: REST surface for users-username-packages-package_type-package_name-versions-package_version_id.
+      operations:
+      - method: GET
+        name: packagesgetpackageversionforuser
+        description: GitHub Get a Package Version for a User
+        call: github-packages.packagesgetpackageversionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: packagesdeletepackageversionforuser
+        description: GitHub Delete Package Version for a User
+        call: github-packages.packagesdeletepackageversionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/packages/{package-type}/{package-name}/versions/{package-version-id}/restore
+      name: users-username-packages-package-type-package-name-versions-package-version-id-re
+      description: REST surface for users-username-packages-package_type-package_name-versions-package_version_id-re.
+      operations:
+      - method: POST
+        name: packagesrestorepackageversionforuser
+        description: GitHub Restore Package Version for a User
+        call: github-packages.packagesrestorepackageversionforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-packages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Packages. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-list-conflicting-packages
+      description: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistdockermigrationconflictingpackagesfororganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-organization
+      description: GitHub List Packages for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistpackagesfororganization
+      with:
+        package_type: tools.package_type
+        page: tools.page
+        per_page: tools.per_page
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-organization
+      description: GitHub Get a Package for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackagefororganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-organization
+      description: GitHub Delete a Package for an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackagefororg
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-organization
+      description: GitHub Restore a Package for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackagefororg
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-package-versions-package
+      description: GitHub List Package Versions for a Package Owned by an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetallpackageversionsforpackageownedbyorg
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-version-organization
+      description: GitHub Get a Package Version for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackageversionfororganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-version-organization
+      description: GitHub Delete Package Version for an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackageversionfororg
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-version-organization
+      description: GitHub Restore Package Version for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackageversionfororg
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-list-conflicting-packages-2
+      description: GitHub Get List of Conflicting Packages During Docker Migration for Authenticated-user
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistdockermigrationconflictingpackagesforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-authenticated-user-s
+      description: GitHub List Packages for the Authenticated User's Namespace
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistpackagesforauthenticateduser
+      with:
+        package_type: tools.package_type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-authenticated-user
+      description: GitHub Get a Package for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackageforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-authenticated-user
+      description: GitHub Delete a Package for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackageforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-authenticated-user
+      description: GitHub Restore a Package for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackageforauthenticateduser
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-package-versions-package-2
+      description: GitHub List Package Versions for a Package Owned by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetallpackageversionsforpackageownedbyauthenticateduser
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-version-authenticated
+      description: GitHub Get a Package Version for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackageversionforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-version-authenticated
+      description: GitHub Delete a Package Version for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackageversionforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-version-authenticated
+      description: GitHub Restore a Package Version for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackageversionforauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-list-conflicting-packages-3
+      description: GitHub Get List of Conflicting Packages During Docker Migration for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistdockermigrationconflictingpackagesforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-packages-user
+      description: GitHub List Packages for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packageslistpackagesforuser
+      with:
+        package_type: tools.package_type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-user
+      description: GitHub Get a Package for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackageforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-user
+      description: GitHub Delete a Package for a User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackageforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-user
+      description: GitHub Restore a Package for a User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackageforuser
+      with:
+        token: tools.token
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-package-versions-package-3
+      description: GitHub List Package Versions for a Package Owned by a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetallpackageversionsforpackageownedbyuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-version-user
+      description: GitHub Get a Package Version for a User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-packages.packagesgetpackageversionforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-version-user
+      description: GitHub Delete Package Version for a User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-packages.packagesdeletepackageversionforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-version-user
+      description: GitHub Restore Package Version for a User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-packages.packagesrestorepackageversionforuser
+      outputParameters:
+      - type: object
+        mapping: $.

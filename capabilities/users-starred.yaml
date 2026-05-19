@@ -1,0 +1,188 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Starred
+  description: 'GitHub User API — Starred. 3 operations. Lead operation: GitHub List Repositories Starred by the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Starred
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-starred
+    baseUri: ''
+    description: GitHub User API — Starred business capability. Self-contained, no shared references.
+    resources:
+    - name: user-starred
+      path: /user/starred
+      operations:
+      - name: listrepositoriesstarredbytheauthenticateduser
+        method: GET
+        description: GitHub List Repositories Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-starred-owner-repo
+      path: /user/starred/{owner}/{repo}
+      operations:
+      - name: checkifrepositoryisstarredbytheauthenticateduser
+        method: GET
+        description: GitHub Check if Repository is Starred by the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-starred
+      path: /users/{username}/starred
+      operations:
+      - name: listrepositoriesstarredbyuser
+        method: GET
+        description: GitHub List Repositories Starred by User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-starred-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Starred. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/starred
+      name: user-starred
+      description: REST surface for user-starred.
+      operations:
+      - method: GET
+        name: listrepositoriesstarredbytheauthenticateduser
+        description: GitHub List Repositories Starred by the Authenticated User
+        call: users-starred.listrepositoriesstarredbytheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/starred/{owner}/{repo}
+      name: user-starred-owner-repo
+      description: REST surface for user-starred-owner-repo.
+      operations:
+      - method: GET
+        name: checkifrepositoryisstarredbytheauthenticateduser
+        description: GitHub Check if Repository is Starred by the Authenticated User
+        call: users-starred.checkifrepositoryisstarredbytheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/starred
+      name: users-username-starred
+      description: REST surface for users-username-starred.
+      operations:
+      - method: GET
+        name: listrepositoriesstarredbyuser
+        description: GitHub List Repositories Starred by User
+        call: users-starred.listrepositoriesstarredbyuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-starred-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Starred. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-repositories-starred-authenticated
+      description: GitHub List Repositories Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-starred.listrepositoriesstarredbytheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-repository-is
+      description: GitHub Check if Repository is Starred by the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-starred.checkifrepositoryisstarredbytheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-starred-user
+      description: GitHub List Repositories Starred by User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-starred.listrepositoriesstarredbyuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

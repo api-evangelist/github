@@ -1,0 +1,88 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-hooks-api — Tests
+  description: 'github-repo-hooks-api — Tests. 1 operations. Lead operation: GitHub Test the Push Repository Webhook. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Tests
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-hooks-tests
+    baseUri: ''
+    description: github-repo-hooks-api — Tests business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-hooks-hook_id-tests
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/tests
+      operations:
+      - name: testthepushrepositorywebhook
+        method: POST
+        description: GitHub Test the Push Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-hooks-tests-rest
+    port: 8080
+    description: REST adapter for github-repo-hooks-api — Tests. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/tests
+      name: repos-owner-repo-hooks-hook-id-tests
+      description: REST surface for repos-owner-repo-hooks-hook_id-tests.
+      operations:
+      - method: POST
+        name: testthepushrepositorywebhook
+        description: GitHub Test the Push Repository Webhook
+        call: repo-hooks-tests.testthepushrepositorywebhook
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-hooks-tests-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-hooks-api — Tests. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-test-push-repository-webhook
+      description: GitHub Test the Push Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repo-hooks-tests.testthepushrepositorywebhook
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

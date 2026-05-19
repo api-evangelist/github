@@ -1,0 +1,152 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Merges
+  description: 'github-repos-api — Merges. 2 operations. Lead operation: GitHub Sync Fork Branch with the Upstream Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Merges
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-merges
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Merges business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-merge-upstream
+      path: /repos/{owner}/{repo}/merge-upstream
+      operations:
+      - name: syncforkbranchwiththeupstreamrepository
+        method: POST
+        description: GitHub Sync Fork Branch with the Upstream Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-merges
+      path: /repos/{owner}/{repo}/merges
+      operations:
+      - name: mergebranch
+        method: POST
+        description: GitHub Merge Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-merges-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Merges. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/merge-upstream
+      name: repos-owner-repo-merge-upstream
+      description: REST surface for repos-owner-repo-merge-upstream.
+      operations:
+      - method: POST
+        name: syncforkbranchwiththeupstreamrepository
+        description: GitHub Sync Fork Branch with the Upstream Repository
+        call: repos-merges.syncforkbranchwiththeupstreamrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/merges
+      name: repos-owner-repo-merges
+      description: REST surface for repos-owner-repo-merges.
+      operations:
+      - method: POST
+        name: mergebranch
+        description: GitHub Merge Branch
+        call: repos-merges.mergebranch
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-merges-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Merges. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-sync-fork-branch-upstream
+      description: GitHub Sync Fork Branch with the Upstream Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repos-merges.syncforkbranchwiththeupstreamrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-merge-branch
+      description: GitHub Merge Branch
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repos-merges.mergebranch
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

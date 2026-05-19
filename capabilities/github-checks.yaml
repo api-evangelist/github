@@ -1,0 +1,484 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Checks
+  description: 'GitHub v3 REST API — Checks. 12 operations. Lead operation: GitHub Create a Check Run. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Checks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-checks
+    baseUri: ''
+    description: GitHub v3 REST API — Checks business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-check-runs
+      path: /repos/{owner}/{repo}/check-runs
+      operations:
+      - name: checkscreate
+        method: POST
+        description: GitHub Create a Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-runs-check_run_id
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}
+      operations:
+      - name: checksget
+        method: GET
+        description: GitHub Get a Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: checksupdate
+        method: PATCH
+        description: GitHub Update a Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-runs-check_run_id-annotations
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations
+      operations:
+      - name: checkslistannotations
+        method: GET
+        description: GitHub List Check Run Annotations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-check-runs-check_run_id-rerequest
+      path: /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest
+      operations:
+      - name: checksrerequestrun
+        method: POST
+        description: GitHub Rerequest a Check Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-check-suites
+      path: /repos/{owner}/{repo}/check-suites
+      operations:
+      - name: checkscreatesuite
+        method: POST
+        description: GitHub Create a Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-suites-preferences
+      path: /repos/{owner}/{repo}/check-suites/preferences
+      operations:
+      - name: checkssetsuitespreferences
+        method: PATCH
+        description: GitHub Update Repository Preferences for Check Suites
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-check-suites-check_suite_id
+      path: /repos/{owner}/{repo}/check-suites/{check_suite_id}
+      operations:
+      - name: checksgetsuite
+        method: GET
+        description: GitHub Get a Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-check-suites-check_suite_id-check-runs
+      path: /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs
+      operations:
+      - name: checkslistforsuite
+        method: GET
+        description: GitHub List Check Runs in a Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.
+    - name: repos-owner-repo-check-suites-check_suite_id-rerequest
+      path: /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest
+      operations:
+      - name: checksrerequestsuite
+        method: POST
+        description: GitHub Rerequest a Check Suite
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-commits-ref-check-runs
+      path: /repos/{owner}/{repo}/commits/{ref}/check-runs
+      operations:
+      - name: checkslistforref
+        method: GET
+        description: GitHub List Check Runs for a Git Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.
+        - name: app_id
+          in: query
+          type: integer
+    - name: repos-owner-repo-commits-ref-check-suites
+      path: /repos/{owner}/{repo}/commits/{ref}/check-suites
+      operations:
+      - name: checkslistsuitesforref
+        method: GET
+        description: GitHub List Check Suites for a Git Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: app_id
+          in: query
+          type: integer
+          description: Filters check suites by GitHub App `id`.
+  exposes:
+  - type: rest
+    namespace: github-checks-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Checks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/check-runs
+      name: repos-owner-repo-check-runs
+      description: REST surface for repos-owner-repo-check-runs.
+      operations:
+      - method: POST
+        name: checkscreate
+        description: GitHub Create a Check Run
+        call: github-checks.checkscreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}
+      name: repos-owner-repo-check-runs-check-run-id
+      description: REST surface for repos-owner-repo-check-runs-check_run_id.
+      operations:
+      - method: GET
+        name: checksget
+        description: GitHub Get a Check Run
+        call: github-checks.checksget
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: checksupdate
+        description: GitHub Update a Check Run
+        call: github-checks.checksupdate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}/annotations
+      name: repos-owner-repo-check-runs-check-run-id-annotations
+      description: REST surface for repos-owner-repo-check-runs-check_run_id-annotations.
+      operations:
+      - method: GET
+        name: checkslistannotations
+        description: GitHub List Check Run Annotations
+        call: github-checks.checkslistannotations
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-runs/{check-run-id}/rerequest
+      name: repos-owner-repo-check-runs-check-run-id-rerequest
+      description: REST surface for repos-owner-repo-check-runs-check_run_id-rerequest.
+      operations:
+      - method: POST
+        name: checksrerequestrun
+        description: GitHub Rerequest a Check Run
+        call: github-checks.checksrerequestrun
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites
+      name: repos-owner-repo-check-suites
+      description: REST surface for repos-owner-repo-check-suites.
+      operations:
+      - method: POST
+        name: checkscreatesuite
+        description: GitHub Create a Check Suite
+        call: github-checks.checkscreatesuite
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/preferences
+      name: repos-owner-repo-check-suites-preferences
+      description: REST surface for repos-owner-repo-check-suites-preferences.
+      operations:
+      - method: PATCH
+        name: checkssetsuitespreferences
+        description: GitHub Update Repository Preferences for Check Suites
+        call: github-checks.checkssetsuitespreferences
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/{check-suite-id}
+      name: repos-owner-repo-check-suites-check-suite-id
+      description: REST surface for repos-owner-repo-check-suites-check_suite_id.
+      operations:
+      - method: GET
+        name: checksgetsuite
+        description: GitHub Get a Check Suite
+        call: github-checks.checksgetsuite
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/{check-suite-id}/check-runs
+      name: repos-owner-repo-check-suites-check-suite-id-check-runs
+      description: REST surface for repos-owner-repo-check-suites-check_suite_id-check-runs.
+      operations:
+      - method: GET
+        name: checkslistforsuite
+        description: GitHub List Check Runs in a Check Suite
+        call: github-checks.checkslistforsuite
+        with:
+          filter: rest.filter
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/check-suites/{check-suite-id}/rerequest
+      name: repos-owner-repo-check-suites-check-suite-id-rerequest
+      description: REST surface for repos-owner-repo-check-suites-check_suite_id-rerequest.
+      operations:
+      - method: POST
+        name: checksrerequestsuite
+        description: GitHub Rerequest a Check Suite
+        call: github-checks.checksrerequestsuite
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/check-runs
+      name: repos-owner-repo-commits-ref-check-runs
+      description: REST surface for repos-owner-repo-commits-ref-check-runs.
+      operations:
+      - method: GET
+        name: checkslistforref
+        description: GitHub List Check Runs for a Git Reference
+        call: github-checks.checkslistforref
+        with:
+          filter: rest.filter
+          app_id: rest.app_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/check-suites
+      name: repos-owner-repo-commits-ref-check-suites
+      description: REST surface for repos-owner-repo-commits-ref-check-suites.
+      operations:
+      - method: GET
+        name: checkslistsuitesforref
+        description: GitHub List Check Suites for a Git Reference
+        call: github-checks.checkslistsuitesforref
+        with:
+          app_id: rest.app_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-checks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Checks. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-create-check-run
+      description: GitHub Create a Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-checks.checkscreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-check-run
+      description: GitHub Get a Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checksget
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-check-run
+      description: GitHub Update a Check Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-checks.checksupdate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-run-annotations
+      description: GitHub List Check Run Annotations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checkslistannotations
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-rerequest-check-run
+      description: GitHub Rerequest a Check Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-checks.checksrerequestrun
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-check-suite
+      description: GitHub Create a Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-checks.checkscreatesuite
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository-preferences-check
+      description: GitHub Update Repository Preferences for Check Suites
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-checks.checkssetsuitespreferences
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-check-suite
+      description: GitHub Get a Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checksgetsuite
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-runs-check
+      description: GitHub List Check Runs in a Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checkslistforsuite
+      with:
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-rerequest-check-suite
+      description: GitHub Rerequest a Check Suite
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: github-checks.checksrerequestsuite
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-runs-git
+      description: GitHub List Check Runs for a Git Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checkslistforref
+      with:
+        filter: tools.filter
+        app_id: tools.app_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-check-suites-git
+      description: GitHub List Check Suites for a Git Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-checks.checkslistsuitesforref
+      with:
+        app_id: tools.app_id
+      outputParameters:
+      - type: object
+        mapping: $.

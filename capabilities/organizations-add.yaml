@@ -1,0 +1,425 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Add
+  description: 'GitHub Org API — Add. 10 operations. Lead operation: GitHub Add Repository Access to Self-hosted Runner Group
+    in an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-add
+    baseUri: ''
+    description: GitHub Org API — Add business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-actions-runner-groups-runner_group_id-repositories-repository_id
+      path: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
+      operations:
+      - name: addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        method: PUT
+        description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-actions-runner-groups-runner_group_id-runners-runner_id
+      path: /orgs/{org}/actions/runner-groups/{runner_group_id}/runners/{runner_id}
+      operations:
+      - name: addselfhostedrunnertogroupforanorganization
+        method: PUT
+        description: GitHub Add Self-hosted Runner to Group for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-actions-runners-runner_id-labels
+      path: /orgs/{org}/actions/runners/{runner_id}/labels
+      operations:
+      - name: addcustomlabelstoselfhostedrunnerforanorganization
+        method: POST
+        description: GitHub Add Custom Labels to Self-hosted Runner for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org-actions-secrets-secret_name-repositories-repository_id
+      path: /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}
+      operations:
+      - name: addselectedrepositorytoanorganizationsecret
+        method: PUT
+        description: GitHub Add Selected Repository to an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: path
+          type: integer
+          required: true
+    - name: orgs-org-actions-variables-name-repositories-repository_id
+      path: /orgs/{org}/actions/variables/{name}/repositories/{repository_id}
+      operations:
+      - name: addselectedrepositorytoanorganizationvariable
+        method: PUT
+        description: GitHub Add Selected Repository to an Organization Variable
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: path
+          type: integer
+          required: true
+    - name: orgs-org-dependabot-secrets-secret_name-repositories-repository_id
+      path: /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}
+      operations:
+      - name: addselectedrepositorytoanorganizationsecret
+        method: PUT
+        description: GitHub Add Selected Repository to an Organization Secret
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: repository_id
+          in: path
+          type: integer
+          required: true
+    - name: orgs-org-security-managers-teams-team_slug
+      path: /orgs/{org}/security-managers/teams/{team_slug}
+      operations:
+      - name: addsecuritymanagerteam
+        method: PUT
+        description: GitHub Add Security Manager Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-memberships-username
+      path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+      operations:
+      - name: addorupdateteammembershipforuser
+        method: PUT
+        description: GitHub Add or Update Team Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: addorupdateteamprojectpermissions
+        method: PUT
+        description: GitHub Add or Update Team Project Permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: orgs-org-teams-team_slug-repos-owner-repo
+      path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+      operations:
+      - name: addorupdateteamrepositorypermissions
+        method: PUT
+        description: GitHub Add or Update Team Repository Permissions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-add-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Add. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/orgs/{org}/actions/runner-groups/{runner-group-id}/repositories/{repository-id}
+      name: orgs-org-actions-runner-groups-runner-group-id-repositories-repository-id
+      description: REST surface for orgs-org-actions-runner-groups-runner_group_id-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+        call: organizations-add.addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/runner-groups/{runner-group-id}/runners/{runner-id}
+      name: orgs-org-actions-runner-groups-runner-group-id-runners-runner-id
+      description: REST surface for orgs-org-actions-runner-groups-runner_group_id-runners-runner_id.
+      operations:
+      - method: PUT
+        name: addselfhostedrunnertogroupforanorganization
+        description: GitHub Add Self-hosted Runner to Group for an Organization
+        call: organizations-add.addselfhostedrunnertogroupforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/runners/{runner-id}/labels
+      name: orgs-org-actions-runners-runner-id-labels
+      description: REST surface for orgs-org-actions-runners-runner_id-labels.
+      operations:
+      - method: POST
+        name: addcustomlabelstoselfhostedrunnerforanorganization
+        description: GitHub Add Custom Labels to Self-hosted Runner for an Organization
+        call: organizations-add.addcustomlabelstoselfhostedrunnerforanorganization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/secrets/{secret-name}/repositories/{repository-id}
+      name: orgs-org-actions-secrets-secret-name-repositories-repository-id
+      description: REST surface for orgs-org-actions-secrets-secret_name-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addselectedrepositorytoanorganizationsecret
+        description: GitHub Add Selected Repository to an Organization Secret
+        call: organizations-add.addselectedrepositorytoanorganizationsecret
+        with:
+          repository_id: rest.repository_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/variables/{name}/repositories/{repository-id}
+      name: orgs-org-actions-variables-name-repositories-repository-id
+      description: REST surface for orgs-org-actions-variables-name-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addselectedrepositorytoanorganizationvariable
+        description: GitHub Add Selected Repository to an Organization Variable
+        call: organizations-add.addselectedrepositorytoanorganizationvariable
+        with:
+          repository_id: rest.repository_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/dependabot/secrets/{secret-name}/repositories/{repository-id}
+      name: orgs-org-dependabot-secrets-secret-name-repositories-repository-id
+      description: REST surface for orgs-org-dependabot-secrets-secret_name-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addselectedrepositorytoanorganizationsecret
+        description: GitHub Add Selected Repository to an Organization Secret
+        call: organizations-add.addselectedrepositorytoanorganizationsecret
+        with:
+          repository_id: rest.repository_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/security-managers/teams/{team-slug}
+      name: orgs-org-security-managers-teams-team-slug
+      description: REST surface for orgs-org-security-managers-teams-team_slug.
+      operations:
+      - method: PUT
+        name: addsecuritymanagerteam
+        description: GitHub Add Security Manager Team
+        call: organizations-add.addsecuritymanagerteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/memberships/{username}
+      name: orgs-org-teams-team-slug-memberships-username
+      description: REST surface for orgs-org-teams-team_slug-memberships-username.
+      operations:
+      - method: PUT
+        name: addorupdateteammembershipforuser
+        description: GitHub Add or Update Team Membership for User
+        call: organizations-add.addorupdateteammembershipforuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: PUT
+        name: addorupdateteamprojectpermissions
+        description: GitHub Add or Update Team Project Permissions
+        call: organizations-add.addorupdateteamprojectpermissions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/repos/{owner}/{repo}
+      name: orgs-org-teams-team-slug-repos-owner-repo
+      description: REST surface for orgs-org-teams-team_slug-repos-owner-repo.
+      operations:
+      - method: PUT
+        name: addorupdateteamrepositorypermissions
+        description: GitHub Add or Update Team Repository Permissions
+        call: organizations-add.addorupdateteamrepositorypermissions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Add. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-add-repository-access-self
+      description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addrepositoryaccesstoselfhostedrunnergroupinanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-self-hosted-runner
+      description: GitHub Add Self-hosted Runner to Group for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addselfhostedrunnertogroupforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-custom-labels-self
+      description: GitHub Add Custom Labels to Self-hosted Runner for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-add.addcustomlabelstoselfhostedrunnerforanorganization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-selected-repository-organization
+      description: GitHub Add Selected Repository to an Organization Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addselectedrepositorytoanorganizationsecret
+      with:
+        repository_id: tools.repository_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-selected-repository-organization-2
+      description: GitHub Add Selected Repository to an Organization Variable
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addselectedrepositorytoanorganizationvariable
+      with:
+        repository_id: tools.repository_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-selected-repository-organization-3
+      description: GitHub Add Selected Repository to an Organization Secret
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addselectedrepositorytoanorganizationsecret
+      with:
+        repository_id: tools.repository_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-security-manager-team
+      description: GitHub Add Security Manager Team
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addsecuritymanagerteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-membership
+      description: GitHub Add or Update Team Membership for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addorupdateteammembershipforuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-project
+      description: GitHub Add or Update Team Project Permissions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addorupdateteamprojectpermissions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-repository
+      description: GitHub Add or Update Team Repository Permissions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-add.addorupdateteamrepositorypermissions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

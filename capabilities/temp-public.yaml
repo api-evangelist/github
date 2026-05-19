@@ -1,0 +1,245 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Public
+  description: 'GitHub Repos API — Public. 4 operations. Lead operation: Get Repository Public Key. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Public
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-public
+    baseUri: ''
+    description: GitHub Repos API — Public business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-secrets-public-key
+      path: /repos/{owner}/{repo}/actions/secrets/public-key
+      operations:
+      - name: getrepositorypublickey
+        method: GET
+        description: Get Repository Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependabot-secrets-public-key
+      path: /repos/{owner}/{repo}/dependabot/secrets/public-key
+      operations:
+      - name: getrepositorypublickey
+        method: GET
+        description: Get Repository Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-environments-environment_name-secrets-public-key
+      path: /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key
+      operations:
+      - name: getanenvironmentpublickey
+        method: GET
+        description: Get An Environment Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repositories
+      path: /repositories
+      operations:
+      - name: listpublicrepositories
+        method: GET
+        description: List Public Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Specifies the types of repositories to return. This endpoint will only list repositories available
+            to all users on the enterprise.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-public-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Public. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/secrets/public-key
+      name: repos-owner-repo-actions-secrets-public-key
+      description: REST surface for repos-owner-repo-actions-secrets-public-key.
+      operations:
+      - method: GET
+        name: getrepositorypublickey
+        description: Get Repository Public Key
+        call: temp-public.getrepositorypublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependabot/secrets/public-key
+      name: repos-owner-repo-dependabot-secrets-public-key
+      description: REST surface for repos-owner-repo-dependabot-secrets-public-key.
+      operations:
+      - method: GET
+        name: getrepositorypublickey
+        description: Get Repository Public Key
+        call: temp-public.getrepositorypublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/secrets/public-key
+      name: repos-owner-repo-environments-environment-name-secrets-public-key
+      description: REST surface for repos-owner-repo-environments-environment_name-secrets-public-key.
+      operations:
+      - method: GET
+        name: getanenvironmentpublickey
+        description: Get An Environment Public Key
+        call: temp-public.getanenvironmentpublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories
+      name: repositories
+      description: REST surface for repositories.
+      operations:
+      - method: GET
+        name: listpublicrepositories
+        description: List Public Repositories
+        call: temp-public.listpublicrepositories
+        with:
+          visibility: rest.visibility
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-public-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Public. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-repository-public-key
+      description: Get Repository Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-public.getrepositorypublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-repository-public-key-2
+      description: Get Repository Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-public.getrepositorypublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-environment-public-key
+      description: Get An Environment Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-public.getanenvironmentpublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-public-repositories
+      description: List Public Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-public.listpublicrepositories
+      with:
+        visibility: tools.visibility
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

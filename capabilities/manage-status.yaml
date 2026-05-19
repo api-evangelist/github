@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Manage API — Status
+  description: 'GitHub Manage API — Status. 1 operations. Lead operation: GitHub Get the Status of Services Running on All
+    Replica Nodes. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: manage-status
+    baseUri: ''
+    description: GitHub Manage API — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: manage-v1-replication-status
+      path: /manage/v1/replication/status
+      operations:
+      - name: getthestatusofservicesrunningonallreplicanodes
+        method: GET
+        description: GitHub Get the Status of Services Running on All Replica Nodes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: manage-status-rest
+    port: 8080
+    description: REST adapter for GitHub Manage API — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/manage/v1/replication/status
+      name: manage-v1-replication-status
+      description: REST surface for manage-v1-replication-status.
+      operations:
+      - method: GET
+        name: getthestatusofservicesrunningonallreplicanodes
+        description: GitHub Get the Status of Services Running on All Replica Nodes
+        call: manage-status.getthestatusofservicesrunningonallreplicanodes
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: manage-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Manage API — Status. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-status-services-running
+      description: GitHub Get the Status of Services Running on All Replica Nodes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: manage-status.getthestatusofservicesrunningonallreplicanodes
+      outputParameters:
+      - type: object
+        mapping: $.

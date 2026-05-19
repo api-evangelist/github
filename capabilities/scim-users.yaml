@@ -1,0 +1,207 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub SCIM API — Users
+  description: 'GitHub SCIM API — Users. 5 operations. Lead operation: GitHub Provision Scim Enterprise User. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Users
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: scim-users
+    baseUri: ''
+    description: GitHub SCIM API — Users business capability. Self-contained, no shared references.
+    resources:
+    - name: scim-v2-Users
+      path: /scim/v2/Users
+      operations:
+      - name: provisionscimenterpriseuser
+        method: POST
+        description: GitHub Provision Scim Enterprise User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: scim-v2-Users-scim_user_id
+      path: /scim/v2/Users/{scim_user_id}
+      operations:
+      - name: getscimprovisioninginformationforanenterpriseuser
+        method: GET
+        description: GitHub Get Scim Provisioning Information for an Enterprise User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setsciminformationforprovisionedenterpriseuser
+        method: PUT
+        description: GitHub Set Scim Information for Provisioned Enterprise User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: updateanattributeforscimenterpriseuser
+        method: PATCH
+        description: GitHub Update an Attribute for Scim Enterprise User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletescimuserfromanenterprise
+        method: DELETE
+        description: GitHub Delete Scim User from an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: scim-users-rest
+    port: 8080
+    description: REST adapter for GitHub SCIM API — Users. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/scim/v2/users
+      name: scim-v2-users
+      description: REST surface for scim-v2-Users.
+      operations:
+      - method: POST
+        name: provisionscimenterpriseuser
+        description: GitHub Provision Scim Enterprise User
+        call: scim-users.provisionscimenterpriseuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scim/v2/users/{scim-user-id}
+      name: scim-v2-users-scim-user-id
+      description: REST surface for scim-v2-Users-scim_user_id.
+      operations:
+      - method: GET
+        name: getscimprovisioninginformationforanenterpriseuser
+        description: GitHub Get Scim Provisioning Information for an Enterprise User
+        call: scim-users.getscimprovisioninginformationforanenterpriseuser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setsciminformationforprovisionedenterpriseuser
+        description: GitHub Set Scim Information for Provisioned Enterprise User
+        call: scim-users.setsciminformationforprovisionedenterpriseuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateanattributeforscimenterpriseuser
+        description: GitHub Update an Attribute for Scim Enterprise User
+        call: scim-users.updateanattributeforscimenterpriseuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletescimuserfromanenterprise
+        description: GitHub Delete Scim User from an Enterprise
+        call: scim-users.deletescimuserfromanenterprise
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: scim-users-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub SCIM API — Users. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-provision-scim-enterprise-user
+      description: GitHub Provision Scim Enterprise User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: scim-users.provisionscimenterpriseuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-scim-provisioning-information
+      description: GitHub Get Scim Provisioning Information for an Enterprise User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: scim-users.getscimprovisioninginformationforanenterpriseuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-scim-information-provisioned
+      description: GitHub Set Scim Information for Provisioned Enterprise User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: scim-users.setsciminformationforprovisionedenterpriseuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-attribute-scim-enterprise
+      description: GitHub Update an Attribute for Scim Enterprise User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: scim-users.updateanattributeforscimenterpriseuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-scim-user-enterprise
+      description: GitHub Delete Scim User from an Enterprise
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: scim-users.deletescimuserfromanenterprise
+      outputParameters:
+      - type: object
+        mapping: $.

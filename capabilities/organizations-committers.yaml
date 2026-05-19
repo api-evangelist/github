@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Committers
+  description: 'GitHub Org API — Committers. 1 operations. Lead operation: GitHub Get Github Advanced Security Active Committers
+    for an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Committers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-committers
+    baseUri: ''
+    description: GitHub Org API — Committers business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-settings-billing-advanced-security
+      path: /orgs/{org}/settings/billing/advanced-security
+      operations:
+      - name: getgithubadvancedsecurityactivecommittersforanorganization
+        method: GET
+        description: GitHub Get Github Advanced Security Active Committers for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-committers-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Committers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/settings/billing/advanced-security
+      name: orgs-org-settings-billing-advanced-security
+      description: REST surface for orgs-org-settings-billing-advanced-security.
+      operations:
+      - method: GET
+        name: getgithubadvancedsecurityactivecommittersforanorganization
+        description: GitHub Get Github Advanced Security Active Committers for an Organization
+        call: organizations-committers.getgithubadvancedsecurityactivecommittersforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-committers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Committers. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-github-advanced-security
+      description: GitHub Get Github Advanced Security Active Committers for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-committers.getgithubadvancedsecurityactivecommittersforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

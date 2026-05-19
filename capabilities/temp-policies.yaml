@@ -1,0 +1,381 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Policies
+  description: 'GitHub Repos API — Policies. 7 operations. Lead operation: Get Github Actions Cache Usage Policy For Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Policies
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-policies
+    baseUri: ''
+    description: GitHub Repos API — Policies business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-cache-usage-policy
+      path: /repos/{owner}/{repo}/actions/cache/usage-policy
+      operations:
+      - name: getgithubactionscacheusagepolicyforrepository
+        method: GET
+        description: Get Github Actions Cache Usage Policy For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: setgithubactionscacheusagepolicyforrepository
+        method: PATCH
+        description: Set Github Actions Cache Usage Policy For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies
+      operations:
+      - name: listdeploymentbranchpolicies
+        method: GET
+        description: List Deployment Branch Policies
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createdeploymentbranchpolicy
+        method: POST
+        description: Create Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-environments-environment_name-deployment-branch-policies-branch
+      path: /repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}
+      operations:
+      - name: getdeploymentbranchpolicy
+        method: GET
+        description: Get Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatedeploymentbranchpolicy
+        method: PUT
+        description: Update Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletedeploymentbranchpolicy
+        method: DELETE
+        description: Delete Deployment Branch Policy
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-policies-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Policies. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/cache/usage-policy
+      name: repos-owner-repo-actions-cache-usage-policy
+      description: REST surface for repos-owner-repo-actions-cache-usage-policy.
+      operations:
+      - method: GET
+        name: getgithubactionscacheusagepolicyforrepository
+        description: Get Github Actions Cache Usage Policy For Repository
+        call: temp-policies.getgithubactionscacheusagepolicyforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: setgithubactionscacheusagepolicyforrepository
+        description: Set Github Actions Cache Usage Policy For Repository
+        call: temp-policies.setgithubactionscacheusagepolicyforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies.
+      operations:
+      - method: GET
+        name: listdeploymentbranchpolicies
+        description: List Deployment Branch Policies
+        call: temp-policies.listdeploymentbranchpolicies
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdeploymentbranchpolicy
+        description: Create Deployment Branch Policy
+        call: temp-policies.createdeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/deployment-branch-policies/{branch-policy-id}
+      name: repos-owner-repo-environments-environment-name-deployment-branch-policies-branch
+      description: REST surface for repos-owner-repo-environments-environment_name-deployment-branch-policies-branch.
+      operations:
+      - method: GET
+        name: getdeploymentbranchpolicy
+        description: Get Deployment Branch Policy
+        call: temp-policies.getdeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatedeploymentbranchpolicy
+        description: Update Deployment Branch Policy
+        call: temp-policies.updatedeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedeploymentbranchpolicy
+        description: Delete Deployment Branch Policy
+        call: temp-policies.deletedeploymentbranchpolicy
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-policies-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Policies. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: get-github-actions-cache-usage
+      description: Get Github Actions Cache Usage Policy For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-policies.getgithubactionscacheusagepolicyforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-github-actions-cache-usage
+      description: Set Github Actions Cache Usage Policy For Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-policies.setgithubactionscacheusagepolicyforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-deployment-branch-policies
+      description: List Deployment Branch Policies
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-policies.listdeploymentbranchpolicies
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-deployment-branch-policy
+      description: Create Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-policies.createdeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-deployment-branch-policy
+      description: Get Deployment Branch Policy
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-policies.getdeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-deployment-branch-policy
+      description: Update Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-policies.updatedeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-deployment-branch-policy
+      description: Delete Deployment Branch Policy
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-policies.deletedeploymentbranchpolicy
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

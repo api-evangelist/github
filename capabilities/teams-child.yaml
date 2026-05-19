@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Child
+  description: 'GitHub Teams API — Child. 2 operations. Lead operation: GitHub List Child Teams. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Child
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-child
+    baseUri: ''
+    description: GitHub Teams API — Child business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug-teams
+      path: /orgs/{org}/teams/{team_slug}/teams
+      operations:
+      - name: listchildteams
+        method: GET
+        description: GitHub List Child Teams
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-teams
+      path: /teams/{team_id}/teams
+      operations:
+      - name: listchildteamslegacy
+        method: GET
+        description: GitHub List Child Teams (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-child-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Child. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}/teams
+      name: orgs-org-teams-team-slug-teams
+      description: REST surface for orgs-org-teams-team_slug-teams.
+      operations:
+      - method: GET
+        name: listchildteams
+        description: GitHub List Child Teams
+        call: teams-child.listchildteams
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/teams
+      name: teams-team-id-teams
+      description: REST surface for teams-team_id-teams.
+      operations:
+      - method: GET
+        name: listchildteamslegacy
+        description: GitHub List Child Teams (legacy)
+        call: teams-child.listchildteamslegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-child-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Child. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-child-teams
+      description: GitHub List Child Teams
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-child.listchildteams
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-child-teams-legacy
+      description: GitHub List Child Teams (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-child.listchildteamslegacy
+      outputParameters:
+      - type: object
+        mapping: $.

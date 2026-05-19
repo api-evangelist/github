@@ -1,0 +1,166 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Checks
+  description: 'GitHub Teams API — Checks. 4 operations. Lead operation: GitHub Check Team Permissions for Project. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Checks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-checks
+    baseUri: ''
+    description: GitHub Teams API — Checks business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforproject
+        method: GET
+        description: GitHub Check Team Permissions for Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-repos-owner-repo
+      path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+      operations:
+      - name: checkteampermissionsforrepository
+        method: GET
+        description: GitHub Check Team Permissions for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-projects-project_id
+      path: /teams/{team_id}/projects/{project_id}
+      operations:
+      - name: checkteampermissionsforprojectlegacy
+        method: GET
+        description: GitHub Check Team Permissions for Project (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-repos-owner-repo
+      path: /teams/{team_id}/repos/{owner}/{repo}
+      operations:
+      - name: checkteampermissionsforrepositorylegacy
+        method: GET
+        description: GitHub Check Team Permissions for Repository (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-checks-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Checks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforproject
+        description: GitHub Check Team Permissions for Project
+        call: teams-checks.checkteampermissionsforproject
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/repos/{owner}/{repo}
+      name: orgs-org-teams-team-slug-repos-owner-repo
+      description: REST surface for orgs-org-teams-team_slug-repos-owner-repo.
+      operations:
+      - method: GET
+        name: checkteampermissionsforrepository
+        description: GitHub Check Team Permissions for Repository
+        call: teams-checks.checkteampermissionsforrepository
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/projects/{project-id}
+      name: teams-team-id-projects-project-id
+      description: REST surface for teams-team_id-projects-project_id.
+      operations:
+      - method: GET
+        name: checkteampermissionsforprojectlegacy
+        description: GitHub Check Team Permissions for Project (legacy)
+        call: teams-checks.checkteampermissionsforprojectlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/repos/{owner}/{repo}
+      name: teams-team-id-repos-owner-repo
+      description: REST surface for teams-team_id-repos-owner-repo.
+      operations:
+      - method: GET
+        name: checkteampermissionsforrepositorylegacy
+        description: GitHub Check Team Permissions for Repository (legacy)
+        call: teams-checks.checkteampermissionsforrepositorylegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-checks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Checks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-check-team-permissions-project
+      description: GitHub Check Team Permissions for Project
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-checks.checkteampermissionsforproject
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-repository
+      description: GitHub Check Team Permissions for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-checks.checkteampermissionsforrepository
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-project-2
+      description: GitHub Check Team Permissions for Project (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-checks.checkteampermissionsforprojectlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-team-permissions-repository-2
+      description: GitHub Check Team Permissions for Repository (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-checks.checkteampermissionsforrepositorylegacy
+      outputParameters:
+      - type: object
+        mapping: $.

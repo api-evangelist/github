@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Gists API — Commits
+  description: 'GitHub Gists API — Commits. 1 operations. Lead operation: GitHub List Gist Commits. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Commits
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gists-commits
+    baseUri: ''
+    description: GitHub Gists API — Commits business capability. Self-contained, no shared references.
+    resources:
+    - name: gists-gist_id-commits
+      path: /gists/{gist_id}/commits
+      operations:
+      - name: listgistcommits
+        method: GET
+        description: GitHub List Gist Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: gists-commits-rest
+    port: 8080
+    description: REST adapter for GitHub Gists API — Commits. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/gists/{gist-id}/commits
+      name: gists-gist-id-commits
+      description: REST surface for gists-gist_id-commits.
+      operations:
+      - method: GET
+        name: listgistcommits
+        description: GitHub List Gist Commits
+        call: gists-commits.listgistcommits
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gists-commits-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Gists API — Commits. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-gist-commits
+      description: GitHub List Gist Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-commits.listgistcommits
+      outputParameters:
+      - type: object
+        mapping: $.

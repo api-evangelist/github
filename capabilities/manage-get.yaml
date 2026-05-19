@@ -1,0 +1,134 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Manage API — Get
+  description: 'GitHub Manage API — Get. 3 operations. Lead operation: GitHub Get Ghes Node Metadata for All Nodes. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: manage-get
+    baseUri: ''
+    description: GitHub Manage API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: manage-v1-config-nodes
+      path: /manage/v1/config/nodes
+      operations:
+      - name: getghesnodemetadataforallnodes
+        method: GET
+        description: GitHub Get Ghes Node Metadata for All Nodes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: manage-v1-replication-status
+      path: /manage/v1/replication/status
+      operations:
+      - name: getthestatusofservicesrunningonallreplicanodes
+        method: GET
+        description: GitHub Get the Status of Services Running on All Replica Nodes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: manage-v1-version
+      path: /manage/v1/version
+      operations:
+      - name: getallghesreleaseversionsforallnodes
+        method: GET
+        description: GitHub Get All Ghes Release Versions for All Nodes
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: manage-get-rest
+    port: 8080
+    description: REST adapter for GitHub Manage API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/manage/v1/config/nodes
+      name: manage-v1-config-nodes
+      description: REST surface for manage-v1-config-nodes.
+      operations:
+      - method: GET
+        name: getghesnodemetadataforallnodes
+        description: GitHub Get Ghes Node Metadata for All Nodes
+        call: manage-get.getghesnodemetadataforallnodes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/manage/v1/replication/status
+      name: manage-v1-replication-status
+      description: REST surface for manage-v1-replication-status.
+      operations:
+      - method: GET
+        name: getthestatusofservicesrunningonallreplicanodes
+        description: GitHub Get the Status of Services Running on All Replica Nodes
+        call: manage-get.getthestatusofservicesrunningonallreplicanodes
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/manage/v1/version
+      name: manage-v1-version
+      description: REST surface for manage-v1-version.
+      operations:
+      - method: GET
+        name: getallghesreleaseversionsforallnodes
+        description: GitHub Get All Ghes Release Versions for All Nodes
+        call: manage-get.getallghesreleaseversionsforallnodes
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: manage-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Manage API — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-ghes-node-metadata
+      description: GitHub Get Ghes Node Metadata for All Nodes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: manage-get.getghesnodemetadataforallnodes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-status-services-running
+      description: GitHub Get the Status of Services Running on All Replica Nodes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: manage-get.getthestatusofservicesrunningonallreplicanodes
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-ghes-release
+      description: GitHub Get All Ghes Release Versions for All Nodes
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: manage-get.getallghesreleaseversionsforallnodes
+      outputParameters:
+      - type: object
+        mapping: $.

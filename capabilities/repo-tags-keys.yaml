@@ -1,0 +1,281 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Keys
+  description: 'github-repos-api — Keys. 5 operations. Lead operation: GitHub Get an Environment Public Key. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Keys
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-keys
+    baseUri: ''
+    description: github-repos-api — Keys business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-environments-environment_name-secrets-public-key
+      path: /repos/{owner}/{repo}/environments/{environment_name}/secrets/public-key
+      operations:
+      - name: getanenvironmentpublickey
+        method: GET
+        description: GitHub Get an Environment Public Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-keys
+      path: /repos/{owner}/{repo}/keys
+      operations:
+      - name: listdeploykeys
+        method: GET
+        description: GitHub List Deploy Keys
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createdeploykey
+        method: POST
+        description: GitHub Create Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-keys-key_id
+      path: /repos/{owner}/{repo}/keys/{key_id}
+      operations:
+      - name: getdeploykey
+        method: GET
+        description: GitHub Get Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletedeploykey
+        method: DELETE
+        description: GitHub Delete Deploy Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-keys-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Keys. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/environments/{environment-name}/secrets/public-key
+      name: repos-owner-repo-environments-environment-name-secrets-public-key
+      description: REST surface for repos-owner-repo-environments-environment_name-secrets-public-key.
+      operations:
+      - method: GET
+        name: getanenvironmentpublickey
+        description: GitHub Get an Environment Public Key
+        call: repo-tags-keys.getanenvironmentpublickey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys
+      name: repos-owner-repo-keys
+      description: REST surface for repos-owner-repo-keys.
+      operations:
+      - method: GET
+        name: listdeploykeys
+        description: GitHub List Deploy Keys
+        call: repo-tags-keys.listdeploykeys
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdeploykey
+        description: GitHub Create Deploy Key
+        call: repo-tags-keys.createdeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/keys/{key-id}
+      name: repos-owner-repo-keys-key-id
+      description: REST surface for repos-owner-repo-keys-key_id.
+      operations:
+      - method: GET
+        name: getdeploykey
+        description: GitHub Get Deploy Key
+        call: repo-tags-keys.getdeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedeploykey
+        description: GitHub Delete Deploy Key
+        call: repo-tags-keys.deletedeploykey
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-keys-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Keys. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-environment-public-key
+      description: GitHub Get an Environment Public Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-keys.getanenvironmentpublickey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deploy-keys
+      description: GitHub List Deploy Keys
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-keys.listdeploykeys
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deploy-key
+      description: GitHub Create Deploy Key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-keys.createdeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deploy-key
+      description: GitHub Get Deploy Key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-keys.getdeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deploy-key
+      description: GitHub Delete Deploy Key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-keys.deletedeploykey
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

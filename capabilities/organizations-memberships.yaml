@@ -1,0 +1,130 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Memberships
+  description: 'GitHub Org API — Memberships. 3 operations. Lead operation: GitHub Get Team Membership for User. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Memberships
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-memberships
+    baseUri: ''
+    description: GitHub Org API — Memberships business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug-memberships-username
+      path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+      operations:
+      - name: getteammembershipforuser
+        method: GET
+        description: GitHub Get Team Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: addorupdateteammembershipforuser
+        method: PUT
+        description: GitHub Add or Update Team Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeteammembershipforuser
+        method: DELETE
+        description: GitHub Remove Team Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-memberships-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Memberships. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}/memberships/{username}
+      name: orgs-org-teams-team-slug-memberships-username
+      description: REST surface for orgs-org-teams-team_slug-memberships-username.
+      operations:
+      - method: GET
+        name: getteammembershipforuser
+        description: GitHub Get Team Membership for User
+        call: organizations-memberships.getteammembershipforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: addorupdateteammembershipforuser
+        description: GitHub Add or Update Team Membership for User
+        call: organizations-memberships.addorupdateteammembershipforuser
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeteammembershipforuser
+        description: GitHub Remove Team Membership for User
+        call: organizations-memberships.removeteammembershipforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-memberships-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Memberships. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-team-membership-user
+      description: GitHub Get Team Membership for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-memberships.getteammembershipforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-update-team-membership
+      description: GitHub Add or Update Team Membership for User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-memberships.addorupdateteammembershipforuser
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-membership-user
+      description: GitHub Remove Team Membership for User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-memberships.removeteammembershipforuser
+      outputParameters:
+      - type: object
+        mapping: $.

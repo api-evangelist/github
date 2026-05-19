@@ -1,0 +1,209 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Issues API — Create
+  description: 'GitHub Issues API — Create. 3 operations. Lead operation: GitHub Create Reaction for an Issue Comment. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Create
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: issues-create
+    baseUri: ''
+    description: GitHub Issues API — Create business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-comments-comment_id-reactions
+      path: /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions
+      operations:
+      - name: createreactionforanissuecomment
+        method: POST
+        description: GitHub Create Reaction for an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-issue_number-comments
+      path: /repos/{owner}/{repo}/issues/{issue_number}/comments
+      operations:
+      - name: createanissuecomment
+        method: POST
+        description: GitHub Create an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-issues-issue_number-reactions
+      path: /repos/{owner}/{repo}/issues/{issue_number}/reactions
+      operations:
+      - name: createreactionforanissue
+        method: POST
+        description: GitHub Create Reaction for an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: issues-create-rest
+    port: 8080
+    description: REST adapter for GitHub Issues API — Create. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/comments/{comment-id}/reactions
+      name: repos-owner-repo-issues-comments-comment-id-reactions
+      description: REST surface for repos-owner-repo-issues-comments-comment_id-reactions.
+      operations:
+      - method: POST
+        name: createreactionforanissuecomment
+        description: GitHub Create Reaction for an Issue Comment
+        call: issues-create.createreactionforanissuecomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/comments
+      name: repos-owner-repo-issues-issue-number-comments
+      description: REST surface for repos-owner-repo-issues-issue_number-comments.
+      operations:
+      - method: POST
+        name: createanissuecomment
+        description: GitHub Create an Issue Comment
+        call: issues-create.createanissuecomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/reactions
+      name: repos-owner-repo-issues-issue-number-reactions
+      description: REST surface for repos-owner-repo-issues-issue_number-reactions.
+      operations:
+      - method: POST
+        name: createreactionforanissue
+        description: GitHub Create Reaction for an Issue
+        call: issues-create.createreactionforanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: issues-create-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Issues API — Create. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-create-reaction-issue-comment
+      description: GitHub Create Reaction for an Issue Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issues-create.createreactionforanissuecomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-issue-comment
+      description: GitHub Create an Issue Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issues-create.createanissuecomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-reaction-issue
+      description: GitHub Create Reaction for an Issue
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: issues-create.createreactionforanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

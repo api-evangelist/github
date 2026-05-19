@@ -1,0 +1,539 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Code
+  description: 'GitHub Repos API — Code. 9 operations. Lead operation: List Code Scanning Alerts For Repository. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Code
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-code
+    baseUri: ''
+    description: GitHub Repos API — Code business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-code-scanning-alerts
+      path: /repos/{owner}/{repo}/code-scanning/alerts
+      operations:
+      - name: listcodescanningalertsforrepository
+        method: GET
+        description: List Code Scanning Alerts For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+          description: The property by which to sort the results.
+        - name: state
+          in: query
+          type: string
+          description: If specified, only code scanning alerts with this state will be returned.
+        - name: severity
+          in: query
+          type: string
+          description: If specified, only code scanning alerts with this severity will be returned.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-alerts-alert_number
+      path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}
+      operations:
+      - name: getcodescanningalert
+        method: GET
+        description: Get Code Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatecodescanningalert
+        method: PATCH
+        description: Update Code Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-code-scanning-alerts-alert_number-instances
+      path: /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances
+      operations:
+      - name: listinstancesofcodescanningalert
+        method: GET
+        description: List Instances Of Code Scanning Alert
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-analyses
+      path: /repos/{owner}/{repo}/code-scanning/analyses
+      operations:
+      - name: listcodescanninganalysesforrepository
+        method: GET
+        description: List Code Scanning Analyses For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: query
+          type: string
+          description: 'The Git reference for the analyses you want to list. The `ref` for a branch can be formatted either
+            as `refs/heads/<branch name>` or simply `<branch name>`. To '
+        - name: sarif_id
+          in: query
+          type: string
+          description: Filter analyses belonging to the same SARIF upload.
+        - name: sort
+          in: query
+          type: string
+          description: The property by which to sort the results.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-analyses-analysis_id
+      path: /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}
+      operations:
+      - name: getcodescanninganalysisforrepository
+        method: GET
+        description: Get Code Scanning Analysis For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: analysis_id
+          in: path
+          type: integer
+          description: The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletecodescanninganalysisfromrepository
+        method: DELETE
+        description: Delete Code Scanning Analysis From Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: analysis_id
+          in: path
+          type: integer
+          description: The ID of the analysis, as returned from the `GET /repos/{owner}/{repo}/code-scanning/analyses` operation.
+          required: true
+        - name: confirm_delete
+          in: query
+          type: string
+          description: Allow deletion if the specified analysis is the last in a set. If you attempt to delete the final analysis
+            in a set without setting this parameter to `true`, yo
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-code-scanning-default-setup
+      path: /repos/{owner}/{repo}/code-scanning/default-setup
+      operations:
+      - name: getcodescanningdefaultsetupconfiguration
+        method: GET
+        description: Get Code Scanning Default Setup Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatecodescanningdefaultsetupconfiguration
+        method: PATCH
+        description: Update Code Scanning Default Setup Configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-code-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Code. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/code-scanning/alerts
+      name: repos-owner-repo-code-scanning-alerts
+      description: REST surface for repos-owner-repo-code-scanning-alerts.
+      operations:
+      - method: GET
+        name: listcodescanningalertsforrepository
+        description: List Code Scanning Alerts For Repository
+        call: temp-code.listcodescanningalertsforrepository
+        with:
+          sort: rest.sort
+          state: rest.state
+          severity: rest.severity
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/alerts/{alert-number}
+      name: repos-owner-repo-code-scanning-alerts-alert-number
+      description: REST surface for repos-owner-repo-code-scanning-alerts-alert_number.
+      operations:
+      - method: GET
+        name: getcodescanningalert
+        description: Get Code Scanning Alert
+        call: temp-code.getcodescanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecodescanningalert
+        description: Update Code Scanning Alert
+        call: temp-code.updatecodescanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/alerts/{alert-number}/instances
+      name: repos-owner-repo-code-scanning-alerts-alert-number-instances
+      description: REST surface for repos-owner-repo-code-scanning-alerts-alert_number-instances.
+      operations:
+      - method: GET
+        name: listinstancesofcodescanningalert
+        description: List Instances Of Code Scanning Alert
+        call: temp-code.listinstancesofcodescanningalert
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/analyses
+      name: repos-owner-repo-code-scanning-analyses
+      description: REST surface for repos-owner-repo-code-scanning-analyses.
+      operations:
+      - method: GET
+        name: listcodescanninganalysesforrepository
+        description: List Code Scanning Analyses For Repository
+        call: temp-code.listcodescanninganalysesforrepository
+        with:
+          ref: rest.ref
+          sarif_id: rest.sarif_id
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/analyses/{analysis-id}
+      name: repos-owner-repo-code-scanning-analyses-analysis-id
+      description: REST surface for repos-owner-repo-code-scanning-analyses-analysis_id.
+      operations:
+      - method: GET
+        name: getcodescanninganalysisforrepository
+        description: Get Code Scanning Analysis For Repository
+        call: temp-code.getcodescanninganalysisforrepository
+        with:
+          analysis_id: rest.analysis_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletecodescanninganalysisfromrepository
+        description: Delete Code Scanning Analysis From Repository
+        call: temp-code.deletecodescanninganalysisfromrepository
+        with:
+          analysis_id: rest.analysis_id
+          confirm_delete: rest.confirm_delete
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/code-scanning/default-setup
+      name: repos-owner-repo-code-scanning-default-setup
+      description: REST surface for repos-owner-repo-code-scanning-default-setup.
+      operations:
+      - method: GET
+        name: getcodescanningdefaultsetupconfiguration
+        description: Get Code Scanning Default Setup Configuration
+        call: temp-code.getcodescanningdefaultsetupconfiguration
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecodescanningdefaultsetupconfiguration
+        description: Update Code Scanning Default Setup Configuration
+        call: temp-code.updatecodescanningdefaultsetupconfiguration
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-code-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Code. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-code-scanning-alerts-repository
+      description: List Code Scanning Alerts For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.listcodescanningalertsforrepository
+      with:
+        sort: tools.sort
+        state: tools.state
+        severity: tools.severity
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-code-scanning-alert
+      description: Get Code Scanning Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.getcodescanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-code-scanning-alert
+      description: Update Code Scanning Alert
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-code.updatecodescanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-instances-code-scanning-alert
+      description: List Instances Of Code Scanning Alert
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.listinstancesofcodescanningalert
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-code-scanning-analyses-repository
+      description: List Code Scanning Analyses For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.listcodescanninganalysesforrepository
+      with:
+        ref: tools.ref
+        sarif_id: tools.sarif_id
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-code-scanning-analysis-repository
+      description: Get Code Scanning Analysis For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.getcodescanninganalysisforrepository
+      with:
+        analysis_id: tools.analysis_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-code-scanning-analysis-repository
+      description: Delete Code Scanning Analysis From Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-code.deletecodescanninganalysisfromrepository
+      with:
+        analysis_id: tools.analysis_id
+        confirm_delete: tools.confirm_delete
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-code-scanning-default-setup
+      description: Get Code Scanning Default Setup Configuration
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code.getcodescanningdefaultsetupconfiguration
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-code-scanning-default-setup
+      description: Update Code Scanning Default Setup Configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-code.updatecodescanningdefaultsetupconfiguration
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,294 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Get
+  description: 'GitHub Application API — Get. 8 operations. Lead operation: GitHub Get the Authenticated App. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-get
+    baseUri: ''
+    description: GitHub Application API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: app
+      path: /app
+      operations:
+      - name: gettheauthenticatedapp
+        method: GET
+        description: GitHub Get the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-hook-config
+      path: /app/hook/config
+      operations:
+      - name: getwebhookconfigurationforanapp
+        method: GET
+        description: GitHub Getwebhook Configuration for an App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-hook-deliveries-delivery_id
+      path: /app/hook/deliveries/{delivery_id}
+      operations:
+      - name: getdeliveryforanappwebhook
+        method: GET
+        description: GitHub Getdelivery for an App Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-installations-installation_id
+      path: /app/installations/{installation_id}
+      operations:
+      - name: getaninstallationfortheauthenticatedapp
+        method: GET
+        description: GitHub Get an Installation for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: applications-grants-grant_id
+      path: /applications/grants/{grant_id}
+      operations:
+      - name: getsinglegrant
+        method: GET
+        description: GitHub Getsingle Grant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: apps-app_slug
+      path: /apps/{app_slug}
+      operations:
+      - name: getanapp
+        method: GET
+        description: GitHub Get an App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-actions-runs-run_id-approvals
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/approvals
+      operations:
+      - name: getthereviewhistoryforworkflowrun
+        method: GET
+        description: GitHub Get the Review History Forworkflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: getappswithaccesstotheprotectedbranch
+        method: GET
+        description: GitHub Get Apps with Access to the Protected Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-get-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/app
+      name: app
+      description: REST surface for app.
+      operations:
+      - method: GET
+        name: gettheauthenticatedapp
+        description: GitHub Get the Authenticated App
+        call: app-get.gettheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/hook/config
+      name: app-hook-config
+      description: REST surface for app-hook-config.
+      operations:
+      - method: GET
+        name: getwebhookconfigurationforanapp
+        description: GitHub Getwebhook Configuration for an App
+        call: app-get.getwebhookconfigurationforanapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/hook/deliveries/{delivery-id}
+      name: app-hook-deliveries-delivery-id
+      description: REST surface for app-hook-deliveries-delivery_id.
+      operations:
+      - method: GET
+        name: getdeliveryforanappwebhook
+        description: GitHub Getdelivery for an App Webhook
+        call: app-get.getdeliveryforanappwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations/{installation-id}
+      name: app-installations-installation-id
+      description: REST surface for app-installations-installation_id.
+      operations:
+      - method: GET
+        name: getaninstallationfortheauthenticatedapp
+        description: GitHub Get an Installation for the Authenticated App
+        call: app-get.getaninstallationfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/grants/{grant-id}
+      name: applications-grants-grant-id
+      description: REST surface for applications-grants-grant_id.
+      operations:
+      - method: GET
+        name: getsinglegrant
+        description: GitHub Getsingle Grant
+        call: app-get.getsinglegrant
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apps/{app-slug}
+      name: apps-app-slug
+      description: REST surface for apps-app_slug.
+      operations:
+      - method: GET
+        name: getanapp
+        description: GitHub Get an App
+        call: app-get.getanapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/approvals
+      name: repos-owner-repo-actions-runs-run-id-approvals
+      description: REST surface for repos-owner-repo-actions-runs-run_id-approvals.
+      operations:
+      - method: GET
+        name: getthereviewhistoryforworkflowrun
+        description: GitHub Get the Review History Forworkflow Run
+        call: app-get.getthereviewhistoryforworkflowrun
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: GET
+        name: getappswithaccesstotheprotectedbranch
+        description: GitHub Get Apps with Access to the Protected Branch
+        call: app-get.getappswithaccesstotheprotectedbranch
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Get. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-authenticated-app
+      description: GitHub Get the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.gettheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getwebhook-configuration-app
+      description: GitHub Getwebhook Configuration for an App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getwebhookconfigurationforanapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getdelivery-app-webhook
+      description: GitHub Getdelivery for an App Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getdeliveryforanappwebhook
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-installation-authenticated-app
+      description: GitHub Get an Installation for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getaninstallationfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-getsingle-grant
+      description: GitHub Getsingle Grant
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getsinglegrant
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-app
+      description: GitHub Get an App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getanapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-review-history-forworkflow
+      description: GitHub Get the Review History Forworkflow Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getthereviewhistoryforworkflowrun
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-apps-access-protected
+      description: GitHub Get Apps with Access to the Protected Branch
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-get.getappswithaccesstotheprotectedbranch
+      outputParameters:
+      - type: object
+        mapping: $.

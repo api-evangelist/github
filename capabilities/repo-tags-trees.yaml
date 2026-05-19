@@ -1,0 +1,159 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Trees
+  description: 'github-repos-api — Trees. 2 operations. Lead operation: GitHub Create Tree. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Trees
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-trees
+    baseUri: ''
+    description: github-repos-api — Trees business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-git-trees
+      path: /repos/{owner}/{repo}/git/trees
+      operations:
+      - name: createtree
+        method: POST
+        description: GitHub Create Tree
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-git-trees-tree_sha
+      path: /repos/{owner}/{repo}/git/trees/{tree_sha}
+      operations:
+      - name: gettree
+        method: GET
+        description: GitHub Get Tree
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tree_sha
+          in: path
+          type: string
+          description: The SHA1 value or ref (branch or tag) name of the tree.
+          required: true
+        - name: recursive
+          in: query
+          type: string
+          description: 'Setting this parameter to any value returns the objects or subtrees referenced by the tree specified
+            in `:tree_sha`. For example, setting `recursive` to any of '
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-trees-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Trees. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/git/trees
+      name: repos-owner-repo-git-trees
+      description: REST surface for repos-owner-repo-git-trees.
+      operations:
+      - method: POST
+        name: createtree
+        description: GitHub Create Tree
+        call: repo-tags-trees.createtree
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/git/trees/{tree-sha}
+      name: repos-owner-repo-git-trees-tree-sha
+      description: REST surface for repos-owner-repo-git-trees-tree_sha.
+      operations:
+      - method: GET
+        name: gettree
+        description: GitHub Get Tree
+        call: repo-tags-trees.gettree
+        with:
+          tree_sha: rest.tree_sha
+          recursive: rest.recursive
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-trees-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Trees. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-create-tree
+      description: GitHub Create Tree
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-trees.createtree
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-tree
+      description: GitHub Get Tree
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-trees.gettree
+      with:
+        tree_sha: tools.tree_sha
+        recursive: tools.recursive
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

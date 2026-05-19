@@ -1,0 +1,168 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Versions
+  description: 'GitHub Org API — Versions. 4 operations. Lead operation: GitHub List Package Versions for Package Owned by
+    an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Versions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-versions
+    baseUri: ''
+    description: GitHub Org API — Versions business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-packages-package_type-package_name-versions
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions
+      operations:
+      - name: listpackageversionsforpackageownedbyanorganization
+        method: GET
+        description: GitHub List Package Versions for Package Owned by an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: The state of the package, either active or deleted.
+    - name: orgs-org-packages-package_type-package_name-versions-package_version_id
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}
+      operations:
+      - name: getpackageversionforanorganization
+        method: GET
+        description: GitHub Get Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletepackageversionforanorganization
+        method: DELETE
+        description: GitHub Delete Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-packages-package_type-package_name-versions-package_version_id-restore
+      path: /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore
+      operations:
+      - name: restorepackageversionforanorganization
+        method: POST
+        description: GitHub Restore Package Version for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-versions-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Versions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions
+      name: orgs-org-packages-package-type-package-name-versions
+      description: REST surface for orgs-org-packages-package_type-package_name-versions.
+      operations:
+      - method: GET
+        name: listpackageversionsforpackageownedbyanorganization
+        description: GitHub List Package Versions for Package Owned by an Organization
+        call: organizations-versions.listpackageversionsforpackageownedbyanorganization
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions/{package-version-id}
+      name: orgs-org-packages-package-type-package-name-versions-package-version-id
+      description: REST surface for orgs-org-packages-package_type-package_name-versions-package_version_id.
+      operations:
+      - method: GET
+        name: getpackageversionforanorganization
+        description: GitHub Get Package Version for an Organization
+        call: organizations-versions.getpackageversionforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepackageversionforanorganization
+        description: GitHub Delete Package Version for an Organization
+        call: organizations-versions.deletepackageversionforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/packages/{package-type}/{package-name}/versions/{package-version-id}/restore
+      name: orgs-org-packages-package-type-package-name-versions-package-version-id-restore
+      description: REST surface for orgs-org-packages-package_type-package_name-versions-package_version_id-restore.
+      operations:
+      - method: POST
+        name: restorepackageversionforanorganization
+        description: GitHub Restore Package Version for an Organization
+        call: organizations-versions.restorepackageversionforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-versions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Versions. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-package-versions-package
+      description: GitHub List Package Versions for Package Owned by an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-versions.listpackageversionsforpackageownedbyanorganization
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-package-version-organization
+      description: GitHub Get Package Version for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-versions.getpackageversionforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-package-version-organization
+      description: GitHub Delete Package Version for an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-versions.deletepackageversionforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-restore-package-version-organization
+      description: GitHub Restore Package Version for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-versions.restorepackageversionforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

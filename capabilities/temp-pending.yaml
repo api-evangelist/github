@@ -1,0 +1,188 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Pending
+  description: 'GitHub Repos API — Pending. 3 operations. Lead operation: Get Pending Deployments For Workflow Run. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Pending
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-pending
+    baseUri: ''
+    description: GitHub Repos API — Pending business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-runs-run_id-pending_deployments
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments
+      operations:
+      - name: getpendingdeploymentsforworkflowrun
+        method: GET
+        description: Get Pending Deployments For Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: reviewpendingdeploymentsforworkflowrun
+        method: POST
+        description: Review Pending Deployments For Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+      operations:
+      - name: deletependingreviewforpullrequest
+        method: DELETE
+        description: Delete Pending Review For Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-pending-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Pending. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/pending-deployments
+      name: repos-owner-repo-actions-runs-run-id-pending-deployments
+      description: REST surface for repos-owner-repo-actions-runs-run_id-pending_deployments.
+      operations:
+      - method: GET
+        name: getpendingdeploymentsforworkflowrun
+        description: Get Pending Deployments For Workflow Run
+        call: temp-pending.getpendingdeploymentsforworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: reviewpendingdeploymentsforworkflowrun
+        description: Review Pending Deployments For Workflow Run
+        call: temp-pending.reviewpendingdeploymentsforworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id.
+      operations:
+      - method: DELETE
+        name: deletependingreviewforpullrequest
+        description: Delete Pending Review For Pull Request
+        call: temp-pending.deletependingreviewforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-pending-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Pending. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-pending-deployments-workflow-run
+      description: Get Pending Deployments For Workflow Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-pending.getpendingdeploymentsforworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: review-pending-deployments-workflow-run
+      description: Review Pending Deployments For Workflow Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-pending.reviewpendingdeploymentsforworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-pending-review-pull-request
+      description: Delete Pending Review For Pull Request
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-pending.deletependingreviewforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

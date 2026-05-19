@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Single
+  description: 'GitHub Auth API — Single. 1 operations. Lead operation: GitHub Getsingle Authorization. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Single
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-single
+    baseUri: ''
+    description: GitHub Auth API — Single business capability. Self-contained, no shared references.
+    resources:
+    - name: authorizations-authorization_id
+      path: /authorizations/{authorization_id}
+      operations:
+      - name: getsingleauthorization
+        method: GET
+        description: GitHub Getsingle Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-single-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Single. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/authorizations/{authorization-id}
+      name: authorizations-authorization-id
+      description: REST surface for authorizations-authorization_id.
+      operations:
+      - method: GET
+        name: getsingleauthorization
+        description: GitHub Getsingle Authorization
+        call: auth-single.getsingleauthorization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-single-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Single. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-getsingle-authorization
+      description: GitHub Getsingle Authorization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: auth-single.getsingleauthorization
+      outputParameters:
+      - type: object
+        mapping: $.

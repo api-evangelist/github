@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub SCIM API — Lists
+  description: 'GitHub SCIM API — Lists. 2 operations. Lead operation: GitHub List Provisioned Scim Groups for an Enterprise.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: scim-lists
+    baseUri: ''
+    description: GitHub SCIM API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: scim-v2-Groups
+      path: /scim/v2/Groups
+      operations:
+      - name: listprovisionedscimgroupsforanenterprise
+        method: GET
+        description: GitHub List Provisioned Scim Groups for an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: If specified, only results that match the specified filter will be returned. Multiple filters are not
+            supported. Possible filters are `externalId`, `id`, and `d
+    - name: scim-v2-Users
+      path: /scim/v2/Users
+      operations:
+      - name: listscimprovisionedidentitiesforanenterprise
+        method: GET
+        description: GitHub List Scim Provisioned Identities for an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: 'If specified, only results that match the specified filter will be returned. Multiple filters are
+            not supported. Possible filters are `userName`, `externalId`, '
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: scim-lists-rest
+    port: 8080
+    description: REST adapter for GitHub SCIM API — Lists. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/scim/v2/groups
+      name: scim-v2-groups
+      description: REST surface for scim-v2-Groups.
+      operations:
+      - method: GET
+        name: listprovisionedscimgroupsforanenterprise
+        description: GitHub List Provisioned Scim Groups for an Enterprise
+        call: scim-lists.listprovisionedscimgroupsforanenterprise
+        with:
+          filter: rest.filter
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/scim/v2/users
+      name: scim-v2-users
+      description: REST surface for scim-v2-Users.
+      operations:
+      - method: GET
+        name: listscimprovisionedidentitiesforanenterprise
+        description: GitHub List Scim Provisioned Identities for an Enterprise
+        call: scim-lists.listscimprovisionedidentitiesforanenterprise
+        with:
+          filter: rest.filter
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: scim-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub SCIM API — Lists. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-provisioned-scim-groups
+      description: GitHub List Provisioned Scim Groups for an Enterprise
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: scim-lists.listprovisionedscimgroupsforanenterprise
+      with:
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-scim-provisioned-identities
+      description: GitHub List Scim Provisioned Identities for an Enterprise
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: scim-lists.listscimprovisionedidentitiesforanenterprise
+      with:
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.

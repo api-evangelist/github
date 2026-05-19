@@ -1,0 +1,151 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Blobs
+  description: 'github-repos-api — Blobs. 2 operations. Lead operation: GitHub Create Blob. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Blobs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-blobs
+    baseUri: ''
+    description: github-repos-api — Blobs business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-git-blobs
+      path: /repos/{owner}/{repo}/git/blobs
+      operations:
+      - name: createblob
+        method: POST
+        description: GitHub Create Blob
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-git-blobs-file_sha
+      path: /repos/{owner}/{repo}/git/blobs/{file_sha}
+      operations:
+      - name: getblob
+        method: GET
+        description: GitHub Get Blob
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: file_sha
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-blobs-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Blobs. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/git/blobs
+      name: repos-owner-repo-git-blobs
+      description: REST surface for repos-owner-repo-git-blobs.
+      operations:
+      - method: POST
+        name: createblob
+        description: GitHub Create Blob
+        call: repo-tags-blobs.createblob
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/git/blobs/{file-sha}
+      name: repos-owner-repo-git-blobs-file-sha
+      description: REST surface for repos-owner-repo-git-blobs-file_sha.
+      operations:
+      - method: GET
+        name: getblob
+        description: GitHub Get Blob
+        call: repo-tags-blobs.getblob
+        with:
+          file_sha: rest.file_sha
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-blobs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Blobs. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-create-blob
+      description: GitHub Create Blob
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-blobs.createblob
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-blob
+      description: GitHub Get Blob
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-blobs.getblob
+      with:
+        file_sha: tools.file_sha
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

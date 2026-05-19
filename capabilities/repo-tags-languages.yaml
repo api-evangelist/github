@@ -1,0 +1,88 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Languages
+  description: 'github-repos-api — Languages. 1 operations. Lead operation: GitHub List Repository Languages. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Languages
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-languages
+    baseUri: ''
+    description: github-repos-api — Languages business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-languages
+      path: /repos/{owner}/{repo}/languages
+      operations:
+      - name: listrepositorylanguages
+        method: GET
+        description: GitHub List Repository Languages
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-languages-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Languages. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/languages
+      name: repos-owner-repo-languages
+      description: REST surface for repos-owner-repo-languages.
+      operations:
+      - method: GET
+        name: listrepositorylanguages
+        description: GitHub List Repository Languages
+        call: repo-tags-languages.listrepositorylanguages
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-languages-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Languages. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-repository-languages
+      description: GitHub List Repository Languages
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-languages.listrepositorylanguages
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

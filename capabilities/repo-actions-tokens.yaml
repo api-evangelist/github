@@ -1,0 +1,138 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Tokens
+  description: 'github-repo-actions-api — Tokens. 2 operations. Lead operation: GitHub Create Registration Token for Repository.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Tokens
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-tokens
+    baseUri: ''
+    description: github-repo-actions-api — Tokens business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-runners-registration-token
+      path: /repos/{owner}/{repo}/actions/runners/registration-token
+      operations:
+      - name: createregistrationtokenforrepository
+        method: POST
+        description: GitHub Create Registration Token for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runners-remove-token
+      path: /repos/{owner}/{repo}/actions/runners/remove-token
+      operations:
+      - name: createremovetokenforrepository
+        method: POST
+        description: GitHub Create Remove Token for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-tokens-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Tokens. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/runners/registration-token
+      name: repos-owner-repo-actions-runners-registration-token
+      description: REST surface for repos-owner-repo-actions-runners-registration-token.
+      operations:
+      - method: POST
+        name: createregistrationtokenforrepository
+        description: GitHub Create Registration Token for Repository
+        call: repo-actions-tokens.createregistrationtokenforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/remove-token
+      name: repos-owner-repo-actions-runners-remove-token
+      description: REST surface for repos-owner-repo-actions-runners-remove-token.
+      operations:
+      - method: POST
+        name: createremovetokenforrepository
+        description: GitHub Create Remove Token for Repository
+        call: repo-actions-tokens.createremovetokenforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-tokens-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Tokens. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-create-registration-token-repository
+      description: GitHub Create Registration Token for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-tokens.createregistrationtokenforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-remove-token-repository
+      description: GitHub Create Remove Token for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-tokens.createremovetokenforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,1491 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Commits
+  description: 'GitHub Repos API — Commits. 28 operations. Lead operation: Get Commit Signature Protection. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Commits
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-commits
+    baseUri: ''
+    description: GitHub Repos API — Commits business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-required_signatures
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures
+      operations:
+      - name: getcommitsignatureprotection
+        method: GET
+        description: Get Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createcommitsignatureprotection
+        method: POST
+        description: Create Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletecommitsignatureprotection
+        method: DELETE
+        description: Delete Commit Signature Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-comments
+      path: /repos/{owner}/{repo}/comments
+      operations:
+      - name: listcommitcommentsforrepository
+        method: GET
+        description: List Commit Comments For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-comments-comment_id
+      path: /repos/{owner}/{repo}/comments/{comment_id}
+      operations:
+      - name: getcommitcomment
+        method: GET
+        description: Get Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatecommitcomment
+        method: PATCH
+        description: Update Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletecommitcomment
+        method: DELETE
+        description: Delete Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-comments-comment_id-reactions
+      path: /repos/{owner}/{repo}/comments/{comment_id}/reactions
+      operations:
+      - name: listreactionsforcommitcomment
+        method: GET
+        description: List Reactions For Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: content
+          in: query
+          type: string
+          description: Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions).
+            Omit this parameter to list all reacti
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createreactionforcommitcomment
+        method: POST
+        description: Create Reaction For Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-comments-comment_id-reactions-reaction_id
+      path: /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}
+      operations:
+      - name: deletecommitcommentreaction
+        method: DELETE
+        description: Delete Commit Comment Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits
+      path: /repos/{owner}/{repo}/commits
+      operations:
+      - name: listcommits
+        method: GET
+        description: List Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: query
+          type: string
+          description: 'SHA or branch to start listing commits from. Default: the repositorys default branch (usually `main`).'
+        - name: path
+          in: query
+          type: string
+          description: Only commits containing this file path will be returned.
+        - name: author
+          in: query
+          type: string
+          description: GitHub username or email address to use to filter by commit author.
+        - name: committer
+          in: query
+          type: string
+          description: GitHub username or email address to use to filter by commit committer.
+        - name: until
+          in: query
+          type: string
+          description: 'Only commits before this date will be returned. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
+            format: `YYYY-MM-DDTHH:MM:SSZ`.'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-commit_sha-branches-where-head
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head
+      operations:
+      - name: listbranchesforheadcommit
+        method: GET
+        description: List Branches For Head Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-commit_sha-comments
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/comments
+      operations:
+      - name: listcommitcomments
+        method: GET
+        description: List Commit Comments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createcommitcomment
+        method: POST
+        description: Create Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-commits-commit_sha-pulls
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/pulls
+      operations:
+      - name: listpullrequestsassociatedwithcommit
+        method: GET
+        description: List Pull Requests Associated With Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-ref
+      path: /repos/{owner}/{repo}/commits/{ref}
+      operations:
+      - name: getcommit
+        method: GET
+        description: Get Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-ref-statuses
+      path: /repos/{owner}/{repo}/commits/{ref}/statuses
+      operations:
+      - name: listcommitstatusesforreference
+        method: GET
+        description: List Commit Statuses For Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-compare-basehead
+      path: /repos/{owner}/{repo}/compare/{basehead}
+      operations:
+      - name: comparetwocommits
+        method: GET
+        description: Compare Two Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: basehead
+          in: path
+          type: string
+          description: 'The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both
+            must be branch names in `repo`. To compare with a branch that '
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-dependency-graph-compare-basehead
+      path: /repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+      operations:
+      - name: getdiffofthedependenciesbetweencommits
+        method: GET
+        description: Get Diff Of The Dependencies Between Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: basehead
+          in: path
+          type: string
+          description: The base and head Git revisions to compare. The Git revisions will be resolved to commit SHAs. Named
+            revisions will be resolved to their corresponding HEAD comm
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-git-commits
+      path: /repos/{owner}/{repo}/git/commits
+      operations:
+      - name: createcommit
+        method: POST
+        description: Create Commit
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-git-commits-commit_sha
+      path: /repos/{owner}/{repo}/git/commits/{commit_sha}
+      operations:
+      - name: getcommitobject
+        method: GET
+        description: Get Commit Object
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pulls-pull_number-commits
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/commits
+      operations:
+      - name: listcommitsonpullrequest
+        method: GET
+        description: List Commits On Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-code_frequency
+      path: /repos/{owner}/{repo}/stats/code_frequency
+      operations:
+      - name: gettheweeklycommitactivity
+        method: GET
+        description: Get The Weekly Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-commit_activity
+      path: /repos/{owner}/{repo}/stats/commit_activity
+      operations:
+      - name: getthelastyearofcommitactivity
+        method: GET
+        description: Get The Last Year Of Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-contributors
+      path: /repos/{owner}/{repo}/stats/contributors
+      operations:
+      - name: getallcontributorcommitactivity
+        method: GET
+        description: Get All Contributor Commit Activity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-participation
+      path: /repos/{owner}/{repo}/stats/participation
+      operations:
+      - name: gettheweeklycommitcount
+        method: GET
+        description: Get The Weekly Commit Count
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-stats-punch_card
+      path: /repos/{owner}/{repo}/stats/punch_card
+      operations:
+      - name: getthehourlycommitcountforeachday
+        method: GET
+        description: Get The Hourly Commit Count For Each Day
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-statuses-sha
+      path: /repos/{owner}/{repo}/statuses/{sha}
+      operations:
+      - name: createcommitstatus
+        method: POST
+        description: Create Commit Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-commits-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Commits. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-signatures
+      name: repos-owner-repo-branches-branch-protection-required-signatures
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_signatures.
+      operations:
+      - method: GET
+        name: getcommitsignatureprotection
+        description: Get Commit Signature Protection
+        call: temp-commits.getcommitsignatureprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createcommitsignatureprotection
+        description: Create Commit Signature Protection
+        call: temp-commits.createcommitsignatureprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletecommitsignatureprotection
+        description: Delete Commit Signature Protection
+        call: temp-commits.deletecommitsignatureprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments
+      name: repos-owner-repo-comments
+      description: REST surface for repos-owner-repo-comments.
+      operations:
+      - method: GET
+        name: listcommitcommentsforrepository
+        description: List Commit Comments For Repository
+        call: temp-commits.listcommitcommentsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}
+      name: repos-owner-repo-comments-comment-id
+      description: REST surface for repos-owner-repo-comments-comment_id.
+      operations:
+      - method: GET
+        name: getcommitcomment
+        description: Get Commit Comment
+        call: temp-commits.getcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecommitcomment
+        description: Update Commit Comment
+        call: temp-commits.updatecommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletecommitcomment
+        description: Delete Commit Comment
+        call: temp-commits.deletecommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}/reactions
+      name: repos-owner-repo-comments-comment-id-reactions
+      description: REST surface for repos-owner-repo-comments-comment_id-reactions.
+      operations:
+      - method: GET
+        name: listreactionsforcommitcomment
+        description: List Reactions For Commit Comment
+        call: temp-commits.listreactionsforcommitcomment
+        with:
+          content: rest.content
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createreactionforcommitcomment
+        description: Create Reaction For Commit Comment
+        call: temp-commits.createreactionforcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}/reactions/{reaction-id}
+      name: repos-owner-repo-comments-comment-id-reactions-reaction-id
+      description: REST surface for repos-owner-repo-comments-comment_id-reactions-reaction_id.
+      operations:
+      - method: DELETE
+        name: deletecommitcommentreaction
+        description: Delete Commit Comment Reaction
+        call: temp-commits.deletecommitcommentreaction
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits
+      name: repos-owner-repo-commits
+      description: REST surface for repos-owner-repo-commits.
+      operations:
+      - method: GET
+        name: listcommits
+        description: List Commits
+        call: temp-commits.listcommits
+        with:
+          sha: rest.sha
+          path: rest.path
+          author: rest.author
+          committer: rest.committer
+          until: rest.until
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/branches-where-head
+      name: repos-owner-repo-commits-commit-sha-branches-where-head
+      description: REST surface for repos-owner-repo-commits-commit_sha-branches-where-head.
+      operations:
+      - method: GET
+        name: listbranchesforheadcommit
+        description: List Branches For Head Commit
+        call: temp-commits.listbranchesforheadcommit
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/comments
+      name: repos-owner-repo-commits-commit-sha-comments
+      description: REST surface for repos-owner-repo-commits-commit_sha-comments.
+      operations:
+      - method: GET
+        name: listcommitcomments
+        description: List Commit Comments
+        call: temp-commits.listcommitcomments
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createcommitcomment
+        description: Create Commit Comment
+        call: temp-commits.createcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/pulls
+      name: repos-owner-repo-commits-commit-sha-pulls
+      description: REST surface for repos-owner-repo-commits-commit_sha-pulls.
+      operations:
+      - method: GET
+        name: listpullrequestsassociatedwithcommit
+        description: List Pull Requests Associated With Commit
+        call: temp-commits.listpullrequestsassociatedwithcommit
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}
+      name: repos-owner-repo-commits-ref
+      description: REST surface for repos-owner-repo-commits-ref.
+      operations:
+      - method: GET
+        name: getcommit
+        description: Get Commit
+        call: temp-commits.getcommit
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/statuses
+      name: repos-owner-repo-commits-ref-statuses
+      description: REST surface for repos-owner-repo-commits-ref-statuses.
+      operations:
+      - method: GET
+        name: listcommitstatusesforreference
+        description: List Commit Statuses For Reference
+        call: temp-commits.listcommitstatusesforreference
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/compare/{basehead}
+      name: repos-owner-repo-compare-basehead
+      description: REST surface for repos-owner-repo-compare-basehead.
+      operations:
+      - method: GET
+        name: comparetwocommits
+        description: Compare Two Commits
+        call: temp-commits.comparetwocommits
+        with:
+          basehead: rest.basehead
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+      name: repos-owner-repo-dependency-graph-compare-basehead
+      description: REST surface for repos-owner-repo-dependency-graph-compare-basehead.
+      operations:
+      - method: GET
+        name: getdiffofthedependenciesbetweencommits
+        description: Get Diff Of The Dependencies Between Commits
+        call: temp-commits.getdiffofthedependenciesbetweencommits
+        with:
+          basehead: rest.basehead
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/git/commits
+      name: repos-owner-repo-git-commits
+      description: REST surface for repos-owner-repo-git-commits.
+      operations:
+      - method: POST
+        name: createcommit
+        description: Create Commit
+        call: temp-commits.createcommit
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/git/commits/{commit-sha}
+      name: repos-owner-repo-git-commits-commit-sha
+      description: REST surface for repos-owner-repo-git-commits-commit_sha.
+      operations:
+      - method: GET
+        name: getcommitobject
+        description: Get Commit Object
+        call: temp-commits.getcommitobject
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/commits
+      name: repos-owner-repo-pulls-pull-number-commits
+      description: REST surface for repos-owner-repo-pulls-pull_number-commits.
+      operations:
+      - method: GET
+        name: listcommitsonpullrequest
+        description: List Commits On Pull Request
+        call: temp-commits.listcommitsonpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/code-frequency
+      name: repos-owner-repo-stats-code-frequency
+      description: REST surface for repos-owner-repo-stats-code_frequency.
+      operations:
+      - method: GET
+        name: gettheweeklycommitactivity
+        description: Get The Weekly Commit Activity
+        call: temp-commits.gettheweeklycommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/commit-activity
+      name: repos-owner-repo-stats-commit-activity
+      description: REST surface for repos-owner-repo-stats-commit_activity.
+      operations:
+      - method: GET
+        name: getthelastyearofcommitactivity
+        description: Get The Last Year Of Commit Activity
+        call: temp-commits.getthelastyearofcommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/contributors
+      name: repos-owner-repo-stats-contributors
+      description: REST surface for repos-owner-repo-stats-contributors.
+      operations:
+      - method: GET
+        name: getallcontributorcommitactivity
+        description: Get All Contributor Commit Activity
+        call: temp-commits.getallcontributorcommitactivity
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/participation
+      name: repos-owner-repo-stats-participation
+      description: REST surface for repos-owner-repo-stats-participation.
+      operations:
+      - method: GET
+        name: gettheweeklycommitcount
+        description: Get The Weekly Commit Count
+        call: temp-commits.gettheweeklycommitcount
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/stats/punch-card
+      name: repos-owner-repo-stats-punch-card
+      description: REST surface for repos-owner-repo-stats-punch_card.
+      operations:
+      - method: GET
+        name: getthehourlycommitcountforeachday
+        description: Get The Hourly Commit Count For Each Day
+        call: temp-commits.getthehourlycommitcountforeachday
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/statuses/{sha}
+      name: repos-owner-repo-statuses-sha
+      description: REST surface for repos-owner-repo-statuses-sha.
+      operations:
+      - method: POST
+        name: createcommitstatus
+        description: Create Commit Status
+        call: temp-commits.createcommitstatus
+        with:
+          sha: rest.sha
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-commits-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Commits. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-commit-signature-protection
+      description: Get Commit Signature Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getcommitsignatureprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-commit-signature-protection
+      description: Create Commit Signature Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-commits.createcommitsignatureprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-commit-signature-protection
+      description: Delete Commit Signature Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-commits.deletecommitsignatureprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commit-comments-repository
+      description: List Commit Comments For Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listcommitcommentsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-commit-comment
+      description: Get Commit Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-commit-comment
+      description: Update Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-commits.updatecommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-commit-comment
+      description: Delete Commit Comment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-commits.deletecommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-reactions-commit-comment
+      description: List Reactions For Commit Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listreactionsforcommitcomment
+      with:
+        content: tools.content
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-reaction-commit-comment
+      description: Create Reaction For Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-commits.createreactionforcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-commit-comment-reaction
+      description: Delete Commit Comment Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-commits.deletecommitcommentreaction
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commits
+      description: List Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listcommits
+      with:
+        sha: tools.sha
+        path: tools.path
+        author: tools.author
+        committer: tools.committer
+        until: tools.until
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-branches-head-commit
+      description: List Branches For Head Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listbranchesforheadcommit
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commit-comments
+      description: List Commit Comments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listcommitcomments
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-commit-comment
+      description: Create Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-commits.createcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-pull-requests-associated-commit
+      description: List Pull Requests Associated With Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listpullrequestsassociatedwithcommit
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-commit
+      description: Get Commit
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getcommit
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commit-statuses-reference
+      description: List Commit Statuses For Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listcommitstatusesforreference
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: compare-two-commits
+      description: Compare Two Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.comparetwocommits
+      with:
+        basehead: tools.basehead
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-diff-dependencies-between-commits
+      description: Get Diff Of The Dependencies Between Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getdiffofthedependenciesbetweencommits
+      with:
+        basehead: tools.basehead
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-commit
+      description: Create Commit
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-commits.createcommit
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-commit-object
+      description: Get Commit Object
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getcommitobject
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-commits-pull-request
+      description: List Commits On Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.listcommitsonpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-weekly-commit-activity
+      description: Get The Weekly Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.gettheweeklycommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-last-year-commit-activity
+      description: Get The Last Year Of Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getthelastyearofcommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-all-contributor-commit-activity
+      description: Get All Contributor Commit Activity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getallcontributorcommitactivity
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-weekly-commit-count
+      description: Get The Weekly Commit Count
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.gettheweeklycommitcount
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-hourly-commit-count-each
+      description: Get The Hourly Commit Count For Each Day
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-commits.getthehourlycommitcountforeachday
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-commit-status
+      description: Create Commit Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-commits.createcommitstatus
+      with:
+        sha: tools.sha
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

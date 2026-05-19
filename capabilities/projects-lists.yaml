@@ -1,0 +1,340 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Lists
+  description: 'GitHub Projects API — Lists. 8 operations. Lead operation: GitHub List Organization Projects. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-lists
+    baseUri: ''
+    description: GitHub Projects API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-projects
+      path: /orgs/{org}/projects
+      operations:
+      - name: listorganizationprojects
+        method: GET
+        description: GitHub List Organization Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the projects to return.
+    - name: orgs-org-teams-team_slug-projects
+      path: /orgs/{org}/teams/{team_slug}/projects
+      operations:
+      - name: listteamprojects
+        method: GET
+        description: GitHub List Team Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: projects-columns-column_id-cards
+      path: /projects/columns/{column_id}/cards
+      operations:
+      - name: listprojectcards
+        method: GET
+        description: GitHub List Project Cards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: archived_state
+          in: query
+          type: string
+          description: Filters the project cards that are returned by the card's state.
+    - name: projects-project_id-collaborators
+      path: /projects/{project_id}/collaborators
+      operations:
+      - name: listprojectcollaborators
+        method: GET
+        description: GitHub List Project Collaborators
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: affiliation
+          in: query
+          type: string
+          description: Filters the collaborators by their affiliation. `outside` means outside collaborators of a project
+            that are not a member of the project's organization. `direct`
+    - name: projects-project_id-columns
+      path: /projects/{project_id}/columns
+      operations:
+      - name: listprojectcolumns
+        method: GET
+        description: GitHub List Project Columns
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-projects
+      path: /repos/{owner}/{repo}/projects
+      operations:
+      - name: listrepositoryprojects
+        method: GET
+        description: GitHub List Repository Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the projects to return.
+    - name: teams-team_id-projects
+      path: /teams/{team_id}/projects
+      operations:
+      - name: listteamprojectslegacy
+        method: GET
+        description: GitHub List Team Projects (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: users-username-projects
+      path: /users/{username}/projects
+      operations:
+      - name: listuserprojects
+        method: GET
+        description: GitHub List User Projects
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the projects to return.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-lists-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Lists. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/projects
+      name: orgs-org-projects
+      description: REST surface for orgs-org-projects.
+      operations:
+      - method: GET
+        name: listorganizationprojects
+        description: GitHub List Organization Projects
+        call: projects-lists.listorganizationprojects
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects
+      name: orgs-org-teams-team-slug-projects
+      description: REST surface for orgs-org-teams-team_slug-projects.
+      operations:
+      - method: GET
+        name: listteamprojects
+        description: GitHub List Team Projects
+        call: projects-lists.listteamprojects
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/columns/{column-id}/cards
+      name: projects-columns-column-id-cards
+      description: REST surface for projects-columns-column_id-cards.
+      operations:
+      - method: GET
+        name: listprojectcards
+        description: GitHub List Project Cards
+        call: projects-lists.listprojectcards
+        with:
+          archived_state: rest.archived_state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/collaborators
+      name: projects-project-id-collaborators
+      description: REST surface for projects-project_id-collaborators.
+      operations:
+      - method: GET
+        name: listprojectcollaborators
+        description: GitHub List Project Collaborators
+        call: projects-lists.listprojectcollaborators
+        with:
+          affiliation: rest.affiliation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/projects/{project-id}/columns
+      name: projects-project-id-columns
+      description: REST surface for projects-project_id-columns.
+      operations:
+      - method: GET
+        name: listprojectcolumns
+        description: GitHub List Project Columns
+        call: projects-lists.listprojectcolumns
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/projects
+      name: repos-owner-repo-projects
+      description: REST surface for repos-owner-repo-projects.
+      operations:
+      - method: GET
+        name: listrepositoryprojects
+        description: GitHub List Repository Projects
+        call: projects-lists.listrepositoryprojects
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/projects
+      name: teams-team-id-projects
+      description: REST surface for teams-team_id-projects.
+      operations:
+      - method: GET
+        name: listteamprojectslegacy
+        description: GitHub List Team Projects (legacy)
+        call: projects-lists.listteamprojectslegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/projects
+      name: users-username-projects
+      description: REST surface for users-username-projects.
+      operations:
+      - method: GET
+        name: listuserprojects
+        description: GitHub List User Projects
+        call: projects-lists.listuserprojects
+        with:
+          state: rest.state
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Lists. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-organization-projects
+      description: GitHub List Organization Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listorganizationprojects
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-team-projects
+      description: GitHub List Team Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listteamprojects
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-project-cards
+      description: GitHub List Project Cards
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listprojectcards
+      with:
+        archived_state: tools.archived_state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-project-collaborators
+      description: GitHub List Project Collaborators
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listprojectcollaborators
+      with:
+        affiliation: tools.affiliation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-project-columns
+      description: GitHub List Project Columns
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listprojectcolumns
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repository-projects
+      description: GitHub List Repository Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listrepositoryprojects
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-team-projects-legacy
+      description: GitHub List Team Projects (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listteamprojectslegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-user-projects
+      description: GitHub List User Projects
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: projects-lists.listuserprojects
+      with:
+        state: tools.state
+      outputParameters:
+      - type: object
+        mapping: $.

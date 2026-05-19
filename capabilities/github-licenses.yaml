@@ -1,0 +1,148 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Licenses
+  description: 'GitHub v3 REST API — Licenses. 3 operations. Lead operation: GitHub Get All Commonly Used Licenses. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Licenses
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-licenses
+    baseUri: ''
+    description: GitHub v3 REST API — Licenses business capability. Self-contained, no shared references.
+    resources:
+    - name: licenses
+      path: /licenses
+      operations:
+      - name: licensesgetallcommonlyused
+        method: GET
+        description: GitHub Get All Commonly Used Licenses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: featured
+          in: query
+          type: boolean
+    - name: licenses-license
+      path: /licenses/{license}
+      operations:
+      - name: licensesget
+        method: GET
+        description: GitHub Get a License
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: license
+          in: path
+          type: string
+          required: true
+    - name: repos-owner-repo-license
+      path: /repos/{owner}/{repo}/license
+      operations:
+      - name: licensesgetforrepo
+        method: GET
+        description: GitHub Get the License for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-licenses-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Licenses. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/licenses
+      name: licenses
+      description: REST surface for licenses.
+      operations:
+      - method: GET
+        name: licensesgetallcommonlyused
+        description: GitHub Get All Commonly Used Licenses
+        call: github-licenses.licensesgetallcommonlyused
+        with:
+          featured: rest.featured
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/licenses/{license}
+      name: licenses-license
+      description: REST surface for licenses-license.
+      operations:
+      - method: GET
+        name: licensesget
+        description: GitHub Get a License
+        call: github-licenses.licensesget
+        with:
+          license: rest.license
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/license
+      name: repos-owner-repo-license
+      description: REST surface for repos-owner-repo-license.
+      operations:
+      - method: GET
+        name: licensesgetforrepo
+        description: GitHub Get the License for a Repository
+        call: github-licenses.licensesgetforrepo
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-licenses-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Licenses. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-all-commonly-used
+      description: GitHub Get All Commonly Used Licenses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-licenses.licensesgetallcommonlyused
+      with:
+        featured: tools.featured
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-license
+      description: GitHub Get a License
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-licenses.licensesget
+      with:
+        license: tools.license
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-license-repository
+      description: GitHub Get the License for a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-licenses.licensesgetforrepo
+      outputParameters:
+      - type: object
+        mapping: $.

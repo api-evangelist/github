@@ -1,0 +1,248 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Git
+  description: 'GitHub Repos API — Git. 4 operations. Lead operation: List Check Runs For Git Reference. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Git
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-git
+    baseUri: ''
+    description: GitHub Repos API — Git business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-commits-ref-check-runs
+      path: /repos/{owner}/{repo}/commits/{ref}/check-runs
+      operations:
+      - name: listcheckrunsforgitreference
+        method: GET
+        description: List Check Runs For Git Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs.
+        - name: app_id
+          in: query
+          type: integer
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-ref-check-suites
+      path: /repos/{owner}/{repo}/commits/{ref}/check-suites
+      operations:
+      - name: listchecksuitesforgitreference
+        method: GET
+        description: List Check Suites For Git Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: app_id
+          in: query
+          type: integer
+          description: Filters check suites by GitHub App `id`.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-lfs
+      path: /repos/{owner}/{repo}/lfs
+      operations:
+      - name: enablegitlfsforrepository
+        method: PUT
+        description: Enable Git Lfs For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: disablegitlfsforrepository
+        method: DELETE
+        description: Disable Git Lfs For Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-git-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Git. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/check-runs
+      name: repos-owner-repo-commits-ref-check-runs
+      description: REST surface for repos-owner-repo-commits-ref-check-runs.
+      operations:
+      - method: GET
+        name: listcheckrunsforgitreference
+        description: List Check Runs For Git Reference
+        call: temp-git.listcheckrunsforgitreference
+        with:
+          filter: rest.filter
+          app_id: rest.app_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/check-suites
+      name: repos-owner-repo-commits-ref-check-suites
+      description: REST surface for repos-owner-repo-commits-ref-check-suites.
+      operations:
+      - method: GET
+        name: listchecksuitesforgitreference
+        description: List Check Suites For Git Reference
+        call: temp-git.listchecksuitesforgitreference
+        with:
+          app_id: rest.app_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/lfs
+      name: repos-owner-repo-lfs
+      description: REST surface for repos-owner-repo-lfs.
+      operations:
+      - method: PUT
+        name: enablegitlfsforrepository
+        description: Enable Git Lfs For Repository
+        call: temp-git.enablegitlfsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: disablegitlfsforrepository
+        description: Disable Git Lfs For Repository
+        call: temp-git.disablegitlfsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-git-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Git. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-check-runs-git-reference
+      description: List Check Runs For Git Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-git.listcheckrunsforgitreference
+      with:
+        filter: tools.filter
+        app_id: tools.app_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-check-suites-git-reference
+      description: List Check Suites For Git Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-git.listchecksuitesforgitreference
+      with:
+        app_id: tools.app_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: enable-git-lfs-repository
+      description: Enable Git Lfs For Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-git.enablegitlfsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: disable-git-lfs-repository
+      description: Disable Git Lfs For Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-git.disablegitlfsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

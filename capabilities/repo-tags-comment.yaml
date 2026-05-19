@@ -1,0 +1,395 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Comment
+  description: 'github-repos-api — Comment. 7 operations. Lead operation: GitHub Get Commit Comment. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Comment
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-comment
+    baseUri: ''
+    description: github-repos-api — Comment business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-comments-comment_id
+      path: /repos/{owner}/{repo}/comments/{comment_id}
+      operations:
+      - name: getcommitcomment
+        method: GET
+        description: GitHub Get Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatecommitcomment
+        method: PATCH
+        description: GitHub Update Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletecommitcomment
+        method: DELETE
+        description: GitHub Delete Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-comments-comment_id-reactions
+      path: /repos/{owner}/{repo}/comments/{comment_id}/reactions
+      operations:
+      - name: listreactionsforcommitcomment
+        method: GET
+        description: GitHub List Reactions for Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: content
+          in: query
+          type: string
+          description: Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions).
+            Omit this parameter to list all reacti
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createreactionforcommitcomment
+        method: POST
+        description: GitHub Create Reaction for Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-comments-comment_id-reactions-reaction_id
+      path: /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}
+      operations:
+      - name: deletecommitcommentreaction
+        method: DELETE
+        description: GitHub Delete Commit Comment Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-commits-commit_sha-comments
+      path: /repos/{owner}/{repo}/commits/{commit_sha}/comments
+      operations:
+      - name: createcommitcomment
+        method: POST
+        description: GitHub Create Commit Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-comment-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Comment. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}
+      name: repos-owner-repo-comments-comment-id
+      description: REST surface for repos-owner-repo-comments-comment_id.
+      operations:
+      - method: GET
+        name: getcommitcomment
+        description: GitHub Get Commit Comment
+        call: repo-tags-comment.getcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatecommitcomment
+        description: GitHub Update Commit Comment
+        call: repo-tags-comment.updatecommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletecommitcomment
+        description: GitHub Delete Commit Comment
+        call: repo-tags-comment.deletecommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}/reactions
+      name: repos-owner-repo-comments-comment-id-reactions
+      description: REST surface for repos-owner-repo-comments-comment_id-reactions.
+      operations:
+      - method: GET
+        name: listreactionsforcommitcomment
+        description: GitHub List Reactions for Commit Comment
+        call: repo-tags-comment.listreactionsforcommitcomment
+        with:
+          content: rest.content
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createreactionforcommitcomment
+        description: GitHub Create Reaction for Commit Comment
+        call: repo-tags-comment.createreactionforcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments/{comment-id}/reactions/{reaction-id}
+      name: repos-owner-repo-comments-comment-id-reactions-reaction-id
+      description: REST surface for repos-owner-repo-comments-comment_id-reactions-reaction_id.
+      operations:
+      - method: DELETE
+        name: deletecommitcommentreaction
+        description: GitHub Delete Commit Comment Reaction
+        call: repo-tags-comment.deletecommitcommentreaction
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{commit-sha}/comments
+      name: repos-owner-repo-commits-commit-sha-comments
+      description: REST surface for repos-owner-repo-commits-commit_sha-comments.
+      operations:
+      - method: POST
+        name: createcommitcomment
+        description: GitHub Create Commit Comment
+        call: repo-tags-comment.createcommitcomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-comment-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Comment. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-commit-comment
+      description: GitHub Get Commit Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-comment.getcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-commit-comment
+      description: GitHub Update Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-tags-comment.updatecommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-commit-comment
+      description: GitHub Delete Commit Comment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-comment.deletecommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-reactions-commit-comment
+      description: GitHub List Reactions for Commit Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-comment.listreactionsforcommitcomment
+      with:
+        content: tools.content
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-reaction-commit-comment
+      description: GitHub Create Reaction for Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-comment.createreactionforcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-commit-comment-reaction
+      description: GitHub Delete Commit Comment Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-tags-comment.deletecommitcommentreaction
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-commit-comment
+      description: GitHub Create Commit Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-tags-comment.createcommitcomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

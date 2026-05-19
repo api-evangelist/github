@@ -1,0 +1,138 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Statuses
+  description: 'github-repos-api — Statuses. 2 operations. Lead operation: GitHub List Commit Statuses for Reference. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Statuses
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-tags-statuses
+    baseUri: ''
+    description: github-repos-api — Statuses business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-commits-ref-statuses
+      path: /repos/{owner}/{repo}/commits/{ref}/statuses
+      operations:
+      - name: listcommitstatusesforreference
+        method: GET
+        description: GitHub List Commit Statuses for Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-deployments-deployment_id-statuses
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+      operations:
+      - name: listdeploymentstatuses
+        method: GET
+        description: GitHub List Deployment Statuses
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-tags-statuses-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Statuses. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/statuses
+      name: repos-owner-repo-commits-ref-statuses
+      description: REST surface for repos-owner-repo-commits-ref-statuses.
+      operations:
+      - method: GET
+        name: listcommitstatusesforreference
+        description: GitHub List Commit Statuses for Reference
+        call: repo-tags-statuses.listcommitstatusesforreference
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}/statuses
+      name: repos-owner-repo-deployments-deployment-id-statuses
+      description: REST surface for repos-owner-repo-deployments-deployment_id-statuses.
+      operations:
+      - method: GET
+        name: listdeploymentstatuses
+        description: GitHub List Deployment Statuses
+        call: repo-tags-statuses.listdeploymentstatuses
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-tags-statuses-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Statuses. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-commit-statuses-reference
+      description: GitHub List Commit Statuses for Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-statuses.listcommitstatusesforreference
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deployment-statuses
+      description: GitHub List Deployment Statuses
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-tags-statuses.listdeploymentstatuses
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

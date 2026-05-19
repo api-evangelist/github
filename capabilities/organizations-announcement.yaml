@@ -1,0 +1,130 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Announcement
+  description: 'GitHub Org API — Announcement. 3 operations. Lead operation: GitHub Get Announcement Banner for Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Announcement
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-announcement
+    baseUri: ''
+    description: GitHub Org API — Announcement business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-announcement
+      path: /orgs/{org}/announcement
+      operations:
+      - name: getannouncementbannerfororganization
+        method: GET
+        description: GitHub Get Announcement Banner for Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setannouncementbannerfororganization
+        method: PATCH
+        description: GitHub Set Announcement Banner for Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: removeannouncementbannerfromorganization
+        method: DELETE
+        description: GitHub Remove Announcement Banner from Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-announcement-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Announcement. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/announcement
+      name: orgs-org-announcement
+      description: REST surface for orgs-org-announcement.
+      operations:
+      - method: GET
+        name: getannouncementbannerfororganization
+        description: GitHub Get Announcement Banner for Organization
+        call: organizations-announcement.getannouncementbannerfororganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: setannouncementbannerfororganization
+        description: GitHub Set Announcement Banner for Organization
+        call: organizations-announcement.setannouncementbannerfororganization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeannouncementbannerfromorganization
+        description: GitHub Remove Announcement Banner from Organization
+        call: organizations-announcement.removeannouncementbannerfromorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-announcement-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Announcement. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-announcement-banner-organization
+      description: GitHub Get Announcement Banner for Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-announcement.getannouncementbannerfororganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-announcement-banner-organization
+      description: GitHub Set Announcement Banner for Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-announcement.setannouncementbannerfororganization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-announcement-banner-organization
+      description: GitHub Remove Announcement Banner from Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-announcement.removeannouncementbannerfromorganization
+      outputParameters:
+      - type: object
+        mapping: $.

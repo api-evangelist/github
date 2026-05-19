@@ -1,0 +1,431 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Public
+  description: 'GitHub User API — Public. 8 operations. Lead operation: GitHub List Public Ssh Keys for the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Public
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-public
+    baseUri: ''
+    description: GitHub User API — Public business capability. Self-contained, no shared references.
+    resources:
+    - name: user-keys
+      path: /user/keys
+      operations:
+      - name: listpublicsshkeysfortheauthenticateduser
+        method: GET
+        description: GitHub List Public Ssh Keys for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createpublicsshkeyfortheauthenticateduser
+        method: POST
+        description: GitHub Create Public Ssh Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: user-keys-key_id
+      path: /user/keys/{key_id}
+      operations:
+      - name: getpublicsshkeyfortheauthenticateduser
+        method: GET
+        description: GitHub Get Public Ssh Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletepublicsshkeyfortheauthenticateduser
+        method: DELETE
+        description: GitHub Delete Public Ssh Key for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: user-public_emails
+      path: /user/public_emails
+      operations:
+      - name: listpublicemailaddressesfortheauthenticateduser
+        method: GET
+        description: GitHub List Public Email Addresses for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-events-public
+      path: /users/{username}/events/public
+      operations:
+      - name: listpubliceventsforuser
+        method: GET
+        description: GitHub List Public Events for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-keys
+      path: /users/{username}/keys
+      operations:
+      - name: listpublickeysforuser
+        method: GET
+        description: GitHub List Public Keys for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: users-username-received_events-public
+      path: /users/{username}/received_events/public
+      operations:
+      - name: listpubliceventsreceivedbyuser
+        method: GET
+        description: GitHub List Public Events Received by User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-public-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Public. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/keys
+      name: user-keys
+      description: REST surface for user-keys.
+      operations:
+      - method: GET
+        name: listpublicsshkeysfortheauthenticateduser
+        description: GitHub List Public Ssh Keys for the Authenticated User
+        call: users-public.listpublicsshkeysfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createpublicsshkeyfortheauthenticateduser
+        description: GitHub Create Public Ssh Key for the Authenticated User
+        call: users-public.createpublicsshkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/keys/{key-id}
+      name: user-keys-key-id
+      description: REST surface for user-keys-key_id.
+      operations:
+      - method: GET
+        name: getpublicsshkeyfortheauthenticateduser
+        description: GitHub Get Public Ssh Key for the Authenticated User
+        call: users-public.getpublicsshkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletepublicsshkeyfortheauthenticateduser
+        description: GitHub Delete Public Ssh Key for the Authenticated User
+        call: users-public.deletepublicsshkeyfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/public-emails
+      name: user-public-emails
+      description: REST surface for user-public_emails.
+      operations:
+      - method: GET
+        name: listpublicemailaddressesfortheauthenticateduser
+        description: GitHub List Public Email Addresses for the Authenticated User
+        call: users-public.listpublicemailaddressesfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/events/public
+      name: users-username-events-public
+      description: REST surface for users-username-events-public.
+      operations:
+      - method: GET
+        name: listpubliceventsforuser
+        description: GitHub List Public Events for User
+        call: users-public.listpubliceventsforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/keys
+      name: users-username-keys
+      description: REST surface for users-username-keys.
+      operations:
+      - method: GET
+        name: listpublickeysforuser
+        description: GitHub List Public Keys for User
+        call: users-public.listpublickeysforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/received-events/public
+      name: users-username-received-events-public
+      description: REST surface for users-username-received_events-public.
+      operations:
+      - method: GET
+        name: listpubliceventsreceivedbyuser
+        description: GitHub List Public Events Received by User
+        call: users-public.listpubliceventsreceivedbyuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-public-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Public. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-public-ssh-keys
+      description: GitHub List Public Ssh Keys for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.listpublicsshkeysfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-public-ssh-key
+      description: GitHub Create Public Ssh Key for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-public.createpublicsshkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-public-ssh-key
+      description: GitHub Get Public Ssh Key for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.getpublicsshkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-public-ssh-key
+      description: GitHub Delete Public Ssh Key for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-public.deletepublicsshkeyfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-email-addresses
+      description: GitHub List Public Email Addresses for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.listpublicemailaddressesfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-events-user
+      description: GitHub List Public Events for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.listpubliceventsforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-keys-user
+      description: GitHub List Public Keys for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.listpublickeysforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-events-received
+      description: GitHub List Public Events Received by User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-public.listpubliceventsreceivedbyuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

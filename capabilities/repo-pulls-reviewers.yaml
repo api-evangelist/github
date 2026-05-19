@@ -1,0 +1,188 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Reviewers
+  description: 'github-repos-api — Reviewers. 3 operations. Lead operation: GitHub Get All Requested Reviewers for Pull Request.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Reviewers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-pulls-reviewers
+    baseUri: ''
+    description: github-repos-api — Reviewers business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pulls-pull_number-requested_reviewers
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+      operations:
+      - name: getallrequestedreviewersforpullrequest
+        method: GET
+        description: GitHub Get All Requested Reviewers for Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: requestreviewersforpullrequest
+        method: POST
+        description: GitHub Request Reviewers for Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removerequestedreviewersfrompullrequest
+        method: DELETE
+        description: GitHub Remove Requested Reviewers from Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-pulls-reviewers-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Reviewers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/requested-reviewers
+      name: repos-owner-repo-pulls-pull-number-requested-reviewers
+      description: REST surface for repos-owner-repo-pulls-pull_number-requested_reviewers.
+      operations:
+      - method: GET
+        name: getallrequestedreviewersforpullrequest
+        description: GitHub Get All Requested Reviewers for Pull Request
+        call: repo-pulls-reviewers.getallrequestedreviewersforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: requestreviewersforpullrequest
+        description: GitHub Request Reviewers for Pull Request
+        call: repo-pulls-reviewers.requestreviewersforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removerequestedreviewersfrompullrequest
+        description: GitHub Remove Requested Reviewers from Pull Request
+        call: repo-pulls-reviewers.removerequestedreviewersfrompullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-pulls-reviewers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Reviewers. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-all-requested-reviewers
+      description: GitHub Get All Requested Reviewers for Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-pulls-reviewers.getallrequestedreviewersforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-request-reviewers-pull-request
+      description: GitHub Request Reviewers for Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-pulls-reviewers.requestreviewersforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-requested-reviewers-pull
+      description: GitHub Remove Requested Reviewers from Pull Request
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-pulls-reviewers.removerequestedreviewersfrompullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

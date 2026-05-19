@@ -1,0 +1,152 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Dependency-Graph
+  description: 'GitHub v3 REST API — Dependency-Graph. 3 operations. Lead operation: GitHub Get a Diff of the Dependencies
+    Between Commits. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Dependency-Graph
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-dependency-graph
+    baseUri: ''
+    description: GitHub v3 REST API — Dependency-Graph business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-dependency-graph-compare-basehead
+      path: /repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+      operations:
+      - name: dependencygraphdiffrange
+        method: GET
+        description: GitHub Get a Diff of the Dependencies Between Commits
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: basehead
+          in: path
+          type: string
+          description: The base and head Git revisions to compare. The Git revisions will be resolved to commit SHAs. Named
+            revisions will be resolved to their corresponding HEAD comm
+          required: true
+    - name: repos-owner-repo-dependency-graph-sbom
+      path: /repos/{owner}/{repo}/dependency-graph/sbom
+      operations:
+      - name: dependencygraphexportsbom
+        method: GET
+        description: GitHub Export a Software Bill of Materials (SBOM) for a Repository.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-dependency-graph-snapshots
+      path: /repos/{owner}/{repo}/dependency-graph/snapshots
+      operations:
+      - name: dependencygraphcreaterepositorysnapshot
+        method: POST
+        description: GitHub Create a Snapshot of Dependencies for a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: rest
+    namespace: github-dependency-graph-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Dependency-Graph. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/compare/{basehead}
+      name: repos-owner-repo-dependency-graph-compare-basehead
+      description: REST surface for repos-owner-repo-dependency-graph-compare-basehead.
+      operations:
+      - method: GET
+        name: dependencygraphdiffrange
+        description: GitHub Get a Diff of the Dependencies Between Commits
+        call: github-dependency-graph.dependencygraphdiffrange
+        with:
+          basehead: rest.basehead
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/sbom
+      name: repos-owner-repo-dependency-graph-sbom
+      description: REST surface for repos-owner-repo-dependency-graph-sbom.
+      operations:
+      - method: GET
+        name: dependencygraphexportsbom
+        description: GitHub Export a Software Bill of Materials (SBOM) for a Repository.
+        call: github-dependency-graph.dependencygraphexportsbom
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/dependency-graph/snapshots
+      name: repos-owner-repo-dependency-graph-snapshots
+      description: REST surface for repos-owner-repo-dependency-graph-snapshots.
+      operations:
+      - method: POST
+        name: dependencygraphcreaterepositorysnapshot
+        description: GitHub Create a Snapshot of Dependencies for a Repository
+        call: github-dependency-graph.dependencygraphcreaterepositorysnapshot
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-dependency-graph-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Dependency-Graph. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-get-diff-dependencies-between
+      description: GitHub Get a Diff of the Dependencies Between Commits
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependency-graph.dependencygraphdiffrange
+      with:
+        basehead: tools.basehead
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-export-software-bill-materials
+      description: GitHub Export a Software Bill of Materials (SBOM) for a Repository.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-dependency-graph.dependencygraphexportsbom
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-snapshot-dependencies-repository
+      description: GitHub Create a Snapshot of Dependencies for a Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-dependency-graph.dependencygraphcreaterepositorysnapshot
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

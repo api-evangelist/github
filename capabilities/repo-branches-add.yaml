@@ -1,0 +1,266 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Add
+  description: 'github-repos-api — Add. 4 operations. Lead operation: GitHub Add Status Check Contexts. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-branches-add
+    baseUri: ''
+    description: github-repos-api — Add business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks-contexts
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+      operations:
+      - name: addstatuscheckcontexts
+        method: POST
+        description: GitHub Add Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: addappaccessrestrictions
+        method: POST
+        description: GitHub Add App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      operations:
+      - name: addteamaccessrestrictions
+        method: POST
+        description: GitHub Add Team Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-branches-branch-protection-restrictions-users
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      operations:
+      - name: adduseraccessrestrictions
+        method: POST
+        description: GitHub Add User Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-branches-add-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Add. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks/contexts
+      name: repos-owner-repo-branches-branch-protection-required-status-checks-contexts
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks-contexts.
+      operations:
+      - method: POST
+        name: addstatuscheckcontexts
+        description: GitHub Add Status Check Contexts
+        call: repo-branches-add.addstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: POST
+        name: addappaccessrestrictions
+        description: GitHub Add App Access Restrictions
+        call: repo-branches-add.addappaccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-teams.
+      operations:
+      - method: POST
+        name: addteamaccessrestrictions
+        description: GitHub Add Team Access Restrictions
+        call: repo-branches-add.addteamaccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users
+      name: repos-owner-repo-branches-branch-protection-restrictions-users
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-users.
+      operations:
+      - method: POST
+        name: adduseraccessrestrictions
+        description: GitHub Add User Access Restrictions
+        call: repo-branches-add.adduseraccessrestrictions
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-branches-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Add. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-add-status-check-contexts
+      description: GitHub Add Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repo-branches-add.addstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-app-access-restrictions
+      description: GitHub Add App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-branches-add.addappaccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-team-access-restrictions
+      description: GitHub Add Team Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-branches-add.addteamaccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-user-access-restrictions
+      description: GitHub Add User Access Restrictions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-branches-add.adduseraccessrestrictions
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

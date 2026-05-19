@@ -1,0 +1,288 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Repositories
+  description: 'github-repos-api — Repositories. 5 operations. Lead operation: GitHub Get Repository. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Repositories
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-repositories
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Repositories business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo
+      path: /repos/{owner}/{repo}
+      operations:
+      - name: getrepository
+        method: GET
+        description: GitHub Get Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updaterepository
+        method: PATCH
+        description: GitHub Update Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleterepository
+        method: DELETE
+        description: GitHub Delete Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-comments
+      path: /repos/{owner}/{repo}/comments
+      operations:
+      - name: listcommitcommentsforrepository
+        method: GET
+        description: GitHub List Commit Comments for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repositories
+      path: /repositories
+      operations:
+      - name: listpublicrepositories
+        method: GET
+        description: GitHub List Public Repositories
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: visibility
+          in: query
+          type: string
+          description: Specifies the types of repositories to return. This endpoint will only list repositories available
+            to all users on the enterprise.
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-repositories-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Repositories. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}
+      name: repos-owner-repo
+      description: REST surface for repos-owner-repo.
+      operations:
+      - method: GET
+        name: getrepository
+        description: GitHub Get Repository
+        call: repos-repositories.getrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updaterepository
+        description: GitHub Update Repository
+        call: repos-repositories.updaterepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleterepository
+        description: GitHub Delete Repository
+        call: repos-repositories.deleterepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/comments
+      name: repos-owner-repo-comments
+      description: REST surface for repos-owner-repo-comments.
+      operations:
+      - method: GET
+        name: listcommitcommentsforrepository
+        description: GitHub List Commit Comments for Repository
+        call: repos-repositories.listcommitcommentsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repositories
+      name: repositories
+      description: REST surface for repositories.
+      operations:
+      - method: GET
+        name: listpublicrepositories
+        description: GitHub List Public Repositories
+        call: repos-repositories.listpublicrepositories
+        with:
+          visibility: rest.visibility
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-repositories-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Repositories. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-repository
+      description: GitHub Get Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-repositories.getrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-repository
+      description: GitHub Update Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repos-repositories.updaterepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-repository
+      description: GitHub Delete Repository
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repos-repositories.deleterepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commit-comments-repository
+      description: GitHub List Commit Comments for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-repositories.listcommitcommentsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-public-repositories
+      description: GitHub List Public Repositories
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-repositories.listpublicrepositories
+      with:
+        visibility: tools.visibility
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

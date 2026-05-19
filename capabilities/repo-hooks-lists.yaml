@@ -1,0 +1,198 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-hooks-api — Lists
+  description: 'github-repo-hooks-api — Lists. 3 operations. Lead operation: GitHub List Repository Webhooks. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-hooks-lists
+    baseUri: ''
+    description: github-repo-hooks-api — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-hooks
+      path: /repos/{owner}/{repo}/hooks
+      operations:
+      - name: listrepositorywebhooks
+        method: GET
+        description: GitHub List Repository Webhooks
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-hooks-hook_id-deliveries
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/deliveries
+      operations:
+      - name: listdeliveriesforrepositorywebhook
+        method: GET
+        description: GitHub List Deliveries for Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: redelivery
+          in: query
+          type: boolean
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pre-receive-hooks
+      path: /repos/{owner}/{repo}/pre-receive-hooks
+      operations:
+      - name: listprereceivehooksforrepository
+        method: GET
+        description: GitHub List Pre-receive Hooks for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-hooks-lists-rest
+    port: 8080
+    description: REST adapter for github-repo-hooks-api — Lists. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/hooks
+      name: repos-owner-repo-hooks
+      description: REST surface for repos-owner-repo-hooks.
+      operations:
+      - method: GET
+        name: listrepositorywebhooks
+        description: GitHub List Repository Webhooks
+        call: repo-hooks-lists.listrepositorywebhooks
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/deliveries
+      name: repos-owner-repo-hooks-hook-id-deliveries
+      description: REST surface for repos-owner-repo-hooks-hook_id-deliveries.
+      operations:
+      - method: GET
+        name: listdeliveriesforrepositorywebhook
+        description: GitHub List Deliveries for Repository Webhook
+        call: repo-hooks-lists.listdeliveriesforrepositorywebhook
+        with:
+          redelivery: rest.redelivery
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pre-receive-hooks
+      name: repos-owner-repo-pre-receive-hooks
+      description: REST surface for repos-owner-repo-pre-receive-hooks.
+      operations:
+      - method: GET
+        name: listprereceivehooksforrepository
+        description: GitHub List Pre-receive Hooks for Repository
+        call: repo-hooks-lists.listprereceivehooksforrepository
+        with:
+          sort: rest.sort
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-hooks-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-hooks-api — Lists. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-repository-webhooks
+      description: GitHub List Repository Webhooks
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-hooks-lists.listrepositorywebhooks
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-deliveries-repository-webhook
+      description: GitHub List Deliveries for Repository Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-hooks-lists.listdeliveriesforrepositorywebhook
+      with:
+        redelivery: tools.redelivery
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-pre-receive-hooks
+      description: GitHub List Pre-receive Hooks for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-hooks-lists.listprereceivehooksforrepository
+      with:
+        sort: tools.sort
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

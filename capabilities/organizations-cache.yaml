@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Cache
+  description: 'GitHub Org API — Cache. 2 operations. Lead operation: GitHub Get Github Actions Cache Usage for an Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Cache
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-cache
+    baseUri: ''
+    description: GitHub Org API — Cache business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-actions-cache-usage
+      path: /orgs/{org}/actions/cache/usage
+      operations:
+      - name: getgithubactionscacheusageforanorganization
+        method: GET
+        description: GitHub Get Github Actions Cache Usage for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-actions-cache-usage-by-repository
+      path: /orgs/{org}/actions/cache/usage-by-repository
+      operations:
+      - name: listrepositorieswithgithubactionscacheusageforanorganization
+        method: GET
+        description: GitHub List Repositories with Github Actions Cache Usage for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-cache-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Cache. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/actions/cache/usage
+      name: orgs-org-actions-cache-usage
+      description: REST surface for orgs-org-actions-cache-usage.
+      operations:
+      - method: GET
+        name: getgithubactionscacheusageforanorganization
+        description: GitHub Get Github Actions Cache Usage for an Organization
+        call: organizations-cache.getgithubactionscacheusageforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/cache/usage-by-repository
+      name: orgs-org-actions-cache-usage-by-repository
+      description: REST surface for orgs-org-actions-cache-usage-by-repository.
+      operations:
+      - method: GET
+        name: listrepositorieswithgithubactionscacheusageforanorganization
+        description: GitHub List Repositories with Github Actions Cache Usage for an Organization
+        call: organizations-cache.listrepositorieswithgithubactionscacheusageforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-cache-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Cache. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-github-actions-cache
+      description: GitHub Get Github Actions Cache Usage for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-cache.getgithubactionscacheusageforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-github-actions
+      description: GitHub List Repositories with Github Actions Cache Usage for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-cache.listrepositorieswithgithubactionscacheusageforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

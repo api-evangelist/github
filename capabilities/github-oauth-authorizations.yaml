@@ -1,0 +1,391 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Oauth-Authorizations
+  description: 'GitHub v3 REST API — Oauth-Authorizations. 10 operations. Lead operation: GitHub List Your Grants. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Oauth-Authorizations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-oauth-authorizations
+    baseUri: ''
+    description: GitHub v3 REST API — Oauth-Authorizations business capability. Self-contained, no shared references.
+    resources:
+    - name: applications-grants
+      path: /applications/grants
+      operations:
+      - name: oauthauthorizationslistgrants
+        method: GET
+        description: GitHub List Your Grants
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_id
+          in: query
+          type: string
+          description: The client ID of your GitHub app.
+    - name: applications-grants-grant_id
+      path: /applications/grants/{grant_id}
+      operations:
+      - name: oauthauthorizationsgetgrant
+        method: GET
+        description: GitHub Get a Single Grant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: oauthauthorizationsdeletegrant
+        method: DELETE
+        description: GitHub Delete a Grant
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: authorizations
+      path: /authorizations
+      operations:
+      - name: oauthauthorizationslistauthorizations
+        method: GET
+        description: GitHub List Your Authorizations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: client_id
+          in: query
+          type: string
+          description: The client ID of your GitHub app.
+      - name: oauthauthorizationscreateauthorization
+        method: POST
+        description: GitHub Create a New Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: authorizations-clients-client_id
+      path: /authorizations/clients/{client_id}
+      operations:
+      - name: oauthauthorizationsgetorcreateauthorizationforapp
+        method: PUT
+        description: GitHub Get-or-create an Authorization for a Specific App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: authorizations-clients-client_id-fingerprint
+      path: /authorizations/clients/{client_id}/{fingerprint}
+      operations:
+      - name: oauthauthorizationsgetorcreateauthorizationforappandfingerprint
+        method: PUT
+        description: GitHub Get-or-create an Authorization for a Specific App and Fingerprint
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: fingerprint
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: authorizations-authorization_id
+      path: /authorizations/{authorization_id}
+      operations:
+      - name: oauthauthorizationsgetauthorization
+        method: GET
+        description: GitHub Get a Single Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: oauthauthorizationsupdateauthorization
+        method: PATCH
+        description: GitHub Update an Existing Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: oauthauthorizationsdeleteauthorization
+        method: DELETE
+        description: GitHub Delete an Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-oauth-authorizations-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Oauth-Authorizations. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/applications/grants
+      name: applications-grants
+      description: REST surface for applications-grants.
+      operations:
+      - method: GET
+        name: oauthauthorizationslistgrants
+        description: GitHub List Your Grants
+        call: github-oauth-authorizations.oauthauthorizationslistgrants
+        with:
+          client_id: rest.client_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/applications/grants/{grant-id}
+      name: applications-grants-grant-id
+      description: REST surface for applications-grants-grant_id.
+      operations:
+      - method: GET
+        name: oauthauthorizationsgetgrant
+        description: GitHub Get a Single Grant
+        call: github-oauth-authorizations.oauthauthorizationsgetgrant
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: oauthauthorizationsdeletegrant
+        description: GitHub Delete a Grant
+        call: github-oauth-authorizations.oauthauthorizationsdeletegrant
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authorizations
+      name: authorizations
+      description: REST surface for authorizations.
+      operations:
+      - method: GET
+        name: oauthauthorizationslistauthorizations
+        description: GitHub List Your Authorizations
+        call: github-oauth-authorizations.oauthauthorizationslistauthorizations
+        with:
+          client_id: rest.client_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: oauthauthorizationscreateauthorization
+        description: GitHub Create a New Authorization
+        call: github-oauth-authorizations.oauthauthorizationscreateauthorization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authorizations/clients/{client-id}
+      name: authorizations-clients-client-id
+      description: REST surface for authorizations-clients-client_id.
+      operations:
+      - method: PUT
+        name: oauthauthorizationsgetorcreateauthorizationforapp
+        description: GitHub Get-or-create an Authorization for a Specific App
+        call: github-oauth-authorizations.oauthauthorizationsgetorcreateauthorizationforapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authorizations/clients/{client-id}/{fingerprint}
+      name: authorizations-clients-client-id-fingerprint
+      description: REST surface for authorizations-clients-client_id-fingerprint.
+      operations:
+      - method: PUT
+        name: oauthauthorizationsgetorcreateauthorizationforappandfingerprint
+        description: GitHub Get-or-create an Authorization for a Specific App and Fingerprint
+        call: github-oauth-authorizations.oauthauthorizationsgetorcreateauthorizationforappandfingerprint
+        with:
+          fingerprint: rest.fingerprint
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/authorizations/{authorization-id}
+      name: authorizations-authorization-id
+      description: REST surface for authorizations-authorization_id.
+      operations:
+      - method: GET
+        name: oauthauthorizationsgetauthorization
+        description: GitHub Get a Single Authorization
+        call: github-oauth-authorizations.oauthauthorizationsgetauthorization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: oauthauthorizationsupdateauthorization
+        description: GitHub Update an Existing Authorization
+        call: github-oauth-authorizations.oauthauthorizationsupdateauthorization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: oauthauthorizationsdeleteauthorization
+        description: GitHub Delete an Authorization
+        call: github-oauth-authorizations.oauthauthorizationsdeleteauthorization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-oauth-authorizations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Oauth-Authorizations. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: github-list-your-grants
+      description: GitHub List Your Grants
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationslistgrants
+      with:
+        client_id: tools.client_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-single-grant
+      description: GitHub Get a Single Grant
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsgetgrant
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-grant
+      description: GitHub Delete a Grant
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsdeletegrant
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-your-authorizations
+      description: GitHub List Your Authorizations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationslistauthorizations
+      with:
+        client_id: tools.client_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-new-authorization
+      description: GitHub Create a New Authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-oauth-authorizations.oauthauthorizationscreateauthorization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-create-authorization-specific
+      description: GitHub Get-or-create an Authorization for a Specific App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsgetorcreateauthorizationforapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-create-authorization-specific-2
+      description: GitHub Get-or-create an Authorization for a Specific App and Fingerprint
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsgetorcreateauthorizationforappandfingerprint
+      with:
+        fingerprint: tools.fingerprint
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-single-authorization
+      description: GitHub Get a Single Authorization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsgetauthorization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-existing-authorization
+      description: GitHub Update an Existing Authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsupdateauthorization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-authorization
+      description: GitHub Delete an Authorization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-oauth-authorizations.oauthauthorizationsdeleteauthorization
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,194 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Get
+  description: 'github-repos-api — Get. 3 operations. Lead operation: GitHub Get an Issue Comment. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-issues-get
+    baseUri: ''
+    description: github-repos-api — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-comments-comment_id
+      path: /repos/{owner}/{repo}/issues/comments/{comment_id}
+      operations:
+      - name: getanissuecomment
+        method: GET
+        description: GitHub Get an Issue Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-events-event_id
+      path: /repos/{owner}/{repo}/issues/events/{event_id}
+      operations:
+      - name: getanissueevent
+        method: GET
+        description: GitHub Get an Issue Event
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_id
+          in: path
+          type: integer
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-issues-issue_number
+      path: /repos/{owner}/{repo}/issues/{issue_number}
+      operations:
+      - name: getanissue
+        method: GET
+        description: GitHub Get an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-issues-get-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/comments/{comment-id}
+      name: repos-owner-repo-issues-comments-comment-id
+      description: REST surface for repos-owner-repo-issues-comments-comment_id.
+      operations:
+      - method: GET
+        name: getanissuecomment
+        description: GitHub Get an Issue Comment
+        call: repo-issues-get.getanissuecomment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/events/{event-id}
+      name: repos-owner-repo-issues-events-event-id
+      description: REST surface for repos-owner-repo-issues-events-event_id.
+      operations:
+      - method: GET
+        name: getanissueevent
+        description: GitHub Get an Issue Event
+        call: repo-issues-get.getanissueevent
+        with:
+          event_id: rest.event_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}
+      name: repos-owner-repo-issues-issue-number
+      description: REST surface for repos-owner-repo-issues-issue_number.
+      operations:
+      - method: GET
+        name: getanissue
+        description: GitHub Get an Issue
+        call: repo-issues-get.getanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-issues-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-issue-comment
+      description: GitHub Get an Issue Comment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-issues-get.getanissuecomment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-issue-event
+      description: GitHub Get an Issue Event
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-issues-get.getanissueevent
+      with:
+        event_id: tools.event_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-issue
+      description: GitHub Get an Issue
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-issues-get.getanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

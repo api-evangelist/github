@@ -1,0 +1,657 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Status
+  description: 'GitHub Repos API — Status. 12 operations. Lead operation: Get Status Checks Protection. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-status
+    baseUri: ''
+    description: GitHub Repos API — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+      operations:
+      - name: getstatuschecksprotection
+        method: GET
+        description: Get Status Checks Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatestatuscheckprotection
+        method: PATCH
+        description: Update Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removestatuscheckprotection
+        method: DELETE
+        description: Remove Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks-contexts
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+      operations:
+      - name: getallstatuscheckcontexts
+        method: GET
+        description: Get All Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addstatuscheckcontexts
+        method: POST
+        description: Add Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: setstatuscheckcontexts
+        method: PUT
+        description: Set Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removestatuscheckcontexts
+        method: DELETE
+        description: Remove Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-commits-ref-status
+      path: /repos/{owner}/{repo}/commits/{ref}/status
+      operations:
+      - name: getthecombinedstatusforspecificreference
+        method: GET
+        description: Get The Combined Status For Specific Reference
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-deployments-deployment_id-statuses
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses
+      operations:
+      - name: createdeploymentstatus
+        method: POST
+        description: Create Deployment Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-deployments-deployment_id-statuses-status_id
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}
+      operations:
+      - name: getdeploymentstatus
+        method: GET
+        description: Get Deployment Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status_id
+          in: path
+          type: integer
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-replicas-caches
+      path: /repos/{owner}/{repo}/replicas/caches
+      operations:
+      - name: listrepositorycachereplicationstatus
+        method: GET
+        description: List Repository Cache Replication Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-statuses-sha
+      path: /repos/{owner}/{repo}/statuses/{sha}
+      operations:
+      - name: createcommitstatus
+        method: POST
+        description: Create Commit Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: path
+          type: string
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-status-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks
+      name: repos-owner-repo-branches-branch-protection-required-status-checks
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks.
+      operations:
+      - method: GET
+        name: getstatuschecksprotection
+        description: Get Status Checks Protection
+        call: temp-status.getstatuschecksprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatestatuscheckprotection
+        description: Update Status Check Protection
+        call: temp-status.updatestatuscheckprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removestatuscheckprotection
+        description: Remove Status Check Protection
+        call: temp-status.removestatuscheckprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks/contexts
+      name: repos-owner-repo-branches-branch-protection-required-status-checks-contexts
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks-contexts.
+      operations:
+      - method: GET
+        name: getallstatuscheckcontexts
+        description: Get All Status Check Contexts
+        call: temp-status.getallstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addstatuscheckcontexts
+        description: Add Status Check Contexts
+        call: temp-status.addstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setstatuscheckcontexts
+        description: Set Status Check Contexts
+        call: temp-status.setstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removestatuscheckcontexts
+        description: Remove Status Check Contexts
+        call: temp-status.removestatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/commits/{ref}/status
+      name: repos-owner-repo-commits-ref-status
+      description: REST surface for repos-owner-repo-commits-ref-status.
+      operations:
+      - method: GET
+        name: getthecombinedstatusforspecificreference
+        description: Get The Combined Status For Specific Reference
+        call: temp-status.getthecombinedstatusforspecificreference
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}/statuses
+      name: repos-owner-repo-deployments-deployment-id-statuses
+      description: REST surface for repos-owner-repo-deployments-deployment_id-statuses.
+      operations:
+      - method: POST
+        name: createdeploymentstatus
+        description: Create Deployment Status
+        call: temp-status.createdeploymentstatus
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}/statuses/{status-id}
+      name: repos-owner-repo-deployments-deployment-id-statuses-status-id
+      description: REST surface for repos-owner-repo-deployments-deployment_id-statuses-status_id.
+      operations:
+      - method: GET
+        name: getdeploymentstatus
+        description: Get Deployment Status
+        call: temp-status.getdeploymentstatus
+        with:
+          status_id: rest.status_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/replicas/caches
+      name: repos-owner-repo-replicas-caches
+      description: REST surface for repos-owner-repo-replicas-caches.
+      operations:
+      - method: GET
+        name: listrepositorycachereplicationstatus
+        description: List Repository Cache Replication Status
+        call: temp-status.listrepositorycachereplicationstatus
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/statuses/{sha}
+      name: repos-owner-repo-statuses-sha
+      description: REST surface for repos-owner-repo-statuses-sha.
+      operations:
+      - method: POST
+        name: createcommitstatus
+        description: Create Commit Status
+        call: temp-status.createcommitstatus
+        with:
+          sha: rest.sha
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Status. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-status-checks-protection
+      description: Get Status Checks Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-status.getstatuschecksprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-status-check-protection
+      description: Update Status Check Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-status.updatestatuscheckprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-status-check-protection
+      description: Remove Status Check Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-status.removestatuscheckprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-all-status-check-contexts
+      description: Get All Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-status.getallstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-status-check-contexts
+      description: Add Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: temp-status.addstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-status-check-contexts
+      description: Set Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-status.setstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-status-check-contexts
+      description: Remove Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: temp-status.removestatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-combined-status-specific-reference
+      description: Get The Combined Status For Specific Reference
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-status.getthecombinedstatusforspecificreference
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-deployment-status
+      description: Create Deployment Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-status.createdeploymentstatus
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-deployment-status
+      description: Get Deployment Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-status.getdeploymentstatus
+      with:
+        status_id: tools.status_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-repository-cache-replication-status
+      description: List Repository Cache Replication Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-status.listrepositorycachereplicationstatus
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-commit-status
+      description: Create Commit Status
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-status.createcommitstatus
+      with:
+        sha: tools.sha
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

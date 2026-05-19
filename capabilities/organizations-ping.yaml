@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Ping
+  description: 'GitHub Org API — Ping. 1 operations. Lead operation: GitHub Ping an Organization Webhook. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Ping
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-ping
+    baseUri: ''
+    description: GitHub Org API — Ping business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-hooks-hook_id-pings
+      path: /orgs/{org}/hooks/{hook_id}/pings
+      operations:
+      - name: pinganorganizationwebhook
+        method: POST
+        description: GitHub Ping an Organization Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-ping-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Ping. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/hooks/{hook-id}/pings
+      name: orgs-org-hooks-hook-id-pings
+      description: REST surface for orgs-org-hooks-hook_id-pings.
+      operations:
+      - method: POST
+        name: pinganorganizationwebhook
+        description: GitHub Ping an Organization Webhook
+        call: organizations-ping.pinganorganizationwebhook
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-ping-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Ping. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-ping-organization-webhook
+      description: GitHub Ping an Organization Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: organizations-ping.pinganorganizationwebhook
+      outputParameters:
+      - type: object
+        mapping: $.

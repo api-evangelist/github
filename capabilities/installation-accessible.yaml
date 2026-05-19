@@ -1,0 +1,134 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Installation API — Accessible
+  description: 'GitHub Installation API — Accessible. 3 operations. Lead operation: GitHub List Repositories Accessible to
+    the App Installation. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Accessible
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: installation-accessible
+    baseUri: ''
+    description: GitHub Installation API — Accessible business capability. Self-contained, no shared references.
+    resources:
+    - name: installation-repositories
+      path: /installation/repositories
+      operations:
+      - name: listrepositoriesaccessibletotheappinstallation
+        method: GET
+        description: GitHub List Repositories Accessible to the App Installation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-installations
+      path: /user/installations
+      operations:
+      - name: listappinstallationsaccessibletotheuseraccesstoken
+        method: GET
+        description: GitHub List App Installations Accessible to the User Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-installations-installation_id-repositories
+      path: /user/installations/{installation_id}/repositories
+      operations:
+      - name: listrepositoriesaccessibletotheuseraccesstoken
+        method: GET
+        description: GitHub List Repositories Accessible to the User Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: installation-accessible-rest
+    port: 8080
+    description: REST adapter for GitHub Installation API — Accessible. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/installation/repositories
+      name: installation-repositories
+      description: REST surface for installation-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesaccessibletotheappinstallation
+        description: GitHub List Repositories Accessible to the App Installation
+        call: installation-accessible.listrepositoriesaccessibletotheappinstallation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations
+      name: user-installations
+      description: REST surface for user-installations.
+      operations:
+      - method: GET
+        name: listappinstallationsaccessibletotheuseraccesstoken
+        description: GitHub List App Installations Accessible to the User Access Token
+        call: installation-accessible.listappinstallationsaccessibletotheuseraccesstoken
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations/{installation-id}/repositories
+      name: user-installations-installation-id-repositories
+      description: REST surface for user-installations-installation_id-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesaccessibletotheuseraccesstoken
+        description: GitHub List Repositories Accessible to the User Access Token
+        call: installation-accessible.listrepositoriesaccessibletotheuseraccesstoken
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: installation-accessible-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Installation API — Accessible. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-repositories-accessible-app
+      description: GitHub List Repositories Accessible to the App Installation
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-accessible.listrepositoriesaccessibletotheappinstallation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-app-installations-accessible
+      description: GitHub List App Installations Accessible to the User Access Token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-accessible.listappinstallationsaccessibletotheuseraccesstoken
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-accessible-user
+      description: GitHub List Repositories Accessible to the User Access Token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-accessible.listrepositoriesaccessibletotheuseraccesstoken
+      outputParameters:
+      - type: object
+        mapping: $.

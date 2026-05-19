@@ -1,0 +1,312 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Deployments
+  description: 'github-repos-api — Deployments. 5 operations. Lead operation: GitHub List Deployments. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Deployments
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repos-deployments
+    baseUri: http://localhost:8080/rest/github-repos-api/1.1.4
+    description: github-repos-api — Deployments business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-deployments
+      path: /repos/{owner}/{repo}/deployments
+      operations:
+      - name: listdeployments
+        method: GET
+        description: GitHub List Deployments
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sha
+          in: query
+          type: string
+          description: The SHA recorded at creation time.
+        - name: ref
+          in: query
+          type: string
+          description: The name of the ref. This can be a branch, tag, or SHA.
+        - name: task
+          in: query
+          type: string
+          description: The name of the task for the deployment (e.g., `deploy` or `deploy:migrations`).
+        - name: environment
+          in: query
+          type: string
+          description: The name of the environment that was deployed to (e.g., `staging` or `production`).
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: createdeployment
+        method: POST
+        description: GitHub Create Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-deployments-deployment_id
+      path: /repos/{owner}/{repo}/deployments/{deployment_id}
+      operations:
+      - name: getdeployment
+        method: GET
+        description: GitHub Get Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deletedeployment
+        method: DELETE
+        description: GitHub Delete Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pages-deployments
+      path: /repos/{owner}/{repo}/pages/deployments
+      operations:
+      - name: creategithubpagesdeployment
+        method: POST
+        description: GitHub Create Github Pages Deployment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repos-deployments-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Deployments. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/deployments
+      name: repos-owner-repo-deployments
+      description: REST surface for repos-owner-repo-deployments.
+      operations:
+      - method: GET
+        name: listdeployments
+        description: GitHub List Deployments
+        call: repos-deployments.listdeployments
+        with:
+          sha: rest.sha
+          ref: rest.ref
+          task: rest.task
+          environment: rest.environment
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdeployment
+        description: GitHub Create Deployment
+        call: repos-deployments.createdeployment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/deployments/{deployment-id}
+      name: repos-owner-repo-deployments-deployment-id
+      description: REST surface for repos-owner-repo-deployments-deployment_id.
+      operations:
+      - method: GET
+        name: getdeployment
+        description: GitHub Get Deployment
+        call: repos-deployments.getdeployment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedeployment
+        description: GitHub Delete Deployment
+        call: repos-deployments.deletedeployment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages/deployments
+      name: repos-owner-repo-pages-deployments
+      description: REST surface for repos-owner-repo-pages-deployments.
+      operations:
+      - method: POST
+        name: creategithubpagesdeployment
+        description: GitHub Create Github Pages Deployment
+        call: repos-deployments.creategithubpagesdeployment
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repos-deployments-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Deployments. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-deployments
+      description: GitHub List Deployments
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-deployments.listdeployments
+      with:
+        sha: tools.sha
+        ref: tools.ref
+        task: tools.task
+        environment: tools.environment
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-deployment
+      description: GitHub Create Deployment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repos-deployments.createdeployment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-deployment
+      description: GitHub Get Deployment
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repos-deployments.getdeployment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-deployment
+      description: GitHub Delete Deployment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repos-deployments.deletedeployment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-github-pages-deployment
+      description: GitHub Create Github Pages Deployment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repos-deployments.creategithubpagesdeployment
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

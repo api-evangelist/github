@@ -1,0 +1,88 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-hooks-api — Ping
+  description: 'github-repo-hooks-api — Ping. 1 operations. Lead operation: GitHub Ping Repository Webhook. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Ping
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-hooks-ping
+    baseUri: ''
+    description: github-repo-hooks-api — Ping business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-hooks-hook_id-pings
+      path: /repos/{owner}/{repo}/hooks/{hook_id}/pings
+      operations:
+      - name: pingrepositorywebhook
+        method: POST
+        description: GitHub Ping Repository Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-hooks-ping-rest
+    port: 8080
+    description: REST adapter for github-repo-hooks-api — Ping. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/hooks/{hook-id}/pings
+      name: repos-owner-repo-hooks-hook-id-pings
+      description: REST surface for repos-owner-repo-hooks-hook_id-pings.
+      operations:
+      - method: POST
+        name: pingrepositorywebhook
+        description: GitHub Ping Repository Webhook
+        call: repo-hooks-ping.pingrepositorywebhook
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-hooks-ping-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-hooks-api — Ping. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-ping-repository-webhook
+      description: GitHub Ping Repository Webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-hooks-ping.pingrepositorywebhook
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

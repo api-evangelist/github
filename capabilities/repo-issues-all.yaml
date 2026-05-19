@@ -1,0 +1,88 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — All
+  description: 'github-repos-api — All. 1 operations. Lead operation: GitHub Remove All Labels from an Issue. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - All
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-issues-all
+    baseUri: ''
+    description: github-repos-api — All business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-issue_number-labels
+      path: /repos/{owner}/{repo}/issues/{issue_number}/labels
+      operations:
+      - name: removealllabelsfromanissue
+        method: DELETE
+        description: GitHub Remove All Labels from an Issue
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-issues-all-rest
+    port: 8080
+    description: REST adapter for github-repos-api — All. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/{issue-number}/labels
+      name: repos-owner-repo-issues-issue-number-labels
+      description: REST surface for repos-owner-repo-issues-issue_number-labels.
+      operations:
+      - method: DELETE
+        name: removealllabelsfromanissue
+        description: GitHub Remove All Labels from an Issue
+        call: repo-issues-all.removealllabelsfromanissue
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-issues-all-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — All. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-remove-all-labels-issue
+      description: GitHub Remove All Labels from an Issue
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-issues-all.removealllabelsfromanissue
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

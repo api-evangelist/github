@@ -1,0 +1,381 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repos-api — Status
+  description: 'github-repos-api — Status. 7 operations. Lead operation: GitHub Get Status Checks Protection. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Status
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-branches-status
+    baseUri: ''
+    description: github-repos-api — Status business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks
+      operations:
+      - name: getstatuschecksprotection
+        method: GET
+        description: GitHub Get Status Checks Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: updatestatuscheckprotection
+        method: PATCH
+        description: GitHub Update Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removestatuscheckprotection
+        method: DELETE
+        description: GitHub Remove Status Check Protection
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-branches-branch-protection-required_status_checks-contexts
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts
+      operations:
+      - name: getallstatuscheckcontexts
+        method: GET
+        description: GitHub Get All Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addstatuscheckcontexts
+        method: POST
+        description: GitHub Add Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: setstatuscheckcontexts
+        method: PUT
+        description: GitHub Set Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removestatuscheckcontexts
+        method: DELETE
+        description: GitHub Remove Status Check Contexts
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-branches-status-rest
+    port: 8080
+    description: REST adapter for github-repos-api — Status. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks
+      name: repos-owner-repo-branches-branch-protection-required-status-checks
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks.
+      operations:
+      - method: GET
+        name: getstatuschecksprotection
+        description: GitHub Get Status Checks Protection
+        call: repo-branches-status.getstatuschecksprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatestatuscheckprotection
+        description: GitHub Update Status Check Protection
+        call: repo-branches-status.updatestatuscheckprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removestatuscheckprotection
+        description: GitHub Remove Status Check Protection
+        call: repo-branches-status.removestatuscheckprotection
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/required-status-checks/contexts
+      name: repos-owner-repo-branches-branch-protection-required-status-checks-contexts
+      description: REST surface for repos-owner-repo-branches-branch-protection-required_status_checks-contexts.
+      operations:
+      - method: GET
+        name: getallstatuscheckcontexts
+        description: GitHub Get All Status Check Contexts
+        call: repo-branches-status.getallstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addstatuscheckcontexts
+        description: GitHub Add Status Check Contexts
+        call: repo-branches-status.addstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setstatuscheckcontexts
+        description: GitHub Set Status Check Contexts
+        call: repo-branches-status.setstatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removestatuscheckcontexts
+        description: GitHub Remove Status Check Contexts
+        call: repo-branches-status.removestatuscheckcontexts
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-branches-status-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repos-api — Status. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-status-checks-protection
+      description: GitHub Get Status Checks Protection
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-branches-status.getstatuschecksprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-status-check-protection
+      description: GitHub Update Status Check Protection
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-branches-status.updatestatuscheckprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-status-check-protection
+      description: GitHub Remove Status Check Protection
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-branches-status.removestatuscheckprotection
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-status-check
+      description: GitHub Get All Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-branches-status.getallstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-status-check-contexts
+      description: GitHub Add Status Check Contexts
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: repo-branches-status.addstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-status-check-contexts
+      description: GitHub Set Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-branches-status.setstatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-status-check-contexts
+      description: GitHub Remove Status Check Contexts
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-branches-status.removestatuscheckcontexts
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

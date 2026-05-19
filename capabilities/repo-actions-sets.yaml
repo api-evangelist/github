@@ -1,0 +1,437 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Sets
+  description: 'github-repo-actions-api — Sets. 7 operations. Lead operation: GitHub Set Github Actions Cache Usage Policy
+    for Repository. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Sets
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-sets
+    baseUri: ''
+    description: github-repo-actions-api — Sets business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-cache-usage-policy
+      path: /repos/{owner}/{repo}/actions/cache/usage-policy
+      operations:
+      - name: setgithubactionscacheusagepolicyforrepository
+        method: PATCH
+        description: GitHub Set Github Actions Cache Usage Policy for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-oidc-customization-sub
+      path: /repos/{owner}/{repo}/actions/oidc/customization/sub
+      operations:
+      - name: setthecustomizationtemplateforanoidcsubjectclaimforrepository
+        method: PUT
+        description: GitHub Set the Customization Template for an Oidc Subject Claim for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-permissions
+      path: /repos/{owner}/{repo}/actions/permissions
+      operations:
+      - name: setgithubactionspermissionsforrepository
+        method: PUT
+        description: GitHub Set Github Actions Permissions for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-permissions-access
+      path: /repos/{owner}/{repo}/actions/permissions/access
+      operations:
+      - name: setthelevelofaccessforworkflowsoutsideoftherepository
+        method: PUT
+        description: GitHub Set the Level of Access for Workflows Outside of the Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-permissions-selected-actions
+      path: /repos/{owner}/{repo}/actions/permissions/selected-actions
+      operations:
+      - name: setallowedactionsforrepository
+        method: PUT
+        description: GitHub Set Allowed Actions for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-actions-permissions-workflow
+      path: /repos/{owner}/{repo}/actions/permissions/workflow
+      operations:
+      - name: setdefaultworkflowpermissionsforrepository
+        method: PUT
+        description: GitHub Set Default Workflow Permissions for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-actions-runners-runner_id-labels
+      path: /repos/{owner}/{repo}/actions/runners/{runner_id}/labels
+      operations:
+      - name: setcustomlabelsforselfhostedrunnerforrepository
+        method: PUT
+        description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-sets-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Sets. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/cache/usage-policy
+      name: repos-owner-repo-actions-cache-usage-policy
+      description: REST surface for repos-owner-repo-actions-cache-usage-policy.
+      operations:
+      - method: PATCH
+        name: setgithubactionscacheusagepolicyforrepository
+        description: GitHub Set Github Actions Cache Usage Policy for Repository
+        call: repo-actions-sets.setgithubactionscacheusagepolicyforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/oidc/customization/sub
+      name: repos-owner-repo-actions-oidc-customization-sub
+      description: REST surface for repos-owner-repo-actions-oidc-customization-sub.
+      operations:
+      - method: PUT
+        name: setthecustomizationtemplateforanoidcsubjectclaimforrepository
+        description: GitHub Set the Customization Template for an Oidc Subject Claim for Repository
+        call: repo-actions-sets.setthecustomizationtemplateforanoidcsubjectclaimforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions
+      name: repos-owner-repo-actions-permissions
+      description: REST surface for repos-owner-repo-actions-permissions.
+      operations:
+      - method: PUT
+        name: setgithubactionspermissionsforrepository
+        description: GitHub Set Github Actions Permissions for Repository
+        call: repo-actions-sets.setgithubactionspermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions/access
+      name: repos-owner-repo-actions-permissions-access
+      description: REST surface for repos-owner-repo-actions-permissions-access.
+      operations:
+      - method: PUT
+        name: setthelevelofaccessforworkflowsoutsideoftherepository
+        description: GitHub Set the Level of Access for Workflows Outside of the Repository
+        call: repo-actions-sets.setthelevelofaccessforworkflowsoutsideoftherepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions/selected-actions
+      name: repos-owner-repo-actions-permissions-selected-actions
+      description: REST surface for repos-owner-repo-actions-permissions-selected-actions.
+      operations:
+      - method: PUT
+        name: setallowedactionsforrepository
+        description: GitHub Set Allowed Actions for Repository
+        call: repo-actions-sets.setallowedactionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/permissions/workflow
+      name: repos-owner-repo-actions-permissions-workflow
+      description: REST surface for repos-owner-repo-actions-permissions-workflow.
+      operations:
+      - method: PUT
+        name: setdefaultworkflowpermissionsforrepository
+        description: GitHub Set Default Workflow Permissions for Repository
+        call: repo-actions-sets.setdefaultworkflowpermissionsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runners/{runner-id}/labels
+      name: repos-owner-repo-actions-runners-runner-id-labels
+      description: REST surface for repos-owner-repo-actions-runners-runner_id-labels.
+      operations:
+      - method: PUT
+        name: setcustomlabelsforselfhostedrunnerforrepository
+        description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+        call: repo-actions-sets.setcustomlabelsforselfhostedrunnerforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-sets-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Sets. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-set-github-actions-cache
+      description: GitHub Set Github Actions Cache Usage Policy for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setgithubactionscacheusagepolicyforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-customization-template-oidc
+      description: GitHub Set the Customization Template for an Oidc Subject Claim for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setthecustomizationtemplateforanoidcsubjectclaimforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-github-actions-permissions
+      description: GitHub Set Github Actions Permissions for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setgithubactionspermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-level-access-workflows
+      description: GitHub Set the Level of Access for Workflows Outside of the Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setthelevelofaccessforworkflowsoutsideoftherepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-allowed-actions-repository
+      description: GitHub Set Allowed Actions for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setallowedactionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-default-workflow-permissions
+      description: GitHub Set Default Workflow Permissions for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setdefaultworkflowpermissionsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-custom-labels-self
+      description: GitHub Set Custom Labels for Self-hosted Runner for Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: repo-actions-sets.setcustomlabelsforselfhostedrunnerforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

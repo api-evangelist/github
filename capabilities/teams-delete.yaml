@@ -1,0 +1,294 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Delete
+  description: 'GitHub Teams API — Delete. 8 operations. Lead operation: GitHub Delete Team. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-delete
+    baseUri: ''
+    description: GitHub Teams API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug
+      path: /orgs/{org}/teams/{team_slug}
+      operations:
+      - name: deleteteam
+        method: DELETE
+        description: GitHub Delete Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-discussions-discussion_number
+      path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}
+      operations:
+      - name: deletediscussion
+        method: DELETE
+        description: GitHub Delete Discussion
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-discussions-discussion_number-comments-comment_number
+      path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}
+      operations:
+      - name: deletediscussioncomment
+        method: DELETE
+        description: GitHub Delete Discussion Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-discussions-discussion_number-comments-comment_number-r
+      path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}
+      operations:
+      - name: deleteteamdiscussioncommentreaction
+        method: DELETE
+        description: GitHub Delete Team Discussion Comment Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-discussions-discussion_number-reactions-reaction_id
+      path: /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}
+      operations:
+      - name: deleteteamdiscussionreaction
+        method: DELETE
+        description: GitHub Delete Team Discussion Reaction
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id
+      path: /teams/{team_id}
+      operations:
+      - name: deleteteamlegacy
+        method: DELETE
+        description: GitHub Delete Team (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-discussions-discussion_number
+      path: /teams/{team_id}/discussions/{discussion_number}
+      operations:
+      - name: deletediscussionlegacy
+        method: DELETE
+        description: GitHub Delete Discussion (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-discussions-discussion_number-comments-comment_number
+      path: /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}
+      operations:
+      - name: deletediscussioncommentlegacy
+        method: DELETE
+        description: GitHub Delete Discussion Comment (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-delete-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Delete. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}
+      name: orgs-org-teams-team-slug
+      description: REST surface for orgs-org-teams-team_slug.
+      operations:
+      - method: DELETE
+        name: deleteteam
+        description: GitHub Delete Team
+        call: teams-delete.deleteteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/discussions/{discussion-number}
+      name: orgs-org-teams-team-slug-discussions-discussion-number
+      description: REST surface for orgs-org-teams-team_slug-discussions-discussion_number.
+      operations:
+      - method: DELETE
+        name: deletediscussion
+        description: GitHub Delete Discussion
+        call: teams-delete.deletediscussion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/discussions/{discussion-number}/comments/{comment-number}
+      name: orgs-org-teams-team-slug-discussions-discussion-number-comments-comment-number
+      description: REST surface for orgs-org-teams-team_slug-discussions-discussion_number-comments-comment_number.
+      operations:
+      - method: DELETE
+        name: deletediscussioncomment
+        description: GitHub Delete Discussion Comment
+        call: teams-delete.deletediscussioncomment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/discussions/{discussion-number}/comments/{comment-number}/reactions/{reaction-id}
+      name: orgs-org-teams-team-slug-discussions-discussion-number-comments-comment-number-r
+      description: REST surface for orgs-org-teams-team_slug-discussions-discussion_number-comments-comment_number-r.
+      operations:
+      - method: DELETE
+        name: deleteteamdiscussioncommentreaction
+        description: GitHub Delete Team Discussion Comment Reaction
+        call: teams-delete.deleteteamdiscussioncommentreaction
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/discussions/{discussion-number}/reactions/{reaction-id}
+      name: orgs-org-teams-team-slug-discussions-discussion-number-reactions-reaction-id
+      description: REST surface for orgs-org-teams-team_slug-discussions-discussion_number-reactions-reaction_id.
+      operations:
+      - method: DELETE
+        name: deleteteamdiscussionreaction
+        description: GitHub Delete Team Discussion Reaction
+        call: teams-delete.deleteteamdiscussionreaction
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}
+      name: teams-team-id
+      description: REST surface for teams-team_id.
+      operations:
+      - method: DELETE
+        name: deleteteamlegacy
+        description: GitHub Delete Team (legacy)
+        call: teams-delete.deleteteamlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/discussions/{discussion-number}
+      name: teams-team-id-discussions-discussion-number
+      description: REST surface for teams-team_id-discussions-discussion_number.
+      operations:
+      - method: DELETE
+        name: deletediscussionlegacy
+        description: GitHub Delete Discussion (legacy)
+        call: teams-delete.deletediscussionlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/discussions/{discussion-number}/comments/{comment-number}
+      name: teams-team-id-discussions-discussion-number-comments-comment-number
+      description: REST surface for teams-team_id-discussions-discussion_number-comments-comment_number.
+      operations:
+      - method: DELETE
+        name: deletediscussioncommentlegacy
+        description: GitHub Delete Discussion Comment (legacy)
+        call: teams-delete.deletediscussioncommentlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Delete. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-delete-team
+      description: GitHub Delete Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deleteteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-discussion
+      description: GitHub Delete Discussion
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deletediscussion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-discussion-comment
+      description: GitHub Delete Discussion Comment
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deletediscussioncomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-team-discussion-comment
+      description: GitHub Delete Team Discussion Comment Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deleteteamdiscussioncommentreaction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-team-discussion-reaction
+      description: GitHub Delete Team Discussion Reaction
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deleteteamdiscussionreaction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-team-legacy
+      description: GitHub Delete Team (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deleteteamlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-discussion-legacy
+      description: GitHub Delete Discussion (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deletediscussionlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-discussion-comment-legacy
+      description: GitHub Delete Discussion Comment (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-delete.deletediscussioncommentlegacy
+      outputParameters:
+      - type: object
+        mapping: $.

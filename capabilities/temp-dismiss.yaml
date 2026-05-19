@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Dismiss
+  description: 'GitHub Repos API — Dismiss. 1 operations. Lead operation: Dismiss Review For Pull Request. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Dismiss
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-dismiss
+    baseUri: ''
+    description: GitHub Repos API — Dismiss business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id-dismissals
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
+      operations:
+      - name: dismissreviewforpullrequest
+        method: PUT
+        description: Dismiss Review For Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-dismiss-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Dismiss. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}/dismissals
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id-dismissals
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id-dismissals.
+      operations:
+      - method: PUT
+        name: dismissreviewforpullrequest
+        description: Dismiss Review For Pull Request
+        call: temp-dismiss.dismissreviewforpullrequest
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-dismiss-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Dismiss. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: dismiss-review-pull-request
+      description: Dismiss Review For Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-dismiss.dismissreviewforpullrequest
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

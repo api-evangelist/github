@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Projects API — Project
+  description: 'GitHub Projects API — Project. 1 operations. Lead operation: GitHub Create an Organization Project. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Project
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: projects-project
+    baseUri: ''
+    description: GitHub Projects API — Project business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-projects
+      path: /orgs/{org}/projects
+      operations:
+      - name: createanorganizationproject
+        method: POST
+        description: GitHub Create an Organization Project
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: projects-project-rest
+    port: 8080
+    description: REST adapter for GitHub Projects API — Project. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/projects
+      name: orgs-org-projects
+      description: REST surface for orgs-org-projects.
+      operations:
+      - method: POST
+        name: createanorganizationproject
+        description: GitHub Create an Organization Project
+        call: projects-project.createanorganizationproject
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: projects-project-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Projects API — Project. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-create-organization-project
+      description: GitHub Create an Organization Project
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: projects-project.createanorganizationproject
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,238 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Installation API — Lists
+  description: 'GitHub Installation API — Lists. 6 operations. Lead operation: GitHub List Installation Requests for the Authenticated
+    App. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Lists
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: installation-lists
+    baseUri: ''
+    description: GitHub Installation API — Lists business capability. Self-contained, no shared references.
+    resources:
+    - name: app-installation-requests
+      path: /app/installation-requests
+      operations:
+      - name: listinstallationrequestsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installation Requests for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-installations
+      path: /app/installations
+      operations:
+      - name: listinstallationsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installations for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: outdated
+          in: query
+          type: string
+    - name: installation-repositories
+      path: /installation/repositories
+      operations:
+      - name: listrepositoriesaccessibletotheappinstallation
+        method: GET
+        description: GitHub List Repositories Accessible to the App Installation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-installations
+      path: /orgs/{org}/installations
+      operations:
+      - name: listappinstallationsforanorganization
+        method: GET
+        description: GitHub List App Installations for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-installations
+      path: /user/installations
+      operations:
+      - name: listappinstallationsaccessibletotheuseraccesstoken
+        method: GET
+        description: GitHub List App Installations Accessible to the User Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: user-installations-installation_id-repositories
+      path: /user/installations/{installation_id}/repositories
+      operations:
+      - name: listrepositoriesaccessibletotheuseraccesstoken
+        method: GET
+        description: GitHub List Repositories Accessible to the User Access Token
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: installation-lists-rest
+    port: 8080
+    description: REST adapter for GitHub Installation API — Lists. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app/installation-requests
+      name: app-installation-requests
+      description: REST surface for app-installation-requests.
+      operations:
+      - method: GET
+        name: listinstallationrequestsfortheauthenticatedapp
+        description: GitHub List Installation Requests for the Authenticated App
+        call: installation-lists.listinstallationrequestsfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations
+      name: app-installations
+      description: REST surface for app-installations.
+      operations:
+      - method: GET
+        name: listinstallationsfortheauthenticatedapp
+        description: GitHub List Installations for the Authenticated App
+        call: installation-lists.listinstallationsfortheauthenticatedapp
+        with:
+          outdated: rest.outdated
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/installation/repositories
+      name: installation-repositories
+      description: REST surface for installation-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesaccessibletotheappinstallation
+        description: GitHub List Repositories Accessible to the App Installation
+        call: installation-lists.listrepositoriesaccessibletotheappinstallation
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/installations
+      name: orgs-org-installations
+      description: REST surface for orgs-org-installations.
+      operations:
+      - method: GET
+        name: listappinstallationsforanorganization
+        description: GitHub List App Installations for an Organization
+        call: installation-lists.listappinstallationsforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations
+      name: user-installations
+      description: REST surface for user-installations.
+      operations:
+      - method: GET
+        name: listappinstallationsaccessibletotheuseraccesstoken
+        description: GitHub List App Installations Accessible to the User Access Token
+        call: installation-lists.listappinstallationsaccessibletotheuseraccesstoken
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/user/installations/{installation-id}/repositories
+      name: user-installations-installation-id-repositories
+      description: REST surface for user-installations-installation_id-repositories.
+      operations:
+      - method: GET
+        name: listrepositoriesaccessibletotheuseraccesstoken
+        description: GitHub List Repositories Accessible to the User Access Token
+        call: installation-lists.listrepositoriesaccessibletotheuseraccesstoken
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: installation-lists-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Installation API — Lists. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-installation-requests-authenticated
+      description: GitHub List Installation Requests for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listinstallationrequestsfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-installations-authenticated-app
+      description: GitHub List Installations for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listinstallationsfortheauthenticatedapp
+      with:
+        outdated: tools.outdated
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-accessible-app
+      description: GitHub List Repositories Accessible to the App Installation
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listrepositoriesaccessibletotheappinstallation
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-app-installations-organization
+      description: GitHub List App Installations for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listappinstallationsforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-app-installations-accessible
+      description: GitHub List App Installations Accessible to the User Access Token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listappinstallationsaccessibletotheuseraccesstoken
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-repositories-accessible-user
+      description: GitHub List Repositories Accessible to the User Access Token
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: installation-lists.listrepositoriesaccessibletotheuseraccesstoken
+      outputParameters:
+      - type: object
+        mapping: $.

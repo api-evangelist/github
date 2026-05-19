@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Dependabot
+  description: 'GitHub Org API — Dependabot. 1 operations. Lead operation: GitHub List Dependabot Alerts for an Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Dependabot
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-dependabot
+    baseUri: ''
+    description: GitHub Org API — Dependabot business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-dependabot-alerts
+      path: /orgs/{org}/dependabot/alerts
+      operations:
+      - name: listdependabotalertsforanorganization
+        method: GET
+        description: GitHub List Dependabot Alerts for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-dependabot-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Dependabot. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/dependabot/alerts
+      name: orgs-org-dependabot-alerts
+      description: REST surface for orgs-org-dependabot-alerts.
+      operations:
+      - method: GET
+        name: listdependabotalertsforanorganization
+        description: GitHub List Dependabot Alerts for an Organization
+        call: organizations-dependabot.listdependabotalertsforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-dependabot-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Dependabot. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-dependabot-alerts-organization
+      description: GitHub List Dependabot Alerts for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-dependabot.listdependabotalertsforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

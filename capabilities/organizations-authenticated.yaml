@@ -1,0 +1,181 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Authenticated
+  description: 'GitHub Org API — Authenticated. 4 operations. Lead operation: GitHub Get an Organization Installation for
+    the Authenticated App. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Authenticated
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-authenticated
+    baseUri: ''
+    description: GitHub Org API — Authenticated business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-installation
+      path: /orgs/{org}/installation
+      operations:
+      - name: getanorganizationinstallationfortheauthenticatedapp
+        method: GET
+        description: GitHub Get an Organization Installation for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-issues
+      path: /orgs/{org}/issues
+      operations:
+      - name: listorganizationissuesassignedtotheauthenticateduser
+        method: GET
+        description: GitHub List Organization Issues Assigned to the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: Indicates which sorts of issues to return. `assigned` means issues assigned to you. `created` means
+            issues created by you. `mentioned` means issues mentioning y
+        - name: state
+          in: query
+          type: string
+          description: Indicates the state of the issues to return.
+        - name: sort
+          in: query
+          type: string
+          description: What to sort results by.
+    - name: orgs-org-public_members-username
+      path: /orgs/{org}/public_members/{username}
+      operations:
+      - name: setpublicorganizationmembershipfortheauthenticateduser
+        method: PUT
+        description: GitHub Set Public Organization Membership for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removepublicorganizationmembershipfortheauthenticateduser
+        method: DELETE
+        description: GitHub Remove Public Organization Membership for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-authenticated-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Authenticated. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/orgs/{org}/installation
+      name: orgs-org-installation
+      description: REST surface for orgs-org-installation.
+      operations:
+      - method: GET
+        name: getanorganizationinstallationfortheauthenticatedapp
+        description: GitHub Get an Organization Installation for the Authenticated App
+        call: organizations-authenticated.getanorganizationinstallationfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/issues
+      name: orgs-org-issues
+      description: REST surface for orgs-org-issues.
+      operations:
+      - method: GET
+        name: listorganizationissuesassignedtotheauthenticateduser
+        description: GitHub List Organization Issues Assigned to the Authenticated User
+        call: organizations-authenticated.listorganizationissuesassignedtotheauthenticateduser
+        with:
+          filter: rest.filter
+          state: rest.state
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/public-members/{username}
+      name: orgs-org-public-members-username
+      description: REST surface for orgs-org-public_members-username.
+      operations:
+      - method: PUT
+        name: setpublicorganizationmembershipfortheauthenticateduser
+        description: GitHub Set Public Organization Membership for the Authenticated User
+        call: organizations-authenticated.setpublicorganizationmembershipfortheauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removepublicorganizationmembershipfortheauthenticateduser
+        description: GitHub Remove Public Organization Membership for the Authenticated User
+        call: organizations-authenticated.removepublicorganizationmembershipfortheauthenticateduser
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-authenticated-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Authenticated. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-organization-installation-authenticated
+      description: GitHub Get an Organization Installation for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-authenticated.getanorganizationinstallationfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-organization-issues-assigned
+      description: GitHub List Organization Issues Assigned to the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-authenticated.listorganizationissuesassignedtotheauthenticateduser
+      with:
+        filter: tools.filter
+        state: tools.state
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-public-organization-membership
+      description: GitHub Set Public Organization Membership for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-authenticated.setpublicorganizationmembershipfortheauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-public-organization-membership
+      description: GitHub Remove Public Organization Membership for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-authenticated.removepublicorganizationmembershipfortheauthenticateduser
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Remove
+  description: 'GitHub Application API — Remove. 1 operations. Lead operation: GitHub Remove App Access Restrictions. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Remove
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-remove
+    baseUri: ''
+    description: GitHub Application API — Remove business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      operations:
+      - name: removeappaccessrestrictions
+        method: DELETE
+        description: GitHub Remove App Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-remove-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Remove. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps
+      name: repos-owner-repo-branches-branch-protection-restrictions-apps
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-apps.
+      operations:
+      - method: DELETE
+        name: removeappaccessrestrictions
+        description: GitHub Remove App Access Restrictions
+        call: app-remove.removeappaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-remove-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Remove. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-remove-app-access-restrictions
+      description: GitHub Remove App Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: app-remove.removeappaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Notifications API — Delete
+  description: 'GitHub Notifications API — Delete. 1 operations. Lead operation: GitHub Delete Thread Subscription. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Delete
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: notifications-delete
+    baseUri: ''
+    description: GitHub Notifications API — Delete business capability. Self-contained, no shared references.
+    resources:
+    - name: notifications-threads-thread_id-subscription
+      path: /notifications/threads/{thread_id}/subscription
+      operations:
+      - name: deletethreadsubscription
+        method: DELETE
+        description: GitHub Delete Thread Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: notifications-delete-rest
+    port: 8080
+    description: REST adapter for GitHub Notifications API — Delete. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/notifications/threads/{thread-id}/subscription
+      name: notifications-threads-thread-id-subscription
+      description: REST surface for notifications-threads-thread_id-subscription.
+      operations:
+      - method: DELETE
+        name: deletethreadsubscription
+        description: GitHub Delete Thread Subscription
+        call: notifications-delete.deletethreadsubscription
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: notifications-delete-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Notifications API — Delete. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-delete-thread-subscription
+      description: GitHub Delete Thread Subscription
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: notifications-delete.deletethreadsubscription
+      outputParameters:
+      - type: object
+        mapping: $.

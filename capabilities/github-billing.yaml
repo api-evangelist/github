@@ -1,0 +1,99 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Billing
+  description: 'GitHub v3 REST API — Billing. 2 operations. Lead operation: GitHub Get GitHub Advanced Security Active Committers
+    for an Enterprise. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Billing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-billing
+    baseUri: ''
+    description: GitHub v3 REST API — Billing business capability. Self-contained, no shared references.
+    resources:
+    - name: enterprises-enterprise-settings-billing-advanced-security
+      path: /enterprises/{enterprise}/settings/billing/advanced-security
+      operations:
+      - name: billinggetgithubadvancedsecuritybillingghe
+        method: GET
+        description: GitHub Get GitHub Advanced Security Active Committers for an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-settings-billing-advanced-security
+      path: /orgs/{org}/settings/billing/advanced-security
+      operations:
+      - name: billinggetgithubadvancedsecuritybillingorg
+        method: GET
+        description: GitHub Get GitHub Advanced Security Active Committers for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: github-billing-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Billing. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/enterprises/{enterprise}/settings/billing/advanced-security
+      name: enterprises-enterprise-settings-billing-advanced-security
+      description: REST surface for enterprises-enterprise-settings-billing-advanced-security.
+      operations:
+      - method: GET
+        name: billinggetgithubadvancedsecuritybillingghe
+        description: GitHub Get GitHub Advanced Security Active Committers for an Enterprise
+        call: github-billing.billinggetgithubadvancedsecuritybillingghe
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/settings/billing/advanced-security
+      name: orgs-org-settings-billing-advanced-security
+      description: REST surface for orgs-org-settings-billing-advanced-security.
+      operations:
+      - method: GET
+        name: billinggetgithubadvancedsecuritybillingorg
+        description: GitHub Get GitHub Advanced Security Active Committers for an Organization
+        call: github-billing.billinggetgithubadvancedsecuritybillingorg
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-billing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Billing. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-get-github-advanced-security
+      description: GitHub Get GitHub Advanced Security Active Committers for an Enterprise
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-billing.billinggetgithubadvancedsecuritybillingghe
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-github-advanced-security-2
+      description: GitHub Get GitHub Advanced Security Active Committers for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-billing.billinggetgithubadvancedsecuritybillingorg
+      outputParameters:
+      - type: object
+        mapping: $.

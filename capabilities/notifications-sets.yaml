@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Notifications API — Sets
+  description: 'GitHub Notifications API — Sets. 1 operations. Lead operation: GitHub Set Thread Subscription. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Sets
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: notifications-sets
+    baseUri: ''
+    description: GitHub Notifications API — Sets business capability. Self-contained, no shared references.
+    resources:
+    - name: notifications-threads-thread_id-subscription
+      path: /notifications/threads/{thread_id}/subscription
+      operations:
+      - name: setthreadsubscription
+        method: PUT
+        description: GitHub Set Thread Subscription
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: notifications-sets-rest
+    port: 8080
+    description: REST adapter for GitHub Notifications API — Sets. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/notifications/threads/{thread-id}/subscription
+      name: notifications-threads-thread-id-subscription
+      description: REST surface for notifications-threads-thread_id-subscription.
+      operations:
+      - method: PUT
+        name: setthreadsubscription
+        description: GitHub Set Thread Subscription
+        call: notifications-sets.setthreadsubscription
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: notifications-sets-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Notifications API — Sets. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-set-thread-subscription
+      description: GitHub Set Thread Subscription
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: notifications-sets.setthreadsubscription
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

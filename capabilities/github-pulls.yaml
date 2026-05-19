@@ -1,0 +1,1011 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Pulls
+  description: 'GitHub v3 REST API — Pulls. 27 operations. Lead operation: GitHub List Pull Requests. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Pulls
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-pulls
+    baseUri: ''
+    description: GitHub v3 REST API — Pulls business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-pulls
+      path: /repos/{owner}/{repo}/pulls
+      operations:
+      - name: pullslist
+        method: GET
+        description: GitHub List Pull Requests
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: Either `open`, `closed`, or `all` to filter by state.
+        - name: head
+          in: query
+          type: string
+          description: 'Filter pulls by head user or head organization and branch name in the format of `user:ref-name` or
+            `organization:ref-name`. For example: `github:new-script-form'
+        - name: base
+          in: query
+          type: string
+          description: 'Filter pulls by base branch name. Example: `gh-pages`.'
+        - name: sort
+          in: query
+          type: string
+          description: 'What to sort results by. `popularity` will sort by the number of comments. `long-running` will sort
+            by date created and will limit the results to pull requests '
+        - name: direction
+          in: query
+          type: string
+          description: 'The direction of the sort. Default: `desc` when sort is `created` or sort is not specified, otherwise
+            `asc`.'
+      - name: pullscreate
+        method: POST
+        description: GitHub Create a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-comments
+      path: /repos/{owner}/{repo}/pulls/comments
+      operations:
+      - name: pullslistreviewcommentsforrepo
+        method: GET
+        description: GitHub List Review Comments in a Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+        - name: direction
+          in: query
+          type: string
+          description: The direction to sort results. Ignored without `sort` parameter.
+    - name: repos-owner-repo-pulls-comments-comment_id
+      path: /repos/{owner}/{repo}/pulls/comments/{comment_id}
+      operations:
+      - name: pullsgetreviewcomment
+        method: GET
+        description: GitHub Get a Review Comment for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullsupdatereviewcomment
+        method: PATCH
+        description: GitHub Update a Review Comment for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: pullsdeletereviewcomment
+        method: DELETE
+        description: GitHub Delete a Review Comment for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pulls-pull_number
+      path: /repos/{owner}/{repo}/pulls/{pull_number}
+      operations:
+      - name: pullsget
+        method: GET
+        description: GitHub Get a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullsupdate
+        method: PATCH
+        description: GitHub Update a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-pulls-pull_number-comments
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/comments
+      operations:
+      - name: pullslistreviewcomments
+        method: GET
+        description: GitHub List Review Comments on a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: direction
+          in: query
+          type: string
+          description: The direction to sort results. Ignored without `sort` parameter.
+      - name: pullscreatereviewcomment
+        method: POST
+        description: GitHub Create a Review Comment for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-comments-comment_id-replies
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies
+      operations:
+      - name: pullscreatereplyforreviewcomment
+        method: POST
+        description: GitHub Create a Reply for a Review Comment
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-commits
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/commits
+      operations:
+      - name: pullslistcommits
+        method: GET
+        description: GitHub List Commits on a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pulls-pull_number-files
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/files
+      operations:
+      - name: pullslistfiles
+        method: GET
+        description: GitHub List Pull Requests Files
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pulls-pull_number-merge
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/merge
+      operations:
+      - name: pullscheckifmerged
+        method: GET
+        description: GitHub Check if a Pull Request Has Been Merged
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullsmerge
+        method: PUT
+        description: GitHub Merge a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-pulls-pull_number-requested_reviewers
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers
+      operations:
+      - name: pullslistrequestedreviewers
+        method: GET
+        description: GitHub Get All Requested Reviewers for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullsrequestreviewers
+        method: POST
+        description: GitHub Request Reviewers for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: pullsremoverequestedreviewers
+        method: DELETE
+        description: GitHub Remove Requested Reviewers from a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-reviews
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews
+      operations:
+      - name: pullslistreviews
+        method: GET
+        description: GitHub List Reviews for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullscreatereview
+        method: POST
+        description: GitHub Create a Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}
+      operations:
+      - name: pullsgetreview
+        method: GET
+        description: GitHub Get a Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: pullsupdatereview
+        method: PUT
+        description: GitHub Update a Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: pullsdeletependingreview
+        method: DELETE
+        description: GitHub Delete a Pending Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id-comments
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments
+      operations:
+      - name: pullslistcommentsforreview
+        method: GET
+        description: GitHub List Comments for a Pull Request Review
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id-dismissals
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals
+      operations:
+      - name: pullsdismissreview
+        method: PUT
+        description: GitHub Dismiss a Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-reviews-review_id-events
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events
+      operations:
+      - name: pullssubmitreview
+        method: POST
+        description: GitHub Submit a Review for a Pull Request
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: repos-owner-repo-pulls-pull_number-update-branch
+      path: /repos/{owner}/{repo}/pulls/{pull_number}/update-branch
+      operations:
+      - name: pullsupdatebranch
+        method: PUT
+        description: GitHub Update a Pull Request Branch
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: github-pulls-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Pulls. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/pulls
+      name: repos-owner-repo-pulls
+      description: REST surface for repos-owner-repo-pulls.
+      operations:
+      - method: GET
+        name: pullslist
+        description: GitHub List Pull Requests
+        call: github-pulls.pullslist
+        with:
+          state: rest.state
+          head: rest.head
+          base: rest.base
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: pullscreate
+        description: GitHub Create a Pull Request
+        call: github-pulls.pullscreate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/comments
+      name: repos-owner-repo-pulls-comments
+      description: REST surface for repos-owner-repo-pulls-comments.
+      operations:
+      - method: GET
+        name: pullslistreviewcommentsforrepo
+        description: GitHub List Review Comments in a Repository
+        call: github-pulls.pullslistreviewcommentsforrepo
+        with:
+          sort: rest.sort
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/comments/{comment-id}
+      name: repos-owner-repo-pulls-comments-comment-id
+      description: REST surface for repos-owner-repo-pulls-comments-comment_id.
+      operations:
+      - method: GET
+        name: pullsgetreviewcomment
+        description: GitHub Get a Review Comment for a Pull Request
+        call: github-pulls.pullsgetreviewcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: pullsupdatereviewcomment
+        description: GitHub Update a Review Comment for a Pull Request
+        call: github-pulls.pullsupdatereviewcomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: pullsdeletereviewcomment
+        description: GitHub Delete a Review Comment for a Pull Request
+        call: github-pulls.pullsdeletereviewcomment
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}
+      name: repos-owner-repo-pulls-pull-number
+      description: REST surface for repos-owner-repo-pulls-pull_number.
+      operations:
+      - method: GET
+        name: pullsget
+        description: GitHub Get a Pull Request
+        call: github-pulls.pullsget
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: pullsupdate
+        description: GitHub Update a Pull Request
+        call: github-pulls.pullsupdate
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/comments
+      name: repos-owner-repo-pulls-pull-number-comments
+      description: REST surface for repos-owner-repo-pulls-pull_number-comments.
+      operations:
+      - method: GET
+        name: pullslistreviewcomments
+        description: GitHub List Review Comments on a Pull Request
+        call: github-pulls.pullslistreviewcomments
+        with:
+          direction: rest.direction
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: pullscreatereviewcomment
+        description: GitHub Create a Review Comment for a Pull Request
+        call: github-pulls.pullscreatereviewcomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/comments/{comment-id}/replies
+      name: repos-owner-repo-pulls-pull-number-comments-comment-id-replies
+      description: REST surface for repos-owner-repo-pulls-pull_number-comments-comment_id-replies.
+      operations:
+      - method: POST
+        name: pullscreatereplyforreviewcomment
+        description: GitHub Create a Reply for a Review Comment
+        call: github-pulls.pullscreatereplyforreviewcomment
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/commits
+      name: repos-owner-repo-pulls-pull-number-commits
+      description: REST surface for repos-owner-repo-pulls-pull_number-commits.
+      operations:
+      - method: GET
+        name: pullslistcommits
+        description: GitHub List Commits on a Pull Request
+        call: github-pulls.pullslistcommits
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/files
+      name: repos-owner-repo-pulls-pull-number-files
+      description: REST surface for repos-owner-repo-pulls-pull_number-files.
+      operations:
+      - method: GET
+        name: pullslistfiles
+        description: GitHub List Pull Requests Files
+        call: github-pulls.pullslistfiles
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/merge
+      name: repos-owner-repo-pulls-pull-number-merge
+      description: REST surface for repos-owner-repo-pulls-pull_number-merge.
+      operations:
+      - method: GET
+        name: pullscheckifmerged
+        description: GitHub Check if a Pull Request Has Been Merged
+        call: github-pulls.pullscheckifmerged
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: pullsmerge
+        description: GitHub Merge a Pull Request
+        call: github-pulls.pullsmerge
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/requested-reviewers
+      name: repos-owner-repo-pulls-pull-number-requested-reviewers
+      description: REST surface for repos-owner-repo-pulls-pull_number-requested_reviewers.
+      operations:
+      - method: GET
+        name: pullslistrequestedreviewers
+        description: GitHub Get All Requested Reviewers for a Pull Request
+        call: github-pulls.pullslistrequestedreviewers
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: pullsrequestreviewers
+        description: GitHub Request Reviewers for a Pull Request
+        call: github-pulls.pullsrequestreviewers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: pullsremoverequestedreviewers
+        description: GitHub Remove Requested Reviewers from a Pull Request
+        call: github-pulls.pullsremoverequestedreviewers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews
+      name: repos-owner-repo-pulls-pull-number-reviews
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews.
+      operations:
+      - method: GET
+        name: pullslistreviews
+        description: GitHub List Reviews for a Pull Request
+        call: github-pulls.pullslistreviews
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: pullscreatereview
+        description: GitHub Create a Review for a Pull Request
+        call: github-pulls.pullscreatereview
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id.
+      operations:
+      - method: GET
+        name: pullsgetreview
+        description: GitHub Get a Review for a Pull Request
+        call: github-pulls.pullsgetreview
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: pullsupdatereview
+        description: GitHub Update a Review for a Pull Request
+        call: github-pulls.pullsupdatereview
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: pullsdeletependingreview
+        description: GitHub Delete a Pending Review for a Pull Request
+        call: github-pulls.pullsdeletependingreview
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}/comments
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id-comments
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id-comments.
+      operations:
+      - method: GET
+        name: pullslistcommentsforreview
+        description: GitHub List Comments for a Pull Request Review
+        call: github-pulls.pullslistcommentsforreview
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}/dismissals
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id-dismissals
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id-dismissals.
+      operations:
+      - method: PUT
+        name: pullsdismissreview
+        description: GitHub Dismiss a Review for a Pull Request
+        call: github-pulls.pullsdismissreview
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/reviews/{review-id}/events
+      name: repos-owner-repo-pulls-pull-number-reviews-review-id-events
+      description: REST surface for repos-owner-repo-pulls-pull_number-reviews-review_id-events.
+      operations:
+      - method: POST
+        name: pullssubmitreview
+        description: GitHub Submit a Review for a Pull Request
+        call: github-pulls.pullssubmitreview
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pulls/{pull-number}/update-branch
+      name: repos-owner-repo-pulls-pull-number-update-branch
+      description: REST surface for repos-owner-repo-pulls-pull_number-update-branch.
+      operations:
+      - method: PUT
+        name: pullsupdatebranch
+        description: GitHub Update a Pull Request Branch
+        call: github-pulls.pullsupdatebranch
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-pulls-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Pulls. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-pull-requests
+      description: GitHub List Pull Requests
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslist
+      with:
+        state: tools.state
+        head: tools.head
+        base: tools.base
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-pull-request
+      description: GitHub Create a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullscreate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-review-comments-repository
+      description: GitHub List Review Comments in a Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistreviewcommentsforrepo
+      with:
+        sort: tools.sort
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-review-comment-pull
+      description: GitHub Get a Review Comment for a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsgetreviewcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-review-comment-pull
+      description: GitHub Update a Review Comment for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsupdatereviewcomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-review-comment-pull
+      description: GitHub Delete a Review Comment for a Pull Request
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-pulls.pullsdeletereviewcomment
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-pull-request
+      description: GitHub Get a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsget
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-pull-request
+      description: GitHub Update a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsupdate
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-review-comments-pull
+      description: GitHub List Review Comments on a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistreviewcomments
+      with:
+        direction: tools.direction
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-review-comment-pull
+      description: GitHub Create a Review Comment for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullscreatereviewcomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-reply-review-comment
+      description: GitHub Create a Reply for a Review Comment
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullscreatereplyforreviewcomment
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-commits-pull-request
+      description: GitHub List Commits on a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistcommits
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-pull-requests-files
+      description: GitHub List Pull Requests Files
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistfiles
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-check-if-pull-request
+      description: GitHub Check if a Pull Request Has Been Merged
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullscheckifmerged
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-merge-pull-request
+      description: GitHub Merge a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsmerge
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-all-requested-reviewers
+      description: GitHub Get All Requested Reviewers for a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistrequestedreviewers
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-request-reviewers-pull-request
+      description: GitHub Request Reviewers for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullsrequestreviewers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-requested-reviewers-pull
+      description: GitHub Remove Requested Reviewers from a Pull Request
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-pulls.pullsremoverequestedreviewers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-reviews-pull-request
+      description: GitHub List Reviews for a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistreviews
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-create-review-pull-request
+      description: GitHub Create a Review for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullscreatereview
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-review-pull-request
+      description: GitHub Get a Review for a Pull Request
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsgetreview
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-review-pull-request
+      description: GitHub Update a Review for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsupdatereview
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-pending-review-pull
+      description: GitHub Delete a Pending Review for a Pull Request
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: github-pulls.pullsdeletependingreview
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-comments-pull-request
+      description: GitHub List Comments for a Pull Request Review
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullslistcommentsforreview
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-dismiss-review-pull-request
+      description: GitHub Dismiss a Review for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsdismissreview
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-submit-review-pull-request
+      description: GitHub Submit a Review for a Pull Request
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: github-pulls.pullssubmitreview
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-update-pull-request-branch
+      description: GitHub Update a Pull Request Branch
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: github-pulls.pullsupdatebranch
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

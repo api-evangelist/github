@@ -1,0 +1,231 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Logs
+  description: 'github-repo-actions-api — Logs. 4 operations. Lead operation: GitHub Download Job Logs for Workflow Run. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Logs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-logs
+    baseUri: ''
+    description: github-repo-actions-api — Logs business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-jobs-job_id-logs
+      path: /repos/{owner}/{repo}/actions/jobs/{job_id}/logs
+      operations:
+      - name: downloadjoblogsforworkflowrun
+        method: GET
+        description: GitHub Download Job Logs for Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runs-run_id-attempts-attempt_number-logs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs
+      operations:
+      - name: downloadworkflowrunattemptlogs
+        method: GET
+        description: GitHub Download Workflow Run Attempt Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-actions-runs-run_id-logs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/logs
+      operations:
+      - name: downloadworkflowrunlogs
+        method: GET
+        description: GitHub Download Workflow Run Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: deleteworkflowrunlogs
+        method: DELETE
+        description: GitHub Delete Workflow Run Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-logs-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Logs. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/jobs/{job-id}/logs
+      name: repos-owner-repo-actions-jobs-job-id-logs
+      description: REST surface for repos-owner-repo-actions-jobs-job_id-logs.
+      operations:
+      - method: GET
+        name: downloadjoblogsforworkflowrun
+        description: GitHub Download Job Logs for Workflow Run
+        call: repo-actions-logs.downloadjoblogsforworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/attempts/{attempt-number}/logs
+      name: repos-owner-repo-actions-runs-run-id-attempts-attempt-number-logs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-attempts-attempt_number-logs.
+      operations:
+      - method: GET
+        name: downloadworkflowrunattemptlogs
+        description: GitHub Download Workflow Run Attempt Logs
+        call: repo-actions-logs.downloadworkflowrunattemptlogs
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/logs
+      name: repos-owner-repo-actions-runs-run-id-logs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-logs.
+      operations:
+      - method: GET
+        name: downloadworkflowrunlogs
+        description: GitHub Download Workflow Run Logs
+        call: repo-actions-logs.downloadworkflowrunlogs
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteworkflowrunlogs
+        description: GitHub Delete Workflow Run Logs
+        call: repo-actions-logs.deleteworkflowrunlogs
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-logs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Logs. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-download-job-logs-workflow
+      description: GitHub Download Job Logs for Workflow Run
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-logs.downloadjoblogsforworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-download-workflow-run-attempt
+      description: GitHub Download Workflow Run Attempt Logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-logs.downloadworkflowrunattemptlogs
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-download-workflow-run-logs
+      description: GitHub Download Workflow Run Logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-logs.downloadworkflowrunlogs
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-workflow-run-logs
+      description: GitHub Delete Workflow Run Logs
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: repo-actions-logs.deleteworkflowrunlogs
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

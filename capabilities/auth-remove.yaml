@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Remove
+  description: 'GitHub Auth API — Remove. 1 operations. Lead operation: GitHub Remove an Authorized Ssh Key. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Remove
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-remove
+    baseUri: ''
+    description: GitHub Auth API — Remove business capability. Self-contained, no shared references.
+    resources:
+    - name: setup-api-settings-authorized-keys
+      path: /setup/api/settings/authorized-keys
+      operations:
+      - name: removeanauthorizedsshkey
+        method: DELETE
+        description: GitHub Remove an Authorized Ssh Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-remove-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Remove. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/setup/api/settings/authorized-keys
+      name: setup-api-settings-authorized-keys
+      description: REST surface for setup-api-settings-authorized-keys.
+      operations:
+      - method: DELETE
+        name: removeanauthorizedsshkey
+        description: GitHub Remove an Authorized Ssh Key
+        call: auth-remove.removeanauthorizedsshkey
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-remove-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Remove. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-remove-authorized-ssh-key
+      description: GitHub Remove an Authorized Ssh Key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: auth-remove.removeanauthorizedsshkey
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,88 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Applications
+  description: 'github-repo-actions-api — Applications. 1 operations. Lead operation: GitHub List Runner Applications for
+    Repository. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Applications
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-applications
+    baseUri: ''
+    description: github-repo-actions-api — Applications business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-runners-downloads
+      path: /repos/{owner}/{repo}/actions/runners/downloads
+      operations:
+      - name: listrunnerapplicationsforrepository
+        method: GET
+        description: GitHub List Runner Applications for Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-applications-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Applications. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/runners/downloads
+      name: repos-owner-repo-actions-runners-downloads
+      description: REST surface for repos-owner-repo-actions-runners-downloads.
+      operations:
+      - method: GET
+        name: listrunnerapplicationsforrepository
+        description: GitHub List Runner Applications for Repository
+        call: repo-actions-applications.listrunnerapplicationsforrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-applications-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Applications. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-list-runner-applications-repository
+      description: GitHub List Runner Applications for Repository
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: repo-actions-applications.listrunnerapplicationsforrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

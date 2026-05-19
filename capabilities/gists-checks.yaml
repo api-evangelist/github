@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Gists API — Checks
+  description: 'GitHub Gists API — Checks. 1 operations. Lead operation: GitHub Check Ifgist is Starred. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Checks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: gists-checks
+    baseUri: ''
+    description: GitHub Gists API — Checks business capability. Self-contained, no shared references.
+    resources:
+    - name: gists-gist_id-star
+      path: /gists/{gist_id}/star
+      operations:
+      - name: checkifgistisstarred
+        method: GET
+        description: GitHub Check Ifgist is Starred
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: gists-checks-rest
+    port: 8080
+    description: REST adapter for GitHub Gists API — Checks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/gists/{gist-id}/star
+      name: gists-gist-id-star
+      description: REST surface for gists-gist_id-star.
+      operations:
+      - method: GET
+        name: checkifgistisstarred
+        description: GitHub Check Ifgist is Starred
+        call: gists-checks.checkifgistisstarred
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: gists-checks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Gists API — Checks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-check-ifgist-is-starred
+      description: GitHub Check Ifgist is Starred
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: gists-checks.checkifgistisstarred
+      outputParameters:
+      - type: object
+        mapping: $.

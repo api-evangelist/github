@@ -1,0 +1,238 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Accounts
+  description: 'GitHub User API — Accounts. 4 operations. Lead operation: GitHub List Social Accounts for the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Accounts
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-accounts
+    baseUri: ''
+    description: GitHub User API — Accounts business capability. Self-contained, no shared references.
+    resources:
+    - name: user-social_accounts
+      path: /user/social_accounts
+      operations:
+      - name: listsocialaccountsfortheauthenticateduser
+        method: GET
+        description: GitHub List Social Accounts for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+      - name: addsocialaccountsfortheauthenticateduser
+        method: POST
+        description: GitHub Add Social Accounts for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletesocialaccountsfortheauthenticateduser
+        method: DELETE
+        description: GitHub Delete Social Accounts for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: users-username-social_accounts
+      path: /users/{username}/social_accounts
+      operations:
+      - name: listsocialaccountsforuser
+        method: GET
+        description: GitHub List Social Accounts for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-accounts-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Accounts. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/social-accounts
+      name: user-social-accounts
+      description: REST surface for user-social_accounts.
+      operations:
+      - method: GET
+        name: listsocialaccountsfortheauthenticateduser
+        description: GitHub List Social Accounts for the Authenticated User
+        call: users-accounts.listsocialaccountsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: addsocialaccountsfortheauthenticateduser
+        description: GitHub Add Social Accounts for the Authenticated User
+        call: users-accounts.addsocialaccountsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletesocialaccountsfortheauthenticateduser
+        description: GitHub Delete Social Accounts for the Authenticated User
+        call: users-accounts.deletesocialaccountsfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/users/{username}/social-accounts
+      name: users-username-social-accounts
+      description: REST surface for users-username-social_accounts.
+      operations:
+      - method: GET
+        name: listsocialaccountsforuser
+        description: GitHub List Social Accounts for User
+        call: users-accounts.listsocialaccountsforuser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-accounts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Accounts. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-social-accounts-authenticated
+      description: GitHub List Social Accounts for the Authenticated User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-accounts.listsocialaccountsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-social-accounts-authenticated
+      description: GitHub Add Social Accounts for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-accounts.addsocialaccountsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-social-accounts-authenticated
+      description: GitHub Delete Social Accounts for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-accounts.deletesocialaccountsfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-social-accounts-user
+      description: GitHub List Social Accounts for User
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: users-accounts.listsocialaccountsforuser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

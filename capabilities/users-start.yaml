@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Start
+  description: 'GitHub User API — Start. 1 operations. Lead operation: GitHub Start User Migration. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Start
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-start
+    baseUri: ''
+    description: GitHub User API — Start business capability. Self-contained, no shared references.
+    resources:
+    - name: user-migrations
+      path: /user/migrations
+      operations:
+      - name: startusermigration
+        method: POST
+        description: GitHub Start User Migration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-start-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Start. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/migrations
+      name: user-migrations
+      description: REST surface for user-migrations.
+      operations:
+      - method: POST
+        name: startusermigration
+        description: GitHub Start User Migration
+        call: users-start.startusermigration
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-start-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Start. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-start-user-migration
+      description: GitHub Start User Migration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-start.startusermigration
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

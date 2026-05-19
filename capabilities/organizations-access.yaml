@@ -1,0 +1,162 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Access
+  description: 'GitHub Org API — Access. 4 operations. Lead operation: GitHub List Repository Access to Self-hosted Runner
+    Group in an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Access
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-access
+    baseUri: ''
+    description: GitHub Org API — Access business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-actions-runner-groups-runner_group_id-repositories
+      path: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories
+      operations:
+      - name: listrepositoryaccesstoselfhostedrunnergroupinanorganization
+        method: GET
+        description: GitHub List Repository Access to Self-hosted Runner Group in an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: setrepositoryaccessforselfhostedrunnergroupinanorganization
+        method: PUT
+        description: GitHub Set Repository Access for Self-hosted Runner Group in an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: orgs-org-actions-runner-groups-runner_group_id-repositories-repository_id
+      path: /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories/{repository_id}
+      operations:
+      - name: addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        method: PUT
+        description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: removerepositoryaccesstoselfhostedrunnergroupinanorganization
+        method: DELETE
+        description: GitHub Remove Repository Access to Self-hosted Runner Group in an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-access-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Access. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/actions/runner-groups/{runner-group-id}/repositories
+      name: orgs-org-actions-runner-groups-runner-group-id-repositories
+      description: REST surface for orgs-org-actions-runner-groups-runner_group_id-repositories.
+      operations:
+      - method: GET
+        name: listrepositoryaccesstoselfhostedrunnergroupinanorganization
+        description: GitHub List Repository Access to Self-hosted Runner Group in an Organization
+        call: organizations-access.listrepositoryaccesstoselfhostedrunnergroupinanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: setrepositoryaccessforselfhostedrunnergroupinanorganization
+        description: GitHub Set Repository Access for Self-hosted Runner Group in an Organization
+        call: organizations-access.setrepositoryaccessforselfhostedrunnergroupinanorganization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/actions/runner-groups/{runner-group-id}/repositories/{repository-id}
+      name: orgs-org-actions-runner-groups-runner-group-id-repositories-repository-id
+      description: REST surface for orgs-org-actions-runner-groups-runner_group_id-repositories-repository_id.
+      operations:
+      - method: PUT
+        name: addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+        call: organizations-access.addrepositoryaccesstoselfhostedrunnergroupinanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removerepositoryaccesstoselfhostedrunnergroupinanorganization
+        description: GitHub Remove Repository Access to Self-hosted Runner Group in an Organization
+        call: organizations-access.removerepositoryaccesstoselfhostedrunnergroupinanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-access-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Access. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-repository-access-self
+      description: GitHub List Repository Access to Self-hosted Runner Group in an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-access.listrepositoryaccesstoselfhostedrunnergroupinanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-set-repository-access-self
+      description: GitHub Set Repository Access for Self-hosted Runner Group in an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-access.setrepositoryaccessforselfhostedrunnergroupinanorganization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-add-repository-access-self
+      description: GitHub Add Repository Access to Self-hosted Runner Group in an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-access.addrepositoryaccesstoselfhostedrunnergroupinanorganization
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-repository-access-self
+      description: GitHub Remove Repository Access to Self-hosted Runner Group in an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-access.removerepositoryaccesstoselfhostedrunnergroupinanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Hooks
+  description: 'GitHub Org API — Hooks. 1 operations. Lead operation: GitHub List Pre-receive Hooks for an Organization. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Hooks
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-hooks
+    baseUri: ''
+    description: GitHub Org API — Hooks business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-pre-receive-hooks
+      path: /orgs/{org}/pre-receive-hooks
+      operations:
+      - name: listprereceivehooksforanorganization
+        method: GET
+        description: GitHub List Pre-receive Hooks for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sort
+          in: query
+          type: string
+          description: The sort order for the response collection.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-hooks-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Hooks. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/pre-receive-hooks
+      name: orgs-org-pre-receive-hooks
+      description: REST surface for orgs-org-pre-receive-hooks.
+      operations:
+      - method: GET
+        name: listprereceivehooksforanorganization
+        description: GitHub List Pre-receive Hooks for an Organization
+        call: organizations-hooks.listprereceivehooksforanorganization
+        with:
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-hooks-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Hooks. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-pre-receive-hooks
+      description: GitHub List Pre-receive Hooks for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-hooks.listprereceivehooksforanorganization
+      with:
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.

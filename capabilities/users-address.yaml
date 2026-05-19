@@ -1,0 +1,145 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub User API — Address
+  description: 'GitHub User API — Address. 2 operations. Lead operation: GitHub Add an Email Address for the Authenticated
+    User. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Address
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: users-address
+    baseUri: ''
+    description: GitHub User API — Address business capability. Self-contained, no shared references.
+    resources:
+    - name: user-emails
+      path: /user/emails
+      operations:
+      - name: addanemailaddressfortheauthenticateduser
+        method: POST
+        description: GitHub Add an Email Address for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteanemailaddressfortheauthenticateduser
+        method: DELETE
+        description: GitHub Delete an Email Address for the Authenticated User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: users-address-rest
+    port: 8080
+    description: REST adapter for GitHub User API — Address. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/user/emails
+      name: user-emails
+      description: REST surface for user-emails.
+      operations:
+      - method: POST
+        name: addanemailaddressfortheauthenticateduser
+        description: GitHub Add an Email Address for the Authenticated User
+        call: users-address.addanemailaddressfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteanemailaddressfortheauthenticateduser
+        description: GitHub Delete an Email Address for the Authenticated User
+        call: users-address.deleteanemailaddressfortheauthenticateduser
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: users-address-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub User API — Address. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-add-email-address-authenticated
+      description: GitHub Add an Email Address for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: users-address.addanemailaddressfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-email-address-authenticated
+      description: GitHub Delete an Email Address for the Authenticated User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: users-address.deleteanemailaddressfortheauthenticateduser
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

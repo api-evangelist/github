@@ -1,0 +1,152 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — About
+  description: 'GitHub Repos API — About. 2 operations. Lead operation: Get Information About Sarif Upload. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - About
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-about
+    baseUri: ''
+    description: GitHub Repos API — About business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-code-scanning-sarifs-sarif_id
+      path: /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}
+      operations:
+      - name: getinformationaboutsarifupload
+        method: GET
+        description: Get Information About Sarif Upload
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: sarif_id
+          in: path
+          type: string
+          description: The SARIF ID obtained after uploading.
+          required: true
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    - name: repos-owner-repo-pages
+      path: /repos/{owner}/{repo}/pages
+      operations:
+      - name: updateinformationaboutgithubenterpriseserverpagessite
+        method: PUT
+        description: Update Information About Github Enterprise Server Pages Site
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-about-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — About. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/code-scanning/sarifs/{sarif-id}
+      name: repos-owner-repo-code-scanning-sarifs-sarif-id
+      description: REST surface for repos-owner-repo-code-scanning-sarifs-sarif_id.
+      operations:
+      - method: GET
+        name: getinformationaboutsarifupload
+        description: Get Information About Sarif Upload
+        call: temp-about.getinformationaboutsarifupload
+        with:
+          sarif_id: rest.sarif_id
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/pages
+      name: repos-owner-repo-pages
+      description: REST surface for repos-owner-repo-pages.
+      operations:
+      - method: PUT
+        name: updateinformationaboutgithubenterpriseserverpagessite
+        description: Update Information About Github Enterprise Server Pages Site
+        call: temp-about.updateinformationaboutgithubenterpriseserverpagessite
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-about-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — About. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-information-about-sarif-upload
+      description: Get Information About Sarif Upload
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-about.getinformationaboutsarifupload
+      with:
+        sarif_id: tools.sarif_id
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-information-about-github-enterprise
+      description: Update Information About Github Enterprise Server Pages Site
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: temp-about.updateinformationaboutgithubenterpriseserverpagessite
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

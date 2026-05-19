@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Transfers
+  description: 'GitHub Repos API — Transfers. 1 operations. Lead operation: Transfer Repository. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Transfers
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-transfers
+    baseUri: ''
+    description: GitHub Repos API — Transfers business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-transfer
+      path: /repos/{owner}/{repo}/transfer
+      operations:
+      - name: transferrepository
+        method: POST
+        description: Transfer Repository
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-transfers-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Transfers. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/transfer
+      name: repos-owner-repo-transfer
+      description: REST surface for repos-owner-repo-transfer.
+      operations:
+      - method: POST
+        name: transferrepository
+        description: Transfer Repository
+        call: temp-transfers.transferrepository
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-transfers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Transfers. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: transfer-repository
+      description: Transfer Repository
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: temp-transfers.transferrepository
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

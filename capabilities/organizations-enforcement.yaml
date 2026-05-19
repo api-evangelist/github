@@ -1,0 +1,105 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Enforcement
+  description: 'GitHub Org API — Enforcement. 2 operations. Lead operation: GitHub Update Pre-receive Hook Enforcement for
+    an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Enforcement
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-enforcement
+    baseUri: ''
+    description: GitHub Org API — Enforcement business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-pre-receive-hooks-pre_receive_hook_id
+      path: /orgs/{org}/pre-receive-hooks/{pre_receive_hook_id}
+      operations:
+      - name: updateprereceivehookenforcementforanorganization
+        method: PATCH
+        description: GitHub Update Pre-receive Hook Enforcement for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: removeprereceivehookenforcementforanorganization
+        method: DELETE
+        description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-enforcement-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Enforcement. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/pre-receive-hooks/{pre-receive-hook-id}
+      name: orgs-org-pre-receive-hooks-pre-receive-hook-id
+      description: REST surface for orgs-org-pre-receive-hooks-pre_receive_hook_id.
+      operations:
+      - method: PATCH
+        name: updateprereceivehookenforcementforanorganization
+        description: GitHub Update Pre-receive Hook Enforcement for an Organization
+        call: organizations-enforcement.updateprereceivehookenforcementforanorganization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: removeprereceivehookenforcementforanorganization
+        description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+        call: organizations-enforcement.removeprereceivehookenforcementforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-enforcement-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Enforcement. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-update-pre-receive-hook
+      description: GitHub Update Pre-receive Hook Enforcement for an Organization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: organizations-enforcement.updateprereceivehookenforcementforanorganization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-pre-receive-hook
+      description: GitHub Remove Pre-receive Hook Enforcement for an Organization
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: organizations-enforcement.removeprereceivehookenforcementforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

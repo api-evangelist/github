@@ -1,0 +1,77 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub v3 REST API — Enterprise-Admin - Scim
+  description: 'GitHub v3 REST API — Enterprise-Admin - Scim. 1 operations. Lead operation: GitHub List Provisioned SCIM Groups
+    for an Enterprise. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Enterprise-Admin - Scim
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: github-enterprise-admin-scim
+    baseUri: ''
+    description: GitHub v3 REST API — Enterprise-Admin - Scim business capability. Self-contained, no shared references.
+    resources:
+    - name: scim-v2-Groups
+      path: /scim/v2/Groups
+      operations:
+      - name: enterpriseadminlistprovisionedgroupsenterprise
+        method: GET
+        description: GitHub List Provisioned SCIM Groups for an Enterprise
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: filter
+          in: query
+          type: string
+          description: If specified, only results that match the specified filter will be returned. Multiple filters are not
+            supported. Possible filters are `externalId`, `id`, and `d
+  exposes:
+  - type: rest
+    namespace: github-enterprise-admin-scim-rest
+    port: 8080
+    description: REST adapter for GitHub v3 REST API — Enterprise-Admin - Scim. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/scim/v2/groups
+      name: scim-v2-groups
+      description: REST surface for scim-v2-Groups.
+      operations:
+      - method: GET
+        name: enterpriseadminlistprovisionedgroupsenterprise
+        description: GitHub List Provisioned SCIM Groups for an Enterprise
+        call: github-enterprise-admin-scim.enterpriseadminlistprovisionedgroupsenterprise
+        with:
+          filter: rest.filter
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: github-enterprise-admin-scim-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub v3 REST API — Enterprise-Admin - Scim. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: github-list-provisioned-scim-groups
+      description: GitHub List Provisioned SCIM Groups for an Enterprise
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: github-enterprise-admin-scim.enterpriseadminlistprovisionedgroupsenterprise
+      with:
+        filter: tools.filter
+      outputParameters:
+      - type: object
+        mapping: $.

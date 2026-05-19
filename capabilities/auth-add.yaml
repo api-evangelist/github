@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Add
+  description: 'GitHub Auth API — Add. 1 operations. Lead operation: GitHub Add an Authorized Ssh Key. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Add
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-add
+    baseUri: ''
+    description: GitHub Auth API — Add business capability. Self-contained, no shared references.
+    resources:
+    - name: setup-api-settings-authorized-keys
+      path: /setup/api/settings/authorized-keys
+      operations:
+      - name: addanauthorizedsshkey
+        method: POST
+        description: GitHub Add an Authorized Ssh Key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-add-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Add. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/setup/api/settings/authorized-keys
+      name: setup-api-settings-authorized-keys
+      description: REST surface for setup-api-settings-authorized-keys.
+      operations:
+      - method: POST
+        name: addanauthorizedsshkey
+        description: GitHub Add an Authorized Ssh Key
+        call: auth-add.addanauthorizedsshkey
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-add-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Add. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-add-authorized-ssh-key
+      description: GitHub Add an Authorized Ssh Key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: auth-add.addanauthorizedsshkey
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

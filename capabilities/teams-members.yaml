@@ -1,0 +1,120 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Members
+  description: 'GitHub Teams API — Members. 2 operations. Lead operation: GitHub List Team Members. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Members
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-members
+    baseUri: ''
+    description: GitHub Teams API — Members business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-teams-team_slug-members
+      path: /orgs/{org}/teams/{team_slug}/members
+      operations:
+      - name: listteammembers
+        method: GET
+        description: GitHub List Team Members
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: role
+          in: query
+          type: string
+          description: Filters members returned by their role in the team.
+    - name: teams-team_id-members
+      path: /teams/{team_id}/members
+      operations:
+      - name: listteammemberslegacy
+        method: GET
+        description: GitHub List Team Members (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: role
+          in: query
+          type: string
+          description: Filters members returned by their role in the team.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-members-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Members. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/teams/{team-slug}/members
+      name: orgs-org-teams-team-slug-members
+      description: REST surface for orgs-org-teams-team_slug-members.
+      operations:
+      - method: GET
+        name: listteammembers
+        description: GitHub List Team Members
+        call: teams-members.listteammembers
+        with:
+          role: rest.role
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/members
+      name: teams-team-id-members
+      description: REST surface for teams-team_id-members.
+      operations:
+      - method: GET
+        name: listteammemberslegacy
+        description: GitHub List Team Members (legacy)
+        call: teams-members.listteammemberslegacy
+        with:
+          role: rest.role
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-members-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Members. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-team-members
+      description: GitHub List Team Members
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-members.listteammembers
+      with:
+        role: tools.role
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-team-members-legacy
+      description: GitHub List Team Members (legacy)
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: teams-members.listteammemberslegacy
+      with:
+        role: tools.role
+      outputParameters:
+      - type: object
+        mapping: $.

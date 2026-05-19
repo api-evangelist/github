@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Repos API — Code Owners
+  description: 'GitHub Repos API — Code Owners. 1 operations. Lead operation: List Codeowners Errors. Self-contained Naftiko
+    capability covering one Github business surface.'
+  tags:
+  - Github
+  - Code Owners
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: temp-code-owners
+    baseUri: ''
+    description: GitHub Repos API — Code Owners business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-codeowners-errors
+      path: /repos/{owner}/{repo}/codeowners/errors
+      operations:
+      - name: listcodeownerserrors
+        method: GET
+        description: List Codeowners Errors
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: ref
+          in: query
+          type: string
+          description: 'branch, tag or commit name used to determine which version of the CODEOWNERS file to use. Default:
+            the repository''s default branch (e.g. `main`)'
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: temp-code-owners-rest
+    port: 8080
+    description: REST adapter for GitHub Repos API — Code Owners. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/codeowners/errors
+      name: repos-owner-repo-codeowners-errors
+      description: REST surface for repos-owner-repo-codeowners-errors.
+      operations:
+      - method: GET
+        name: listcodeownerserrors
+        description: List Codeowners Errors
+        call: temp-code-owners.listcodeownerserrors
+        with:
+          ref: rest.ref
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: temp-code-owners-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Repos API — Code Owners. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-codeowners-errors
+      description: List Codeowners Errors
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: temp-code-owners.listcodeownerserrors
+      with:
+        ref: tools.ref
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+      outputParameters:
+      - type: object
+        mapping: $.

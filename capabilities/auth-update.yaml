@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Auth API — Update
+  description: 'GitHub Auth API — Update. 1 operations. Lead operation: GitHub Update an Existing Authorization. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Update
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: auth-update
+    baseUri: ''
+    description: GitHub Auth API — Update business capability. Self-contained, no shared references.
+    resources:
+    - name: authorizations-authorization_id
+      path: /authorizations/{authorization_id}
+      operations:
+      - name: updateanexistingauthorization
+        method: PATCH
+        description: GitHub Update an Existing Authorization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: auth-update-rest
+    port: 8080
+    description: REST adapter for GitHub Auth API — Update. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/authorizations/{authorization-id}
+      name: authorizations-authorization-id
+      description: REST surface for authorizations-authorization_id.
+      operations:
+      - method: PATCH
+        name: updateanexistingauthorization
+        description: GitHub Update an Existing Authorization
+        call: auth-update.updateanexistingauthorization
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: auth-update-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Auth API — Update. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-update-existing-authorization
+      description: GitHub Update an Existing Authorization
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: auth-update.updateanexistingauthorization
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

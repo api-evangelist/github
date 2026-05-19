@@ -1,0 +1,91 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Code
+  description: 'GitHub Org API — Code. 1 operations. Lead operation: GitHub List Code Scanning Alerts for an Organization.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Code
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-code
+    baseUri: ''
+    description: GitHub Org API — Code business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-code-scanning-alerts
+      path: /orgs/{org}/code-scanning/alerts
+      operations:
+      - name: listcodescanningalertsforanorganization
+        method: GET
+        description: GitHub List Code Scanning Alerts for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: state
+          in: query
+          type: string
+          description: If specified, only code scanning alerts with this state will be returned.
+        - name: sort
+          in: query
+          type: string
+          description: The property by which to sort the results.
+        - name: severity
+          in: query
+          type: string
+          description: If specified, only code scanning alerts with this severity will be returned.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-code-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Code. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/code-scanning/alerts
+      name: orgs-org-code-scanning-alerts
+      description: REST surface for orgs-org-code-scanning-alerts.
+      operations:
+      - method: GET
+        name: listcodescanningalertsforanorganization
+        description: GitHub List Code Scanning Alerts for an Organization
+        call: organizations-code.listcodescanningalertsforanorganization
+        with:
+          state: rest.state
+          sort: rest.sort
+          severity: rest.severity
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-code-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Code. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-list-code-scanning-alerts
+      description: GitHub List Code Scanning Alerts for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-code.listcodescanningalertsforanorganization
+      with:
+        state: tools.state
+        sort: tools.sort
+        severity: tools.severity
+      outputParameters:
+      - type: object
+        mapping: $.

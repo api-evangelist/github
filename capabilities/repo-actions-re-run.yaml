@@ -1,0 +1,209 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Re-Run
+  description: 'github-repo-actions-api — Re-Run. 3 operations. Lead operation: GitHub Re-run Job from Workflow Run. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Re-Run
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-re-run
+    baseUri: ''
+    description: github-repo-actions-api — Re-Run business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-jobs-job_id-rerun
+      path: /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun
+      operations:
+      - name: rerunjobfromworkflowrun
+        method: POST
+        description: GitHub Re-run Job from Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-actions-runs-run_id-rerun
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun
+      operations:
+      - name: rerunworkflow
+        method: POST
+        description: GitHub Re-run Workflow
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: repos-owner-repo-actions-runs-run_id-rerun-failed-jobs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs
+      operations:
+      - name: rerunfailedjobsfromworkflowrun
+        method: POST
+        description: GitHub Re-run Failed Jobs from Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-re-run-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Re-Run. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/jobs/{job-id}/rerun
+      name: repos-owner-repo-actions-jobs-job-id-rerun
+      description: REST surface for repos-owner-repo-actions-jobs-job_id-rerun.
+      operations:
+      - method: POST
+        name: rerunjobfromworkflowrun
+        description: GitHub Re-run Job from Workflow Run
+        call: repo-actions-re-run.rerunjobfromworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/rerun
+      name: repos-owner-repo-actions-runs-run-id-rerun
+      description: REST surface for repos-owner-repo-actions-runs-run_id-rerun.
+      operations:
+      - method: POST
+        name: rerunworkflow
+        description: GitHub Re-run Workflow
+        call: repo-actions-re-run.rerunworkflow
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/rerun-failed-jobs
+      name: repos-owner-repo-actions-runs-run-id-rerun-failed-jobs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-rerun-failed-jobs.
+      operations:
+      - method: POST
+        name: rerunfailedjobsfromworkflowrun
+        description: GitHub Re-run Failed Jobs from Workflow Run
+        call: repo-actions-re-run.rerunfailedjobsfromworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-re-run-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Re-Run. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-re-run-job-workflow
+      description: GitHub Re-run Job from Workflow Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-re-run.rerunjobfromworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-re-run-workflow
+      description: GitHub Re-run Workflow
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-re-run.rerunworkflow
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-re-run-failed-jobs
+      description: GitHub Re-run Failed Jobs from Workflow Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-re-run.rerunfailedjobsfromworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

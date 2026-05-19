@@ -1,0 +1,95 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: github-repo-actions-api — Failed
+  description: 'github-repo-actions-api — Failed. 1 operations. Lead operation: GitHub Re-run Failed Jobs from Workflow Run.
+    Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Failed
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: repo-actions-failed
+    baseUri: ''
+    description: github-repo-actions-api — Failed business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-actions-runs-run_id-rerun-failed-jobs
+      path: /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs
+      operations:
+      - name: rerunfailedjobsfromworkflowrun
+        method: POST
+        description: GitHub Re-run Failed Jobs from Workflow Run
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: Authorization
+          in: header
+          type: string
+        - name: X-GitHub-Api-Version
+          in: header
+          type: string
+        - name: Accept
+          in: header
+          type: string
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: repo-actions-failed-rest
+    port: 8080
+    description: REST adapter for github-repo-actions-api — Failed. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/actions/runs/{run-id}/rerun-failed-jobs
+      name: repos-owner-repo-actions-runs-run-id-rerun-failed-jobs
+      description: REST surface for repos-owner-repo-actions-runs-run_id-rerun-failed-jobs.
+      operations:
+      - method: POST
+        name: rerunfailedjobsfromworkflowrun
+        description: GitHub Re-run Failed Jobs from Workflow Run
+        call: repo-actions-failed.rerunfailedjobsfromworkflowrun
+        with:
+          Authorization: rest.Authorization
+          X-GitHub-Api-Version: rest.X-GitHub-Api-Version
+          Accept: rest.Accept
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: repo-actions-failed-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for github-repo-actions-api — Failed. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-re-run-failed-jobs
+      description: GitHub Re-run Failed Jobs from Workflow Run
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: repo-actions-failed.rerunfailedjobsfromworkflowrun
+      with:
+        Authorization: tools.Authorization
+        X-GitHub-Api-Version: tools.X-GitHub-Api-Version
+        Accept: tools.Accept
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Org API — Fine-Grained
+  description: 'GitHub Org API — Fine-Grained. 1 operations. Lead operation: GitHub List Repository Fine-grained Permissions
+    for an Organization. Self-contained Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Fine-Grained
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: organizations-fine-grained
+    baseUri: ''
+    description: GitHub Org API — Fine-Grained business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-repository-fine-grained-permissions
+      path: /orgs/{org}/repository-fine-grained-permissions
+      operations:
+      - name: listrepositoryfinegrainedpermissionsforanorganization
+        method: GET
+        description: GitHub List Repository Fine-grained Permissions for an Organization
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: organizations-fine-grained-rest
+    port: 8080
+    description: REST adapter for GitHub Org API — Fine-Grained. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/repository-fine-grained-permissions
+      name: orgs-org-repository-fine-grained-permissions
+      description: REST surface for orgs-org-repository-fine-grained-permissions.
+      operations:
+      - method: GET
+        name: listrepositoryfinegrainedpermissionsforanorganization
+        description: GitHub List Repository Fine-grained Permissions for an Organization
+        call: organizations-fine-grained.listrepositoryfinegrainedpermissionsforanorganization
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: organizations-fine-grained-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Org API — Fine-Grained. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: github-list-repository-fine-grained
+      description: GitHub List Repository Fine-grained Permissions for an Organization
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: organizations-fine-grained.listrepositoryfinegrainedpermissionsforanorganization
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,199 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Application API — Authenticated
+  description: 'GitHub Application API — Authenticated. 5 operations. Lead operation: GitHub Get the Authenticated App. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Authenticated
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: app-authenticated
+    baseUri: ''
+    description: GitHub Application API — Authenticated business capability. Self-contained, no shared references.
+    resources:
+    - name: app
+      path: /app
+      operations:
+      - name: gettheauthenticatedapp
+        method: GET
+        description: GitHub Get the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-installation-requests
+      path: /app/installation-requests
+      operations:
+      - name: listinstallationrequestsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installation Requests for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: app-installations
+      path: /app/installations
+      operations:
+      - name: listinstallationsfortheauthenticatedapp
+        method: GET
+        description: GitHub List Installations for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: outdated
+          in: query
+          type: string
+    - name: app-installations-installation_id
+      path: /app/installations/{installation_id}
+      operations:
+      - name: getaninstallationfortheauthenticatedapp
+        method: GET
+        description: GitHub Get an Installation for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteaninstallationfortheauthenticatedapp
+        method: DELETE
+        description: GitHub Delete an Installation for the Authenticated App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: app-authenticated-rest
+    port: 8080
+    description: REST adapter for GitHub Application API — Authenticated. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/app
+      name: app
+      description: REST surface for app.
+      operations:
+      - method: GET
+        name: gettheauthenticatedapp
+        description: GitHub Get the Authenticated App
+        call: app-authenticated.gettheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installation-requests
+      name: app-installation-requests
+      description: REST surface for app-installation-requests.
+      operations:
+      - method: GET
+        name: listinstallationrequestsfortheauthenticatedapp
+        description: GitHub List Installation Requests for the Authenticated App
+        call: app-authenticated.listinstallationrequestsfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations
+      name: app-installations
+      description: REST surface for app-installations.
+      operations:
+      - method: GET
+        name: listinstallationsfortheauthenticatedapp
+        description: GitHub List Installations for the Authenticated App
+        call: app-authenticated.listinstallationsfortheauthenticatedapp
+        with:
+          outdated: rest.outdated
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/app/installations/{installation-id}
+      name: app-installations-installation-id
+      description: REST surface for app-installations-installation_id.
+      operations:
+      - method: GET
+        name: getaninstallationfortheauthenticatedapp
+        description: GitHub Get an Installation for the Authenticated App
+        call: app-authenticated.getaninstallationfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteaninstallationfortheauthenticatedapp
+        description: GitHub Delete an Installation for the Authenticated App
+        call: app-authenticated.deleteaninstallationfortheauthenticatedapp
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: app-authenticated-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Application API — Authenticated. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: github-get-authenticated-app
+      description: GitHub Get the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-authenticated.gettheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-installation-requests-authenticated
+      description: GitHub List Installation Requests for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-authenticated.listinstallationrequestsfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-list-installations-authenticated-app
+      description: GitHub List Installations for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-authenticated.listinstallationsfortheauthenticatedapp
+      with:
+        outdated: tools.outdated
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-get-installation-authenticated-app
+      description: GitHub Get an Installation for the Authenticated App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: app-authenticated.getaninstallationfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-delete-installation-authenticated-app
+      description: GitHub Delete an Installation for the Authenticated App
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: app-authenticated.deleteaninstallationfortheauthenticatedapp
+      outputParameters:
+      - type: object
+        mapping: $.

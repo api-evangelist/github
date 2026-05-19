@@ -1,0 +1,368 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Teams API — Remove
+  description: 'GitHub Teams API — Remove. 10 operations. Lead operation: GitHub Remove Security Manager Team. Self-contained
+    Naftiko capability covering one Github business surface.'
+  tags:
+  - Github
+  - Remove
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: teams-remove
+    baseUri: ''
+    description: GitHub Teams API — Remove business capability. Self-contained, no shared references.
+    resources:
+    - name: orgs-org-security-managers-teams-team_slug
+      path: /orgs/{org}/security-managers/teams/{team_slug}
+      operations:
+      - name: removesecuritymanagerteam
+        method: DELETE
+        description: GitHub Remove Security Manager Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-external-groups
+      path: /orgs/{org}/teams/{team_slug}/external-groups
+      operations:
+      - name: removetheconnectionbetweenanexternalgroupandteam
+        method: DELETE
+        description: GitHub Remove the Connection Between an External Group and Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-memberships-username
+      path: /orgs/{org}/teams/{team_slug}/memberships/{username}
+      operations:
+      - name: removeteammembershipforuser
+        method: DELETE
+        description: GitHub Remove Team Membership for User
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-projects-project_id
+      path: /orgs/{org}/teams/{team_slug}/projects/{project_id}
+      operations:
+      - name: removeprojectfromteam
+        method: DELETE
+        description: GitHub Remove Project from Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orgs-org-teams-team_slug-repos-owner-repo
+      path: /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}
+      operations:
+      - name: removerepositoryfromteam
+        method: DELETE
+        description: GitHub Remove Repository from Team
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      path: /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      operations:
+      - name: removeteamaccessrestrictions
+        method: DELETE
+        description: GitHub Remove Team Access Restrictions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: teams-team_id-members-username
+      path: /teams/{team_id}/members/{username}
+      operations:
+      - name: removeteammemberlegacy
+        method: DELETE
+        description: GitHub Remove Team Member (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-memberships-username
+      path: /teams/{team_id}/memberships/{username}
+      operations:
+      - name: removeteammembershipforuserlegacy
+        method: DELETE
+        description: GitHub Remove Team Membership for User (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-projects-project_id
+      path: /teams/{team_id}/projects/{project_id}
+      operations:
+      - name: removeprojectfromteamlegacy
+        method: DELETE
+        description: GitHub Remove Project from Team (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: teams-team_id-repos-owner-repo
+      path: /teams/{team_id}/repos/{owner}/{repo}
+      operations:
+      - name: removerepositoryfromteamlegacy
+        method: DELETE
+        description: GitHub Remove Repository from Team (legacy)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: teams-remove-rest
+    port: 8080
+    description: REST adapter for GitHub Teams API — Remove. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/orgs/{org}/security-managers/teams/{team-slug}
+      name: orgs-org-security-managers-teams-team-slug
+      description: REST surface for orgs-org-security-managers-teams-team_slug.
+      operations:
+      - method: DELETE
+        name: removesecuritymanagerteam
+        description: GitHub Remove Security Manager Team
+        call: teams-remove.removesecuritymanagerteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/external-groups
+      name: orgs-org-teams-team-slug-external-groups
+      description: REST surface for orgs-org-teams-team_slug-external-groups.
+      operations:
+      - method: DELETE
+        name: removetheconnectionbetweenanexternalgroupandteam
+        description: GitHub Remove the Connection Between an External Group and Team
+        call: teams-remove.removetheconnectionbetweenanexternalgroupandteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/memberships/{username}
+      name: orgs-org-teams-team-slug-memberships-username
+      description: REST surface for orgs-org-teams-team_slug-memberships-username.
+      operations:
+      - method: DELETE
+        name: removeteammembershipforuser
+        description: GitHub Remove Team Membership for User
+        call: teams-remove.removeteammembershipforuser
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/projects/{project-id}
+      name: orgs-org-teams-team-slug-projects-project-id
+      description: REST surface for orgs-org-teams-team_slug-projects-project_id.
+      operations:
+      - method: DELETE
+        name: removeprojectfromteam
+        description: GitHub Remove Project from Team
+        call: teams-remove.removeprojectfromteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orgs/{org}/teams/{team-slug}/repos/{owner}/{repo}
+      name: orgs-org-teams-team-slug-repos-owner-repo
+      description: REST surface for orgs-org-teams-team_slug-repos-owner-repo.
+      operations:
+      - method: DELETE
+        name: removerepositoryfromteam
+        description: GitHub Remove Repository from Team
+        call: teams-remove.removerepositoryfromteam
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams
+      name: repos-owner-repo-branches-branch-protection-restrictions-teams
+      description: REST surface for repos-owner-repo-branches-branch-protection-restrictions-teams.
+      operations:
+      - method: DELETE
+        name: removeteamaccessrestrictions
+        description: GitHub Remove Team Access Restrictions
+        call: teams-remove.removeteamaccessrestrictions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/members/{username}
+      name: teams-team-id-members-username
+      description: REST surface for teams-team_id-members-username.
+      operations:
+      - method: DELETE
+        name: removeteammemberlegacy
+        description: GitHub Remove Team Member (legacy)
+        call: teams-remove.removeteammemberlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/memberships/{username}
+      name: teams-team-id-memberships-username
+      description: REST surface for teams-team_id-memberships-username.
+      operations:
+      - method: DELETE
+        name: removeteammembershipforuserlegacy
+        description: GitHub Remove Team Membership for User (legacy)
+        call: teams-remove.removeteammembershipforuserlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/projects/{project-id}
+      name: teams-team-id-projects-project-id
+      description: REST surface for teams-team_id-projects-project_id.
+      operations:
+      - method: DELETE
+        name: removeprojectfromteamlegacy
+        description: GitHub Remove Project from Team (legacy)
+        call: teams-remove.removeprojectfromteamlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/teams/{team-id}/repos/{owner}/{repo}
+      name: teams-team-id-repos-owner-repo
+      description: REST surface for teams-team_id-repos-owner-repo.
+      operations:
+      - method: DELETE
+        name: removerepositoryfromteamlegacy
+        description: GitHub Remove Repository from Team (legacy)
+        call: teams-remove.removerepositoryfromteamlegacy
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: teams-remove-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Teams API — Remove. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-remove-security-manager-team
+      description: GitHub Remove Security Manager Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removesecuritymanagerteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-connection-between-external
+      description: GitHub Remove the Connection Between an External Group and Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removetheconnectionbetweenanexternalgroupandteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-membership-user
+      description: GitHub Remove Team Membership for User
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeteammembershipforuser
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-project-team
+      description: GitHub Remove Project from Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeprojectfromteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-repository-team
+      description: GitHub Remove Repository from Team
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removerepositoryfromteam
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-access-restrictions
+      description: GitHub Remove Team Access Restrictions
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeteamaccessrestrictions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-member-legacy
+      description: GitHub Remove Team Member (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeteammemberlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-team-membership-user-2
+      description: GitHub Remove Team Membership for User (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeteammembershipforuserlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-project-team-legacy
+      description: GitHub Remove Project from Team (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removeprojectfromteamlegacy
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: github-remove-repository-team-legacy
+      description: GitHub Remove Repository from Team (legacy)
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: teams-remove.removerepositoryfromteamlegacy
+      outputParameters:
+      - type: object
+        mapping: $.

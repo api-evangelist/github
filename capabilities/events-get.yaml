@@ -1,0 +1,79 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: GitHub Events API — Get
+  description: 'GitHub Events API — Get. 1 operations. Lead operation: GitHub Get an Issue Event. Self-contained Naftiko capability
+    covering one Github business surface.'
+  tags:
+  - Github
+  - Get
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    GITHUB_API_KEY: GITHUB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: events-get
+    baseUri: ''
+    description: GitHub Events API — Get business capability. Self-contained, no shared references.
+    resources:
+    - name: repos-owner-repo-issues-events-event_id
+      path: /repos/{owner}/{repo}/issues/events/{event_id}
+      operations:
+      - name: getanissueevent
+        method: GET
+        description: GitHub Get an Issue Event
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: event_id
+          in: path
+          type: integer
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.GITHUB_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: events-get-rest
+    port: 8080
+    description: REST adapter for GitHub Events API — Get. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/repos/{owner}/{repo}/issues/events/{event-id}
+      name: repos-owner-repo-issues-events-event-id
+      description: REST surface for repos-owner-repo-issues-events-event_id.
+      operations:
+      - method: GET
+        name: getanissueevent
+        description: GitHub Get an Issue Event
+        call: events-get.getanissueevent
+        with:
+          event_id: rest.event_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: events-get-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for GitHub Events API — Get. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: github-get-issue-event
+      description: GitHub Get an Issue Event
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: events-get.getanissueevent
+      with:
+        event_id: tools.event_id
+      outputParameters:
+      - type: object
+        mapping: $.
