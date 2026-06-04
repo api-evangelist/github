@@ -1,0 +1,71 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Star a Gist and Leave Feedback
+  summary: Star a gist to bookmark it, then post a feedback comment on it.
+  description: >-
+    A lightweight gist engagement pattern. The workflow stars a gist to bookmark
+    it and then posts a feedback comment on that same gist. Starring returns a
+    204 No Content response, so the flow proceeds on that documented status.
+    Every step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubGistsApi
+  url: ../openapi/github-gists-openapi.yml
+  type: openapi
+workflows:
+- workflowId: star-and-comment-gist
+  summary: Star a gist then post a feedback comment on it.
+  description: >-
+    Stars a gist and then posts a comment on the same gist with feedback.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - gistId
+    - comment
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with gist scope, passed as a Bearer credential.
+      gistId:
+        type: string
+        description: The identifier of the gist to star and comment on.
+      comment:
+        type: string
+        description: The feedback comment body to add to the gist.
+  steps:
+  - stepId: starGist
+    description: Star the gist to bookmark it. Returns 204 No Content on success.
+    operationId: stargist
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: gist_id
+      in: path
+      value: $inputs.gistId
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: commentOnGist
+    description: Add a feedback comment to the starred gist.
+    operationId: creategistComment
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: gist_id
+      in: path
+      value: $inputs.gistId
+    requestBody:
+      contentType: application/json
+      payload:
+        body: $inputs.comment
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      commentId: $response.body#/id
+      commentUrl: $response.body#/url
+  outputs:
+    commentId: $steps.commentOnGist.outputs.commentId
+    commentUrl: $steps.commentOnGist.outputs.commentUrl

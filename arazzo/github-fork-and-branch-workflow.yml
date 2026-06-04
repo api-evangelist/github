@@ -1,0 +1,121 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Fork a Repository and Create a Working Branch
+  summary: Fork a repository, resolve the fork's default branch tip, and create a working branch.
+  description: >-
+    The contributor onboarding pattern. The workflow forks a repository into the
+    authenticated account, reads the default branch reference on the fork to
+    obtain its tip commit, and then creates a working branch on the fork from
+    that commit. Forking is asynchronous on GitHub, so the fork step accepts the
+    documented 202 Accepted response. Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: fork-and-branch
+  summary: Fork a repository then create a working branch on the fork.
+  description: >-
+    Forks the upstream repository, reads the fork's default branch tip, and
+    creates a working branch from it.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - defaultBranch
+    - workingBranch
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the upstream repository to fork.
+      repo:
+        type: string
+        description: The name of the upstream repository to fork.
+      defaultBranch:
+        type: string
+        description: The default branch name of the fork to branch from, without the heads/ prefix.
+      workingBranch:
+        type: string
+        description: The working branch name to create on the fork, without the heads/ prefix.
+  steps:
+  - stepId: forkRepository
+    description: >-
+      Fork the upstream repository into the authenticated account. The fork is
+      created asynchronously and returns 202 Accepted.
+    operationId: createFork
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        default_branch_only: true
+    successCriteria:
+    - condition: $statusCode == 202
+    outputs:
+      forkOwner: $response.body#/owner/login
+      forkName: $response.body#/name
+  - stepId: getForkDefaultRef
+    description: >-
+      Read the default branch reference on the fork to obtain its tip commit
+      SHA.
+    operationId: getReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $steps.forkRepository.outputs.forkOwner
+    - name: repo
+      in: path
+      value: $steps.forkRepository.outputs.forkName
+    - name: ref
+      in: path
+      value: "heads/$inputs.defaultBranch"
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tipSha: $response.body#/object/sha
+  - stepId: createWorkingBranch
+    description: >-
+      Create the working branch on the fork from the default branch tip SHA.
+    operationId: createReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $steps.forkRepository.outputs.forkOwner
+    - name: repo
+      in: path
+      value: $steps.forkRepository.outputs.forkName
+    requestBody:
+      contentType: application/json
+      payload:
+        ref: "refs/heads/$inputs.workingBranch"
+        sha: $steps.getForkDefaultRef.outputs.tipSha
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      workingRef: $response.body#/ref
+  outputs:
+    forkOwner: $steps.forkRepository.outputs.forkOwner
+    forkName: $steps.forkRepository.outputs.forkName
+    workingRef: $steps.createWorkingBranch.outputs.workingRef

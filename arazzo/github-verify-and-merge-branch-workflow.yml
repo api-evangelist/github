@@ -1,0 +1,103 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Verify a Branch and Merge It
+  summary: Confirm a head branch exists, then merge it into a base branch.
+  description: >-
+    A server-side branch integration pattern that does not require a pull
+    request. The workflow verifies the head branch exists and reads its tip
+    commit, then performs a merge of that head branch into the base branch.
+    Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoBranchesApi
+  url: ../openapi/github-repo-branches-api-openapi.yml
+  type: openapi
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: verify-and-merge-branch
+  summary: Verify a head branch exists then merge it into a base branch.
+  description: >-
+    Reads the head branch to confirm it exists and then merges it into the base
+    branch with a custom commit message.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - headBranch
+    - baseBranch
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      headBranch:
+        type: string
+        description: The branch to merge in (the head of the merge).
+      baseBranch:
+        type: string
+        description: The branch to receive the merge (the base of the merge).
+      commitMessage:
+        type: string
+        description: The commit message to use for the merge commit.
+  steps:
+  - stepId: verifyHeadBranch
+    description: >-
+      Read the head branch to confirm it exists before attempting the merge.
+    operationId: getBranch
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: branch
+      in: path
+      value: $inputs.headBranch
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      headSha: $response.body#/commit/sha
+  - stepId: mergeIntoBase
+    description: >-
+      Merge the verified head branch into the base branch with the supplied
+      commit message.
+    operationId: mergeBranch
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        base: $inputs.baseBranch
+        head: $inputs.headBranch
+        commit_message: $inputs.commitMessage
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      mergeSha: $response.body#/sha
+      mergeUrl: $response.body#/html_url
+  outputs:
+    headSha: $steps.verifyHeadBranch.outputs.headSha
+    mergeSha: $steps.mergeIntoBase.outputs.mergeSha
+    mergeUrl: $steps.mergeIntoBase.outputs.mergeUrl

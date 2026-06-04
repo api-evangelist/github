@@ -1,0 +1,112 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Create a Milestone and Assign an Issue to It
+  summary: Create a milestone, then open an issue assigned to that milestone.
+  description: >-
+    A planning pattern that groups work under a deliverable. The workflow
+    creates a milestone in the repository and then opens an issue assigned to
+    that milestone using the milestone number returned by the create step. Every
+    step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+- name: githubRepoIssuesApi
+  url: ../openapi/github-repo-issues-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-milestone-and-issue
+  summary: Create a milestone then open an issue assigned to it.
+  description: >-
+    Creates a milestone and chains its returned number into the milestone field
+    of a new issue.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - milestoneTitle
+    - issueTitle
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      milestoneTitle:
+        type: string
+        description: The title of the milestone to create.
+      milestoneDescription:
+        type: string
+        description: A description of the milestone.
+      dueOn:
+        type: string
+        description: The milestone due date as an ISO 8601 timestamp.
+      issueTitle:
+        type: string
+        description: The title of the issue to open under the milestone.
+      issueBody:
+        type: string
+        description: The body of the issue to open.
+  steps:
+  - stepId: createMilestone
+    description: Create the milestone in the repository.
+    operationId: createMilestone
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.milestoneTitle
+        description: $inputs.milestoneDescription
+        due_on: $inputs.dueOn
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      milestoneNumber: $response.body#/number
+      milestoneUrl: $response.body#/html_url
+  - stepId: openIssue
+    description: >-
+      Open an issue assigned to the milestone using the milestone number
+      returned by the create step.
+    operationId: createAnIssue
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.issueTitle
+        body: $inputs.issueBody
+        milestone: $steps.createMilestone.outputs.milestoneNumber
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      issueNumber: $response.body#/number
+      issueUrl: $response.body#/html_url
+  outputs:
+    milestoneNumber: $steps.createMilestone.outputs.milestoneNumber
+    issueNumber: $steps.openIssue.outputs.issueNumber
+    issueUrl: $steps.openIssue.outputs.issueUrl

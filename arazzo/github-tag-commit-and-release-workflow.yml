@@ -1,0 +1,125 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Tag a Commit and Cut a Release
+  summary: Resolve a branch tip, create a tag reference there, then cut a release on that tag.
+  description: >-
+    A release-cutting pattern that pins a release to a specific commit. The
+    workflow reads the tip SHA of a branch, creates a lightweight tag reference
+    pointing at that commit, and then creates a release for the new tag. Every
+    step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: tag-commit-and-release
+  summary: Resolve a branch tip, create a tag ref, and cut a release on it.
+  description: >-
+    Reads the branch tip SHA, creates a tag reference at that SHA, and creates a
+    release for the tag.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - branch
+    - tagName
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      branch:
+        type: string
+        description: The branch whose tip commit will be tagged, without the heads/ prefix.
+      tagName:
+        type: string
+        description: The tag name to create and release, without the tags/ prefix.
+      releaseName:
+        type: string
+        description: The display name of the release.
+      releaseBody:
+        type: string
+        description: The description text of the release.
+  steps:
+  - stepId: getBranchTip
+    description: Read the branch reference to obtain the tip commit SHA.
+    operationId: getReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: ref
+      in: path
+      value: "heads/$inputs.branch"
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tipSha: $response.body#/object/sha
+  - stepId: createTagRef
+    description: >-
+      Create a tag reference pointing at the branch tip SHA returned by the
+      previous step.
+    operationId: createReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        ref: "refs/tags/$inputs.tagName"
+        sha: $steps.getBranchTip.outputs.tipSha
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      tagRef: $response.body#/ref
+  - stepId: cutRelease
+    description: Create a release for the tag that was just created.
+    operationId: createRelease
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        tag_name: $inputs.tagName
+        target_commitish: $steps.getBranchTip.outputs.tipSha
+        name: $inputs.releaseName
+        body: $inputs.releaseBody
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      releaseId: $response.body#/id
+      releaseUrl: $response.body#/html_url
+  outputs:
+    tagRef: $steps.createTagRef.outputs.tagRef
+    releaseId: $steps.cutRelease.outputs.releaseId
+    releaseUrl: $steps.cutRelease.outputs.releaseUrl

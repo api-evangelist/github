@@ -1,0 +1,138 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Create Label and Triage an Issue
+  summary: Ensure a triage label exists, open an issue, and apply the label to it.
+  description: >-
+    A repository triage pattern that guarantees a label exists before tagging
+    work with it. The workflow creates a label in the repository, opens a new
+    issue, and then applies the label to that issue using the issue number
+    returned by the create step. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+- name: githubRepoIssuesApi
+  url: ../openapi/github-repo-issues-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-label-and-triage-issue
+  summary: Create a label, open an issue, then apply the label to the issue.
+  description: >-
+    Creates a repository label, opens an issue, and chains the issue number into
+    a call that adds the label to the issue.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - labelName
+    - labelColor
+    - issueTitle
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      labelName:
+        type: string
+        description: The name of the label to create and apply.
+      labelColor:
+        type: string
+        description: The hexadecimal color code for the label, without a leading hash.
+      labelDescription:
+        type: string
+        description: A short description of the label.
+      issueTitle:
+        type: string
+        description: The title of the issue to open.
+      issueBody:
+        type: string
+        description: The body of the issue to open.
+  steps:
+  - stepId: createLabel
+    description: Create the triage label in the repository.
+    operationId: createLabel
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.labelName
+        color: $inputs.labelColor
+        description: $inputs.labelDescription
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      labelName: $response.body#/name
+      labelUrl: $response.body#/url
+  - stepId: openIssue
+    description: Open the issue that will be triaged with the new label.
+    operationId: createAnIssue
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.issueTitle
+        body: $inputs.issueBody
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      issueNumber: $response.body#/number
+      issueUrl: $response.body#/html_url
+  - stepId: applyLabel
+    description: >-
+      Apply the newly created label to the issue using the issue number returned
+      by the open step.
+    operationId: addLabelsToAnIssue
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: issue_number
+      in: path
+      value: $steps.openIssue.outputs.issueNumber
+    requestBody:
+      contentType: application/json
+      payload:
+        labels:
+        - $steps.createLabel.outputs.labelName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      appliedLabels: $response.body
+  outputs:
+    issueNumber: $steps.openIssue.outputs.issueNumber
+    issueUrl: $steps.openIssue.outputs.issueUrl
+    labelName: $steps.createLabel.outputs.labelName

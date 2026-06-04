@@ -1,0 +1,88 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Onboard a Member into an Organization
+  summary: Confirm an organization exists, then set a user's membership role in it.
+  description: >-
+    A membership onboarding pattern. The workflow reads the organization to
+    confirm it exists and to capture its identifier, then sets the membership
+    role for a user, which invites the user when they are not yet a member and
+    updates their role when they already are. Every step spells out its request
+    inline so the flow can be read and executed without opening the underlying
+    OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubOrganizationsApi
+  url: ../openapi/github-organizations-openapi.yml
+  type: openapi
+workflows:
+- workflowId: onboard-org-member
+  summary: Verify an organization then set a user's membership role.
+  description: >-
+    Reads the organization to confirm it exists and then sets the membership
+    role for the supplied user.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - org
+    - username
+    - role
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with org admin scope, passed as a Bearer credential.
+      org:
+        type: string
+        description: The login of the organization.
+      username:
+        type: string
+        description: The handle of the user to onboard.
+      role:
+        type: string
+        description: The membership role to assign (admin or member).
+  steps:
+  - stepId: verifyOrganization
+    description: >-
+      Read the organization to confirm it exists before changing membership.
+    operationId: getAnOrganization
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: org
+      in: path
+      value: $inputs.org
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      orgId: $response.body#/id
+      orgLogin: $response.body#/login
+  - stepId: setMembership
+    description: >-
+      Set the membership role for the user in the verified organization,
+      inviting them if they are not yet a member.
+    operationId: setOrganizationMembershipForUser
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: org
+      in: path
+      value: $steps.verifyOrganization.outputs.orgLogin
+    - name: username
+      in: path
+      value: $inputs.username
+    requestBody:
+      contentType: application/json
+      payload:
+        role: $inputs.role
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      membershipState: $response.body#/state
+      membershipRole: $response.body#/role
+      membershipUrl: $response.body#/url
+  outputs:
+    orgId: $steps.verifyOrganization.outputs.orgId
+    membershipState: $steps.setMembership.outputs.membershipState
+    membershipRole: $steps.setMembership.outputs.membershipRole

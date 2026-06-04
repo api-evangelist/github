@@ -1,0 +1,113 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Open a Pull Request and Request Reviewers
+  summary: Open a pull request from a branch, then request reviewers on it.
+  description: >-
+    A review-routing pattern. The workflow opens a pull request from a head
+    branch to a base branch and then requests one or more reviewers on the newly
+    opened pull request using the number returned by the create step. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoPullsApi
+  url: ../openapi/github-repo-pulls-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: open-pull-request-and-request-reviewers
+  summary: Open a pull request then request reviewers on it.
+  description: >-
+    Creates a pull request and chains the returned number into a call that
+    requests the supplied reviewers.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - head
+    - base
+    - title
+    - reviewers
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      head:
+        type: string
+        description: The name of the branch where the changes are implemented.
+      base:
+        type: string
+        description: The name of the branch to merge the changes into.
+      title:
+        type: string
+        description: The title of the pull request.
+      body:
+        type: string
+        description: The body of the pull request.
+      reviewers:
+        type: array
+        description: The user handles to request as reviewers.
+        items:
+          type: string
+  steps:
+  - stepId: openPullRequest
+    description: Open a pull request from the head branch to the base branch.
+    operationId: createPullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.title
+        body: $inputs.body
+        head: $inputs.head
+        base: $inputs.base
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      pullNumber: $response.body#/number
+      pullUrl: $response.body#/html_url
+  - stepId: requestReviewers
+    description: >-
+      Request the supplied reviewers on the newly opened pull request using its
+      returned number.
+    operationId: requestReviewersForPullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: pull_number
+      in: path
+      value: $steps.openPullRequest.outputs.pullNumber
+    requestBody:
+      contentType: application/json
+      payload:
+        reviewers: $inputs.reviewers
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      requestedReviewerCount: $response.body#/requested_reviewers
+  outputs:
+    pullNumber: $steps.openPullRequest.outputs.pullNumber
+    pullUrl: $steps.openPullRequest.outputs.pullUrl

@@ -1,0 +1,114 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Check Mergeability and Merge a Pull Request
+  summary: Fetch a pull request, confirm it is mergeable, then merge it.
+  description: >-
+    A guarded merge pattern that avoids attempting to merge a pull request that
+    GitHub has flagged as not mergeable. The workflow fetches the pull request,
+    branches on its mergeable flag, and only proceeds to merge when the pull
+    request reports as mergeable. Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoPullsApi
+  url: ../openapi/github-repo-pulls-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: review-and-merge-pull-request
+  summary: Get a pull request, branch on its mergeable flag, and merge when ready.
+  description: >-
+    Reads the pull request, and when the mergeable flag is true performs the
+    merge using the configured merge method.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - pullNumber
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      pullNumber:
+        type: integer
+        description: The number that identifies the pull request.
+      mergeMethod:
+        type: string
+        description: The merge method to use (merge, squash, or rebase).
+  steps:
+  - stepId: getPull
+    description: >-
+      Fetch the pull request to read its mergeable flag before attempting a
+      merge.
+    operationId: getPullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: pull_number
+      in: path
+      value: $inputs.pullNumber
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      mergeable: $response.body#/mergeable
+      headSha: $response.body#/head/sha
+    onSuccess:
+    - name: isMergeable
+      type: goto
+      stepId: mergePull
+      criteria:
+      - context: $response.body
+        condition: $.mergeable == true
+        type: jsonpath
+    - name: notMergeable
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.mergeable != true
+        type: jsonpath
+  - stepId: mergePull
+    description: >-
+      Merge the pull request using the supplied merge method now that it has
+      been confirmed mergeable.
+    operationId: mergePullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: pull_number
+      in: path
+      value: $inputs.pullNumber
+    requestBody:
+      contentType: application/json
+      payload:
+        merge_method: $inputs.mergeMethod
+        sha: $steps.getPull.outputs.headSha
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      merged: $response.body#/merged
+      mergeSha: $response.body#/sha
+  outputs:
+    merged: $steps.mergePull.outputs.merged
+    mergeSha: $steps.mergePull.outputs.mergeSha

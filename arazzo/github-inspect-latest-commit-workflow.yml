@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Inspect the Latest Commit on a Branch
+  summary: List a branch's commits, take the newest, then fetch that commit's full detail.
+  description: >-
+    A repository auditing pattern. The workflow lists the most recent commits on
+    a branch, captures the SHA of the newest commit, and then fetches the full
+    detail for that commit including its stats and changed files. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: inspect-latest-commit
+  summary: List commits on a branch then fetch the newest commit's detail.
+  description: >-
+    Lists commits on a branch, captures the newest commit SHA, and retrieves the
+    full commit detail for it.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - branch
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      branch:
+        type: string
+        description: The branch (or SHA) to list commits from.
+  steps:
+  - stepId: listBranchCommits
+    description: >-
+      List the most recent commits on the branch, limited to one so the newest
+      commit is returned first.
+    operationId: listCommits
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: sha
+      in: query
+      value: $inputs.branch
+    - name: per_page
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      latestSha: $response.body#/0/sha
+  - stepId: getCommitDetail
+    description: >-
+      Fetch the full detail of the newest commit using the SHA captured from the
+      list step.
+    operationId: getCommit
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: ref
+      in: path
+      value: $steps.listBranchCommits.outputs.latestSha
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      message: $response.body#/commit/message
+      authorName: $response.body#/commit/author/name
+      totalChanges: $response.body#/stats/total
+      commitUrl: $response.body#/html_url
+  outputs:
+    latestSha: $steps.listBranchCommits.outputs.latestSha
+    message: $steps.getCommitDetail.outputs.message
+    commitUrl: $steps.getCommitDetail.outputs.commitUrl

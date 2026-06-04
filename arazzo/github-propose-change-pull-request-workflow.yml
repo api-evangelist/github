@@ -1,0 +1,167 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Propose a Change via Pull Request
+  summary: Branch, commit a file, and open a pull request back to the base branch.
+  description: >-
+    The end-to-end change proposal pattern. The workflow reads the base branch
+    SHA, creates a new branch from it, commits a file onto that branch, and then
+    opens a pull request from the new branch back to the base branch. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+- name: githubRepoPullsApi
+  url: ../openapi/github-repo-pulls-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: propose-change-pull-request
+  summary: Create a branch, commit a file, then open a pull request for it.
+  description: >-
+    Resolves the base branch SHA, creates a branch, commits a file, and opens a
+    pull request from the new branch to the base branch.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - baseBranch
+    - newBranch
+    - path
+    - message
+    - contentBase64
+    - prTitle
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      baseBranch:
+        type: string
+        description: The base branch to branch from and target with the pull request.
+      newBranch:
+        type: string
+        description: The new branch name to create, without the heads/ prefix.
+      path:
+        type: string
+        description: The repository path of the file to create.
+      message:
+        type: string
+        description: The commit message.
+      contentBase64:
+        type: string
+        description: The new file content, Base64 encoded.
+      prTitle:
+        type: string
+        description: The title of the pull request.
+      prBody:
+        type: string
+        description: The body of the pull request.
+  steps:
+  - stepId: getBaseRef
+    description: Read the base branch reference to obtain its commit SHA.
+    operationId: getReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: ref
+      in: path
+      value: "heads/$inputs.baseBranch"
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      baseSha: $response.body#/object/sha
+  - stepId: createBranchRef
+    description: Create the new branch reference from the base commit SHA.
+    operationId: createReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        ref: "refs/heads/$inputs.newBranch"
+        sha: $steps.getBaseRef.outputs.baseSha
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      newRef: $response.body#/ref
+  - stepId: commitFile
+    description: Commit the file onto the new branch.
+    operationId: createOrUpdateFileContents
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: path
+      in: path
+      value: $inputs.path
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+        content: $inputs.contentBase64
+        branch: $inputs.newBranch
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      commitSha: $response.body#/commit/sha
+  - stepId: openPullRequest
+    description: >-
+      Open a pull request from the new branch back to the base branch so the
+      committed change can be reviewed.
+    operationId: createPullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.prTitle
+        body: $inputs.prBody
+        head: $inputs.newBranch
+        base: $inputs.baseBranch
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      pullNumber: $response.body#/number
+      pullUrl: $response.body#/html_url
+  outputs:
+    newRef: $steps.createBranchRef.outputs.newRef
+    pullNumber: $steps.openPullRequest.outputs.pullNumber
+    pullUrl: $steps.openPullRequest.outputs.pullUrl

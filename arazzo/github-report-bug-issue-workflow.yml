@@ -1,0 +1,106 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Report a Bug and Add Follow-up Detail
+  summary: Open a bug issue and immediately add a follow-up comment with reproduction detail.
+  description: >-
+    A bug intake pattern that keeps the initial report concise and pushes the
+    longer reproduction notes into a follow-up comment. The workflow opens a new
+    issue in the target repository, then posts a comment on that same issue
+    using the issue number returned by the create step. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoIssuesApi
+  url: ../openapi/github-repo-issues-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: report-bug-issue
+  summary: Open a bug issue then add a follow-up comment with reproduction steps.
+  description: >-
+    Creates an issue and chains its returned number into a follow-up call that
+    adds a comment containing the detailed reproduction steps.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - title
+    - reproductionSteps
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      title:
+        type: string
+        description: The title summarizing the bug.
+      body:
+        type: string
+        description: The short body of the bug report.
+      reproductionSteps:
+        type: string
+        description: The detailed reproduction steps to add as a follow-up comment.
+  steps:
+  - stepId: openIssue
+    description: Open the bug issue in the target repository.
+    operationId: createAnIssue
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.title
+        body: $inputs.body
+        labels:
+        - bug
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      issueNumber: $response.body#/number
+      issueUrl: $response.body#/html_url
+  - stepId: addReproductionComment
+    description: >-
+      Add a follow-up comment with the detailed reproduction steps to the issue
+      that was just opened.
+    operationId: createAnIssueComment
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: issue_number
+      in: path
+      value: $steps.openIssue.outputs.issueNumber
+    requestBody:
+      contentType: application/json
+      payload:
+        body: $inputs.reproductionSteps
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      commentId: $response.body#/id
+      commentUrl: $response.body#/html_url
+  outputs:
+    issueNumber: $steps.openIssue.outputs.issueNumber
+    issueUrl: $steps.openIssue.outputs.issueUrl
+    commentId: $steps.addReproductionComment.outputs.commentId

@@ -1,0 +1,78 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Fork a Gist and Comment on the Fork
+  summary: Fork an existing gist into your account and leave a comment on the fork.
+  description: >-
+    A gist collaboration pattern. The workflow forks an existing gist into the
+    authenticated account and then posts a comment on the newly created fork
+    using the fork's gist id returned by the fork step. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubGistsApi
+  url: ../openapi/github-gists-openapi.yml
+  type: openapi
+workflows:
+- workflowId: fork-gist-and-comment
+  summary: Fork a gist then comment on the resulting fork.
+  description: >-
+    Forks a gist and chains the returned fork id into a call that adds a comment
+    to the fork.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - gistId
+    - comment
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with gist scope, passed as a Bearer credential.
+      gistId:
+        type: string
+        description: The identifier of the gist to fork.
+      comment:
+        type: string
+        description: The comment body to add to the forked gist.
+  steps:
+  - stepId: forkGist
+    description: Fork the source gist into the authenticated account.
+    operationId: forkgist
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: gist_id
+      in: path
+      value: $inputs.gistId
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      forkGistId: $response.body#/id
+      forkUrl: $response.body#/html_url
+  - stepId: commentOnFork
+    description: >-
+      Add a comment to the forked gist using the fork id returned by the fork
+      step.
+    operationId: creategistComment
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: gist_id
+      in: path
+      value: $steps.forkGist.outputs.forkGistId
+    requestBody:
+      contentType: application/json
+      payload:
+        body: $inputs.comment
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      commentId: $response.body#/id
+      commentUrl: $response.body#/url
+  outputs:
+    forkGistId: $steps.forkGist.outputs.forkGistId
+    forkUrl: $steps.forkGist.outputs.forkUrl
+    commentId: $steps.commentOnFork.outputs.commentId

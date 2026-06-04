@@ -1,0 +1,102 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Create Repository and Open First Issue
+  summary: Create a repository for the authenticated user and open its first tracking issue.
+  description: >-
+    A common bootstrapping pattern for a new project. The workflow creates a new
+    repository under the authenticated user's account (optionally auto
+    initialized with a README so the default branch exists), then opens a first
+    issue in that repository to track initial setup work. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubUsersApi
+  url: ../openapi/github-users-api-openapi.yml
+  type: openapi
+- name: githubRepoIssuesApi
+  url: ../openapi/github-repo-issues-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: create-repository-and-issue
+  summary: Create a user repository then open a first issue in it.
+  description: >-
+    Creates a repository for the authenticated user and chains the returned
+    owner and repository name into a follow-up call that opens the first issue.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - name
+    - issueTitle
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      name:
+        type: string
+        description: The name of the repository to create.
+      description:
+        type: string
+        description: A short description of the repository.
+      private:
+        type: boolean
+        description: Whether the repository is private.
+      issueTitle:
+        type: string
+        description: The title of the first issue to open.
+      issueBody:
+        type: string
+        description: The body of the first issue to open.
+  steps:
+  - stepId: createRepository
+    description: >-
+      Create a new repository for the authenticated user, initialized with a
+      README so the default branch is created.
+    operationId: createRepositoryForTheAuthenticatedUser
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        description: $inputs.description
+        private: $inputs.private
+        auto_init: true
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      ownerLogin: $response.body#/owner/login
+      repoName: $response.body#/name
+      htmlUrl: $response.body#/html_url
+  - stepId: openFirstIssue
+    description: >-
+      Open the first issue in the newly created repository using the owner and
+      repository name returned by the create step.
+    operationId: createAnIssue
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $steps.createRepository.outputs.ownerLogin
+    - name: repo
+      in: path
+      value: $steps.createRepository.outputs.repoName
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.issueTitle
+        body: $inputs.issueBody
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      issueNumber: $response.body#/number
+      issueUrl: $response.body#/html_url
+  outputs:
+    repositoryUrl: $steps.createRepository.outputs.htmlUrl
+    issueNumber: $steps.openFirstIssue.outputs.issueNumber
+    issueUrl: $steps.openFirstIssue.outputs.issueUrl

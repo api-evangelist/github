@@ -1,0 +1,112 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Open and Auto-Merge a Pull Request
+  summary: Open a pull request from an existing branch and immediately merge it.
+  description: >-
+    A fast-forward integration pattern for trusted, already-pushed branches. The
+    workflow opens a pull request from a head branch to a base branch and then
+    merges that pull request using the number returned by the create step. Every
+    step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoPullsApi
+  url: ../openapi/github-repo-pulls-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: open-and-merge-pull-request
+  summary: Open a pull request then merge it using the returned number.
+  description: >-
+    Creates a pull request from an existing head branch and chains the returned
+    pull request number into the merge call.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - head
+    - base
+    - title
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      head:
+        type: string
+        description: The name of the branch where the changes are implemented.
+      base:
+        type: string
+        description: The name of the branch to merge the changes into.
+      title:
+        type: string
+        description: The title of the pull request.
+      body:
+        type: string
+        description: The body of the pull request.
+      mergeMethod:
+        type: string
+        description: The merge method to use (merge, squash, or rebase).
+  steps:
+  - stepId: openPullRequest
+    description: Open a pull request from the head branch to the base branch.
+    operationId: createPullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.title
+        body: $inputs.body
+        head: $inputs.head
+        base: $inputs.base
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      pullNumber: $response.body#/number
+      pullUrl: $response.body#/html_url
+  - stepId: mergePull
+    description: >-
+      Merge the freshly opened pull request using the number returned by the
+      create step.
+    operationId: mergePullRequest
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: pull_number
+      in: path
+      value: $steps.openPullRequest.outputs.pullNumber
+    requestBody:
+      contentType: application/json
+      payload:
+        merge_method: $inputs.mergeMethod
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      merged: $response.body#/merged
+      mergeSha: $response.body#/sha
+  outputs:
+    pullNumber: $steps.openPullRequest.outputs.pullNumber
+    pullUrl: $steps.openPullRequest.outputs.pullUrl
+    merged: $steps.mergePull.outputs.merged

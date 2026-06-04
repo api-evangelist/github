@@ -1,0 +1,105 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Provision an Org Repository and Register an Org Webhook
+  summary: Create an organization repository, then register an organization-level webhook.
+  description: >-
+    A provisioning pattern that stands up a new organization repository and
+    wires the organization's event delivery in one pass. The workflow creates a
+    repository owned by the organization and then registers an organization
+    webhook that will deliver the selected events to the supplied endpoint. The
+    webhook is created at the organization level because the GitHub organization
+    spec exposes organization webhook management; it therefore applies to events
+    across the organization rather than only the new repository. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubOrganizationsApi
+  url: ../openapi/github-organizations-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-org-repo-with-webhook
+  summary: Create an org repository then register an org webhook for event delivery.
+  description: >-
+    Creates an organization-owned repository and registers an organization
+    webhook that delivers the selected events to the supplied URL.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - org
+    - name
+    - webhookUrl
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with org admin and repo scope, passed as a Bearer credential.
+      org:
+        type: string
+        description: The login of the organization.
+      name:
+        type: string
+        description: The name of the repository to create.
+      private:
+        type: boolean
+        description: Whether the repository is private.
+      webhookUrl:
+        type: string
+        description: The URL that will receive webhook deliveries.
+      events:
+        type: array
+        description: The list of event names the webhook should subscribe to.
+        items:
+          type: string
+  steps:
+  - stepId: createOrgRepository
+    description: Create the organization-owned repository.
+    operationId: createAnOrganizationRepository
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: org
+      in: path
+      value: $inputs.org
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        private: $inputs.private
+        auto_init: true
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      repoName: $response.body#/name
+      repoUrl: $response.body#/html_url
+  - stepId: registerWebhook
+    description: >-
+      Register an organization webhook that delivers the selected events to the
+      supplied URL as JSON.
+    operationId: createAnOrganizationWebhook
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: org
+      in: path
+      value: $inputs.org
+    requestBody:
+      contentType: application/json
+      payload:
+        name: web
+        active: true
+        events: $inputs.events
+        config:
+          url: $inputs.webhookUrl
+          content_type: json
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      hookId: $response.body#/id
+      hookUrl: $response.body#/url
+  outputs:
+    repoName: $steps.createOrgRepository.outputs.repoName
+    repoUrl: $steps.createOrgRepository.outputs.repoUrl
+    hookId: $steps.registerWebhook.outputs.hookId

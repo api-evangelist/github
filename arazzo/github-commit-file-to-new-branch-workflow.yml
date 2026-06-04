@@ -1,0 +1,135 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Commit a File to a New Branch
+  summary: Branch off the default branch and commit a new file to that branch.
+  description: >-
+    The foundational write pattern for proposing a change. The workflow reads
+    the SHA of the base branch reference, creates a new branch reference
+    pointing at that SHA, and then creates a file on the new branch in a single
+    commit. Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubReposApi
+  url: ../openapi/github-repos-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: commit-file-to-new-branch
+  summary: Create a branch from a base ref and commit a file to it.
+  description: >-
+    Resolves the base branch SHA, creates a new branch reference from it, and
+    commits a new file onto the branch.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - baseBranch
+    - newBranch
+    - path
+    - message
+    - contentBase64
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with repo scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      baseBranch:
+        type: string
+        description: The base branch name to branch from (e.g. main), without the heads/ prefix.
+      newBranch:
+        type: string
+        description: The new branch name to create, without the heads/ prefix.
+      path:
+        type: string
+        description: The repository path of the file to create.
+      message:
+        type: string
+        description: The commit message.
+      contentBase64:
+        type: string
+        description: The new file content, Base64 encoded.
+  steps:
+  - stepId: getBaseRef
+    description: >-
+      Read the base branch reference to obtain the commit SHA the new branch
+      will point at.
+    operationId: getReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: ref
+      in: path
+      value: "heads/$inputs.baseBranch"
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      baseSha: $response.body#/object/sha
+  - stepId: createBranchRef
+    description: >-
+      Create the new branch reference pointing at the base commit SHA returned
+      by the previous step.
+    operationId: createReference
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    requestBody:
+      contentType: application/json
+      payload:
+        ref: "refs/heads/$inputs.newBranch"
+        sha: $steps.getBaseRef.outputs.baseSha
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      newRef: $response.body#/ref
+  - stepId: commitFile
+    description: Create the file on the new branch in a single commit.
+    operationId: createOrUpdateFileContents
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: path
+      in: path
+      value: $inputs.path
+    requestBody:
+      contentType: application/json
+      payload:
+        message: $inputs.message
+        content: $inputs.contentBase64
+        branch: $inputs.newBranch
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      commitSha: $response.body#/commit/sha
+      contentUrl: $response.body#/content/html_url
+  outputs:
+    newRef: $steps.createBranchRef.outputs.newRef
+    commitSha: $steps.commitFile.outputs.commitSha
+    contentUrl: $steps.commitFile.outputs.contentUrl

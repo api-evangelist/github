@@ -1,0 +1,141 @@
+arazzo: 1.0.1
+info:
+  title: GitHub Dispatch a Workflow and Poll the Run
+  summary: Trigger a workflow_dispatch event, locate the resulting run, and poll it to completion.
+  description: >-
+    The CI orchestration pattern for manually triggered workflows. The workflow
+    fires a workflow_dispatch event for a workflow on a given ref, lists the
+    workflow's runs to capture the most recent run id, and then polls that run
+    until its status reports as completed before reading its conclusion. The poll
+    step retries on the completed condition so the flow waits for the run to
+    finish. Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: githubRepoActionsApi
+  url: ../openapi/github-repo-actions-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: dispatch-workflow-and-poll-run
+  summary: Dispatch a workflow, find the run, and poll it until completed.
+  description: >-
+    Triggers a workflow_dispatch event, lists runs for the workflow to obtain
+    the latest run id, and polls the run until it completes.
+  inputs:
+    type: object
+    required:
+    - githubToken
+    - owner
+    - repo
+    - workflowId
+    - ref
+    properties:
+      githubToken:
+        type: string
+        description: A GitHub token with actions scope, passed as a Bearer credential.
+      owner:
+        type: string
+        description: The account owner of the repository.
+      repo:
+        type: string
+        description: The name of the repository.
+      workflowId:
+        type: string
+        description: The workflow file name (e.g. ci.yml) or numeric workflow id.
+      ref:
+        type: string
+        description: The git reference (branch or tag) to run the workflow against.
+      inputs:
+        type: object
+        description: Optional input keys and values to pass to the dispatched workflow.
+  steps:
+  - stepId: dispatchWorkflow
+    description: >-
+      Trigger a workflow_dispatch event for the workflow against the supplied
+      ref.
+    operationId: createWorkflowDispatchEvent
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: workflow_id
+      in: path
+      value: $inputs.workflowId
+    requestBody:
+      contentType: application/json
+      payload:
+        ref: $inputs.ref
+        inputs: $inputs.inputs
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: findRun
+    description: >-
+      List the workflow's runs and capture the id of the most recent run, which
+      corresponds to the run that was just dispatched.
+    operationId: listWorkflowRunsForWorkflow
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: workflow_id
+      in: path
+      value: $inputs.workflowId
+    - name: branch
+      in: query
+      value: $inputs.ref
+    - name: per_page
+      in: query
+      value: 1
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      runId: $response.body#/workflow_runs/0/id
+  - stepId: pollRun
+    description: >-
+      Poll the workflow run until its status reports as completed, retrying
+      while the run is still in progress.
+    operationId: getWorkflowRun
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.githubToken
+    - name: owner
+      in: path
+      value: $inputs.owner
+    - name: repo
+      in: path
+      value: $inputs.repo
+    - name: run_id
+      in: path
+      value: $steps.findRun.outputs.runId
+    successCriteria:
+    - condition: $statusCode == 200
+    - context: $response.body
+      condition: $.status == "completed"
+      type: jsonpath
+    onFailure:
+    - name: waitAndRetry
+      type: retry
+      retryAfter: 10
+      retryLimit: 30
+      stepId: pollRun
+    outputs:
+      runStatus: $response.body#/status
+      conclusion: $response.body#/conclusion
+      runUrl: $response.body#/html_url
+  outputs:
+    runId: $steps.findRun.outputs.runId
+    conclusion: $steps.pollRun.outputs.conclusion
+    runUrl: $steps.pollRun.outputs.runUrl
