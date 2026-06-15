@@ -1,0 +1,500 @@
+{
+  "info": {
+    "_postman_id": "5bc9de92-c30d-4a44-a549-1f039d9cb972",
+    "name": "github-repos-api",
+    "description": "Use the REST API to create, manage and control the workflow of public and\nprivate GitHub repositories.\n\nContact Support:\n Name: Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:18:53.000Z",
+    "updatedAt": "2026-06-05T13:18:53.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-5bc9de92-c30d-4a44-a549-1f039d9cb972"
+  },
+  "item": [
+    {
+      "name": "repos",
+      "item": [
+        {
+          "name": "{owner}",
+          "item": [
+            {
+              "name": "{repo}",
+              "item": [
+                {
+                  "name": "invitations",
+                  "item": [
+                    {
+                      "name": "{invitation_id}",
+                      "item": [
+                        {
+                          "name": "GitHub Update Repository Invitation",
+                          "id": "46db886d-cf3a-474b-b2fc-f92340d04187",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "PATCH",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"permissions\": \"read\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/invitations/:invitation_id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "invitations",
+                                ":invitation_id"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "1761f801-7b49-49fa-9951-202543e35df6",
+                                  "key": "owner",
+                                  "value": "<string>",
+                                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "2bb48f71-9a22-4511-bb4a-52e90dd37936",
+                                  "key": "repo",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "dea063b9-d1d4-491a-9b7a-ebe2a4fb33cb",
+                                  "key": "invitation_id",
+                                  "value": "<integer>",
+                                  "description": "(Required) The unique identifier of the invitation."
+                                }
+                              ]
+                            },
+                            "description": "This API endpoint allows you to update an existing repository invitation by modifying its permissions level. You must authenticate as a repository owner or administrator and provide the invitation ID in the URL path. The PATCH request accepts a JSON body with a 'permissions' field that can be set to 'read', 'write', 'maintain', 'triage', or 'admin' to change the access level being offered to the invited user. Upon successful execution, it returns the updated invitation object containing details such as the invitation ID, invitee information, permissions level, and creation timestamp. This is useful when you need to adjust the access rights of a pending invitation before it has been accepted by the recipient."
+                          },
+                          "response": [
+                            {
+                              "id": "ce3fcdc8-d01b-4d51-b344-b7af98f0a506",
+                              "name": "Response",
+                              "originalRequest": {
+                                "method": "PATCH",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"permissions\": \"read\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/invitations/:invitation_id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "invitations",
+                                    ":invitation_id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "invitation_id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "OK",
+                              "code": 200,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"id\": \"<long>\",\n  \"node_id\": \"<string>\",\n  \"permissions\": \"write\",\n  \"inviter\": {\n    \"avatar_url\": \"<uri>\",\n    \"events_url\": \"<string>\",\n    \"followers_url\": \"<uri>\",\n    \"following_url\": \"<string>\",\n    \"gists_url\": \"<string>\",\n    \"gravatar_id\": \"<string>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"organizations_url\": \"<uri>\",\n    \"received_events_url\": \"<uri>\",\n    \"repos_url\": \"<uri>\",\n    \"site_admin\": \"<boolean>\",\n    \"starred_url\": \"<string>\",\n    \"subscriptions_url\": \"<uri>\",\n    \"type\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"starred_at\": \"<string>\"\n  },\n  \"invitee\": {\n    \"avatar_url\": \"<uri>\",\n    \"events_url\": \"<string>\",\n    \"followers_url\": \"<uri>\",\n    \"following_url\": \"<string>\",\n    \"gists_url\": \"<string>\",\n    \"gravatar_id\": \"<string>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"organizations_url\": \"<uri>\",\n    \"received_events_url\": \"<uri>\",\n    \"repos_url\": \"<uri>\",\n    \"site_admin\": \"<boolean>\",\n    \"starred_url\": \"<string>\",\n    \"subscriptions_url\": \"<uri>\",\n    \"type\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"name\": \"<string>\",\n    \"email\": \"<string>\",\n    \"starred_at\": \"<string>\"\n  },\n  \"repository\": {\n    \"archive_url\": \"<string>\",\n    \"assignees_url\": \"<string>\",\n    \"blobs_url\": \"<string>\",\n    \"branches_url\": \"<string>\",\n    \"collaborators_url\": \"<string>\",\n    \"comments_url\": \"<string>\",\n    \"commits_url\": \"<string>\",\n    \"compare_url\": \"<string>\",\n    \"contents_url\": \"<string>\",\n    \"contributors_url\": \"<uri>\",\n    \"deployments_url\": \"<uri>\",\n    \"description\": \"<string>\",\n    \"downloads_url\": \"<uri>\",\n    \"events_url\": \"<uri>\",\n    \"fork\": \"<boolean>\",\n    \"forks_url\": \"<uri>\",\n    \"full_name\": \"<string>\",\n    \"git_commits_url\": \"<string>\",\n    \"git_refs_url\": \"<string>\",\n    \"git_tags_url\": \"<string>\",\n    \"hooks_url\": \"<uri>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"issue_comment_url\": \"<string>\",\n    \"issue_events_url\": \"<string>\",\n    \"issues_url\": \"<string>\",\n    \"keys_url\": \"<string>\",\n    \"labels_url\": \"<string>\",\n    \"languages_url\": \"<uri>\",\n    \"merges_url\": \"<uri>\",\n    \"milestones_url\": \"<string>\",\n    \"name\": \"<string>\",\n    \"notifications_url\": \"<string>\",\n    \"owner\": {\n      \"avatar_url\": \"<uri>\",\n      \"events_url\": \"<string>\",\n      \"followers_url\": \"<uri>\",\n      \"following_url\": \"<string>\",\n      \"gists_url\": \"<string>\",\n      \"gravatar_id\": \"<string>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"login\": \"<string>\",\n      \"organizations_url\": \"<uri>\",\n      \"received_events_url\": \"<uri>\",\n      \"repos_url\": \"<uri>\",\n      \"site_admin\": \"<boolean>\",\n      \"starred_url\": \"<string>\",\n      \"subscriptions_url\": \"<uri>\",\n      \"type\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"starred_at\": \"<string>\"\n    },\n    \"private\": \"<boolean>\",\n    \"pulls_url\": \"<string>\",\n    \"releases_url\": \"<string>\",\n    \"stargazers_url\": \"<uri>\",\n    \"statuses_url\": \"<string>\",\n    \"subscribers_url\": \"<uri>\",\n    \"subscription_url\": \"<uri>\",\n    \"tags_url\": \"<uri>\",\n    \"teams_url\": \"<uri>\",\n    \"trees_url\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"git_url\": \"<string>\",\n    \"ssh_url\": \"<string>\",\n    \"clone_url\": \"<string>\",\n    \"mirror_url\": \"<string>\",\n    \"svn_url\": \"<string>\",\n    \"homepage\": \"<string>\",\n    \"language\": \"<string>\",\n    \"forks_count\": \"<integer>\",\n    \"stargazers_count\": \"<integer>\",\n    \"watchers_count\": \"<integer>\",\n    \"size\": \"<integer>\",\n    \"default_branch\": \"<string>\",\n    \"open_issues_count\": \"<integer>\",\n    \"is_template\": \"<boolean>\",\n    \"topics\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"has_issues\": \"<boolean>\",\n    \"has_projects\": \"<boolean>\",\n    \"has_wiki\": \"<boolean>\",\n    \"has_pages\": \"<boolean>\",\n    \"has_downloads\": \"<boolean>\",\n    \"has_discussions\": \"<boolean>\",\n    \"archived\": \"<boolean>\",\n    \"disabled\": \"<boolean>\",\n    \"visibility\": \"<string>\",\n    \"pushed_at\": \"<dateTime>\",\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\",\n    \"permissions\": {\n      \"admin\": \"<boolean>\",\n      \"maintain\": \"<boolean>\",\n      \"push\": \"<boolean>\",\n      \"triage\": \"<boolean>\",\n      \"pull\": \"<boolean>\"\n    },\n    \"role_name\": \"<string>\",\n    \"temp_clone_token\": \"<string>\",\n    \"delete_branch_on_merge\": \"<boolean>\",\n    \"subscribers_count\": \"<integer>\",\n    \"network_count\": \"<integer>\",\n    \"code_of_conduct\": {\n      \"url\": \"<uri>\",\n      \"html_url\": \"<uri>\",\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"body\": \"<string>\"\n    },\n    \"license\": {\n      \"key\": \"<string>\",\n      \"name\": \"<string>\",\n      \"spdx_id\": \"<string>\",\n      \"url\": \"<string>\",\n      \"node_id\": \"<string>\"\n    },\n    \"forks\": \"<integer>\",\n    \"open_issues\": \"<integer>\",\n    \"watchers\": \"<integer>\",\n    \"allow_forking\": \"<boolean>\",\n    \"web_commit_signoff_required\": \"<boolean>\",\n    \"security_and_analysis\": {\n      \"advanced_security\": {\n        \"status\": \"enabled\"\n      },\n      \"secret_scanning\": {\n        \"status\": \"enabled\"\n      },\n      \"secret_scanning_push_protection\": {\n        \"status\": \"disabled\"\n      }\n    }\n  },\n  \"url\": \"<string>\",\n  \"html_url\": \"<string>\",\n  \"created_at\": \"<dateTime>\",\n  \"expired\": \"<boolean>\"\n}",
+                              "createdAt": "2026-06-05T13:18:53.000Z",
+                              "updatedAt": "2026-06-05T13:18:53.000Z",
+                              "uid": "35240-ce3fcdc8-d01b-4d51-b344-b7af98f0a506"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:18:53.000Z",
+                          "updatedAt": "2026-06-05T13:18:53.000Z",
+                          "uid": "35240-46db886d-cf3a-474b-b2fc-f92340d04187"
+                        },
+                        {
+                          "name": "GitHub Delete Repository Invitation",
+                          "id": "f7eb19aa-49a5-4201-a47d-dd1e9b3ddade",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/invitations/:invitation_id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "invitations",
+                                ":invitation_id"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "b52e6575-e15b-4a16-9f26-9602e52a328a",
+                                  "key": "owner",
+                                  "value": "<string>",
+                                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "11d090c2-b8f0-45f8-91d8-5e1e353db969",
+                                  "key": "repo",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "e57136fe-b148-41cb-bb99-b5c54aa87597",
+                                  "key": "invitation_id",
+                                  "value": "<integer>",
+                                  "description": "(Required) The unique identifier of the invitation."
+                                }
+                              ]
+                            },
+                            "description": "This API operation allows a repository owner or administrator to delete a pending invitation to collaborate on a repository. By sending a DELETE request to the endpoint with the repository owner's username, repository name, and the specific invitation ID, the invitation is permanently removed and the invited user will no longer be able to accept it. This is useful for revoking invitations that were sent in error, are no longer needed, or when access requirements have changed before the invitation was accepted."
+                          },
+                          "response": [
+                            {
+                              "id": "711ab123-f39c-494d-bcac-2f2ed716a867",
+                              "name": "Response",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/invitations/:invitation_id",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "invitations",
+                                    ":invitation_id"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "invitation_id"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-06-05T13:18:53.000Z",
+                              "updatedAt": "2026-06-05T13:18:53.000Z",
+                              "uid": "35240-711ab123-f39c-494d-bcac-2f2ed716a867"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:18:53.000Z",
+                          "updatedAt": "2026-06-05T13:18:53.000Z",
+                          "uid": "35240-f7eb19aa-49a5-4201-a47d-dd1e9b3ddade"
+                        }
+                      ],
+                      "id": "591db6ec-ac3e-4504-9100-8a40549302e1",
+                      "createdAt": "2026-06-05T13:18:53.000Z",
+                      "updatedAt": "2026-06-05T13:18:53.000Z",
+                      "uid": "35240-591db6ec-ac3e-4504-9100-8a40549302e1"
+                    },
+                    {
+                      "name": "GitHub List Repository Invitations",
+                      "id": "ad57809a-ca98-47ce-a740-4ac6f8b90c3f",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "X-GitHub-Api-Version",
+                            "value": "2022-11-28"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/repos/:owner/:repo/invitations?per_page=30&page=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "repos",
+                            ":owner",
+                            ":repo",
+                            "invitations"
+                          ],
+                          "query": [
+                            {
+                              "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                              "key": "per_page",
+                              "value": "30"
+                            },
+                            {
+                              "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                              "key": "page",
+                              "value": "1"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "efc4dc19-0898-4c8c-b4b0-5aae25d6d2b2",
+                              "key": "owner",
+                              "value": "<string>",
+                              "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                            },
+                            {
+                              "id": "8f7724bb-acfb-4978-86d6-2f2718b05d3a",
+                              "key": "repo",
+                              "value": "<string>",
+                              "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                            }
+                          ]
+                        },
+                        "description": "When authenticating as a user with admin rights to a repository, this endpoint will list all currently open repository invitations."
+                      },
+                      "response": [
+                        {
+                          "id": "97830d51-a4eb-4a1f-b33d-6f81a9de7e63",
+                          "name": "Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/invitations?per_page=30&page=1",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "invitations"
+                              ],
+                              "query": [
+                                {
+                                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "per_page",
+                                  "value": "30"
+                                },
+                                {
+                                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "page",
+                                  "value": "1"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "owner"
+                                },
+                                {
+                                  "key": "repo"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "Link",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "[\n  {\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"permissions\": \"triage\",\n    \"inviter\": {\n      \"avatar_url\": \"<uri>\",\n      \"events_url\": \"<string>\",\n      \"followers_url\": \"<uri>\",\n      \"following_url\": \"<string>\",\n      \"gists_url\": \"<string>\",\n      \"gravatar_id\": \"<string>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"login\": \"<string>\",\n      \"organizations_url\": \"<uri>\",\n      \"received_events_url\": \"<uri>\",\n      \"repos_url\": \"<uri>\",\n      \"site_admin\": \"<boolean>\",\n      \"starred_url\": \"<string>\",\n      \"subscriptions_url\": \"<uri>\",\n      \"type\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"starred_at\": \"<string>\"\n    },\n    \"invitee\": {\n      \"avatar_url\": \"<uri>\",\n      \"events_url\": \"<string>\",\n      \"followers_url\": \"<uri>\",\n      \"following_url\": \"<string>\",\n      \"gists_url\": \"<string>\",\n      \"gravatar_id\": \"<string>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"login\": \"<string>\",\n      \"organizations_url\": \"<uri>\",\n      \"received_events_url\": \"<uri>\",\n      \"repos_url\": \"<uri>\",\n      \"site_admin\": \"<boolean>\",\n      \"starred_url\": \"<string>\",\n      \"subscriptions_url\": \"<uri>\",\n      \"type\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"starred_at\": \"<string>\"\n    },\n    \"repository\": {\n      \"archive_url\": \"<string>\",\n      \"assignees_url\": \"<string>\",\n      \"blobs_url\": \"<string>\",\n      \"branches_url\": \"<string>\",\n      \"collaborators_url\": \"<string>\",\n      \"comments_url\": \"<string>\",\n      \"commits_url\": \"<string>\",\n      \"compare_url\": \"<string>\",\n      \"contents_url\": \"<string>\",\n      \"contributors_url\": \"<uri>\",\n      \"deployments_url\": \"<uri>\",\n      \"description\": \"<string>\",\n      \"downloads_url\": \"<uri>\",\n      \"events_url\": \"<uri>\",\n      \"fork\": \"<boolean>\",\n      \"forks_url\": \"<uri>\",\n      \"full_name\": \"<string>\",\n      \"git_commits_url\": \"<string>\",\n      \"git_refs_url\": \"<string>\",\n      \"git_tags_url\": \"<string>\",\n      \"hooks_url\": \"<uri>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"issue_comment_url\": \"<string>\",\n      \"issue_events_url\": \"<string>\",\n      \"issues_url\": \"<string>\",\n      \"keys_url\": \"<string>\",\n      \"labels_url\": \"<string>\",\n      \"languages_url\": \"<uri>\",\n      \"merges_url\": \"<uri>\",\n      \"milestones_url\": \"<string>\",\n      \"name\": \"<string>\",\n      \"notifications_url\": \"<string>\",\n      \"owner\": {\n        \"avatar_url\": \"<uri>\",\n        \"events_url\": \"<string>\",\n        \"followers_url\": \"<uri>\",\n        \"following_url\": \"<string>\",\n        \"gists_url\": \"<string>\",\n        \"gravatar_id\": \"<string>\",\n        \"html_url\": \"<uri>\",\n        \"id\": \"<long>\",\n        \"node_id\": \"<string>\",\n        \"login\": \"<string>\",\n        \"organizations_url\": \"<uri>\",\n        \"received_events_url\": \"<uri>\",\n        \"repos_url\": \"<uri>\",\n        \"site_admin\": \"<boolean>\",\n        \"starred_url\": \"<string>\",\n        \"subscriptions_url\": \"<uri>\",\n        \"type\": \"<string>\",\n        \"url\": \"<uri>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"starred_at\": \"<string>\"\n      },\n      \"private\": \"<boolean>\",\n      \"pulls_url\": \"<string>\",\n      \"releases_url\": \"<string>\",\n      \"stargazers_url\": \"<uri>\",\n      \"statuses_url\": \"<string>\",\n      \"subscribers_url\": \"<uri>\",\n      \"subscription_url\": \"<uri>\",\n      \"tags_url\": \"<uri>\",\n      \"teams_url\": \"<uri>\",\n      \"trees_url\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"git_url\": \"<string>\",\n      \"ssh_url\": \"<string>\",\n      \"clone_url\": \"<string>\",\n      \"mirror_url\": \"<string>\",\n      \"svn_url\": \"<string>\",\n      \"homepage\": \"<string>\",\n      \"language\": \"<string>\",\n      \"forks_count\": \"<integer>\",\n      \"stargazers_count\": \"<integer>\",\n      \"watchers_count\": \"<integer>\",\n      \"size\": \"<integer>\",\n      \"default_branch\": \"<string>\",\n      \"open_issues_count\": \"<integer>\",\n      \"is_template\": \"<boolean>\",\n      \"topics\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"has_issues\": \"<boolean>\",\n      \"has_projects\": \"<boolean>\",\n      \"has_wiki\": \"<boolean>\",\n      \"has_pages\": \"<boolean>\",\n      \"has_downloads\": \"<boolean>\",\n      \"has_discussions\": \"<boolean>\",\n      \"archived\": \"<boolean>\",\n      \"disabled\": \"<boolean>\",\n      \"visibility\": \"<string>\",\n      \"pushed_at\": \"<dateTime>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"permissions\": {\n        \"admin\": \"<boolean>\",\n        \"maintain\": \"<boolean>\",\n        \"push\": \"<boolean>\",\n        \"triage\": \"<boolean>\",\n        \"pull\": \"<boolean>\"\n      },\n      \"role_name\": \"<string>\",\n      \"temp_clone_token\": \"<string>\",\n      \"delete_branch_on_merge\": \"<boolean>\",\n      \"subscribers_count\": \"<integer>\",\n      \"network_count\": \"<integer>\",\n      \"code_of_conduct\": {\n        \"url\": \"<uri>\",\n        \"html_url\": \"<uri>\",\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"body\": \"<string>\"\n      },\n      \"license\": {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"spdx_id\": \"<string>\",\n        \"url\": \"<string>\",\n        \"node_id\": \"<string>\"\n      },\n      \"forks\": \"<integer>\",\n      \"open_issues\": \"<integer>\",\n      \"watchers\": \"<integer>\",\n      \"allow_forking\": \"<boolean>\",\n      \"web_commit_signoff_required\": \"<boolean>\",\n      \"security_and_analysis\": {\n        \"advanced_security\": {\n          \"status\": \"disabled\"\n        },\n        \"secret_scanning\": {\n          \"status\": \"disabled\"\n        },\n        \"secret_scanning_push_protection\": {\n          \"status\": \"enabled\"\n        }\n      }\n    },\n    \"url\": \"<string>\",\n    \"html_url\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"expired\": \"<boolean>\"\n  },\n  {\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"permissions\": \"admin\",\n    \"inviter\": {\n      \"avatar_url\": \"<uri>\",\n      \"events_url\": \"<string>\",\n      \"followers_url\": \"<uri>\",\n      \"following_url\": \"<string>\",\n      \"gists_url\": \"<string>\",\n      \"gravatar_id\": \"<string>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"login\": \"<string>\",\n      \"organizations_url\": \"<uri>\",\n      \"received_events_url\": \"<uri>\",\n      \"repos_url\": \"<uri>\",\n      \"site_admin\": \"<boolean>\",\n      \"starred_url\": \"<string>\",\n      \"subscriptions_url\": \"<uri>\",\n      \"type\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"starred_at\": \"<string>\"\n    },\n    \"invitee\": {\n      \"avatar_url\": \"<uri>\",\n      \"events_url\": \"<string>\",\n      \"followers_url\": \"<uri>\",\n      \"following_url\": \"<string>\",\n      \"gists_url\": \"<string>\",\n      \"gravatar_id\": \"<string>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"login\": \"<string>\",\n      \"organizations_url\": \"<uri>\",\n      \"received_events_url\": \"<uri>\",\n      \"repos_url\": \"<uri>\",\n      \"site_admin\": \"<boolean>\",\n      \"starred_url\": \"<string>\",\n      \"subscriptions_url\": \"<uri>\",\n      \"type\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"name\": \"<string>\",\n      \"email\": \"<string>\",\n      \"starred_at\": \"<string>\"\n    },\n    \"repository\": {\n      \"archive_url\": \"<string>\",\n      \"assignees_url\": \"<string>\",\n      \"blobs_url\": \"<string>\",\n      \"branches_url\": \"<string>\",\n      \"collaborators_url\": \"<string>\",\n      \"comments_url\": \"<string>\",\n      \"commits_url\": \"<string>\",\n      \"compare_url\": \"<string>\",\n      \"contents_url\": \"<string>\",\n      \"contributors_url\": \"<uri>\",\n      \"deployments_url\": \"<uri>\",\n      \"description\": \"<string>\",\n      \"downloads_url\": \"<uri>\",\n      \"events_url\": \"<uri>\",\n      \"fork\": \"<boolean>\",\n      \"forks_url\": \"<uri>\",\n      \"full_name\": \"<string>\",\n      \"git_commits_url\": \"<string>\",\n      \"git_refs_url\": \"<string>\",\n      \"git_tags_url\": \"<string>\",\n      \"hooks_url\": \"<uri>\",\n      \"html_url\": \"<uri>\",\n      \"id\": \"<long>\",\n      \"node_id\": \"<string>\",\n      \"issue_comment_url\": \"<string>\",\n      \"issue_events_url\": \"<string>\",\n      \"issues_url\": \"<string>\",\n      \"keys_url\": \"<string>\",\n      \"labels_url\": \"<string>\",\n      \"languages_url\": \"<uri>\",\n      \"merges_url\": \"<uri>\",\n      \"milestones_url\": \"<string>\",\n      \"name\": \"<string>\",\n      \"notifications_url\": \"<string>\",\n      \"owner\": {\n        \"avatar_url\": \"<uri>\",\n        \"events_url\": \"<string>\",\n        \"followers_url\": \"<uri>\",\n        \"following_url\": \"<string>\",\n        \"gists_url\": \"<string>\",\n        \"gravatar_id\": \"<string>\",\n        \"html_url\": \"<uri>\",\n        \"id\": \"<long>\",\n        \"node_id\": \"<string>\",\n        \"login\": \"<string>\",\n        \"organizations_url\": \"<uri>\",\n        \"received_events_url\": \"<uri>\",\n        \"repos_url\": \"<uri>\",\n        \"site_admin\": \"<boolean>\",\n        \"starred_url\": \"<string>\",\n        \"subscriptions_url\": \"<uri>\",\n        \"type\": \"<string>\",\n        \"url\": \"<uri>\",\n        \"name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"starred_at\": \"<string>\"\n      },\n      \"private\": \"<boolean>\",\n      \"pulls_url\": \"<string>\",\n      \"releases_url\": \"<string>\",\n      \"stargazers_url\": \"<uri>\",\n      \"statuses_url\": \"<string>\",\n      \"subscribers_url\": \"<uri>\",\n      \"subscription_url\": \"<uri>\",\n      \"tags_url\": \"<uri>\",\n      \"teams_url\": \"<uri>\",\n      \"trees_url\": \"<string>\",\n      \"url\": \"<uri>\",\n      \"git_url\": \"<string>\",\n      \"ssh_url\": \"<string>\",\n      \"clone_url\": \"<string>\",\n      \"mirror_url\": \"<string>\",\n      \"svn_url\": \"<string>\",\n      \"homepage\": \"<string>\",\n      \"language\": \"<string>\",\n      \"forks_count\": \"<integer>\",\n      \"stargazers_count\": \"<integer>\",\n      \"watchers_count\": \"<integer>\",\n      \"size\": \"<integer>\",\n      \"default_branch\": \"<string>\",\n      \"open_issues_count\": \"<integer>\",\n      \"is_template\": \"<boolean>\",\n      \"topics\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"has_issues\": \"<boolean>\",\n      \"has_projects\": \"<boolean>\",\n      \"has_wiki\": \"<boolean>\",\n      \"has_pages\": \"<boolean>\",\n      \"has_downloads\": \"<boolean>\",\n      \"has_discussions\": \"<boolean>\",\n      \"archived\": \"<boolean>\",\n      \"disabled\": \"<boolean>\",\n      \"visibility\": \"<string>\",\n      \"pushed_at\": \"<dateTime>\",\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\",\n      \"permissions\": {\n        \"admin\": \"<boolean>\",\n        \"maintain\": \"<boolean>\",\n        \"push\": \"<boolean>\",\n        \"triage\": \"<boolean>\",\n        \"pull\": \"<boolean>\"\n      },\n      \"role_name\": \"<string>\",\n      \"temp_clone_token\": \"<string>\",\n      \"delete_branch_on_merge\": \"<boolean>\",\n      \"subscribers_count\": \"<integer>\",\n      \"network_count\": \"<integer>\",\n      \"code_of_conduct\": {\n        \"url\": \"<uri>\",\n        \"html_url\": \"<uri>\",\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"body\": \"<string>\"\n      },\n      \"license\": {\n        \"key\": \"<string>\",\n        \"name\": \"<string>\",\n        \"spdx_id\": \"<string>\",\n        \"url\": \"<string>\",\n        \"node_id\": \"<string>\"\n      },\n      \"forks\": \"<integer>\",\n      \"open_issues\": \"<integer>\",\n      \"watchers\": \"<integer>\",\n      \"allow_forking\": \"<boolean>\",\n      \"web_commit_signoff_required\": \"<boolean>\",\n      \"security_and_analysis\": {\n        \"advanced_security\": {\n          \"status\": \"disabled\"\n        },\n        \"secret_scanning\": {\n          \"status\": \"enabled\"\n        },\n        \"secret_scanning_push_protection\": {\n          \"status\": \"enabled\"\n        }\n      }\n    },\n    \"url\": \"<string>\",\n    \"html_url\": \"<string>\",\n    \"created_at\": \"<dateTime>\",\n    \"expired\": \"<boolean>\"\n  }\n]",
+                          "createdAt": "2026-06-05T13:18:53.000Z",
+                          "updatedAt": "2026-06-05T13:18:53.000Z",
+                          "uid": "35240-97830d51-a4eb-4a1f-b33d-6f81a9de7e63"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:18:53.000Z",
+                      "updatedAt": "2026-06-05T13:18:53.000Z",
+                      "uid": "35240-ad57809a-ca98-47ce-a740-4ac6f8b90c3f"
+                    }
+                  ],
+                  "id": "c1a03e44-7c3a-4339-b192-c22ec1c12233",
+                  "createdAt": "2026-06-05T13:18:53.000Z",
+                  "updatedAt": "2026-06-05T13:18:53.000Z",
+                  "uid": "35240-c1a03e44-7c3a-4339-b192-c22ec1c12233"
+                }
+              ],
+              "id": "d83ce837-8afd-4b2d-bbe4-5f8e3522f925",
+              "createdAt": "2026-06-05T13:18:53.000Z",
+              "updatedAt": "2026-06-05T13:18:53.000Z",
+              "uid": "35240-d83ce837-8afd-4b2d-bbe4-5f8e3522f925"
+            }
+          ],
+          "id": "4cd5d05c-e0b4-4a04-9fb2-54fdb9f7bee1",
+          "createdAt": "2026-06-05T13:18:53.000Z",
+          "updatedAt": "2026-06-05T13:18:53.000Z",
+          "uid": "35240-4cd5d05c-e0b4-4a04-9fb2-54fdb9f7bee1"
+        }
+      ],
+      "id": "c038f265-fcd5-41c4-bc0d-5a43a9b39be4",
+      "createdAt": "2026-06-05T13:18:53.000Z",
+      "updatedAt": "2026-06-05T13:18:53.000Z",
+      "uid": "35240-c038f265-fcd5-41c4-bc0d-5a43a9b39be4"
+    }
+  ],
+  "variable": [
+    {
+      "key": "hostname",
+      "value": "api.github.com"
+    },
+    {
+      "key": "protocol",
+      "value": "https"
+    },
+    {
+      "key": "baseUrl",
+      "value": "{{protocol}}://{{hostname}}"
+    }
+  ]
+}

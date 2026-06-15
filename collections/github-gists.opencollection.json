@@ -1,0 +1,492 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub Gists API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Gists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Public Gists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/public",
+            "params": [
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List public gists sorted by most recently updated to least recently updated.\n\nNote: With [pagination](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api), you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page."
+        },
+        {
+          "info": {
+            "name": "GitHub List Starred Gists",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/starred",
+            "params": [
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "The GitHub Gists API endpoint GET /gists/starred retrieves a list of all gists that the authenticated user has starred. This operation requires authentication and returns a paginated collection of gist objects, each containing metadata such as the gist's ID, description, owner information, files, creation and update timestamps, and visibility status. The endpoint supports standard pagination parameters to navigate through the results, allowing developers to programmatically access and manage the"
+        },
+        {
+          "info": {
+            "name": "GitHub Updategist",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Allows you to update a gist's description and to update, delete, or rename gist files. Files\nfrom the previous version of the gist that aren't explicitly changed during an edit\nare unchanged.\n\nAt least one of `description` or `files` is required.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+js"
+        },
+        {
+          "info": {
+            "name": "GitHub Stargist",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/star",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Unstargist",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/star",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "This API operation allows authenticated users to remove their star from a previously starred GitHub Gist by sending a DELETE request to the endpoint with the specific Gist ID. When executed successfully, it removes the user's star designation from the specified Gist, effectively indicating that the user no longer wishes to mark that Gist as a favorite or bookmark it for later reference. This is part of GitHub's Gist starring functionality that helps users curate and organize code snippets they f"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Get",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Getgist",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "Gets a specified gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any i"
+        },
+        {
+          "info": {
+            "name": "GitHub Getgist Revision",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/:sha",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "sha",
+                "value": "abc123def456789012345678901234567890",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets a specified gist revision.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist conta"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Delete",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Deletegist",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "The DELETE operation on the /gists/{gist_id} endpoint allows authenticated users to permanently remove a specific gist from GitHub. This operation requires the gist_id path parameter to identify which gist should be deleted, and the user must be authenticated with proper authorization scopes (typically the 'gist' scope) to perform the deletion. Once executed successfully, the gist and all its associated content, revisions, and metadata are permanently removed from GitHub's servers and cannot be "
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Comments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Gist Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists the comments on a gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contain"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Comment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Creategist Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a comment on a gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains"
+        },
+        {
+          "info": {
+            "name": "GitHub Getgist Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments/:comment_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "comment_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the comment."
+              }
+            ]
+          },
+          "docs": "Gets a comment on a gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains an"
+        },
+        {
+          "info": {
+            "name": "GitHub Updategist Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments/:comment_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "comment_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a comment on a gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains"
+        },
+        {
+          "info": {
+            "name": "GitHub Deletegist Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments/:comment_id",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "comment_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the comment."
+              }
+            ]
+          },
+          "docs": "This API operation allows you to delete a specific comment from a GitHub Gist by providing both the gist ID and the comment ID in the endpoint path. When executed, it permanently removes the targeted comment from the specified Gist, requiring proper authentication and authorization to ensure only the comment author or users with appropriate permissions can perform the deletion. The operation uses the DELETE HTTP method and returns a success status code when the comment is successfully removed fr"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Commits",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Gist Commits",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/commits",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "This API endpoint retrieves the commit history for a specific GitHub Gist by making a GET request to /gists/{gist_id}/commits, where {gist_id} is the unique identifier of the Gist you want to query. The response returns a chronological list of all commits made to that Gist, including information such as the commit version, URL, user who made the commit, timestamp of when it was committed, and change statistics showing additions, deletions, and total changes. This is particularly useful for track"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Forks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Gist Forks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/forks",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "This API endpoint retrieves a list of all forks for a specific GitHub Gist identified by its gist_id parameter. When called with a GET request, it returns an array of fork objects, each containing details about users who have forked the gist, including their user information, the fork's creation date, and the forked gist's URL. This is useful for tracking how widely a gist has been shared and reused across the GitHub community, allowing developers to see who has created their own copy of the ori"
+        },
+        {
+          "info": {
+            "name": "GitHub Forkgist",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/forks",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "This API endpoint allows authenticated users to create a fork (copy) of an existing gist by making a POST request to /gists/{gist_id}/forks, where {gist_id} is the unique identifier of the gist to be forked. When executed successfully, it creates a duplicate of the specified gist under the authenticated user's account, preserving all the original files and content while establishing a relationship between the forked gist and its parent. This operation requires authentication and returns the newl"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Checks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Check Ifgist is Starred",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/star",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              }
+            ]
+          },
+          "docs": "The Check If A Gist Is Starred operation is a GET request to the /gists/{gist_id}/star endpoint that allows authenticated users to verify whether they have starred a specific gist. This endpoint requires the gist_id path parameter to identify the target gist and returns a boolean-style HTTP status response: 204 No Content if the gist is starred by the authenticated user, or 404 Not Found if it is not starred or does not exist. This operation is useful for applications that need to display or tra"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

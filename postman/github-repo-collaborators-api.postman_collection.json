@@ -1,0 +1,1238 @@
+{
+  "info": {
+    "_postman_id": "94480a5f-ae06-4fe7-8f4b-7e37eb4c0792",
+    "name": "github-repos-api",
+    "description": "Use the REST API to create, manage and control the workflow of public and\nprivate GitHub repositories.\n\nContact Support:\n Name: Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T13:18:36.000Z",
+    "updatedAt": "2026-06-05T13:18:36.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-94480a5f-ae06-4fe7-8f4b-7e37eb4c0792"
+  },
+  "item": [
+    {
+      "name": "repos",
+      "item": [
+        {
+          "name": "{owner}",
+          "item": [
+            {
+              "name": "{repo}",
+              "item": [
+                {
+                  "name": "collaborators",
+                  "item": [
+                    {
+                      "name": "{username}",
+                      "item": [
+                        {
+                          "name": "permission",
+                          "item": [
+                            {
+                              "name": "GitHub Get Repository Permissions for User",
+                              "id": "00f8441e-7e0b-46d6-803e-db00aef79446",
+                              "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                              },
+                              "request": {
+                                "auth": {
+                                  "type": "bearer",
+                                  "bearer": [
+                                    {
+                                      "key": "token",
+                                      "value": "{{bearerToken}}",
+                                      "type": "string"
+                                    }
+                                  ]
+                                },
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username/permission",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username",
+                                    "permission"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "id": "636aae34-144d-4fb1-bb85-eb8160779e1f",
+                                      "key": "owner",
+                                      "value": "<string>",
+                                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                    },
+                                    {
+                                      "id": "a9bc743c-8133-43c4-a53f-d29cdf0bcdd2",
+                                      "key": "repo",
+                                      "value": "<string>",
+                                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                    },
+                                    {
+                                      "id": "2350ef87-8de4-4c2f-ad45-547a64d98f82",
+                                      "key": "username",
+                                      "value": "<string>",
+                                      "description": "(Required) The handle for the GitHub user account."
+                                    }
+                                  ]
+                                },
+                                "description": "Checks the repository permission of a collaborator. The possible repository\npermissions are `admin`, `write`, `read`, and `none`.\n\n*Note*: The `permission` attribute provides the legacy base roles of `admin`, `write`, `read`, and `none`, where the\n`maintain` role is mapped to `write` and the `triage` role is mapped to `read`. To determine the role assigned to the\ncollaborator, see the `role_name` attribute, which will provide the full role name, including custom roles. The\n`permissions` hash can also be used to determine which base level of access the collaborator has to the repository."
+                              },
+                              "response": [
+                                {
+                                  "id": "1a76686a-1fcd-4381-a6b1-40474baa8116",
+                                  "name": "if user has admin permissions",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "X-GitHub-Api-Version",
+                                        "value": "2022-11-28"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username/permission",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "repos",
+                                        ":owner",
+                                        ":repo",
+                                        "collaborators",
+                                        ":username",
+                                        "permission"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "owner"
+                                        },
+                                        {
+                                          "key": "repo"
+                                        },
+                                        {
+                                          "key": "username"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "OK",
+                                  "code": 200,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"permission\": \"<string>\",\n  \"role_name\": \"<string>\",\n  \"user\": {\n    \"avatar_url\": \"<uri>\",\n    \"events_url\": \"<string>\",\n    \"followers_url\": \"<uri>\",\n    \"following_url\": \"<string>\",\n    \"gists_url\": \"<string>\",\n    \"gravatar_id\": \"<string>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"organizations_url\": \"<uri>\",\n    \"received_events_url\": \"<uri>\",\n    \"repos_url\": \"<uri>\",\n    \"site_admin\": \"<boolean>\",\n    \"starred_url\": \"<string>\",\n    \"subscriptions_url\": \"<uri>\",\n    \"type\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"email\": \"<string>\",\n    \"name\": \"<string>\",\n    \"permissions\": {\n      \"pull\": \"<boolean>\",\n      \"push\": \"<boolean>\",\n      \"admin\": \"<boolean>\",\n      \"triage\": \"<boolean>\",\n      \"maintain\": \"<boolean>\"\n    },\n    \"role_name\": \"<string>\"\n  }\n}",
+                                  "createdAt": "2026-06-05T13:18:36.000Z",
+                                  "updatedAt": "2026-06-05T13:18:36.000Z",
+                                  "uid": "35240-1a76686a-1fcd-4381-a6b1-40474baa8116"
+                                },
+                                {
+                                  "id": "5bd5e45a-9459-4cfb-a4a1-f0f101641ae6",
+                                  "name": "Resource not found",
+                                  "originalRequest": {
+                                    "method": "GET",
+                                    "header": [
+                                      {
+                                        "key": "X-GitHub-Api-Version",
+                                        "value": "2022-11-28"
+                                      },
+                                      {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                      },
+                                      {
+                                        "description": "Added as a part of security scheme: bearer",
+                                        "key": "Authorization",
+                                        "value": "Bearer <token>"
+                                      }
+                                    ],
+                                    "url": {
+                                      "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username/permission",
+                                      "host": [
+                                        "{{baseUrl}}"
+                                      ],
+                                      "path": [
+                                        "repos",
+                                        ":owner",
+                                        ":repo",
+                                        "collaborators",
+                                        ":username",
+                                        "permission"
+                                      ],
+                                      "variable": [
+                                        {
+                                          "key": "owner"
+                                        },
+                                        {
+                                          "key": "repo"
+                                        },
+                                        {
+                                          "key": "username"
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  "status": "Not Found",
+                                  "code": 404,
+                                  "_postman_previewlanguage": "json",
+                                  "header": [
+                                    {
+                                      "key": "Content-Type",
+                                      "value": "application/json"
+                                    }
+                                  ],
+                                  "cookie": [],
+                                  "responseTime": null,
+                                  "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"url\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                                  "createdAt": "2026-06-05T13:18:36.000Z",
+                                  "updatedAt": "2026-06-05T13:18:36.000Z",
+                                  "uid": "35240-5bd5e45a-9459-4cfb-a4a1-f0f101641ae6"
+                                }
+                              ],
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-00f8441e-7e0b-46d6-803e-db00aef79446"
+                            }
+                          ],
+                          "id": "951bd218-32d8-4e16-9cfb-4f8f3d59970f",
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-951bd218-32d8-4e16-9cfb-4f8f3d59970f"
+                        },
+                        {
+                          "name": "GitHub Check if User is Repository Collaborator",
+                          "id": "95de1dde-7eb3-4f37-9171-6f6fe78749f5",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "collaborators",
+                                ":username"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "0b0dc52c-d11d-4862-9dc3-a407cfff9ffc",
+                                  "key": "owner",
+                                  "value": "<string>",
+                                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "0bfba38f-ebef-48b3-9b3f-66cd515b8343",
+                                  "key": "repo",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "d7f99cdd-7dd5-42b2-85c4-f9af541ea664",
+                                  "key": "username",
+                                  "value": "<string>",
+                                  "description": "(Required) The handle for the GitHub user account."
+                                }
+                              ]
+                            },
+                            "description": "For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.\n\nTeam members will include the members of child teams.\n\nThe authenticated user must have push access to the repository to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `read:org` and `repo` scopes to use this endpoint."
+                          },
+                          "response": [
+                            {
+                              "id": "b2606d00-9161-4a1a-b4f2-147720ab90ab",
+                              "name": "Response if user is a collaborator",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-b2606d00-9161-4a1a-b4f2-147720ab90ab"
+                            },
+                            {
+                              "id": "f4e2cf78-6f75-458d-96ed-35ddc5f6f869",
+                              "name": "Not Found if user is not a collaborator",
+                              "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-f4e2cf78-6f75-458d-96ed-35ddc5f6f869"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-95de1dde-7eb3-4f37-9171-6f6fe78749f5"
+                        },
+                        {
+                          "name": "GitHub Add Repository Collaborator",
+                          "id": "5d5fbaba-21d8-46ca-90af-3a61a6d9e351",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"permission\": \"push\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "collaborators",
+                                ":username"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "385292aa-5208-4627-a83d-efd584cd7833",
+                                  "key": "owner",
+                                  "value": "<string>",
+                                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "dcc4f73c-479d-4474-bf7b-da8c6dc55d05",
+                                  "key": "repo",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "e0891caa-c447-43a4-abd9-79a05f8c0718",
+                                  "key": "username",
+                                  "value": "<string>",
+                                  "description": "(Required) The handle for the GitHub user account."
+                                }
+                              ]
+                            },
+                            "description": "This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.9/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see \"[Rate limits for the API](https://docs.github.com/enterprise-server@3.9/rest/overview/rate-limits-for-the-rest-api#about-secondary-rate-limits)\" and \"[Best practices for using the REST API](https://docs.github.com/enterprise-server@3.9/rest/guides/best-practices-for-using-the-rest-api).\"\n\nAdding an outside collaborator may be restricted by enterprise administrators. For more information, see \"[Enforcing repository management policies in your enterprise](https://docs.github.com/enterprise-server@3.9/admin/policies/enforcing-policies-for-your-enterprise/enforcing-repository-management-policies-in-your-enterprise#enforcing-a-policy-for-inviting-outside-collaborators-to-repositories).\"\n\nFor more information on permission levels, see \"[Repository permission levels for an organization](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/repository-permission-levels-for-an-organization#permission-levels-for-repositories-owned-by-an-organization)\". There are restrictions on which permissions can be granted to organization members when an organization base role is in place. In this case, the permission being given must be equal to or higher than the org base permission. Otherwise, the request will fail with:\n\n```\nCannot assign {member} permission of {role name}\n```\n\nNote that, if you choose not to pass any parameters, you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method).\"\n\n**Updating an existing collaborator's permission level**\n\nThe endpoint can also be used to change the permissions of an existing collaborator without first removing and re-adding the collaborator. To change the permissions, use the same endpoint and pass a different `permission` parameter. The response will be a `204`, with no other indication that the permission level changed."
+                          },
+                          "response": [
+                            {
+                              "id": "2ded24bf-a46e-48ea-8d99-7c65908b7110",
+                              "name": "Response when:\n- an existing collaborator is added as a collaborator\n- an organization member is added as an individual collaborator\n- an existing team member (whose team is also a repository collaborator) is added as an individual collaborator",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"permission\": \"push\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-2ded24bf-a46e-48ea-8d99-7c65908b7110"
+                            },
+                            {
+                              "id": "c123b2f1-2cd2-4a04-831d-f439401b118e",
+                              "name": "Forbidden",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"permission\": \"push\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"url\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-c123b2f1-2cd2-4a04-831d-f439401b118e"
+                            },
+                            {
+                              "id": "8d10db97-b7a1-493e-a955-f86e417403a6",
+                              "name": "Validation failed, or the endpoint has been spammed.",
+                              "originalRequest": {
+                                "method": "PUT",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"permission\": \"push\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                              "code": 422,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"errors\": [\n    {\n      \"code\": \"<string>\",\n      \"resource\": \"<string>\",\n      \"field\": \"<string>\",\n      \"message\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"resource\": \"<string>\",\n      \"field\": \"<string>\",\n      \"message\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-8d10db97-b7a1-493e-a955-f86e417403a6"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-5d5fbaba-21d8-46ca-90af-3a61a6d9e351"
+                        },
+                        {
+                          "name": "GitHub Remove Repository Collaborator",
+                          "id": "d01b5d53-8bd5-4e4d-84e6-42e765551796",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "auth": {
+                              "type": "bearer",
+                              "bearer": [
+                                {
+                                  "key": "token",
+                                  "value": "{{bearerToken}}",
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "collaborators",
+                                ":username"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "13da6879-5319-4fea-95f0-4f7285daa5cd",
+                                  "key": "owner",
+                                  "value": "<string>",
+                                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "91d57b0b-593f-4d4b-ab50-5f1117ad7439",
+                                  "key": "repo",
+                                  "value": "<string>",
+                                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                                },
+                                {
+                                  "id": "4907a37a-ba8f-4af9-b919-4eda2de0d489",
+                                  "key": "username",
+                                  "value": "<string>",
+                                  "description": "(Required) The handle for the GitHub user account."
+                                }
+                              ]
+                            },
+                            "description": "Removes a collaborator from a repository.\n\nTo use this endpoint, the authenticated user must either be an administrator of the repository or target themselves for removal.\n\nThis endpoint also:\n- Cancels any outstanding invitations\n- Unasigns the user from any issues\n- Removes access to organization projects if the user is not an organization member and is not a collaborator on any other organization repositories.\n- Unstars the repository\n- Updates access permissions to packages\n\nRemoving a user as a collaborator has the following effects on forks:\n\n\n\n\n\n\n\n\n\n\n - If the user had access to a fork through their membership to this repository, the user will also be removed from the fork.\n - If the user had their own fork of the repository, the fork will be deleted.\n - If the user still has read access to the repository, open pull requests by this user from a fork will be denied.\n\n**Note**: user can still have access to the repository through organization permissions like base repository permissions.\n\nAlthough the API responds immediately, the additional permission updates might take some extra time to complete in the background.\n\nFor more information on fork permissions, see \"[About permissions and visibility of forks](https://docs.github.com/enterprise-server@3.9/pull-requests/collaborating-with-pull-requests/working-with-forks/about-permissions-and-visibility-of-forks)\"."
+                          },
+                          "response": [
+                            {
+                              "id": "dbc213bd-6938-40f3-bc23-046994994ca3",
+                              "name": "No Content when collaborator was removed from the repository.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-dbc213bd-6938-40f3-bc23-046994994ca3"
+                            },
+                            {
+                              "id": "7e30c908-45b5-4cf6-a1ad-30e4eb5baa53",
+                              "name": "Forbidden",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"url\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-7e30c908-45b5-4cf6-a1ad-30e4eb5baa53"
+                            },
+                            {
+                              "id": "a248cfa1-83a5-4d47-8e50-f46df87632db",
+                              "name": "Validation failed, or the endpoint has been spammed.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "X-GitHub-Api-Version",
+                                    "value": "2022-11-28"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: bearer",
+                                    "key": "Authorization",
+                                    "value": "Bearer <token>"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators/:username",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "repos",
+                                    ":owner",
+                                    ":repo",
+                                    "collaborators",
+                                    ":username"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "owner"
+                                    },
+                                    {
+                                      "key": "repo"
+                                    },
+                                    {
+                                      "key": "username"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+                              "code": 422,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"errors\": [\n    {\n      \"code\": \"<string>\",\n      \"resource\": \"<string>\",\n      \"field\": \"<string>\",\n      \"message\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"code\": \"<string>\",\n      \"resource\": \"<string>\",\n      \"field\": \"<string>\",\n      \"message\": \"<string>\",\n      \"index\": \"<integer>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+                              "createdAt": "2026-06-05T13:18:36.000Z",
+                              "updatedAt": "2026-06-05T13:18:36.000Z",
+                              "uid": "35240-a248cfa1-83a5-4d47-8e50-f46df87632db"
+                            }
+                          ],
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-d01b5d53-8bd5-4e4d-84e6-42e765551796"
+                        }
+                      ],
+                      "id": "44e76f73-6c55-44a5-85d6-d2cb24014079",
+                      "createdAt": "2026-06-05T13:18:36.000Z",
+                      "updatedAt": "2026-06-05T13:18:36.000Z",
+                      "uid": "35240-44e76f73-6c55-44a5-85d6-d2cb24014079"
+                    },
+                    {
+                      "name": "GitHub List Repository Collaborators",
+                      "id": "53699a69-a6f8-48f8-bebc-a101d1ec1b3d",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "X-GitHub-Api-Version",
+                            "value": "2022-11-28"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators?affiliation=all&permission=maintain&per_page=30&page=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "repos",
+                            ":owner",
+                            ":repo",
+                            "collaborators"
+                          ],
+                          "query": [
+                            {
+                              "description": "Filter collaborators returned by their affiliation. `outside` means all outside collaborators of an organization-owned repository. `direct` means all collaborators with permissions to an organization-owned repository, regardless of organization membership status. `all` means all collaborators the authenticated user can see.",
+                              "key": "affiliation",
+                              "value": "all"
+                            },
+                            {
+                              "description": "Filter collaborators by the permissions they have on the repository. If not specified, all collaborators will be returned.",
+                              "key": "permission",
+                              "value": "maintain"
+                            },
+                            {
+                              "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                              "key": "per_page",
+                              "value": "30"
+                            },
+                            {
+                              "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                              "key": "page",
+                              "value": "1"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "617a6d02-ba98-4405-a902-ec91c9cf1f24",
+                              "key": "owner",
+                              "value": "<string>",
+                              "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                            },
+                            {
+                              "id": "7c869899-9d48-42af-8375-68564841d868",
+                              "key": "repo",
+                              "value": "<string>",
+                              "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                            }
+                          ]
+                        },
+                        "description": "For organization-owned repositories, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners.\nOrganization members with write, maintain, or admin privileges on the organization-owned repository can use this endpoint.\n\nTeam members will include the members of child teams.\n\nThe authenticated user must have push access to the repository to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `read:org` and `repo` scopes to use this endpoint."
+                      },
+                      "response": [
+                        {
+                          "id": "5bc2b56c-2050-4915-bd9a-8cb5bae3efc0",
+                          "name": "Response",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators?affiliation=all&permission=maintain&per_page=30&page=1",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "collaborators"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter collaborators returned by their affiliation. `outside` means all outside collaborators of an organization-owned repository. `direct` means all collaborators with permissions to an organization-owned repository, regardless of organization membership status. `all` means all collaborators the authenticated user can see.",
+                                  "key": "affiliation",
+                                  "value": "all"
+                                },
+                                {
+                                  "description": "Filter collaborators by the permissions they have on the repository. If not specified, all collaborators will be returned.",
+                                  "key": "permission",
+                                  "value": "maintain"
+                                },
+                                {
+                                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "per_page",
+                                  "value": "30"
+                                },
+                                {
+                                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "page",
+                                  "value": "1"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "owner"
+                                },
+                                {
+                                  "key": "repo"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "",
+                                "type": "text/plain"
+                              },
+                              "key": "Link",
+                              "value": ""
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "[\n  {\n    \"avatar_url\": \"<uri>\",\n    \"events_url\": \"<string>\",\n    \"followers_url\": \"<uri>\",\n    \"following_url\": \"<string>\",\n    \"gists_url\": \"<string>\",\n    \"gravatar_id\": \"<string>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"organizations_url\": \"<uri>\",\n    \"received_events_url\": \"<uri>\",\n    \"repos_url\": \"<uri>\",\n    \"site_admin\": \"<boolean>\",\n    \"starred_url\": \"<string>\",\n    \"subscriptions_url\": \"<uri>\",\n    \"type\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"email\": \"<string>\",\n    \"name\": \"<string>\",\n    \"permissions\": {\n      \"pull\": \"<boolean>\",\n      \"push\": \"<boolean>\",\n      \"admin\": \"<boolean>\",\n      \"triage\": \"<boolean>\",\n      \"maintain\": \"<boolean>\"\n    },\n    \"role_name\": \"<string>\"\n  },\n  {\n    \"avatar_url\": \"<uri>\",\n    \"events_url\": \"<string>\",\n    \"followers_url\": \"<uri>\",\n    \"following_url\": \"<string>\",\n    \"gists_url\": \"<string>\",\n    \"gravatar_id\": \"<string>\",\n    \"html_url\": \"<uri>\",\n    \"id\": \"<long>\",\n    \"node_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"organizations_url\": \"<uri>\",\n    \"received_events_url\": \"<uri>\",\n    \"repos_url\": \"<uri>\",\n    \"site_admin\": \"<boolean>\",\n    \"starred_url\": \"<string>\",\n    \"subscriptions_url\": \"<uri>\",\n    \"type\": \"<string>\",\n    \"url\": \"<uri>\",\n    \"email\": \"<string>\",\n    \"name\": \"<string>\",\n    \"permissions\": {\n      \"pull\": \"<boolean>\",\n      \"push\": \"<boolean>\",\n      \"admin\": \"<boolean>\",\n      \"triage\": \"<boolean>\",\n      \"maintain\": \"<boolean>\"\n    },\n    \"role_name\": \"<string>\"\n  }\n]",
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-5bc2b56c-2050-4915-bd9a-8cb5bae3efc0"
+                        },
+                        {
+                          "id": "1d717529-c8ef-4975-9ba7-6e46e0c8b4f2",
+                          "name": "Resource not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "X-GitHub-Api-Version",
+                                "value": "2022-11-28"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/repos/:owner/:repo/collaborators?affiliation=all&permission=maintain&per_page=30&page=1",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "repos",
+                                ":owner",
+                                ":repo",
+                                "collaborators"
+                              ],
+                              "query": [
+                                {
+                                  "description": "Filter collaborators returned by their affiliation. `outside` means all outside collaborators of an organization-owned repository. `direct` means all collaborators with permissions to an organization-owned repository, regardless of organization membership status. `all` means all collaborators the authenticated user can see.",
+                                  "key": "affiliation",
+                                  "value": "all"
+                                },
+                                {
+                                  "description": "Filter collaborators by the permissions they have on the repository. If not specified, all collaborators will be returned.",
+                                  "key": "permission",
+                                  "value": "maintain"
+                                },
+                                {
+                                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "per_page",
+                                  "value": "30"
+                                },
+                                {
+                                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\"",
+                                  "key": "page",
+                                  "value": "1"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "owner"
+                                },
+                                {
+                                  "key": "repo"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"message\": \"<string>\",\n  \"documentation_url\": \"<string>\",\n  \"url\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+                          "createdAt": "2026-06-05T13:18:36.000Z",
+                          "updatedAt": "2026-06-05T13:18:36.000Z",
+                          "uid": "35240-1d717529-c8ef-4975-9ba7-6e46e0c8b4f2"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T13:18:36.000Z",
+                      "updatedAt": "2026-06-05T13:18:36.000Z",
+                      "uid": "35240-53699a69-a6f8-48f8-bebc-a101d1ec1b3d"
+                    }
+                  ],
+                  "id": "52d0f459-2698-4091-875c-10e3a2e8be31",
+                  "createdAt": "2026-06-05T13:18:36.000Z",
+                  "updatedAt": "2026-06-05T13:18:36.000Z",
+                  "uid": "35240-52d0f459-2698-4091-875c-10e3a2e8be31"
+                }
+              ],
+              "id": "e07127e6-b242-4310-987d-e9f1cf87f212",
+              "createdAt": "2026-06-05T13:18:36.000Z",
+              "updatedAt": "2026-06-05T13:18:36.000Z",
+              "uid": "35240-e07127e6-b242-4310-987d-e9f1cf87f212"
+            }
+          ],
+          "id": "62ce246c-09ec-4200-ab5b-cc79cd301b4c",
+          "createdAt": "2026-06-05T13:18:36.000Z",
+          "updatedAt": "2026-06-05T13:18:36.000Z",
+          "uid": "35240-62ce246c-09ec-4200-ab5b-cc79cd301b4c"
+        }
+      ],
+      "id": "e0d80697-f2ed-4eca-910f-00170ae1f290",
+      "createdAt": "2026-06-05T13:18:36.000Z",
+      "updatedAt": "2026-06-05T13:18:36.000Z",
+      "uid": "35240-e0d80697-f2ed-4eca-910f-00170ae1f290"
+    }
+  ],
+  "variable": [
+    {
+      "key": "hostname",
+      "value": "api.github.com"
+    },
+    {
+      "key": "protocol",
+      "value": "https"
+    },
+    {
+      "key": "baseUrl",
+      "value": "{{protocol}}://{{hostname}}"
+    }
+  ]
+}

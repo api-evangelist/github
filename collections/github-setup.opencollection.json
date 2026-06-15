@@ -1,0 +1,269 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub Setup API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Configuration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get the Configuration Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/configcheck"
+          },
+          "docs": "This endpoint allows you to check the status of the most recent configuration process:\n\nNote that you may need to wait several seconds after you start a process before you can check its status.\n\nThe different statuses are:\n\n| Status        | Description                       |\n| - |  |\n| `PENDING`     | The job has not started yet       |\n| `CONFIGURING` | The job is running                |\n| `DONE`        | The job has finished correctly    |\n| `FAILED`      | The job has finished unexpectedly"
+        },
+        {
+          "info": {
+            "name": "GitHub Start Configuration Process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/configure"
+          },
+          "docs": "The GitHub Setup API's `/setup/api/configure` endpoint accepts POST requests to initiate the configuration process for a new GitHub Enterprise Server instance. This endpoint is typically called during the initial setup phase when administrators need to establish basic system settings such as management console password, hostname, and other foundational configurations. The API operation triggers the configuration workflow that prepares the instance for use, and it returns a response indicating wh"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Get",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get the Maintenance Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/maintenance"
+          },
+          "docs": "The GitHub Setup API endpoint `/setup/api/maintenance` using the GET method retrieves the current maintenance status of a GitHub Enterprise Server instance. This operation allows administrators and monitoring systems to programmatically check whether the server is currently in maintenance mode, which is useful for coordinating deployments, upgrades, or troubleshooting activities. The endpoint returns information about the maintenance state, helping teams understand if the instance is available f"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings"
+          },
+          "docs": "Gets the settings for your instance. To change settings, see the [Set settings endpoint](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#set-settings).\n\n**Note:** You cannot retrieve the management console password with the Enterprise administration API."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Disables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Enable or Disable Maintenance Mode",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/maintenance",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "maintenance",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Sets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Set Settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "settings",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Applies settings on your instance. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#get-settings).\n\n**Notes:**\n\n- The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "All",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get All Authorized Ssh Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings/authorized-keys"
+          },
+          "docs": "The GitHub Setup API endpoint `/setup/api/settings/authorized-keys` with the GET method retrieves a complete list of all authorized SSH keys that have been configured for the GitHub instance. This operation allows administrators to view all SSH public keys that are currently authorized for authentication purposes, providing visibility into which keys have access to the system. The endpoint returns information about each authorized key, which typically includes details such as the key fingerprint"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Add",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Add an Authorized Ssh Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings/authorized-keys",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "authorized_key",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Authorized",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Remove an Authorized Ssh Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings/authorized-keys",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "authorized_key",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Create",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Create Github License",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/start",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "license",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "password",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "settings",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.\n\nNote that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#start-a-configuration-process) to start the actual configuration process.\n\nWhen using this endpoint, your GitHub instance must have a password set. This can be accomplished two ways:\n\n1.  If you're working directly with the API before accessing th"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Licenses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Upgrade License",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/upgrade",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "license",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "This API upgrades your license and also triggers the configuration process.\n\n**Note:** The request body for this operation must be submitted as `multipart/form-data` data. You can can reference the license file by prefixing the filename with the `@` symbol using `curl`. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#-F)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

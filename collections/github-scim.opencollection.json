@@ -1,0 +1,306 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub SCIM API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Enterprise",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Provisioned Scim Groups for an Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups",
+            "params": [
+              {
+                "name": "filter",
+                "value": "example_value",
+                "type": "query",
+                "description": "If specified, only results that match the specified filter will be returned. Multiple filters are not supported. Possible filters are `externalId`, `id`, and `displayName`. For example, `?filter=\"externalId eq '9138790-10932-109120392-12321'\"`."
+              },
+              {
+                "name": "excludedAttributes",
+                "value": "",
+                "type": "query",
+                "description": "Excludes the specified attribute from being returned in the results. Using this parameter can speed up response time."
+              },
+              {
+                "name": "startIndex",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting index of the first result to return when paginating through values."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the number of results to return per page."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nLists provisioned SCIM groups in an enterprise.\n\nYou can improve query search time by using the `excludedAttributes` query parameter with a value of `members` to exclude members from the response."
+        },
+        {
+          "info": {
+            "name": "GitHub Provision Scim Enterprise Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nCreates a SCIM group for an enterprise.\n\nIf members are included as part of the group provisioning payload, they will be created as external group members. It is up to a provider to store a mapping between the `externalId` and `id` of each user."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Scim Provisioning Information for an Enterprise Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups/:scim_group_id",
+            "params": [
+              {
+                "name": "scim_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier of the SCIM group."
+              },
+              {
+                "name": "excludedAttributes",
+                "value": "",
+                "type": "query",
+                "description": "Excludes the specified attribute from being returned in the results. Using this parameter can speed up response time."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nGets information about a SCIM group."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Scim Information for Provisioned Enterprise Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups/:scim_group_id",
+            "params": [
+              {
+                "name": "scim_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier of the SCIM group."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nReplaces an existing provisioned group’s information.\n\nYou must provide all the information required for the group as if you were provisioning it for the first time. Any existing group information that you don't provide will be removed, including group membership. If you want to only update a specific attribute, use the [Update an attribute for a SCIM enterprise group](#update-an-"
+        },
+        {
+          "info": {
+            "name": "GitHub List Scim Provisioned Identities for an Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users",
+            "params": [
+              {
+                "name": "filter",
+                "value": "example_value",
+                "type": "query",
+                "description": "If specified, only results that match the specified filter will be returned. Multiple filters are not supported. Possible filters are `userName`, `externalId`, `id`, and `displayName`. For example, `?filter=\"externalId eq '9138790-10932-109120392-12321'\"`."
+              },
+              {
+                "name": "startIndex",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting index of the first result to return when paginating through values."
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the number of results to return per page."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nLists provisioned SCIM enterprise members.\n\nWhen a user with a SCIM-provisioned external identity is removed from an enterprise through a `patch` with `active` flag set to `false`, the account's metadata is preserved to allow the user to re-join the enterprise in the future. However, the user's account will be suspended and the user will not be able to sign-in. In order to permane"
+        },
+        {
+          "info": {
+            "name": "GitHub Provision Scim Enterprise User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nCreates an external identity for a new SCIM enterprise user.\n\nSCIM does not authenticate users, it only provisions them. The authentication of users is done by SAML. However, when SCIM is enabled, all users need to be provisioned through SCIM before a user can sign in through SAML. The matching of a user to a SCIM provisioned user is done when the SAML assertion is consumed. The u"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Scim Provisioning Information for an Enterprise User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users/:scim_user_id",
+            "params": [
+              {
+                "name": "scim_user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the SCIM user."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nGets information about a SCIM user."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Scim Information for Provisioned Enterprise User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users/:scim_user_id",
+            "params": [
+              {
+                "name": "scim_user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the SCIM user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nReplaces an existing provisioned user's information.\n\nYou must provide all the information required for the user as if you were provisioning them for the first time. Any existing user information that you don't provide will be removed. If you want to only update a specific attribute, use the [Update an attribute for a SCIM user](#update-an-attribute-for-a-scim-enterprise-user) end"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Attribute",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Update an Attribute for Scim Enterprise Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups/:scim_group_id",
+            "params": [
+              {
+                "name": "scim_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier of the SCIM group."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nUpdate a provisioned group’s individual attributes.\n\nTo change a group’s values, you must provide a specific Operations JSON format that contains at least one of the add, remove, or replace operations. For examples and more information on the SCIM operations format, see the [SCIM specification](https://tools.ietf.org/html/rfc7644#section-3.5.2).  Update can also be used to add gro"
+        },
+        {
+          "info": {
+            "name": "GitHub Update an Attribute for Scim Enterprise User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users/:scim_user_id",
+            "params": [
+              {
+                "name": "scim_user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the SCIM user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nUpdate a provisioned user's individual attributes.\n\nTo change a user's values, you must provide a specific `Operations` JSON format that contains at least one of the `add`, `remove`, or `replace` operations. For examples and more information on the SCIM operations format, see the [SCIM specification](https://tools.ietf.org/html/rfc7644#section-3.5.2).\n\n**Note:** Complicated SCIM `"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Delete",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Delete Scim Group from an Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Groups/:scim_group_id",
+            "params": [
+              {
+                "name": "scim_group_id",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier of the SCIM group."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\n Deletes a SCIM group from an enterprise."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Scim User from an Enterprise",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/scim/v2/Users/:scim_user_id",
+            "params": [
+              {
+                "name": "scim_user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the SCIM user."
+              }
+            ]
+          },
+          "docs": "**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.\n\nPermanently suspends a SCIM user from an enterprise, removes all data for the user, obfuscates the login, email, and display name of the user, removes all external-identity SCIM attributes, and deletes the emails, avatar, PATs, SSH keys, OAuth authorizations credentials, GPG keys, and SAML mappings for the user. You will not be able to undo this action."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
