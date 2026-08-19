@@ -1,0 +1,282 @@
+{
+  "item": [
+    {
+      "id": "5b46e04d-cb37-4ad3-851c-0da209142bde",
+      "name": "Committers",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c26f4a1b-89ee-4f63-be5a-60779a490a79",
+          "name": "GitHub Get Github Advanced Security Active Committers for an Organization",
+          "request": {
+            "name": "GitHub Get Github Advanced Security Active Committers for an Organization",
+            "description": {
+              "content": "Gets the GitHub Advanced Security active committers for an organization per repository.\n\nEach distinct user login across all repositories is counted as a single Advanced Security seat, so the `total_advanced_security_committers` is not the sum of advanced_security_committers for each repository.\n\nIf this organization defers to an enterprise for billing, the `total_advanced_security_committers` returned from the organization API may include some users that are in more than one organization, so they will only consume a single Advanced Security seat at the enterprise level.\n\nThe total number of repositories with committer information is tracked by the `total_count` field.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "settings",
+                "billing",
+                "advanced-security"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dbae827f-21de-4800-99dd-24ab5ae14ec2",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "settings",
+                    "billing",
+                    "advanced-security"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total_advanced_security_committers\": 2,\n  \"total_count\": 2,\n  \"repositories\": [\n    {\n      \"name\": \"octocat-org/Hello-World\",\n      \"advanced_security_committers\": 2,\n      \"advanced_security_committers_breakdown\": [\n        {\n          \"user_login\": \"octocat\",\n          \"last_pushed_date\": \"2021-11-03\"\n        },\n        {\n          \"user_login\": \"octokitten\",\n          \"last_pushed_date\": \"2021-10-25\"\n        }\n      ]\n    },\n    {\n      \"name\": \"octocat-org/server\",\n      \"advanced_security_committers\": 1,\n      \"advanced_security_committers_breakdown\": [\n        {\n          \"user_login\": \"octokitten\",\n          \"last_pushed_date\": \"2021-10-26\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "42a0d07a-8ee6-4810-8aa4-b67afcbd079a",
+              "name": "Response if GitHub Advanced Security is not enabled for this repository",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "settings",
+                    "billing",
+                    "advanced-security"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "d0f82cc4-aa5b-4be3-888d-a89d5fc6d6f2",
+    "name": "GitHub Org Committers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the REST API to control and manage all your GitHub organizations.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

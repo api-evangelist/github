@@ -1,0 +1,1328 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub v3 REST Orgs API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orgs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Organizations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/organizations",
+            "params": [
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "An organization ID. Only return organizations with an ID greater than this ID."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all organizations, in the order that they were created on GitHub Enterprise Server.\n\n**Note:** Pagination is powered exclusively by the `since` parameter. Use the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers) to get the URL for the next page of organizations."
+        },
+        {
+          "info": {
+            "name": "GitHub Deprecated - List Custom Repository Roles in an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/organizations/:organization_id/custom_roles",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "12345678",
+                "type": "path",
+                "description": "The unique identifier of the organization."
+              }
+            ]
+          },
+          "docs": "**Note**: This operation is deprecated and will be removed in the future.\nUse the \"[List custom repository roles](https://docs.github.com/enterprise-server@3.9/rest/orgs/custom-roles#list-custom-repository-roles-in-an-organization)\" endpoint instead.\n\nList the custom repository roles available in this organization. For more information on custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organ"
+        },
+        {
+          "info": {
+            "name": "GitHub Get an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Gets information about an organization.\n\nWhen the value of `two_factor_requirement_enabled` is `true`, the organization requires all members, billing managers, and outside collaborators to enable [two-factor authentication](https://docs.github.com/enterprise-server@3.9/articles/securing-your-account-with-two-factor-authentication-2fa/).\n\nTo see the full details about an organization, the authenticated user must be an organization owner.\n\nOAuth app tokens and personal access tokens (classic) need"
+        },
+        {
+          "info": {
+            "name": "GitHub Update an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Parameter Deprecation Notice:** GitHub Enterprise Server will replace and discontinue `members_allowed_repository_creation_type` in favor of more granular permissions. The new input parameters are `members_can_create_public_repositories`, `members_can_create_private_repositories` for all organizations and `members_can_create_internal_repositories` for organizations associated with an enterprise account using GitHub Enterprise Cloud or GitHub Enterprise Server 2.20+. For more information, see t"
+        },
+        {
+          "info": {
+            "name": "GitHub Delete an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Deletes an organization and all its repositories.\n\nThe organization login will be unavailable for 90 days after deletion.\n\nPlease review the Terms of Service regarding account deletion before using this endpoint:\n\nhttps://docs.github.com/enterprise-server@3.9/site-policy/github-terms/github-terms-of-service"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Announcement Banner for Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/announcement",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Gets the announcement banner currently set for the organization. Only returns the announcement banner set at the\norganization level. Organization members may also see an enterprise-level announcement banner. To get an\nannouncement banner displayed at the enterprise level, use the enterprise-level endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Announcement Banner for Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/announcement",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sets the announcement banner to display for the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Announcement Banner from Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/announcement",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Removes the announcement banner currently set for the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Get the Audit Log for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/audit-log",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "phrase",
+                "value": "",
+                "type": "query",
+                "description": "A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log)."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "The event types to include:\n\n- `web` - returns web (non-Git) events.\n- `git` - returns Git events.\n- `all` - returns both web and Git events.\n\nThe default is `web`."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events after this cursor."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events before this cursor."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.\n\nThe default is `desc`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Gets the audit log for an organization. For more information, see \"[Reviewing the audit log for your organization](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization).\"\n\nBy default, the response includes up to 30 events from the past three months. Use the `phrase` parameter to filter results and retrieve older events. For example, use the `phrase` parameter with the `created` qualifier to filter event"
+        },
+        {
+          "info": {
+            "name": "GitHub List Custom Repository Roles in an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/custom-repository-roles",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "List the custom repository roles available in this organization. For more information on custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator of the organization or of a repository of the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin"
+        },
+        {
+          "info": {
+            "name": "GitHub Create a Custom Repository Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/custom-repository-roles",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a custom repository role that can be used by all repositories owned by the organization. For more information on custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` "
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Custom Repository Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/custom-repository-roles/:role_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "role_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the role."
+              }
+            ]
+          },
+          "docs": "Gets a custom repository role that is available to all repositories owned by the organization. For more information on custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator of the organization or of a repository of the organization to use this endpoint.\n\nOAuth app tokens and personal access to"
+        },
+        {
+          "info": {
+            "name": "GitHub Update a Custom Repository Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/custom-repository-roles/:role_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "role_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the role."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a custom repository role that can be used by all repositories owned by the organization. For more information about custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:or"
+        },
+        {
+          "info": {
+            "name": "GitHub Delete a Custom Repository Role",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/custom-repository-roles/:role_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "role_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the role."
+              }
+            ]
+          },
+          "docs": "Deletes a custom role from an organization. Once the custom role has been deleted, any\nuser, team, or invitation with the deleted custom role will be reassigned the inherited role. For more information about custom repository roles, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator for the organization to use this"
+        },
+        {
+          "info": {
+            "name": "GitHub List Organization Webhooks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "GitHub List Organization Webhooks"
+        },
+        {
+          "info": {
+            "name": "GitHub Create an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Here's how you can create a hook that posts payloads in JSON format:"
+        },
+        {
+          "info": {
+            "name": "GitHub Get an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ]
+          },
+          "docs": "Returns a webhook configured in an organization. To get only the webhook `config` properties, see \"[Get a webhook configuration for an organization](/rest/orgs/webhooks#get-a-webhook-configuration-for-an-organization).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Update an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a webhook configured in an organization. When you update a webhook, the `secret` will be overwritten. If you previously had a `secret` set, you must provide the same `secret` or set a new `secret` or the secret will be removed. If you are only updating individual webhook `config` properties, use \"[Update a webhook configuration for an organization](/rest/orgs/webhooks#update-a-webhook-configuration-for-an-organization).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Delete an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ]
+          },
+          "docs": "GitHub Delete an Organization Webhook"
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Webhook Configuration for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/config",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ]
+          },
+          "docs": "Returns the webhook configuration for an organization. To get more information about the webhook, including the `active` state and `events`, use \"[Get an organization webhook ](/rest/orgs/webhooks#get-an-organization-webhook).\"\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org_hook` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Update a Webhook Configuration for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/config",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the webhook configuration for an organization. To update more information about the webhook, including the `active` state and `events`, use \"[Update an organization webhook ](/rest/orgs/webhooks#update-an-organization-webhook).\"\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org_hook` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Deliveries for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors."
+              },
+              {
+                "name": "redelivery",
+                "value": "true",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of webhook deliveries for a webhook configured in an organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Webhook Delivery for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries/:delivery_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a delivery for a webhook configured in an organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Redeliver a Delivery for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries/:delivery_id/attempts",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Redeliver a delivery for a webhook configured in an organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Ping an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/pings",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              }
+            ]
+          },
+          "docs": "This will trigger a [ping event](https://docs.github.com/enterprise-server@3.9/webhooks/#ping-event) to be sent to the hook."
+        },
+        {
+          "info": {
+            "name": "GitHub List App Installations for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/installations",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all GitHub Apps in an organization. The installation count includes\nall GitHub Apps installed on repositories in the organization.\n\nThe authenticated user must be an organization owner to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:read` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Organization Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/members",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "filter",
+                "value": "2fa_disabled",
+                "type": "query",
+                "description": "Filter members returned in the list. `2fa_disabled` means that only members without [two-factor authentication](https://github.com/blog/1614-two-factor-authentication) enabled will be returned. This options is only available for organization owners."
+              },
+              {
+                "name": "role",
+                "value": "all",
+                "type": "query",
+                "description": "Filter members returned by their role."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List all users who are members of an organization. If the authenticated user is also a member of this organization then both concealed and public members will be returned."
+        },
+        {
+          "info": {
+            "name": "GitHub Check Organization Membership for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Check if a user is, publicly or privately, a member of the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove an Organization Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removing a user from this list will remove them from all teams and they will no longer have any access to the organization's repositories."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Organization Membership for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Organization Membership for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Only authenticated organization owners can add a member to the organization or update the member's role.\n\n*   If the authenticated user is _adding_ a member to the organization, the invited user will receive an email inviting them to the organization. The user's [membership status](https://docs.github.com/enterprise-server@3.9/rest/orgs/members#get-organization-membership-for-a-user) will be `pending` until they accept the invitation.\n    \n*   Authenticated users can _update_ a user's membership"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Organization Membership for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "In order to remove a user's membership with an organization, the authenticated user must be an organization owner.\n\nIf the specified user is an active member of the organization, this will remove them from the organization. If the specified user has been invited to the organization, this will cancel their invitation. The specified user will receive an email notification in both cases."
+        },
+        {
+          "info": {
+            "name": "GitHub List Outside Collaborators for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/outside_collaborators",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "filter",
+                "value": "2fa_disabled",
+                "type": "query",
+                "description": "Filter the list of outside collaborators. `2fa_disabled` means that only outside collaborators without [two-factor authentication](https://github.com/blog/1614-two-factor-authentication) enabled will be returned."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List all users who are outside collaborators of an organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Convert an Organization Member to Outside Collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/outside_collaborators/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "When an organization member is converted to an outside collaborator, they'll only have access to the repositories that their current team membership allows. The user will no longer be a member of the organization. For more information, see \"[Converting an organization member to an outside collaborator](https://docs.github.com/enterprise-server@3.9/articles/converting-an-organization-member-to-an-outside-collaborator/)\". Converting an organization member to an outside collaborator may be restrict"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Outside Collaborator from an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/outside_collaborators/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removing a user from this list will remove them from all the organization's repositories."
+        },
+        {
+          "info": {
+            "name": "GitHub List Public Organization Members",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Members of an organization can choose to have their membership publicized or not."
+        },
+        {
+          "info": {
+            "name": "GitHub Check Public Organization Membership for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Check if the provided user is a public member of the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Public Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "The user can publicize their own membership. (A user cannot publicize the membership for another user.)\n\nNote that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Public Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removes the public membership for the authenticated user from the specified organization, unless public visibility is enforced by default."
+        },
+        {
+          "info": {
+            "name": "GitHub List Repository Fine-grained Permissions for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/repository-fine-grained-permissions",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Lists the fine-grained permissions that can be used in custom repository roles for an organization. For more information, see \"[About custom repository roles](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-repository-roles).\"\n\nThe authenticated user must be an administrator of the organization or of a repository of the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need th"
+        },
+        {
+          "info": {
+            "name": "GitHub List Security Manager Teams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/security-managers",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Lists teams that are security managers for an organization. For more information, see \"[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization).\"\n\nThe authenticated user must be an administrator or security manager for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `read:org` scope to "
+        },
+        {
+          "info": {
+            "name": "GitHub Add a Security Manager Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/security-managers/teams/:team_slug",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              }
+            ]
+          },
+          "docs": "Adds a team as a security manager for an organization. For more information, see \"[Managing security for an organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization) for an organization.\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpo"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove a Security Manager Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/security-managers/teams/:team_slug",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              }
+            ]
+          },
+          "docs": "Removes the security manager role from a team for an organization. For more information, see \"[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization) team from an organization.\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:"
+        },
+        {
+          "info": {
+            "name": "GitHub Enable or Disable a Security Feature for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/:security_product/:enablement",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "security_product",
+                "value": "",
+                "type": "path",
+                "description": "The security feature to enable or disable."
+              },
+              {
+                "name": "enablement",
+                "value": "",
+                "type": "path",
+                "description": "The action to take.\n\n`enable_all` means to enable the specified security feature for all repositories in the organization.\n`disable_all` means to disable the specified security feature for all repositories in the organization."
+              }
+            ]
+          },
+          "docs": "Enables or disables the specified security feature for all eligible repositories in an organization. For more information, see \"[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization).\"\n\nThe authenticated user must be an organization owner or be member of a team with the security manager role to use this endpoint.\n\nOAuth app tokens and per"
+        },
+        {
+          "info": {
+            "name": "GitHub List Organization Memberships for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/memberships/orgs",
+            "params": [
+              {
+                "name": "state",
+                "value": "active",
+                "type": "query",
+                "description": "Indicates the state of the memberships to return. If not specified, the API returns both active and pending memberships."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all of the authenticated user's organization memberships."
+        },
+        {
+          "info": {
+            "name": "GitHub Get an Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/memberships/orgs/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "If the authenticated user is an active or pending member of the organization, this endpoint will return the user's membership. If the authenticated user is not affiliated with the organization, a `404` is returned. This endpoint will return a `403` if the request is made by a GitHub App that is blocked by the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Update an Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/user/memberships/orgs/:org",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Converts the authenticated user to an active member of the organization, if that user has a pending invitation from the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub List Organizations for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/orgs",
+            "params": [
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List organizations for the authenticated user.\n\nFor OAuth app tokens and personal access tokens (classic), this endpoint only lists organizations that your authorization allows you to operate on in some way (e.g., you can list teams with `read:org` scope, you can publicize your organization membership with `user` scope, etc.). Therefore, this API requires at least `user` or `read:org` scope for OAuth app tokens and personal access tokens (classic). Requests with insufficient scope will receive a"
+        },
+        {
+          "info": {
+            "name": "GitHub List Organizations for a User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/users/:username/orgs",
+            "params": [
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List [public organization memberships](https://docs.github.com/enterprise-server@3.9/articles/publicizing-or-concealing-organization-membership) for the specified user.\n\nThis method only lists _public_ memberships, regardless of authentication. If you need to fetch all of the organization memberships (public and private) for the authenticated user, use the [List organizations for the authenticated user](https://docs.github.com/enterprise-server@3.9/rest/orgs/orgs#list-organizations-for-the-authe"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

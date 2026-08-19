@@ -1,0 +1,348 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Deliveries API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deliveries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Deliveries for an App Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/app/hook/deliveries",
+            "params": [
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors."
+              },
+              {
+                "name": "redelivery",
+                "value": "true",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of webhook deliveries for the webhook configured for a GitHub App.\n\nYou must use a [JWT](https://docs.github.com/enterprise-server@3.9/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Getdelivery for an App Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/app/hook/deliveries/:delivery_id",
+            "params": [
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a delivery for the webhook configured for a GitHub App.\n\nYou must use a [JWT](https://docs.github.com/enterprise-server@3.9/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Redeliverdelivery for an App Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/app/hook/deliveries/:delivery_id/attempts",
+            "params": [
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Redeliver a delivery for the webhook configured for a GitHub App.\n\nYou must use a [JWT](https://docs.github.com/enterprise-server@3.9/apps/building-github-apps/authenticating-with-github-apps/#authenticating-as-a-github-app) to access this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Deliveries for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors."
+              },
+              {
+                "name": "redelivery",
+                "value": "true",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of webhook deliveries for a webhook configured in an organization. This endpoint allows you to retrieve the delivery history for a specific organization webhook, showing details about each time the webhook was triggered and the HTTP request was sent to the configured URL. Each delivery record includes information such as the delivery ID, status, timestamp, and other metadata about the webhook event that was fired. This is useful for debugging webhook integrations, monitoring webho"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Webhook Delivery for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries/:delivery_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This API operation retrieves detailed information about a specific webhook delivery attempt for an organization-level webhook in GitHub. By providing the organization name, webhook ID, and delivery ID as path parameters, you can access comprehensive data about a particular delivery event, including the request and response details, headers, payload, status code, and timestamp. This is useful for debugging webhook issues, monitoring delivery success rates, and understanding how your webhooks are "
+        },
+        {
+          "info": {
+            "name": "GitHub Redeliver Delivery for an Organization Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/hooks/:hook_id/deliveries/:delivery_id/attempts",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Redeliver a delivery for a webhook configured in an organization."
+        },
+        {
+          "info": {
+            "name": "GitHub List Deliveries for Repository Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/hooks/:hook_id/deliveries",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors."
+              },
+              {
+                "name": "redelivery",
+                "value": "true",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a list of webhook deliveries for a webhook configured in a repository."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Delivery for Repository Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/hooks/:hook_id/deliveries/:delivery_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a delivery for a webhook configured in a repository."
+        },
+        {
+          "info": {
+            "name": "GitHub Redeliver Delivery for Repository Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/hooks/:hook_id/deliveries/:delivery_id/attempts",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery."
+              },
+              {
+                "name": "delivery_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Redeliver a webhook delivery for a webhook configured in a repository."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

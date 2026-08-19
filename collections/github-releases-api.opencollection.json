@@ -1,0 +1,817 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Releases API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Releases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get All Ghes Release Versions for All Nodes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/manage/v1/version",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "query",
+                "description": "The UUID which identifies a node."
+              },
+              {
+                "name": "cluster_roles",
+                "value": "",
+                "type": "query",
+                "description": "The cluster roles from the cluster configuration file."
+              }
+            ]
+          },
+          "docs": "Gets the GitHub Enterprise Server release versions that are currently installed on all available nodes. For more information, see \"[GitHub Enterprise Server releases](https://docs.github.com/enterprise-server@3.9/admin/all-releases).\""
+        },
+        {
+          "info": {
+            "name": "GitHub List Releases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "This returns a list of releases, which does not include regular Git tags that have not been associated with a release. To Get list of Git tags, use the [Repository Tags API](https://docs.github.com/enterprise-server@3.9/rest/repos/repos#list-repository-tags).\n\nInformation about published releases are available to everyone. Only users with push access will receive listings for draft releases."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Users with push access to the repository can create a release.\n\nThis endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.9/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see \"[Rate limits for the API](https://docs.github.com/enterprise-server@3.9/rest/overview/rate-limits-for-the-rest-api#about-secondary-rate-limits)\" and \"[Best "
+        },
+        {
+          "info": {
+            "name": "GitHub Get Release Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/assets/:asset_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the asset."
+              }
+            ]
+          },
+          "docs": "To download the asset's binary content, set the `Accept` header of the request to [`application/octet-stream`](https://docs.github.com/enterprise-server@3.9/rest/overview/media-types). The API will either redirect the client to the location, or stream it directly if possible. API clients should handle both a `200` or `302` response."
+        },
+        {
+          "info": {
+            "name": "GitHub Update Release Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/assets/:asset_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the asset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Users with push access to the repository can edit a release asset."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Release Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/assets/:asset_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "asset_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the asset."
+              }
+            ]
+          },
+          "docs": "The Delete Release Asset operation removes a specific asset file from a GitHub repository release by targeting its unique asset ID. This DELETE endpoint requires authentication and appropriate permissions to modify releases in the specified repository. When executed, it permanently deletes the asset file (such as binaries, archives, or documentation) that was previously uploaded to a release, freeing up storage space and removing the download option for users. The operation is irreversible and r"
+        },
+        {
+          "info": {
+            "name": "GitHub Generate Release Notes Content for Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/generate-notes",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a name and body describing a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release). The body content will be markdown formatted and contain information like the changes since last release and users who contributed. The generated release notes are not saved anywhere. They are intended to be generated and used when creating a new release."
+        },
+        {
+          "info": {
+            "name": "GitHub Get the Latest Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/latest",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "View the latest published full release for the repository.\n\nThe latest release is the most recent non-prerelease, non-draft release, sorted by the `created_at` attribute. The `created_at` attribute is the date of the commit used for the release, and not the date when the release was drafted or published."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Release by Tag Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/tags/:tag",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "tag",
+                "value": "example_value",
+                "type": "path",
+                "description": "tag parameter"
+              }
+            ]
+          },
+          "docs": "Get published release with the specified tag."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              }
+            ]
+          },
+          "docs": "Gets a public release with the specified release ID.\n\n**Note:** This returns an `upload_url` key corresponding to the endpoint\nfor uploading release assets. This key is a hypermedia resource. For more information, see\n\"[Getting started with the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#hypermedia).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Update Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Users with push access to the repository can edit a release."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              }
+            ]
+          },
+          "docs": "Users with push access to the repository can delete a release."
+        },
+        {
+          "info": {
+            "name": "GitHub List Release Assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id/assets",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all assets attached to a specific release in a GitHub repository. This endpoint requires the repository owner's username, the repository name, and the unique identifier of the release to retrieve its associated assets. Assets typically include downloadable files such as compiled binaries, source code archives, documentation, or other artifacts that are bundled with a particular release. The response includes metadata for each asset such as name, size, download count, content type, browser "
+        },
+        {
+          "info": {
+            "name": "GitHub Upload Release Asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id/assets",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              },
+              {
+                "name": "name",
+                "value": "octocat",
+                "type": "query"
+              },
+              {
+                "name": "label",
+                "value": "Example Title",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint makes use of a [Hypermedia relation](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#hypermedia) to determine which URL to access. The endpoint you call to upload release assets is specific to your release. Use the `upload_url` returned in\nthe response of the [Create a release endpoint](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#create-a-release) to upload a release asset.\n\nYou need to use an HTTP cli"
+        },
+        {
+          "info": {
+            "name": "GitHub List Reactions for Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id/reactions",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              },
+              {
+                "name": "content",
+                "value": "+1",
+                "type": "query",
+                "description": "Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a release."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List the reactions to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release)."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Reaction for Release",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id/reactions",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a reaction to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release). response with a `Status: 200 OK` means that you already added the reaction type to this release."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Release Reaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/releases/:release_id/reactions/:reaction_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "release_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the release."
+              },
+              {
+                "name": "reaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the reaction."
+              }
+            ]
+          },
+          "docs": "**Note:** You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/releases/:release_id/reactions/:reaction_id`.\n\nDelete a reaction to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,452 @@
+{
+  "item": [
+    {
+      "id": "11d73169-7fa9-4400-8b02-a8b54a76038c",
+      "name": "Replication",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d528f80b-2c4f-4f6f-b30a-9a2eb448da9f",
+          "name": "GitHub List Repository Cache Replication Status",
+          "request": {
+            "name": "GitHub List Repository Cache Replication Status",
+            "description": {
+              "content": "Lists the status of each repository cache replica.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "repos",
+                ":owner",
+                ":repo",
+                "replicas",
+                "caches"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repo",
+                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "X-GitHub-Api-Version",
+                "value": "2022-11-28",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4616779d-7c64-4487-9d37-f92733228dde",
+              "name": "Status information for cache replicas",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "replicas",
+                    "caches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Link",
+                  "value": "<https://api.github.com/resource?page=2>; rel=\"next\", <https://api.github.com/resource?page=5>; rel=\"last\"",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"host\": \"host-1\",\n    \"location\": \"berlin\",\n    \"git\": {\n      \"sync_status\": \"in_sync\",\n      \"last_sync\": \"2022-01-10T19:33:52Z\"\n    }\n  },\n  {\n    \"host\": \"host-2\",\n    \"location\": \"chicago\",\n    \"git\": {\n      \"sync_status\": \"offline\",\n      \"last_sync\": \"2022-01-10T19:34:12Z\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "389b3243-0dd1-44ff-a67e-4de749b478a0",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "replicas",
+                    "caches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab08782f-0661-48d1-b21e-a11e3ddc0204",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "replicas",
+                    "caches"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api.github.com",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "https",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "840e19b2-3eaa-4698-ac98-b93dd2560991",
+    "name": "github-repos-api Replication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the REST API to create, manage and control the workflow of public and\nprivate GitHub repositories.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

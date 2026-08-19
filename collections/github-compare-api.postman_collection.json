@@ -1,0 +1,582 @@
+{
+  "item": [
+    {
+      "id": "a2e19ef0-8de2-44e9-90a8-fc75f67eec83",
+      "name": "Compare",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "47fdfb56-88c8-47f1-963f-5c5977d144ab",
+          "name": "GitHub Compare Two Commits",
+          "request": {
+            "name": "GitHub Compare Two Commits",
+            "description": {
+              "content": "Compares two commits against one another. You can compare refs (branches or tags) and commit SHAs in the same repository, or you can compare refs and commit SHAs that exist in different repositories within the same repository network, including fork branches. For more information about how to view a repository's network, see \"[Understanding connections between repositories](https://docs.github.com/enterprise-server@3.9/repositories/viewing-activity-and-data-for-your-repository/understanding-connections-between-repositories).\"\n\nThis endpoint is equivalent to running the `git log BASE..HEAD` command, but it returns commits in a different order. The `git log BASE..HEAD` command returns commits in reverse chronological order, whereas the API returns commits in chronological order.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.diff`**: Returns the diff of the commit.\n- **`application/vnd.github.patch`**: Returns the patch of the commit. Diffs with binary data will have no `patch` property.\n\nThe API response includes details about the files that were changed between the two commits. This includes the status of the change (if a file was added, removed, modified, or renamed), and details of the change itself. For example, files with a `renamed` status have a `previous_filename` field showing the previous filename of the file, and files with a `modified` status have a `patch` field showing the changes made to the file.\n\nWhen calling this endpoint without any paging parameter (`per_page` or `page`), the returned list is limited to 250 commits, and the last commit in the list is the most recent of the entire comparison.\n\n**Working with large comparisons**\n\nTo process a response with a large number of commits, use a query parameter (`per_page` or `page`) to paginate the results. When using pagination:\n\n- The list of changed files is only shown on the first page of results, but it includes all changed files for the entire comparison.\n- The results are returned in chronological order, but the last commit in the returned list may not be the most recent one in the entire set if there are more pages of results.\n\nFor more information on working with pagination, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api).\"\n\n**Signature verification object**\n\nThe response will include a `verification` object that describes the result of verifying the commit's signature. The `verification` object includes the following fields:\n\n| Name | Type | Description |\n| - | - | -- |\n| `verified` | `boolean` | Indicates whether GitHub considers the signature in this commit to be verified. |\n| `reason` | `string` | The reason for verified value. Possible values and their meanings are enumerated in table below. |\n| `signature` | `string` | The signature that was extracted from the commit. |\n| `payload` | `string` | The value that was signed. |\n\nThese are the possible values for `reason` in the `verification` object:\n\n| Value | Description |\n| -- | -- |\n| `expired_key` | The key that made the signature is expired. |\n| `not_signing_key` | The \"signing\" flag is not among the usage flags in the GPG key that made the signature. |\n| `gpgverify_error` | There was an error communicating with the signature verification service. |\n| `gpgverify_unavailable` | The signature verification service is currently unavailable. |\n| `unsigned` | The object does not include a signature. |\n| `unknown_signature_type` | non-PGP signature was found in the commit. |\n| `no_user` | No user was associated with the `committer` email address in the commit. |\n| `unverified_email` | The `committer` email address in the commit was associated with a user, but the email address is not verified on their account. |\n| `bad_email` | The `committer` email address in the commit is not included in the identities of the PGP key that made the signature. |\n| `unknown_key` | The key that made the signature has not been registered with any user's account. |\n| `malformed_signature` | There was an error parsing the signature. |\n| `invalid` | The signature could not be cryptographically verified using the key whose key-id was found in the signature. |\n| `valid` | None of the above errors applied, so the signature is considered to be verified. |",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "repos",
+                ":owner",
+                ":repo",
+                "compare",
+                ":basehead"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "owner",
+                  "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "repo",
+                  "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "basehead",
+                  "description": "(Required) The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "X-GitHub-Api-Version",
+                "value": "2022-11-28",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a7cb09a9-6c98-4d48-9d3a-58e2d5203a98",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "compare",
+                    ":basehead"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "basehead",
+                      "description": "(Required) The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World/compare/master...topic\",\n  \"html_url\": \"https://github.com/octocat/Hello-World/compare/master...topic\",\n  \"permalink_url\": \"https://github.com/octocat/Hello-World/compare/octocat:bbcd538c8e72b8c175046e27cc8f907076331401...octocat:0328041d1152db8ae77652d1618a02e57f745f17\",\n  \"diff_url\": \"https://github.com/octocat/Hello-World/compare/master...topic.diff\",\n  \"patch_url\": \"https://github.com/octocat/Hello-World/compare/master...topic.patch\",\n  \"base_commit\": {\n    \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"node_id\": \"MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==\",\n    \"html_url\": \"https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"comments_url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments\",\n    \"commit\": {\n      \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"author\": {\n        \"name\": \"Monalisa Octocat\",\n        \"email\": \"mona@github.com\",\n        \"date\": \"2011-04-14T16:00:49Z\"\n      },\n      \"committer\": {\n        \"name\": \"Monalisa Octocat\",\n        \"email\": \"mona@github.com\",\n        \"date\": \"2011-04-14T16:00:49Z\"\n      },\n      \"message\": \"Fix all the bugs\",\n      \"tree\": {\n        \"url\": \"https://api.github.com/repos/octocat/Hello-World/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n        \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n      },\n      \"comment_count\": 0,\n      \"verification\": {\n        \"verified\": false,\n        \"reason\": \"unsigned\",\n        \"signature\": \"\",\n        \"payload\": \"\"\n      }\n    },\n    \"author\": {\n      \"login\": \"octocat\",\n      \"id\": 1,\n      \"node_id\": \"MDQ6VXNlcjE=\",\n      \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/octocat\",\n      \"html_url\": \"https://github.com/octocat\",\n      \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n      \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n      \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n      \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"committer\": {\n      \"login\": \"octocat\",\n      \"id\": 1,\n      \"node_id\": \"MDQ6VXNlcjE=\",\n      \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/octocat\",\n      \"html_url\": \"https://github.com/octocat\",\n      \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n      \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n      \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n      \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"parents\": [\n      {\n        \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n        \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n      }\n    ]\n  },\n  \"merge_base_commit\": {\n    \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"node_id\": \"MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==\",\n    \"html_url\": \"https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n    \"comments_url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments\",\n    \"commit\": {\n      \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"author\": {\n        \"name\": \"Monalisa Octocat\",\n        \"email\": \"mona@github.com\",\n        \"date\": \"2011-04-14T16:00:49Z\"\n      },\n      \"committer\": {\n        \"name\": \"Monalisa Octocat\",\n        \"email\": \"mona@github.com\",\n        \"date\": \"2011-04-14T16:00:49Z\"\n      },\n      \"message\": \"Fix all the bugs\",\n      \"tree\": {\n        \"url\": \"https://api.github.com/repos/octocat/Hello-World/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n        \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n      },\n      \"comment_count\": 0,\n      \"verification\": {\n        \"verified\": false,\n        \"reason\": \"unsigned\",\n        \"signature\": \"\",\n        \"payload\": \"\"\n      }\n    },\n    \"author\": {\n      \"login\": \"octocat\",\n      \"id\": 1,\n      \"node_id\": \"MDQ6VXNlcjE=\",\n      \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/octocat\",\n      \"html_url\": \"https://github.com/octocat\",\n      \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n      \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n      \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n      \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"committer\": {\n      \"login\": \"octocat\",\n      \"id\": 1,\n      \"node_id\": \"MDQ6VXNlcjE=\",\n      \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n      \"gravatar_id\": \"\",\n      \"url\": \"https://api.github.com/users/octocat\",\n      \"html_url\": \"https://github.com/octocat\",\n      \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n      \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n      \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n      \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n      \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n      \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n      \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n      \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n      \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n      \"type\": \"User\",\n      \"site_admin\": false\n    },\n    \"parents\": [\n      {\n        \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n        \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n      }\n    ]\n  },\n  \"status\": \"behind\",\n  \"ahead_by\": 1,\n  \"behind_by\": 2,\n  \"total_commits\": 1,\n  \"commits\": [\n    {\n      \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"node_id\": \"MDY6Q29tbWl0NmRjYjA5YjViNTc4NzVmMzM0ZjYxYWViZWQ2OTVlMmU0MTkzZGI1ZQ==\",\n      \"html_url\": \"https://github.com/octocat/Hello-World/commit/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"comments_url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e/comments\",\n      \"commit\": {\n        \"url\": \"https://api.github.com/repos/octocat/Hello-World/git/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n        \"author\": {\n          \"name\": \"Monalisa Octocat\",\n          \"email\": \"mona@github.com\",\n          \"date\": \"2011-04-14T16:00:49Z\"\n        },\n        \"committer\": {\n          \"name\": \"Monalisa Octocat\",\n          \"email\": \"mona@github.com\",\n          \"date\": \"2011-04-14T16:00:49Z\"\n        },\n        \"message\": \"Fix all the bugs\",\n        \"tree\": {\n          \"url\": \"https://api.github.com/repos/octocat/Hello-World/tree/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n          \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n        },\n        \"comment_count\": 0,\n        \"verification\": {\n          \"verified\": false,\n          \"reason\": \"unsigned\",\n          \"signature\": \"\",\n          \"payload\": \"\"\n        }\n      },\n      \"author\": {\n        \"login\": \"octocat\",\n        \"id\": 1,\n        \"node_id\": \"MDQ6VXNlcjE=\",\n        \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/octocat\",\n        \"html_url\": \"https://github.com/octocat\",\n        \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n        \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n        \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n        \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n        \"type\": \"User\",\n        \"site_admin\": false\n      },\n      \"committer\": {\n        \"login\": \"octocat\",\n        \"id\": 1,\n        \"node_id\": \"MDQ6VXNlcjE=\",\n        \"avatar_url\": \"https://github.com/images/error/octocat_happy.gif\",\n        \"gravatar_id\": \"\",\n        \"url\": \"https://api.github.com/users/octocat\",\n        \"html_url\": \"https://github.com/octocat\",\n        \"followers_url\": \"https://api.github.com/users/octocat/followers\",\n        \"following_url\": \"https://api.github.com/users/octocat/following{/other_user}\",\n        \"gists_url\": \"https://api.github.com/users/octocat/gists{/gist_id}\",\n        \"starred_url\": \"https://api.github.com/users/octocat/starred{/owner}{/repo}\",\n        \"subscriptions_url\": \"https://api.github.com/users/octocat/subscriptions\",\n        \"organizations_url\": \"https://api.github.com/users/octocat/orgs\",\n        \"repos_url\": \"https://api.github.com/users/octocat/repos\",\n        \"events_url\": \"https://api.github.com/users/octocat/events{/privacy}\",\n        \"received_events_url\": \"https://api.github.com/users/octocat/received_events\",\n        \"type\": \"User\",\n        \"site_admin\": false\n      },\n      \"parents\": [\n        {\n          \"url\": \"https://api.github.com/repos/octocat/Hello-World/commits/6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n          \"sha\": \"6dcb09b5b57875f334f61aebed695e2e4193db5e\"\n        }\n      ]\n    }\n  ],\n  \"files\": [\n    {\n      \"sha\": \"bbcd538c8e72b8c175046e27cc8f907076331401\",\n      \"filename\": \"file1.txt\",\n      \"status\": \"added\",\n      \"additions\": 103,\n      \"deletions\": 21,\n      \"changes\": 124,\n      \"blob_url\": \"https://github.com/octocat/Hello-World/blob/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt\",\n      \"raw_url\": \"https://github.com/octocat/Hello-World/raw/6dcb09b5b57875f334f61aebed695e2e4193db5e/file1.txt\",\n      \"contents_url\": \"https://api.github.com/repos/octocat/Hello-World/contents/file1.txt?ref=6dcb09b5b57875f334f61aebed695e2e4193db5e\",\n      \"patch\": \"@@ -132,7 +132,7 @@ module Test @@ -1000,7 +1000,7 @@ module Test\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8302d4ef-e6db-4dbc-8a6d-cd4c32724201",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "compare",
+                    ":basehead"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "basehead",
+                      "description": "(Required) The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "377d896d-2176-4f85-b9cf-1e80032336d9",
+              "name": "Internal Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "compare",
+                    ":basehead"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "basehead",
+                      "description": "(Required) The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "190df1f7-b0c3-489b-8483-88c1cf7653f0",
+              "name": "Service unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "repos",
+                    ":owner",
+                    ":repo",
+                    "compare",
+                    ":basehead"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "owner",
+                      "description": "(Required) The account owner of the repository. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "repo",
+                      "description": "(Required) The name of the repository without the `.git` extension. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "basehead",
+                      "description": "(Required) The base branch and head branch to compare. This parameter expects the format `BASE...HEAD`. Both must be branch names in `repo`. To compare with a branch that exists in a different repository in the same network as `repo`, the `basehead` parameter expects the format `USERNAME:BASE...USERNAME:HEAD`."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Authorization",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "X-GitHub-Api-Version",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept",
+                    "value": "example_value",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"documentation_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "api.github.com",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "https",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "86edbaae-bde5-4810-be4b-0d1658d304b1",
+    "name": "github-repos-api Compare API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the REST API to create, manage and control the workflow of public and\nprivate GitHub repositories.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

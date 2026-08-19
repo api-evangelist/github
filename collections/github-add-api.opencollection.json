@@ -1,0 +1,905 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Add API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Add",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Add App Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/apps",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nGrants the specified apps push access for this branch. Only GitHub Apps that are install"
+        },
+        {
+          "info": {
+            "name": "GitHub Add an Authorized Ssh Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings/authorized-keys",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "authorized_key",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode)."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Repository to an App Installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/user/installations/:installation_id/repositories/:repository_id",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the installation."
+              },
+              {
+                "name": "repository_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the repository."
+              }
+            ]
+          },
+          "docs": "Add a single repository to an installation. The authenticated user must have admin access to the repository."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Repository Access to Self-hosted Runner Group in an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runner-groups/:runner_group_id/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_group_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner group."
+              },
+              {
+                "name": "repository_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the repository."
+              }
+            ]
+          },
+          "docs": "Adds a repository to the list of repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see \"[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization).\"\n\nOAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Self-hosted Runner to Group for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runner-groups/:runner_group_id/runners/:runner_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_group_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner group."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ]
+          },
+          "docs": "Adds a self-hosted runner to a runner group configured in an organization.\n\nOAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Custom Labels to Self-hosted Runner for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runners/:runner_id/labels",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds custom labels to a self-hosted runner configured in an organization.\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Selected Repository to an Organization Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/secrets/:secret_name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "secret_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the secret."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Adds a repository to an organization secret when the `visibility` for\nrepository access is set to `selected`. For more information about setting the visibility, see [Create or\nupdate an organization secret](https://docs.github.com/enterprise-server@3.9/rest/actions/secrets#create-or-update-an-organization-secret).\n\nAuthenticated users must have collaborator access to a repository to create, update, or read secrets.\n\nOAuth tokens and personal access tokens (classic) need the `admin:org` scope to "
+        },
+        {
+          "info": {
+            "name": "GitHub Add Selected Repository to an Organization Variable",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/variables/:name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the variable."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Adds a repository to an organization variable that is available to selected repositories.\nOrganization variables that are available to selected repositories have their `visibility` field set to `selected`.\n\nAuthenticated users must have collaborator access to a repository to create, update, or read secrets.\n\nOAuth tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, OAuth tokens and personal access tokens (classic) need the `r"
+        },
+        {
+          "info": {
+            "name": "GitHub Add Selected Repository to an Organization Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/dependabot/secrets/:secret_name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "secret_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the secret."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Adds a repository to an organization secret when the `visibility` for\nrepository access is set to `selected`. The visibility is set when you [Create or\nupdate an organization secret](https://docs.github.com/enterprise-server@3.9/rest/dependabot/secrets#create-or-update-an-organization-secret).\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Security Manager Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/security-managers/teams/:team_slug",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              }
+            ]
+          },
+          "docs": "Adds a team as a security manager for an organization. For more information, see \"[Managing security for an organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization) for an organization.\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpo"
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an organization member to a team. An authenticated organization owner or team maintainer can add organization members to a team.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\n**Note:** When you have team synchronization set up for a team with your organization's identity provi"
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Project Permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/projects/:project_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an organization project to a team. To add a project to a team or update the team's permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `PUT /organizations/{org_id}/team/{team_id}/projects/{project_id}`."
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Repository Permissions",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/repos/:owner/:repo",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The repository must be owned by the organization, or a direct fork of a repository owned by the organization. You will get a `422 Unprocessable Entity` status if you attempt to add a repository to a team that is not owned by the organization. Note that, if you choose not to pass any parameters, you'll need to set `Conten"
+        },
+        {
+          "info": {
+            "name": "GitHub Add Project Collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/projects/:project_id/collaborators/:username",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a collaborator to an organization project and sets their permission level. You must be an organization owner or a project `admin` to add a collaborator."
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Project Permissions (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/projects/:project_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team project permissions](https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions) endpoint.\n\nAdds an organization project to a team. To add a project to a team or update the team's permission on a project, the authenticated user must have `admin` permissions for the project. The pro"
+        },
+        {
+          "info": {
+            "name": "GitHub Add Custom Labels to Self-hosted Runner for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/actions/runners/:runner_id/labels",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds custom labels to a self-hosted runner configured in a repository.\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Status Check Contexts",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Team Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/teams",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nGrants the specified teams push access for this branch. You can also give push access to"
+        },
+        {
+          "info": {
+            "name": "GitHub Add User Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/users",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nGrants the specified people push access for this branch.\n\n| Type    | Description       "
+        },
+        {
+          "info": {
+            "name": "GitHub Add Repository Collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/collaborators/:username",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.9/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see \"[Rate limits for the API](https://docs.github.com/enterprise-server@3.9/rest/overview/rate-limits-for-the-rest-api#about-secondary-rate-limits)\" and \"[Best practices for using the REST API](https://docs.github.com/enterp"
+        },
+        {
+          "info": {
+            "name": "GitHub Add Assignees to an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/assignees",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds up to 10 assignees to an issue. Users already assigned to an issue are not replaced."
+        },
+        {
+          "info": {
+            "name": "GitHub Add Labels to an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/labels",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds labels to an issue. If you provide an empty array of labels, all labels are removed from the issue. "
+        },
+        {
+          "info": {
+            "name": "GitHub Add Team Member (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/members/:username",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "The \"Add team member\" endpoint (described below) is deprecated.\n\nWe recommend using the [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.9/rest/teams/members#add-or-update-team-membership-for-a-user) endpoint instead. It allows you to invite new organization members to your teams.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/gith"
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Membership for User (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/memberships/:username",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Add or update team membership for a user](https://docs.github.com/enterprise-server@3.9/rest/teams/members#add-or-update-team-membership-for-a-user) endpoint.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/ge"
+        },
+        {
+          "info": {
+            "name": "GitHub Add or Update Team Repository Permissions (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/repos/:owner/:repo",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new \"[Add or update team repository permissions](https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-repository-permissions)\" endpoint.\n\nTo add a repository to a team or update the team's permission on a repository, the authenticated user must have admin access to the repository, and must be able to see the team. The "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

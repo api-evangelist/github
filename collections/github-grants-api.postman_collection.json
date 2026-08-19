@@ -1,0 +1,1116 @@
+{
+  "item": [
+    {
+      "id": "c0f8e22c-43c5-4585-a91d-49c3cf3c2f5a",
+      "name": "Grants",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4a954ea6-6075-4732-bf7b-88bc94c1dc70",
+          "name": "GitHub List Your Grants",
+          "request": {
+            "name": "GitHub List Your Grants",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\nYou can use this API to list the set of OAuth applications that have been granted access to your account. Unlike the [list your authorizations](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations#list-your-authorizations) API, this API does not manage individual tokens. This API will return one entry for each OAuth application that has been granted access to your account, regardless of the number of tokens an application has generated for your user. The list of OAuth applications returned matches what is shown on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized). The `scopes` returned are the union of scopes authorized for the application. For example, if an application has one token with `repo` scope and another token with `user` scope, the grant will return `[\"repo\", \"user\"]`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "The client ID of your GitHub app."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "932456e1-587b-4a10-abe0-b82bf6029236",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Link",
+                  "value": "<https://api.github.com/resource?page=2>; rel=\"next\", <https://api.github.com/resource?page=5>; rel=\"last\"",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1,\n    \"url\": \"https://api.github.com/applications/grants/1\",\n    \"app\": {\n      \"url\": \"http://my-github-app.com\",\n      \"name\": \"my github app\",\n      \"client_id\": \"abcde12345fghij67890\"\n    },\n    \"created_at\": \"2011-09-06T17:26:27Z\",\n    \"updated_at\": \"2011-09-06T20:39:23Z\",\n    \"scopes\": [\n      \"public_repo\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ca4ec79-28a1-46e5-896a-1b1a35176116",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "939127a5-d0d7-47e6-8241-dd4bf04acaec",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "651923e1-366c-443c-bc1d-1c6d4dff1e25",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b01ac467-fed3-4e17-9207-a80bcf257f3f",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e42e90b3-a7cd-46de-bf45-03a9f62ee280",
+          "name": "GitHub Getsingle Grant",
+          "request": {
+            "name": "GitHub Getsingle Grant",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants",
+                ":grant_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "grant_id",
+                  "description": "(Required) The unique identifier of the grant."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ba4c1916-d626-42cf-8ba9-932bdf512e3b",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/applications/grants/1\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"scopes\": [\n    \"public_repo\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98d17f5e-80fe-43ee-a00c-4eadd07c3e10",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3c970bd9-7825-4d41-bb66-41ec6dc5f51c",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4916954e-4520-4349-9d47-cc436be71af5",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fc0775f1-7e12-4c21-a73c-e0063c9775d7",
+          "name": "GitHub Deletegrant",
+          "request": {
+            "name": "GitHub Deletegrant",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\nDeleting an OAuth application's grant will also delete all OAuth tokens associated with the application for your user. Once deleted, the application has no access to your account and is no longer listed on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants",
+                ":grant_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "grant_id",
+                  "description": "(Required) The unique identifier of the grant."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7940ae29-6592-47bb-a6bf-985854061b69",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a88f5e32-e2ee-40c7-9440-4cf19b48ec0c",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4b223c21-37e1-41be-88b9-ef2f493f120f",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e57c5a9-3057-4fdd-908f-9c2e067d5341",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8997a58e-1ad6-4ad7-9dc3-d85baac11efa",
+    "name": "GitHub Application Grants API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the REST API to retrieve information about GitHub Apps and GitHub App\ninstallations.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,3263 @@
+{
+  "item": [
+    {
+      "id": "6ce9d679-9114-4267-bf45-9e0ce3526ce7",
+      "name": "Oauth-Authorizations",
+      "description": {
+        "content": "OAuth Authorizations API",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8d173adb-e504-4ed2-8065-8d59b72a0327",
+          "name": "GitHub List Your Grants",
+          "request": {
+            "name": "GitHub List Your Grants",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\nYou can use this API to list the set of OAuth applications that have been granted access to your account. Unlike the [list your authorizations](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations#list-your-authorizations) API, this API does not manage individual tokens. This API will return one entry for each OAuth application that has been granted access to your account, regardless of the number of tokens an application has generated for your user. The list of OAuth applications returned matches what is shown on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized). The `scopes` returned are the union of scopes authorized for the application. For example, if an application has one token with `repo` scope and another token with `user` scope, the grant will return `[\"repo\", \"user\"]`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "The client ID of your GitHub app."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "205e32dd-51c9-4042-9511-053b44c158f0",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Link",
+                  "value": "<https://api.github.com/resource?page=2>; rel=\"next\", <https://api.github.com/resource?page=5>; rel=\"last\"",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1,\n    \"url\": \"https://api.github.com/applications/grants/1\",\n    \"app\": {\n      \"url\": \"http://my-github-app.com\",\n      \"name\": \"my github app\",\n      \"client_id\": \"abcde12345fghij67890\"\n    },\n    \"created_at\": \"2011-09-06T17:26:27Z\",\n    \"updated_at\": \"2011-09-06T20:39:23Z\",\n    \"scopes\": [\n      \"public_repo\"\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5c04acc-5829-441c-aed7-fb70a4ed1d88",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5314980f-eb9b-436d-acb2-1ab055051820",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f20da960-161e-49a2-8dc2-b426fcf39772",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73a79fd2-54a6-49e6-aad3-09e481e8a98b",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c637503a-32cd-4eba-a034-628b0111e3f8",
+          "name": "GitHub Get a Single Grant",
+          "request": {
+            "name": "GitHub Get a Single Grant",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants",
+                ":grant_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "grant_id",
+                  "description": "(Required) The unique identifier of the grant."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b103f03b-2097-4961-bb08-2d313f2daaa3",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/applications/grants/1\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"scopes\": [\n    \"public_repo\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cfe958be-5975-411e-8a0c-b9c229abbde3",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f2386c22-faab-4c72-89fa-b3259235be03",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a046f89-859f-4a21-ace9-01548e33485b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fd528dd1-6a96-4b52-9daf-1ca03fe615b3",
+          "name": "GitHub Delete a Grant",
+          "request": {
+            "name": "GitHub Delete a Grant",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\nDeleting an OAuth application's grant will also delete all OAuth tokens associated with the application for your user. Once deleted, the application has no access to your account and is no longer listed on [the application authorizations settings screen within GitHub](https://github.com/settings/applications#authorized).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "applications",
+                "grants",
+                ":grant_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "grant_id",
+                  "description": "(Required) The unique identifier of the grant."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b6f373e9-b5a9-4f79-a0d1-a9d7d98d9fb8",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "79634d2c-a865-44e8-9ee8-5625fd95febc",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "69030f97-ef85-4c5e-9dee-d30df57a5840",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7efa509d-ddbb-4609-a5d1-a82838c1b533",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applications",
+                    "grants",
+                    ":grant_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "grant_id",
+                      "description": "(Required) The unique identifier of the grant."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b0606c17-6a63-470a-8e2a-2251d40302a6",
+          "name": "GitHub List Your Authorizations",
+          "request": {
+            "name": "GitHub List Your Authorizations",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "client_id",
+                  "value": "<string>",
+                  "description": "The client ID of your GitHub app."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "11b412c8-0566-4c1c-bbe9-7fafa78dc827",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Link",
+                  "value": "<https://api.github.com/resource?page=2>; rel=\"next\", <https://api.github.com/resource?page=5>; rel=\"last\"",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 2,\n    \"url\": \"https://enterprise.octocat.com/api/v3/authorizations/2\",\n    \"app\": {\n      \"name\": \"My personal access token\",\n      \"url\": \"https://docs.github.com/enterprise/rest/enterprise-admin/users#list-personal-access-tokens\",\n      \"client_id\": \"00000000000000000000\"\n    },\n    \"token\": \"REDACTED_GITHUB_TOKEN\",\n    \"hashed_token\": \"23cffb2fab1b0a62747863eba88cb9327e561f2f7a0c8661c0d9b83146cb8d45\",\n    \"token_last_eight\": \"Ae178B4a\",\n    \"note\": \"My personal access token\",\n    \"note_url\": null,\n    \"created_at\": \"2019-04-24T21:49:02Z\",\n    \"updated_at\": \"2019-04-24T21:49:02Z\",\n    \"scopes\": [\n      \"admin:business\",\n      \"admin:gpg_key\",\n      \"admin:org\",\n      \"admin:org_hook\",\n      \"admin:pre_receive_hook\",\n      \"admin:public_key\",\n      \"admin:repo_hook\",\n      \"delete_repo\",\n      \"gist\",\n      \"notifications\",\n      \"repo\",\n      \"user\",\n      \"write:discussion\"\n    ],\n    \"fingerprint\": null\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e07b14b-92d2-44ec-9ea1-f5769c34cb8f",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ad32b3b5-e945-4ee0-9ac3-17505d233e62",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "671b3439-b4cd-4607-9450-03eab53c7c0c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4491217b-43c3-4271-8c5d-2a34a5d73ca8",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "12345678"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a6f5a1d-9994-4a4d-97c7-dd6a5d5cc2ba",
+          "name": "GitHub Create a New Authorization",
+          "request": {
+            "name": "GitHub Create a New Authorization",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\n**Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).\n\nCreates OAuth tokens using [Basic Authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#basic-authentication). If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see \"[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#working-with-two-factor-authentication).\"\n\nTo create tokens for a particular OAuth application using this endpoint, you must authenticate as the user you want to create an authorization for and provide the app's client ID and secret, found on your OAuth application's settings page. If your OAuth application intends to create multiple tokens for one user, use `fingerprint` to differentiate between them.\n\nYou can also create tokens on GitHub Enterprise Server from the [personal access tokens settings](https://github.com/settings/tokens) page. Read more about these tokens in [the GitHub Help documentation](https://docs.github.com/enterprise-server@3.9/articles/creating-an-access-token-for-command-line-use).\n\nOrganizations that enforce SAML SSO require personal access tokens to be allowed. For more information, see \"[About identity and access management with SAML single sign-on](https://docs.github.com/enterprise-server@3.9/enterprise-cloud@latest/organizations/managing-saml-single-sign-on-for-your-organization/about-identity-and-access-management-with-saml-single-sign-on)\" in the GitHub Enterprise Cloud documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scopes\": \"<array,null>\",\n  \"note\": \"<string>\",\n  \"note_url\": \"<string>\",\n  \"client_id\": \"<string>\",\n  \"client_secret\": \"<string>\",\n  \"fingerprint\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6b9ad781-92f6-405d-bef0-26a5bc53a9b8",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Location",
+                  "value": "https://api.github.com/authorizations/1",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d37d42ce-7fc3-49a7-be6a-7199041959f7",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bc903a64-db1f-4eb7-868f-a1a325c87262",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d75e00db-8154-486d-92b3-647507d0a5fd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e16c4af-9980-446b-8e88-566ee5a5a832",
+              "name": "Gone",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8db35aa2-66b7-46c6-9247-0f56ad80cfc7",
+              "name": "Validation failed, or the endpoint has been spammed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"client_id\": \"abcde12345fghij67890\",\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 6392,\n      \"value\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 9259,\n      \"value\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1b87c763-3d0d-492d-9adf-11e222303617",
+          "name": "GitHub Get-or-create an Authorization for a Specific App",
+          "request": {
+            "name": "GitHub Get-or-create an Authorization for a Specific App",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\n**Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).\n\nCreates a new authorization for the specified OAuth application, only if an authorization for that application doesn't already exist for the user. The URL includes the 20 character client ID for the OAuth app that is requesting the token. It returns the user's existing authorization for the application if one is present. Otherwise, it creates and returns a new one.\n\nIf you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see \"[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#working-with-two-factor-authentication).\"\n\n**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations",
+                "clients",
+                ":client_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "client_id",
+                  "description": "(Required) The client ID of the OAuth app."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_secret\": \"<string>\",\n  \"scopes\": \"<array,null>\",\n  \"note\": \"<string>\",\n  \"note_url\": \"<string>\",\n  \"fingerprint\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ad359f31-a9b7-4432-8397-3111e27d06f2",
+              "name": "if returning an existing token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Location",
+                  "value": "https://api.github.com/authorizations/1",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32750d74-6982-4603-a163-eb6a4e1f0889",
+              "name": "**Deprecation Notice:** GitHub will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Location",
+                  "value": "https://api.github.com/authorizations/1",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bbf81d7-5dff-4016-bad9-0e822ace4a0f",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0d9a62a5-ac19-43e5-af97-f369b68ce8c5",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e76fdc2-967e-4daa-a5e9-b78c87eefb5f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a51b76a-5151-4a24-a94f-e27eb34fd990",
+              "name": "Validation failed, or the endpoint has been spammed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 1521,\n      \"value\": null\n    },\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 5872,\n      \"value\": null\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "01f99728-d20e-4917-98ae-2d418a1b7a83",
+          "name": "GitHub Get-or-create an Authorization for a Specific App and Fingerprint",
+          "request": {
+            "name": "GitHub Get-or-create an Authorization for a Specific App and Fingerprint",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\n**Warning:** Apps must use the [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow) to obtain OAuth tokens that work with GitHub Enterprise Server SAML organizations. OAuth tokens created using the Authorizations API will be unable to access GitHub Enterprise Server SAML organizations. For more information, see the [blog post](https://developer.github.com/changes/2019-11-05-deprecated-passwords-and-authorizations-api).\n\nThis method will create a new authorization for the specified OAuth application, only if an authorization for that application and fingerprint do not already exist for the user. The URL includes the 20 character client ID for the OAuth app that is requesting the token. `fingerprint` is a unique string to distinguish an authorization from others created for the same client ID and user. It returns the user's existing authorization for the application if one is present. Otherwise, it creates and returns a new one.\n\nIf you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see \"[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#working-with-two-factor-authentication).\"",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations",
+                "clients",
+                ":client_id",
+                ":fingerprint"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "client_id",
+                  "description": "(Required) The client ID of the OAuth app."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "fingerprint",
+                  "description": "(Required) "
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_secret\": \"<string>\",\n  \"scopes\": \"<array,null>\",\n  \"note\": \"<string>\",\n  \"note_url\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c3c79fd1-cefa-43b3-9bbe-23b874566b38",
+              "name": "if returning an existing token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id",
+                    ":fingerprint"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fingerprint",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Location",
+                  "value": "https://api.github.com/authorizations/1",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32f96ad3-ff74-4e50-b313-6ccdfb68ec42",
+              "name": "Response if returning a new token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id",
+                    ":fingerprint"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fingerprint",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Location",
+                  "value": "https://api.github.com/authorizations/1",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2012-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eae38238-4e4a-4fe9-9fb9-781f54834fe0",
+              "name": "Validation failed, or the endpoint has been spammed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    "clients",
+                    ":client_id",
+                    ":fingerprint"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "client_id",
+                      "description": "(Required) The client ID of the OAuth app."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "fingerprint",
+                      "description": "(Required) "
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_secret\": \"3ef4ad510c59ad37bac6bb4f80047fb3aee3cc7f\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 1521,\n      \"value\": null\n    },\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 5872,\n      \"value\": null\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4eff3865-0e01-44b0-b5c2-e71b3cf32cb0",
+          "name": "GitHub Get a Single Authorization",
+          "request": {
+            "name": "GitHub Get a Single Authorization",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations",
+                ":authorization_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "authorization_id",
+                  "description": "(Required) The unique identifier of the authorization."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eec79b62-c621-4590-949d-a55011bc8073",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6297f09-7326-412b-ba08-cfc8cc382bd5",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a90c7032-c9d1-4b70-aeac-fa735e0a5702",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3cdb4ec-7608-4ad0-b45a-440857acf870",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8605226e-c544-4b17-8351-2042daaf43c1",
+          "name": "GitHub Update an Existing Authorization",
+          "request": {
+            "name": "GitHub Update an Existing Authorization",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations/), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/developers/apps/authorizing-oauth-apps#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).\n\nIf you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see \"[Working with two-factor authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#working-with-two-factor-authentication).\"\n\nYou can only send one of these scope keys at a time.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations",
+                ":authorization_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "authorization_id",
+                  "description": "(Required) The unique identifier of the authorization."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scopes\": \"<array,null>\",\n  \"add_scopes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"remove_scopes\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"note\": \"<string>\",\n  \"note_url\": \"<string>\",\n  \"fingerprint\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "adc18b94-ec03-42f5-b1c9-29df03088011",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"add_scopes\": [\n    \"public_repo\"\n  ],\n  \"remove_scopes\": [\n    \"user\"\n  ],\n  \"note\": \"optional note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"url\": \"https://api.github.com/authorizations/1\",\n  \"scopes\": [\n    \"public_repo\"\n  ],\n  \"token\": \"REDACTED_GITHUB_TOKEN\",\n  \"token_last_eight\": \"Ae178B4a\",\n  \"hashed_token\": \"25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8\",\n  \"app\": {\n    \"url\": \"http://my-github-app.com\",\n    \"name\": \"my github app\",\n    \"client_id\": \"abcde12345fghij67890\"\n  },\n  \"note\": \"optional note\",\n  \"note_url\": \"http://optional/note/url\",\n  \"updated_at\": \"2011-09-06T20:39:23Z\",\n  \"created_at\": \"2011-09-06T17:26:27Z\",\n  \"expires_at\": \"2011-10-06T17:26:27Z\",\n  \"fingerprint\": \"jklmnop12345678\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "efbac7ed-47a8-42aa-990e-beb5fbfe5a66",
+              "name": "Validation failed, or the endpoint has been spammed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"add_scopes\": [\n    \"public_repo\"\n  ],\n  \"remove_scopes\": [\n    \"user\"\n  ],\n  \"note\": \"optional note\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 1521,\n      \"value\": null\n    },\n    {\n      \"code\": \"string\",\n      \"resource\": \"string\",\n      \"field\": \"string\",\n      \"message\": \"string\",\n      \"index\": 5872,\n      \"value\": null\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a0ffdeed-189c-473f-b8d3-47ca2301e2a7",
+          "name": "GitHub Delete an Authorization",
+          "request": {
+            "name": "GitHub Delete an Authorization",
+            "description": {
+              "content": "**Deprecation Notice:** GitHub Enterprise Server will discontinue the [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations), which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our [web application flow](https://docs.github.com/enterprise-server@3.9/apps/building-oauth-apps/authorizing-oauth-apps/#web-application-flow). The [OAuth Authorizations API](https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations) will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the [blog post](https://developer.github.com/changes/2020-02-14-deprecating-oauth-auth-endpoint/).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "authorizations",
+                ":authorization_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "authorization_id",
+                  "description": "(Required) The unique identifier of the authorization."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ab0c6f61-5ce4-4265-835e-e16994fa05c9",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d3fe47b3-c24b-4e7a-b025-bc32ffe945db",
+              "name": "Not modified",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Modified",
+              "code": 304,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "edb0bfe5-21a4-45b0-b812-5a999e022450",
+              "name": "Requires authentication",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cfdaa28-8d78-49a2-b40d-5c65cfbc8461",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "authorizations",
+                    ":authorization_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "authorization_id",
+                      "description": "(Required) The unique identifier of the authorization."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Example body text\",\n  \"documentation_url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"url\": \"https://api.github.com/repos/octocat/Hello-World\",\n  \"status\": \"open\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "24a467c7-1875-45b5-9700-63d36c57bc09",
+    "name": "GitHub v3 REST OAUTH Authorizations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "GitHub's v3 REST API.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

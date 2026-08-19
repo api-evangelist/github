@@ -1,0 +1,646 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Git API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Git",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Create a Blob",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/blobs",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "GitHub Create a Blob"
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Blob",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/blobs/:file_sha",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "file_sha",
+                "value": "abc123def456789012345678901234567890",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "The `content` in the response will always be Base64 encoded.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw blob data.\n- **`application/vnd.github+json`**: Returns a JSON representation of the blob with `content` as a base64 encoded string. This is the default if no medi"
+        },
+        {
+          "info": {
+            "name": "GitHub Create a Commit",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/commits",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Git [commit object](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects).\n\n**Signature verification object**\n\nThe response will include a `verification` object that describes the result of verifying the commit's signature. The following fields are included in the `verification` object:\n\n| Name | Type | Description |\n| - | - | -- |\n| `verified` | `boolean` | Indicates whether GitHub considers the signature in this commit to be verified. |\n| `reason` | `string` | The reason for "
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Commit Object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/commits/:commit_sha",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "commit_sha",
+                "value": "",
+                "type": "path",
+                "description": "The SHA of the commit."
+              }
+            ]
+          },
+          "docs": "Gets a Git [commit object](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects).\n\nTo get the contents of a commit, see \"[Get a commit](/rest/commits/commits#get-a-commit).\"\n\n**Signature verification object**\n\nThe response will include a `verification` object that describes the result of verifying the commit's signature. The following fields are included in the `verification` object:\n\n| Name | Type | Description |\n| - | - | -- |\n| `verified` | `boolean` | Indicates whether GitHub considers t"
+        },
+        {
+          "info": {
+            "name": "GitHub List Matching References",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/matching-refs/:ref",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "heads/feature-a",
+                "type": "path",
+                "description": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              }
+            ]
+          },
+          "docs": "Returns an array of references from your Git database that match the supplied name. The `:ref` in the URL must be formatted as `heads/<branch name>` for branches and `tags/<tag name>` for tags. If the `:ref` doesn't exist in the repository, but existing refs start with `:ref`, they will be returned as an array.\n\nWhen you use this endpoint without providing a `:ref`, it will return an array of all the references from your Git database, including notes and stashes if they exist on the server. Anyt"
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/ref/:ref",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "heads/feature-a",
+                "type": "path",
+                "description": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              }
+            ]
+          },
+          "docs": "Returns a single reference from your Git database. The `:ref` in the URL must be formatted as `heads/<branch name>` for branches and `tags/<tag name>` for tags. If the `:ref` doesn't match an existing ref, a `404` is returned.\n\n**Note:** You need to explicitly [request a pull request](https://docs.github.com/enterprise-server@3.9/rest/pulls/pulls#get-a-pull-request) to trigger a test merge commit, which checks the mergeability of pull requests. For more information, see \"[Checking mergeability o"
+        },
+        {
+          "info": {
+            "name": "GitHub Create a Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/refs",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a reference for your repository. You are unable to create new references for empty repositories, even if the commit SHA-1 hash used exists. Empty repositories are repositories without branches."
+        },
+        {
+          "info": {
+            "name": "GitHub Update a Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/refs/:ref",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "heads/feature-a",
+                "type": "path",
+                "description": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the provided reference to point to a new SHA. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete a Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/refs/:ref",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "heads/feature-a",
+                "type": "path",
+                "description": "The Git reference. For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              }
+            ]
+          },
+          "docs": "Deletes the provided reference."
+        },
+        {
+          "info": {
+            "name": "GitHub Create a Tag Object",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/tags",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then [create](https://docs.github.com/enterprise-server@3.9/rest/git/refs#create-a-reference) the `refs/tags/[tag]` reference. If you want to create a lightweight tag, you only have to [create](https://docs.github.com/enterprise-server@3.9/rest/git/refs#create-a-reference) the tag reference - this call would b"
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/tags/:tag_sha",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "tag_sha",
+                "value": "abc123def456789012345678901234567890",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "**Signature verification object**\n\nThe response will include a `verification` object that describes the result of verifying the commit's signature. The following fields are included in the `verification` object:\n\n| Name | Type | Description |\n| - | - | -- |\n| `verified` | `boolean` | Indicates whether GitHub considers the signature in this commit to be verified. |\n| `reason` | `string` | The reason for verified value. Possible values and their meanings are enumerated in table below. |\n| `signatu"
+        },
+        {
+          "info": {
+            "name": "GitHub Create a Tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/trees",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The tree creation API accepts nested entries. If you specify both a tree and a nested path modifying that tree, this endpoint will overwrite the contents of the tree with the new path contents, and create a new tree structure.\n\nIf you use this endpoint to add, delete, or modify the file contents in a tree, you will need to commit the tree and then update a branch to point to the commit. For more information see \"[Create a commit](https://docs.github.com/enterprise-server@3.9/rest/git/commits#cre"
+        },
+        {
+          "info": {
+            "name": "GitHub Get a Tree",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/git/trees/:tree_sha",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "tree_sha",
+                "value": "abc123def456789012345678901234567890",
+                "type": "path",
+                "description": "The SHA1 value or ref (branch or tag) name of the tree."
+              },
+              {
+                "name": "recursive",
+                "value": "example_value",
+                "type": "query",
+                "description": "Setting this parameter to any value returns the objects or subtrees referenced by the tree specified in `:tree_sha`. For example, setting `recursive` to any of the following will enable returning objects or subtrees: `0`, `1`, `\"true\"`, and `\"false\"`. Omit this parameter to prevent recursively returning objects or subtrees."
+              }
+            ]
+          },
+          "docs": "Returns a single tree using the SHA1 value or ref name for that tree.\n\nIf `truncated` is `true` in the response then the number of items in the `tree` array exceeded our maximum limit. If you need to fetch more items, use the non-recursive method of fetching trees, and fetch one sub-tree at a time.\n\n\n**Note**: The limit for the `tree` array is 100,000 entries with a maximum size of 7 MB when using the `recursive` parameter."
+        },
+        {
+          "info": {
+            "name": "GitHub List Check Runs for Git Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/commits/:ref/check-runs",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "",
+                "type": "path",
+                "description": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              },
+              {
+                "name": "check_name",
+                "value": "",
+                "type": "query",
+                "description": "Returns check runs with the specified `name`."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Returns check runs with the specified `status`."
+              },
+              {
+                "name": "filter",
+                "value": "latest",
+                "type": "query",
+                "description": "Filters check runs by their `completed_at` timestamp. `latest` returns the most recent check runs."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "app_id",
+                "value": "42",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Lists check runs for a commit ref. The `ref` can be a SHA, branch name, or a tag name.\n\n**Note:** The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array.\n\nIf there are more than 1000 check suites on a single git reference, this endpoint will limit check runs to the 1000 most recent check suites. To iterate over all possible check run"
+        },
+        {
+          "info": {
+            "name": "GitHub List Check Suites for Git Reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/commits/:ref/check-suites",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "ref",
+                "value": "",
+                "type": "path",
+                "description": "The commit reference. Can be a commit SHA, branch name (`heads/BRANCH_NAME`), or tag name (`tags/TAG_NAME`). For more information, see \"[Git References](https://git-scm.com/book/en/v2/Git-Internals-Git-References)\" in the Git documentation."
+              },
+              {
+                "name": "app_id",
+                "value": "1",
+                "type": "query",
+                "description": "Filters check suites by GitHub App `id`."
+              },
+              {
+                "name": "check_name",
+                "value": "",
+                "type": "query",
+                "description": "Returns check runs with the specified `name`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists check suites for a commit `ref`. The `ref` can be a SHA, branch name, or a tag name.\n\n**Note:** The endpoints to manage checks only look for pushes in the repository where the check suite or check run were created. Pushes to a branch in a forked repository are not detected and return an empty `pull_requests` array and a `null` value for `head_branch`.\n\nOAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint on a private repository."
+        },
+        {
+          "info": {
+            "name": "GitHub Enable Git Lfs for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/lfs",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Enables Git LFS for a repository.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:enterprise` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Disable Git Lfs for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/lfs",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Disables Git LFS for a repository.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:enterprise` scope to use this endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

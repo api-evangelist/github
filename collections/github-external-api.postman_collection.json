@@ -1,0 +1,888 @@
+{
+  "item": [
+    {
+      "id": "e0ef8189-3150-4015-be82-900e6347b343",
+      "name": "External",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "021733ff-29dc-4273-916f-f76524ec6e5a",
+          "name": "GitHub Get an External Group",
+          "request": {
+            "name": "GitHub Get an External Group",
+            "description": {
+              "content": "Displays information about the specific group's usage.  Provides a list of the group's external members as well as a list of teams that this group is connected to.\n\nYou can manage team membership with your identity provider using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products)\" in the GitHub Help documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "external-group",
+                ":group_id"
+              ],
+              "host": [
+                "{{orgs-org-external-group-group_id-Url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "group_id",
+                  "description": "(Required) The unique identifier of the group."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fed54634-c4fa-44f8-9e58-ecb7cac457c4",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "external-group",
+                    ":group_id"
+                  ],
+                  "host": [
+                    "{{orgs-org-external-group-group_id-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "group_id",
+                      "description": "(Required) The unique identifier of the group."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"group_id\": \"123\",\n  \"group_name\": \"Octocat admins\",\n  \"updated_at\": \"2021-01-24T11:31:04-06:00\",\n  \"teams\": [\n    {\n      \"team_id\": 1,\n      \"team_name\": \"team-test\"\n    },\n    {\n      \"team_id\": 2,\n      \"team_name\": \"team-test2\"\n    }\n  ],\n  \"members\": [\n    {\n      \"member_id\": 1,\n      \"member_login\": \"mona-lisa_eocsaxrs\",\n      \"member_name\": \"Mona Lisa\",\n      \"member_email\": \"mona_lisa@github.com\"\n    },\n    {\n      \"member_id\": 2,\n      \"member_login\": \"octo-lisa_eocsaxrs\",\n      \"member_name\": \"Octo Lisa\",\n      \"member_email\": \"octo_lisa@github.com\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40dcafd6-5254-4c88-b7b7-ded46ad2851c",
+          "name": "GitHub List External Groups in an Organization",
+          "request": {
+            "name": "GitHub List External Groups in an Organization",
+            "description": {
+              "content": "Lists external groups available in an organization. You can query the groups using the `display_name` parameter, only groups with a `group_name` containing the text provided in the `display_name` parameter will be returned.  You can also limit your page results using the `per_page` parameter. GitHub Enterprise Server generates a url-encoded `page` token using a cursor value for where the next page begins. For more information on cursor pagination, see \"[Offset and Cursor Pagination explained](https://dev.to/jackmarchant/offset-and-cursor-pagination-explained-b89).\"\n\nYou can manage team membership with your identity provider using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products)\" in the GitHub Help documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "external-groups"
+              ],
+              "host": [
+                "{{orgs-org-external-groups-Url}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "per_page",
+                  "value": "30",
+                  "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "Page token"
+                },
+                {
+                  "disabled": false,
+                  "key": "display_name",
+                  "value": "<string>",
+                  "description": "Limits the list to groups containing the text in the group name"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e6276787-935e-4b9c-893e-14e628283b02",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "external-groups"
+                  ],
+                  "host": [
+                    "{{orgs-org-external-groups-Url}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "per_page",
+                      "value": "30"
+                    },
+                    {
+                      "key": "page",
+                      "value": "42"
+                    },
+                    {
+                      "key": "display_name",
+                      "value": "octocat"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Link",
+                  "value": "<https://api.github.com/resource?per_page=2&page=url-encoded-next-page-token>; rel=\"next\"",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"groups\": [\n    {\n      \"group_id\": \"123\",\n      \"group_name\": \"Octocat admins\",\n      \"updated_at\": \"2021-01-24T11:31:04-06:00\"\n    },\n    {\n      \"group_id\": \"456\",\n      \"group_name\": \"Octocat docs members\",\n      \"updated_at\": \"2021-03-24T11:31:04-06:00\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b2b543fe-8781-4cd7-808d-bea0b1933397",
+          "name": "GitHub List Connection Between an External Group and Team",
+          "request": {
+            "name": "GitHub List Connection Between an External Group and Team",
+            "description": {
+              "content": "Lists a connection between a team and an external group.\n\nYou can manage team membership with your identity provider using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products)\" in the GitHub Help documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "teams",
+                ":team_slug",
+                "external-groups"
+              ],
+              "host": [
+                "{{orgs-org-teams-team_slug-external-groups-Url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "team_slug",
+                  "description": "(Required) The slug of the team name."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3b6bba97-cbc1-4e90-8c1f-d1b670b59890",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "teams",
+                    ":team_slug",
+                    "external-groups"
+                  ],
+                  "host": [
+                    "{{orgs-org-teams-team_slug-external-groups-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "team_slug",
+                      "description": "(Required) The slug of the team name."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"groups\": [\n    {\n      \"group_id\": \"123\",\n      \"group_name\": \"Octocat admins\",\n      \"updated_at\": \"2021-01-24T11:31:04-06:00\"\n    },\n    {\n      \"group_id\": \"456\",\n      \"group_name\": \"Octocat docs members\",\n      \"updated_at\": \"2021-03-24T11:31:04-06:00\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "300ca938-e131-4314-b2b5-35de27e86806",
+          "name": "GitHub Update the Connection Between an External Group and Team",
+          "request": {
+            "name": "GitHub Update the Connection Between an External Group and Team",
+            "description": {
+              "content": "Creates a connection between a team and an external group.  Only one external group can be linked to a team.\n\nYou can manage team membership with your identity provider using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see \"[GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products)\" in the GitHub Help documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "teams",
+                ":team_slug",
+                "external-groups"
+              ],
+              "host": [
+                "{{orgs-org-teams-team_slug-external-groups-Url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "team_slug",
+                  "description": "(Required) The slug of the team name."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"group_id\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "928aa80a-486c-4be6-a794-b6f3e9522043",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "teams",
+                    ":team_slug",
+                    "external-groups"
+                  ],
+                  "host": [
+                    "{{orgs-org-teams-team_slug-external-groups-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "team_slug",
+                      "description": "(Required) The slug of the team name."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"group_id\": 123\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"group_id\": \"123\",\n  \"group_name\": \"Octocat admins\",\n  \"updated_at\": \"2021-01-24T11:31:04-06:00\",\n  \"teams\": [\n    {\n      \"team_id\": 1,\n      \"team_name\": \"team-test\"\n    },\n    {\n      \"team_id\": 2,\n      \"team_name\": \"team-test2\"\n    }\n  ],\n  \"members\": [\n    {\n      \"member_id\": 1,\n      \"member_login\": \"mona-lisa_eocsaxrs\",\n      \"member_name\": \"Mona Lisa\",\n      \"member_email\": \"mona_lisa@github.com\"\n    },\n    {\n      \"member_id\": 2,\n      \"member_login\": \"octo-lisa_eocsaxrs\",\n      \"member_name\": \"Octo Lisa\",\n      \"member_email\": \"octo_lisa@github.com\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e64981a-67f3-450c-ab6e-99154dc09456",
+          "name": "GitHub Remove the Connection Between an External Group and Team",
+          "request": {
+            "name": "GitHub Remove the Connection Between an External Group and Team",
+            "description": {
+              "content": "Deletes a connection between a team and an external group.\n\nYou can manage team membership with your IdP using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org",
+                "teams",
+                ":team_slug",
+                "external-groups"
+              ],
+              "host": [
+                "{{orgs-org-teams-team_slug-external-groups-Url}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org",
+                  "description": "(Required) The organization name. The name is not case sensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "team_slug",
+                  "description": "(Required) The slug of the team name."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ec5e76b7-73fb-4e84-91a0-b6272bc50e90",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org",
+                    "teams",
+                    ":team_slug",
+                    "external-groups"
+                  ],
+                  "host": [
+                    "{{orgs-org-teams-team_slug-external-groups-Url}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org",
+                      "description": "(Required) The organization name. The name is not case sensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "team_slug",
+                      "description": "(Required) The slug of the team name."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "baseUrl"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "orgs-org-external-group-group_id-Url"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "orgs-org-external-groups-Url"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "orgs-org-teams-team_slug-external-groups-Url"
+    }
+  ],
+  "info": {
+    "_postman_id": "f1d7f919-623e-473c-9e6e-51616f4fe54c",
+    "name": "Github External API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Operations tagged External across 2 of this provider's published API definitions: github-organizations-openapi.yml, github-teams-openapi.yml. Each path carries the servers of the definition it was published in.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Licenses API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Licenses",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get License",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/licenses/:license",
+            "params": [
+              {
+                "name": "license",
+                "value": "example_value",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "The GitHub Licenses API endpoint `/licenses/{license}` allows developers to retrieve detailed information about a specific open source license by providing its unique license key as a path parameter. When you make a GET request to this endpoint, it returns comprehensive details about the specified license, including its full name, description, permissions, conditions, limitations, and the complete license text. This is particularly useful when you need to programmatically access license informat"
+        },
+        {
+          "info": {
+            "name": "GitHub Get All Commonly Used Licenses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/licenses",
+            "params": [
+              {
+                "name": "featured",
+                "value": "true",
+                "type": "query"
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists the most commonly used licenses on GitHub. For more information, see \"[Licensing a repository ](https://docs.github.com/enterprise-server@3.9/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Get the License for a Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/license",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "This method returns the contents of the repository's license file, if one is detected.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw contents of the license.\n- **`application/vnd.github.html+json`**: Returns the license contents in HTML. Markup languages are rendered to"
+        },
+        {
+          "info": {
+            "name": "GitHub Create Github License",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/start",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "license",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "password",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "settings",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.\n\nNote that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#start-a-configuration-process) to start the actual configuration process.\n\nWhen using this endpoint, your GitHub instance must have a password set. This can be accomplished two ways:\n\n1.  If you're working directly with the API before accessing th"
+        },
+        {
+          "info": {
+            "name": "GitHub Upgrade License",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/upgrade",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "license",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "This API upgrades your license and also triggers the configuration process.\n\n**Note:** The request body for this operation must be submitted as `multipart/form-data` data. You can can reference the license file by prefixing the filename with the `@` symbol using `curl`. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#-F)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

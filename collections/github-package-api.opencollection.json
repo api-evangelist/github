@@ -1,0 +1,277 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub Org Package API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Package",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Get Package for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Gets a specific package in an organization.\n\nOAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see \"[About permissions for GitHub Packages](https://docs.github.com/enterprise-server@3.9/packages/learn-github-packages/about-permissions-for-github-packages#permissio"
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Package for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Deletes an entire package in an organization. You cannot delete a public package if any version of the package has more than 5,000 downloads. In this scenario, contact GitHub support for further assistance.\n\nThe authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package. For the list of these registrie"
+        },
+        {
+          "info": {
+            "name": "GitHub Restore Package for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name/restore",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "token",
+                "value": "example_value",
+                "type": "query",
+                "description": "package token"
+              }
+            ]
+          },
+          "docs": "Restores an entire package in an organization.\n\nYou can restore a deleted package under the following conditions:\n  - The package was deleted within the last 30 days.\n  - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this\nscenario, to restore the deleted package, you must delete the new package that uses the deleted package's namespace first.\nThe authenti"
+        },
+        {
+          "info": {
+            "name": "GitHub List Package Versions for Package Owned by an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name/versions",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "state",
+                "value": "active",
+                "type": "query",
+                "description": "The state of the package, either active or deleted."
+              }
+            ]
+          },
+          "docs": "Lists package versions for a package owned by an organization.\n\nOAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint if the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions. For the list of these registries, see \"[About permissions for GitHub Packages](https://docs.github.com/enterprise-server@3.9/packages/learn-github-packages/about-permissions-for-github-packages#permissions-for-repository-scoped-p"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Package Version for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name/versions/:package_version_id",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "package_version_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the package version."
+              }
+            ]
+          },
+          "docs": "Gets a specific package version in an organization.\n\nOAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see \"[About permissions for GitHub Packages](https://docs.github.com/enterprise-server@3.9/packages/learn-github-packages/about-permissions-for-github-packages#p"
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Package Version for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name/versions/:package_version_id",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "package_version_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the package version."
+              }
+            ]
+          },
+          "docs": "Deletes a specific package version in an organization. If the package is public and the package version has more than 5,000 downloads, you cannot delete the package version. In this scenario, contact GitHub support for further assistance.\n\nThe authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package."
+        },
+        {
+          "info": {
+            "name": "GitHub Restore Package Version for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/packages/:package_type/:package_name/versions/:package_version_id/restore",
+            "params": [
+              {
+                "name": "package_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry."
+              },
+              {
+                "name": "package_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the package."
+              },
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "package_version_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the package version."
+              }
+            ]
+          },
+          "docs": "Restores a specific package version in an organization.\n\nYou can restore a deleted package under the following conditions:\n  - The package was deleted within the last 30 days.\n  - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this\nscenario, to restore the deleted package, you must delete the new package that uses the deleted package's namespace first.\nThe"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

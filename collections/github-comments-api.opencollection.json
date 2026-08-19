@@ -1,0 +1,1086 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Comments API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Comments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Gist Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/gists/:gist_id/comments",
+            "params": [
+              {
+                "name": "gist_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the gist."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists the comments on a gist.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.\n- **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contain"
+        },
+        {
+          "info": {
+            "name": "GitHub List Discussion Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "The direction to sort the results by."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List all comments on a team discussion.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments`.\n\nOAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new comment on a team discussion.\n\nThis endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.9/github/managing-subscriptions-and-notifications-on-github/about-notifications). Creating content too quickly using this endpoint may result in secondary rate limiting. For more information, see \"[Rate limits for the API](https://docs.github.com/enterprise-server@3.9/rest/overview/rate-limits-for-the-rest-api#about-secondary-rate-limits)\" and \"[Best practices for using"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ]
+          },
+          "docs": "Get a specific comment on a team discussion.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.\n\nOAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Update Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edits the body text of a discussion comment.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `PATCH /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.\n\nOAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ]
+          },
+          "docs": "Deletes a comment on a team discussion.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/discussions/{discussion_number}/comments/{comment_number}`.\n\nOAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Reactions for Team Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number/reactions",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              },
+              {
+                "name": "content",
+                "value": "+1",
+                "type": "query",
+                "description": "Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a team discussion comment."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.\n\nOAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Reaction for Team Discussion Comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number/reactions",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).\n\nA response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `POST /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.\n\nOAuth app tokens and personal access"
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Team Discussion Comment Reaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/discussions/:discussion_number/comments/:comment_number/reactions/:reaction_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              },
+              {
+                "name": "reaction_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the reaction."
+              }
+            ]
+          },
+          "docs": "**Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions/:reaction_id`.\n\nDelete a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).\n\nOAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Issue Comments for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The property to sort the results by."
+              },
+              {
+                "name": "direction",
+                "value": "asc",
+                "type": "query",
+                "description": "Either `asc` or `desc`. Ignored without the `sort` parameter."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "You can use the REST API to list comments on issues and pull requests for a repository. Every pull request is an issue, but not every issue is a pull request.\n\nBy default, issue comments are ordered by ascending ID.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown"
+        },
+        {
+          "info": {
+            "name": "GitHub List Issue Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "You can use the REST API to list comments on issues and pull requests. Every pull request is an issue, but not every issue is a pull request.\n\nIssue comments are ordered by ascending ID.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github.raw+json`**: Returns the raw markdown body. Response will include "
+        },
+        {
+          "info": {
+            "name": "GitHub List Review Comments in Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/pulls/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "sort",
+                "value": "created",
+                "type": "query"
+              },
+              {
+                "name": "direction",
+                "value": "asc",
+                "type": "query",
+                "description": "The direction to sort results. Ignored without `sort` parameter."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists review comments for all pull requests in a repository. By default,\nreview comments are in ascending order by ID.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github-commitcomment.raw+json`**: Returns the raw markdown body. Response will include `body`. This is the default if you do not pass any spe"
+        },
+        {
+          "info": {
+            "name": "GitHub List Review Comments on Pull Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/pulls/:pull_number/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "pull_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the pull request."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "The property to sort the results by."
+              },
+              {
+                "name": "direction",
+                "value": "asc",
+                "type": "query",
+                "description": "The direction to sort results. Ignored without `sort` parameter."
+              },
+              {
+                "name": "since",
+                "value": "",
+                "type": "query",
+                "description": "Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all review comments for a specified pull request. By default, review comments\nare in ascending order by ID.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github-commitcomment.raw+json`**: Returns the raw markdown body. Response will include `body`. This is the default if you do not pass any specific"
+        },
+        {
+          "info": {
+            "name": "GitHub List Comments for Pull Request Review",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/pulls/:pull_number/reviews/:review_id/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "pull_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the pull request."
+              },
+              {
+                "name": "review_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the review."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists comments for a specific pull request review.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github-commitcomment.raw+json`**: Returns the raw markdown body. Response will include `body`. This is the default if you do not pass any specific media type.\n- **`application/vnd.github-commitcomment.text+jso"
+        },
+        {
+          "info": {
+            "name": "GitHub List Commit Comments for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists the commit comments for a specified repository. Comments are ordered by ascending ID.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github-commitcomment.raw+json`**: Returns the raw markdown body. Response will include `body`. This is the default if you do not pass any specific media type.\n- **`appl"
+        },
+        {
+          "info": {
+            "name": "GitHub List Commit Comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/commits/:commit_sha/comments",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "commit_sha",
+                "value": "",
+                "type": "path",
+                "description": "The SHA of the commit."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists the comments for a specified commit.\n\nThis endpoint supports the following custom media types. For more information, see \"[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types).\"\n\n- **`application/vnd.github-commitcomment.raw+json`**: Returns the raw markdown body. Response will include `body`. This is the default if you do not pass any specific media type.\n- **`application/vnd.github-commitcomment.text+json`**: Re"
+        },
+        {
+          "info": {
+            "name": "GitHub List Discussion Comments (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "The direction to sort the results by."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [List discussion comments](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#list-discussion-comments) endpoint.\n\nList all comments on a team discussion.\n\nOAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Create a discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#create-a-discussion-comment) endpoint.\n\nCreates a new comment on a team discussion.\n\nThis endpoint triggers [notifications](https://docs.github.com/enterprise-server@3.9/github/managing-subscriptions-and-notifications-on-github/about-noti"
+        },
+        {
+          "info": {
+            "name": "GitHub Get Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Get a discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment) endpoint.\n\nGet a specific comment on a team discussion.\n\nOAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Update Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Update a discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#update-a-discussion-comment) endpoint.\n\nEdits the body text of a discussion comment.\n\nOAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments/:comment_number",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Delete a discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#delete-a-discussion-comment) endpoint.\n\nDeletes a comment on a team discussion.\n\nOAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub List Reactions for Team Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments/:comment_number/reactions",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              },
+              {
+                "name": "content",
+                "value": "+1",
+                "type": "query",
+                "description": "Returns a single [reaction type](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#about-reactions). Omit this parameter to list all reactions to a team discussion comment."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#list-reactions-for-a-team-discussion-comment) endpoint.\n\nList the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).\n\nOAuth app tok"
+        },
+        {
+          "info": {
+            "name": "GitHub Create Reaction for Team Discussion Comment (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/discussions/:discussion_number/comments/:comment_number/reactions",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "discussion_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the discussion."
+              },
+              {
+                "name": "comment_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the comment."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new \"[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#create-reaction-for-a-team-discussion-comment)\" endpoint.\n\nCreate a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).\n\nA response w"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

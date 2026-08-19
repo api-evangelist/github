@@ -1,0 +1,1359 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Remove API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Remove",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Remove App Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/apps",
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nRemoves the ability of an app to push to this branch. Only GitHub Apps that are installe"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove an Authorized Ssh Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/setup/api/settings/authorized-keys",
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "authorized_key",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#--data-urlencode)."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Repository from an App Installation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/user/installations/:installation_id/repositories/:repository_id",
+            "params": [
+              {
+                "name": "installation_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the installation."
+              },
+              {
+                "name": "repository_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the repository."
+              }
+            ]
+          },
+          "docs": "Remove a single repository from an installation. The authenticated user must have admin access to the repository.\n\nYou must use a personal access token (which you can create via the [command line](https://docs.github.com/enterprise-server@3.9/github/authenticating-to-github/creating-a-personal-access-token) or [Basic Authentication](https://docs.github.com/enterprise-server@3.9/rest/overview/other-authentication-methods#basic-authentication)) to access this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Repository Access to Self-hosted Runner Group in an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runner-groups/:runner_group_id/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_group_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner group."
+              },
+              {
+                "name": "repository_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the repository."
+              }
+            ]
+          },
+          "docs": "Removes a repository from the list of selected repositories that can access a self-hosted runner group. The runner group must have `visibility` set to `selected`. For more information, see \"[Create a self-hosted runner group for an organization](#create-a-self-hosted-runner-group-for-an-organization).\"\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Self-hosted Runner from Group for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runner-groups/:runner_group_id/runners/:runner_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_group_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner group."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ]
+          },
+          "docs": "Removes a self-hosted runner from a group configured in an organization. The runner is then returned to the default group.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Remove Token for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runners/remove-token",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Returns a token that you can pass to the `config` script to remove a self-hosted runner from an organization. The token expires after one hour.\n\nFor example, you can replace `TOKEN` in the following example with the registration token provided by this endpoint to remove your self-hosted runner from an organization:\n\n```\n./config.sh remove --token TOKEN\n```\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove All Custom Labels from Self-hosted Runner for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runners/:runner_id/labels",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ]
+          },
+          "docs": "Remove all custom labels from a self-hosted runner configured in an\norganization. Returns the remaining read-only labels from the runner.\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Custom Label from Self-hosted Runner for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runners/:runner_id/labels/:name",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of a self-hosted runner's custom label."
+              }
+            ]
+          },
+          "docs": "Remove a custom label from a self-hosted runner configured\nin an organization. Returns the remaining labels from the runner.\n\nThis endpoint returns a `404 Not Found` status if the custom label is not\npresent on the runner.\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Selected Repository from an Organization Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/secrets/:secret_name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "secret_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the secret."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes a repository from an organization secret when the `visibility`\nfor repository access is set to `selected`. The visibility is set when you [Create\nor update an organization secret](https://docs.github.com/enterprise-server@3.9/rest/actions/secrets#create-or-update-an-organization-secret).\n\nAuthenticated users must have collaborator access to a repository to create, update, or read secrets.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoi"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Selected Repository from an Organization Variable",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/variables/:name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the variable."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes a repository from an organization variable that is\navailable to selected repositories. Organization variables that are available to\nselected repositories have their `visibility` field set to `selected`.\n\nAuthenticated users must have collaborator access to a repository to create, update, or read variables.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint. If the repository is private, the `repo` scope is also required."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Announcement Banner from Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/announcement",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Removes the announcement banner currently set for the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Selected Repository from an Organization Secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/dependabot/secrets/:secret_name/repositories/:repository_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "secret_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the secret."
+              },
+              {
+                "name": "repository_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes a repository from an organization secret when the `visibility`\nfor repository access is set to `selected`. The visibility is set when you [Create\nor update an organization secret](https://docs.github.com/enterprise-server@3.9/rest/dependabot/secrets#create-or-update-an-organization-secret).\n\nOAuth app tokens and personal access tokens (classic) need the `admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove an Organization Member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removing a user from this list will remove them from all teams and they will no longer have any access to the organization's repositories."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "In order to remove a user's membership with an organization, the authenticated user must be an organization owner.\n\nIf the specified user is an active member of the organization, this will remove them from the organization. If the specified user has been invited to the organization, this will cancel their invitation. The specified user will receive an email notification in both cases."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Outside Collaborator from an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/outside_collaborators/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removing a user from this list will remove them from all the organization's repositories."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Pre-receive Hook Enforcement for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/pre-receive-hooks/:pre_receive_hook_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "pre_receive_hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the pre-receive hook."
+              }
+            ]
+          },
+          "docs": "Removes any overrides for this hook at the org level for this org."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Public Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removes the public membership for the authenticated user from the specified organization, unless public visibility is enforced by default."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Security Manager Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/security-managers/teams/:team_slug",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              }
+            ]
+          },
+          "docs": "Removes the security manager role from a team for an organization. For more information, see \"[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization) team from an organization.\"\n\nThe authenticated user must be an administrator for the organization to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `admin:"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove the Connection Between an External Group and Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/external-groups",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              }
+            ]
+          },
+          "docs": "Deletes a connection between a team and an external group.\n\nYou can manage team membership with your IdP using Enterprise Managed Users for GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Team Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "To remove a membership between a user and a team, the authenticated user must have 'admin' permissions to the team or be an owner of the organization that the team is associated with. Removing team membership does not delete the user, it just removes their membership from the team.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/github"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Project from Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/projects/:project_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ]
+          },
+          "docs": "Removes an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user must have `read` access to both the team and project, or `admin` access to the team or project. This endpoint removes the project from the team, but does not delete the project.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/t"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Repository from Team",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/teams/:team_slug/repos/:owner/:repo",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "team_slug",
+                "value": "",
+                "type": "path",
+                "description": "The slug of the team name."
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "If the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated user must have admin access to the repository and must be able to see the team. This does not delete the repository, it just removes it from the team.\n\n**Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/repos/{owner}/{repo}"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove User as Collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/projects/:project_id/collaborators/:username",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removes a collaborator from an organization project. You must be an organization owner or a project `admin` to remove a collaborator."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Project from Team (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/projects/:project_id",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the project."
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a project from a team](https://docs.github.com/enterprise-server@3.9/rest/teams/teams#remove-a-project-from-a-team) endpoint.\n\nRemoves an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user mu"
+        },
+        {
+          "info": {
+            "name": "GitHub Create Remove Token for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/actions/runners/remove-token",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Returns a token that you can pass to the `config` script to remove a self-hosted runner from an repository. The token expires after one hour.\n\nFor example, you can replace `TOKEN` in the following example with the registration token provided by this endpoint to remove your self-hosted runner from an organization:\n\n```\n./config.sh remove --token TOKEN\n```\n\nAuthenticated users must have admin access to the repository to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need the"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove All Custom Labels from Self-hosted Runner for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/actions/runners/:runner_id/labels",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              }
+            ]
+          },
+          "docs": "Remove all custom labels from a self-hosted runner configured in a\nrepository. Returns the remaining read-only labels from the runner.\n\nAuthenticated users must have admin access to the repository to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Custom Label from Self-hosted Runner for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/actions/runners/:runner_id/labels/:name",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "runner_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the self-hosted runner."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "path",
+                "description": "The name of a self-hosted runner's custom label."
+              }
+            ]
+          },
+          "docs": "Remove a custom label from a self-hosted runner configured\nin a repository. Returns the remaining labels from the runner.\n\nThis endpoint returns a `404 Not Found` status if the custom label is not\npresent on the runner.\n\nAuthenticated users must have admin access to the repository to use this endpoint.\n\nOAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Status Check Protection",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/required_status_checks",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ]
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Status Check Contexts",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/required_status_checks/contexts",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Team Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/teams",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nRemoves the ability of a team to push to this branch. You can also remove push access fo"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove User Access Restrictions",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/branches/:branch/protection/restrictions/users",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "branch",
+                "value": "",
+                "type": "path",
+                "description": "The name of the branch. Cannot contain wildcard characters. To use wildcard characters in branch names, use [the GraphQL API](https://docs.github.com/enterprise-server@3.9/graphql)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Protected branches are available in public repositories with GitHub Free and GitHub Free for organizations, and in public and private repositories with GitHub Pro, GitHub Team, GitHub Enterprise Cloud, and GitHub Enterprise Server. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-with-github/githubs-products) in the GitHub Help documentation.\n\nRemoves the ability of a user to push to this branch.\n\n| Type    | Description          "
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Repository Collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/collaborators/:username",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removes a collaborator from a repository.\n\nTo use this endpoint, the authenticated user must either be an administrator of the repository or target themselves for removal.\n\nThis endpoint also:\n- Cancels any outstanding invitations\n- Unasigns the user from any issues\n- Removes access to organization projects if the user is not an organization member and is not a collaborator on any other organization repositories.\n- Unstars the repository\n- Updates access permissions to packages\n\nRemoving a user "
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Pre-receive Hook Enforcement for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/pre-receive-hooks/:pre_receive_hook_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "pre_receive_hook_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the pre-receive hook."
+              }
+            ]
+          },
+          "docs": "Deletes any overridden enforcement on this repository for the specified hook.\n\nResponds with effective values inherited from owner and/or global level."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Assignees from an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/assignees",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes one or more assignees from an issue."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove All Labels from an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/labels",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              }
+            ]
+          },
+          "docs": "Removes all labels from an issue."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Label from an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/labels/:name",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              },
+              {
+                "name": "name",
+                "value": "octocat",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes the specified label from the issue, and returns the remaining labels on the issue. This endpoint returns a `404 Not Found` status if the label does not exist."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Requested Reviewers from Pull Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/pulls/:pull_number/requested_reviewers",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "pull_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the pull request."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Removes review requests from a pull request for a given set of users and/or teams."
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Team Member (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/members/:username",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "The \"Remove team member\" endpoint (described below) is deprecated.\n\nWe recommend using the [Remove team membership for a user](https://docs.github.com/enterprise-server@3.9/rest/teams/members#remove-team-membership-for-a-user) endpoint instead. It allows you to remove both active and pending memberships.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-sta"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Team Membership for User (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/memberships/:username",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove team membership for a user](https://docs.github.com/enterprise-server@3.9/rest/teams/members#remove-team-membership-for-a-user) endpoint.\n\nTeam synchronization is available for organizations using GitHub Enterprise Cloud. For more information, see [GitHub's products](https://docs.github.com/enterprise-server@3.9/github/getting-started-"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Repository from Team (legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/teams/:team_id/repos/:owner/:repo",
+            "params": [
+              {
+                "name": "team_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the team."
+              },
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [Remove a repository from a team](https://docs.github.com/enterprise-server@3.9/rest/teams/teams#remove-a-repository-from-a-team) endpoint.\n\nIf the authenticated user is an organization owner or a team maintainer, they can remove any repositories from the team. To remove a repository from a team as an organization member, the authenticated use"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

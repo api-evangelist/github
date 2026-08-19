@@ -1,0 +1,197 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "GitHub Org Membership API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Membership",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Check Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Check if a user is, publicly or privately, a member of the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Get Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "In order to get a user's membership with an organization, the authenticated user must be an organization member. The `state` parameter in the response can be used to identify the user's membership status."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Only authenticated organization owners can add a member to the organization or update the member's role.\n\n*   If the authenticated user is _adding_ a member to the organization, the invited user will receive an email inviting them to the organization. The user's [membership status](https://docs.github.com/enterprise-server@3.9/rest/orgs/members#get-organization-membership-for-a-user) will be `pending` until they accept the invitation.\n    \n*   Authenticated users can _update_ a user's membership"
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/memberships/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "In order to remove a user's membership with an organization, the authenticated user must be an organization owner.\n\nIf the specified user is an active member of the organization, this will remove them from the organization. If the specified user has been invited to the organization, this will cancel their invitation. The specified user will receive an email notification in both cases."
+        },
+        {
+          "info": {
+            "name": "GitHub Check Public Organization Membership for User",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Check if the provided user is a public member of the organization."
+        },
+        {
+          "info": {
+            "name": "GitHub Set Public Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "The user can publicize their own membership. (A user cannot publicize the membership for another user.)\n\nNote that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see \"[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method).\""
+        },
+        {
+          "info": {
+            "name": "GitHub Remove Public Organization Membership for the Authenticated User",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/public_members/:username",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "path",
+                "description": "The handle for the GitHub user account."
+              }
+            ]
+          },
+          "docs": "Removes the public membership for the authenticated user from the specified organization, unless public visibility is enforced by default."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

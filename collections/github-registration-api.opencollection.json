@@ -1,0 +1,76 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Registration API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Registration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub Create Registration Token for an Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/actions/runners/registration-token",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Returns a token that you can pass to the `config` script. The token expires after one hour.\n\nFor example, you can replace `TOKEN` in the following example with the registration token provided by this endpoint to configure your self-hosted runner:\n\n```\n./config.sh --url https://github.com/octo-org --token TOKEN\n```\n\nAuthenticated users must have admin access to the organization to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need the`admin:org` scope to use this endpoint."
+        },
+        {
+          "info": {
+            "name": "GitHub Create Registration Token for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/actions/runners/registration-token",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Returns a token that you can pass to the `config` script. The token expires after one hour.\n\nFor example, you can replace `TOKEN` in the following example with the registration token provided by this endpoint to configure your self-hosted runner:\n\n```\n./config.sh --url https://github.com/octo-org --token TOKEN\n```\n\nAuthenticated users must have admin access to the repository to use this endpoint.\n\nOAuth tokens and personal access tokens (classic) need the `repo` scope to use this endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

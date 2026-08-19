@@ -1,0 +1,336 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Github Migrations API",
+    "version": "1.1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Migrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GitHub List Organization Migrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "exclude",
+                "value": "",
+                "type": "query",
+                "description": "Exclude attributes from the API response to improve performance"
+              }
+            ]
+          },
+          "docs": "Lists the most recent migrations, including both exports (which can be started through the REST API) and imports (which cannot be started using the REST API).\n\nA list of `repositories` is only returned for export migrations."
+        },
+        {
+          "info": {
+            "name": "GitHub Start an Organization Migration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates the generation of a migration archive.\n\nBefore you can use this endpoint, you must configure a blob storage provider in the \"Migrations\" section in the Management Console. For more details, see \"[Migrating repositories from GitHub Enterprise Server to GitHub Enterprise Cloud](https://docs.github.com/enterprise-server@3.9/migrations/using-github-enterprise-importer/migrating-repositories-with-github-enterprise-importer/migrating-repositories-from-github-enterprise-server-to-github-enter"
+        },
+        {
+          "info": {
+            "name": "GitHub Get an Organization Migration Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations/:migration_id",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              },
+              {
+                "name": "exclude",
+                "value": "",
+                "type": "query",
+                "description": "Exclude attributes from the API response to improve performance"
+              }
+            ]
+          },
+          "docs": "Fetches the status of a migration.\n\nThe `state` of a migration can be one of the following values:\n\n*   `pending`, which means the migration hasn't started yet.\n*   `exporting`, which means the migration is in progress.\n*   `exported`, which means the migration finished successfully.\n*   `failed`, which means the migration failed."
+        },
+        {
+          "info": {
+            "name": "GitHub Download an Organization Migration Archive",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations/:migration_id/archive",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              }
+            ]
+          },
+          "docs": "Fetches the URL to a migration archive."
+        },
+        {
+          "info": {
+            "name": "GitHub Delete an Organization Migration Archive",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations/:migration_id/archive",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              }
+            ]
+          },
+          "docs": "Deletes a previous migration archive. Migration archives are automatically deleted after seven days."
+        },
+        {
+          "info": {
+            "name": "GitHub Unlock an Organization Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations/:migration_id/repos/:repo_name/lock",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              },
+              {
+                "name": "repo_name",
+                "value": "",
+                "type": "path",
+                "description": "repo_name parameter"
+              }
+            ]
+          },
+          "docs": "Unlocks a repository that was locked for migration. You should unlock each migrated repository and [delete them](https://docs.github.com/enterprise-server@3.9/rest/repos/repos#delete-a-repository) when the migration is complete and you no longer need the source data."
+        },
+        {
+          "info": {
+            "name": "GitHub List Repositories in an Organization Migration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/migrations/:migration_id/repositories",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              },
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List all the repositories for this organization migration."
+        },
+        {
+          "info": {
+            "name": "GitHub List User Migrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/migrations",
+            "params": [
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all migrations a user has started."
+        },
+        {
+          "info": {
+            "name": "GitHub Start a User Migration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{hostname}/api/v3/user/migrations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiates the generation of a user migration archive."
+        },
+        {
+          "info": {
+            "name": "GitHub Download a User Migration Archive",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/migrations/:migration_id/archive",
+            "params": [
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              }
+            ]
+          },
+          "docs": "Fetches the URL to download the migration archive as a `tar.gz` file. Depending on the resources your repository uses, the migration archive can contain JSON files with data for these objects:\n\n*   attachments\n*   bases\n*   commit\\_comments\n*   issue\\_comments\n*   issue\\_events\n*   issues\n*   milestones\n*   organizations\n*   projects\n*   protected\\_branches\n*   pull\\_request\\_reviews\n*   pull\\_requests\n*   releases\n*   repositories\n*   review\\_comments\n*   schema\n*   users\n\nThe archive will also"
+        },
+        {
+          "info": {
+            "name": "GitHub List Repositories for a User Migration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/user/migrations/:migration_id/repositories",
+            "params": [
+              {
+                "name": "migration_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the migration."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all the repositories for this user migration."
+        },
+        {
+          "info": {
+            "name": "GitHub Get List of Conflicting Packages During Docker Migration for Organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/docker/conflicts",
+            "params": [
+              {
+                "name": "org",
+                "value": "",
+                "type": "path",
+                "description": "The organization name. The name is not case sensitive."
+              }
+            ]
+          },
+          "docs": "Lists all packages that are in a specific organization, are readable by the requesting user, and that encountered a conflict during a Docker migration.\n\nOAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

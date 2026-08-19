@@ -1,7 +1,7 @@
 {
   "opencollection": "1.0.0",
   "info": {
-    "name": "GitHub Events API",
+    "name": "Github Events API",
     "version": "1.1.4"
   },
   "items": [
@@ -13,12 +13,12 @@
       "items": [
         {
           "info": {
-            "name": "GitHub Get an Issue Event",
+            "name": "GitHub List Public Events for Network of Repositories",
             "type": "http"
           },
           "http": {
             "method": "GET",
-            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/events/:event_id",
+            "url": "{protocol}://{hostname}/api/v3/networks/:owner/:repo/events",
             "params": [
               {
                 "name": "owner",
@@ -31,30 +31,6 @@
                 "value": "",
                 "type": "path",
                 "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
-              },
-              {
-                "name": "event_id",
-                "value": "42",
-                "type": "path"
-              }
-            ]
-          },
-          "docs": "The Get An Issue Event operation retrieves detailed information about a specific event that occurred on an issue within a GitHub repository. By providing the repository owner, repository name, and a unique event ID through the endpoint path parameters, this API returns comprehensive data about that particular issue event, such as when it was created, the type of event (like labeled, assigned, closed, etc.), the actor who triggered the event, and any associated metadata. This is useful for tracki"
-        },
-        {
-          "info": {
-            "name": "GitHub List Public Events for User",
-            "type": "http"
-          },
-          "http": {
-            "method": "GET",
-            "url": "{protocol}://{hostname}/api/v3/users/:username/events/public",
-            "params": [
-              {
-                "name": "username",
-                "value": "",
-                "type": "path",
-                "description": "The handle for the GitHub user account."
               },
               {
                 "name": "per_page",
@@ -70,31 +46,17 @@
               }
             ]
           },
-          "docs": "The List Public Events For A User operation retrieves a paginated list of public events performed by a specified GitHub user. This GET endpoint accepts a username as a path parameter and returns events such as repository pushes, issue comments, pull requests, and other public activities associated with that user's account. The response includes event metadata like timestamps, event types, and related repository information, making it useful for tracking user contributions and activity across Git"
-        }
-      ]
-    },
-    {
-      "info": {
-        "name": "Authenticated",
-        "type": "folder"
-      },
-      "items": [
+          "docs": "This API operation retrieves a list of public events that have occurred across a network of repositories. By providing the owner and repository name in the path parameters, it returns events not only from the specified repository but also from all forks within that repository's network. The GET request to the /networks/{owner}/{repo}/events endpoint allows developers to monitor activity and track contributions across an entire ecosystem of related repositories, making it useful for understanding"
+        },
         {
           "info": {
-            "name": "GitHub List Organization Events for the Authenticated User",
+            "name": "GitHub List Public Organization Events",
             "type": "http"
           },
           "http": {
             "method": "GET",
-            "url": "{protocol}://{hostname}/api/v3/users/:username/events/orgs/:org",
+            "url": "{protocol}://{hostname}/api/v3/orgs/:org/events",
             "params": [
-              {
-                "name": "username",
-                "value": "",
-                "type": "path",
-                "description": "The handle for the GitHub user account."
-              },
               {
                 "name": "org",
                 "value": "",
@@ -115,7 +77,267 @@
               }
             ]
           },
-          "docs": "The GitHub Events API endpoint `/users/{username}/events/orgs/{org}` using the GET method retrieves a list of events for the authenticated user within a specific organization. This endpoint allows developers to access activity data related to a particular organization that the authenticated user is associated with, providing visibility into organization-level events and actions. The API returns event data in a paginated format, showing activities such as repository changes, issue updates, pull r"
+          "docs": "Lists all public events for an organization. This endpoint returns a paginated list of events that have occurred within the organization, including activities like repository creation, issue comments, pull requests, and other public actions performed by organization members. The events are returned in reverse chronological order, with the most recent events appearing first. Authentication is not required to access this endpoint since it only exposes public events, though authenticated requests r"
+        },
+        {
+          "info": {
+            "name": "GitHub List Issue Events for Repository",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/events",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists events for a repository."
+        },
+        {
+          "info": {
+            "name": "GitHub Get an Issue Event",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/events/:event_id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "event_id",
+                "value": "42",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Gets a single event by the event id."
+        },
+        {
+          "info": {
+            "name": "GitHub List Issue Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/events",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "Lists all events for an issue."
+        },
+        {
+          "info": {
+            "name": "GitHub List Timeline Events for an Issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/issues/:issue_number/timeline",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "issue_number",
+                "value": "",
+                "type": "path",
+                "description": "The number that identifies the issue."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "List all timeline events for an issue."
+        },
+        {
+          "info": {
+            "name": "GitHub List Repository Events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{hostname}/api/v3/repos/:owner/:repo/events",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": "example_value"
+              },
+              {
+                "name": "X-GitHub-Api-Version",
+                "value": "example_value"
+              },
+              {
+                "name": "Accept",
+                "value": "example_value"
+              }
+            ],
+            "params": [
+              {
+                "name": "owner",
+                "value": "",
+                "type": "path",
+                "description": "The account owner of the repository. The name is not case sensitive."
+              },
+              {
+                "name": "repo",
+                "value": "",
+                "type": "path",
+                "description": "The name of the repository without the `.git` extension. The name is not case sensitive."
+              },
+              {
+                "name": "per_page",
+                "value": "",
+                "type": "query",
+                "description": "The number of results per page (max 100). For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page number of the results to fetch. For more information, see \"[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api).\""
+              }
+            ]
+          },
+          "docs": "**Note**: This API is not built to serve real-time use cases. Depending on the time of day, event latency can be anywhere from 30s to 6h.\n"
         }
       ]
     }

@@ -1,0 +1,339 @@
+{
+  "item": [
+    {
+      "id": "a3ae6cbe-4bff-4365-9c6c-0dadf53f07ff",
+      "name": "Ldap",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "67214930-f0ea-4c2f-8fb9-cf35c9e78d16",
+          "name": "GitHub Update Ldap Mapping for Team",
+          "request": {
+            "name": "GitHub Update Ldap Mapping for Team",
+            "description": {
+              "content": "Updates the [distinguished name](https://www.ldap.com/ldap-dns-and-rdns) (DN) of the LDAP entry to map to a team. [LDAP synchronization](https://docs.github.com/enterprise-server@3.9/admin/identity-and-access-management/using-ldap-for-enterprise-iam/using-ldap#enabling-ldap-sync) must be enabled to map LDAP entries to a team. Use the [Create a team](https://docs.github.com/enterprise-server@3.9/rest/teams/teams/#create-a-team) endpoint to create a team with LDAP mapping.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "ldap",
+                "teams",
+                ":team_id",
+                "mapping"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "team_id",
+                  "description": "(Required) The unique identifier of the team."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ldap_dn\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "73050dc0-89ac-4c0b-80b4-bb5eafef122e",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "ldap",
+                    "teams",
+                    ":team_id",
+                    "mapping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "team_id",
+                      "description": "(Required) The unique identifier of the team."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ldap_dn\": \"cn=Enterprise Ops,ou=teams,dc=github,dc=com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ldap_dn\": \"cn=Enterprise Ops,ou=teams,dc=github,dc=com\",\n  \"id\": 1,\n  \"node_id\": \"MDQ6VGVhbTE=\",\n  \"url\": \"https://api.github.com/teams/1\",\n  \"html_url\": \"https://github.com/orgs/github/teams/justice-league\",\n  \"name\": \"Justice League\",\n  \"slug\": \"justice-league\",\n  \"description\": \"A great team.\",\n  \"privacy\": \"closed\",\n  \"notification_setting\": \"notifications_enabled\",\n  \"permission\": \"admin\",\n  \"members_url\": \"https://api.github.com/teams/1/members{/member}\",\n  \"repositories_url\": \"https://api.github.com/teams/1/repos\",\n  \"parent\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "019dcc2d-9a3a-47a1-ac9a-841744f289c2",
+          "name": "GitHub Sync Ldap Mapping for Team",
+          "request": {
+            "name": "GitHub Sync Ldap Mapping for Team",
+            "description": {
+              "content": "Note that this API call does not automatically initiate an LDAP sync. Rather, if a `201` is returned, the sync job is queued successfully, and is performed when the instance is ready.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "admin",
+                "ldap",
+                "teams",
+                ":team_id",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "team_id",
+                  "description": "(Required) The unique identifier of the team."
+                },
+                {
+                  "description": "Self-hosted Enterprise Server hostname",
+                  "type": "any",
+                  "value": "{{hostname}}",
+                  "key": "hostname"
+                },
+                {
+                  "description": "Self-hosted Enterprise Server protocol",
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bd09de9c-3eae-4f25-824d-2bc0839dc658",
+              "name": "Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "admin",
+                    "ldap",
+                    "teams",
+                    ":team_id",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "team_id",
+                      "description": "(Required) The unique identifier of the team."
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server hostname",
+                      "type": "any",
+                      "value": "{{hostname}}",
+                      "key": "hostname"
+                    },
+                    {
+                      "description": "Self-hosted Enterprise Server protocol",
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"queued\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server hostname",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "HOSTNAME",
+      "key": "hostname"
+    },
+    {
+      "description": {
+        "content": "Self-hosted Enterprise Server protocol",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "http",
+      "key": "protocol"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{hostname}}/api/v3",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "330d0c89-66cf-4f14-9f63-2f96969ed8ec",
+    "name": "GitHub Teams Ldap API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The GitHub Teams API allows developers to programmatically create and manage teams within GitHub organizations, which are groups of organization members that reflect your company or group's structure and provide cascading access permissions to repositories. Through these REST API endpoints, you can create and delete teams, add or remove team members and maintainers, manage team repositories and their permission levels, organize teams into hierarchical structures with parent and child teams, configure team settings like privacy levels and notifications, and access team discussions. This API is essential for automating team management workflows, synchronizing GitHub team structures with external HR or directory systems, building custom administrative dashboards, and maintaining consistent access control as your organization scales.\n\nContact Support:\n Name: Support",
+      "type": "text/plain"
+    }
+  }
+}
