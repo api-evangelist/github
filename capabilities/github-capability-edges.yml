@@ -1,0 +1,86 @@
+slug: github
+provider: GitHub
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 7
+edges:
+- tag: Pulls
+  spec_file: github-pulls-api-openapi.yml
+  capability_id: BC-4200.40
+  capability_id_l1: BC-4200
+  capability_name: Software Construction Management
+  confidence: 0.9
+  evidence: POST /repos/{owner}/{repo}/pulls  pulls/create  GitHub Create a Pull Request; pulls/create-review-comment  GitHub
+    Create a Review Comment for a Pull Request
+  reason: Pull request creation, review comments, commits and merges — source control and code review
+    practice, i.e. software construction management.
+- tag: Actions
+  spec_file: github-actions-api-openapi.yml
+  capability_id: BC-4210.10
+  capability_id_l1: BC-4210
+  capability_name: Continuous Integration Management
+  confidence: 0.8
+  evidence: '"Get GitHub Actions Permissions for an Organization", "Set Default Workflow Permissions for
+    an Enterprise", "Get GitHub Actions Cache Usage"; schemas workflow, actions-cache-list'
+  reason: Governance and configuration of the Actions CI/CD platform (workflow permissions, caches, runners)
+    is build-pipeline and pipeline-policy management.
+- tag: Git
+  spec_file: github-git-api-openapi.yml
+  capability_id: BC-4200.40
+  capability_id_l1: BC-4200
+  capability_name: Software Construction Management
+  confidence: 0.8
+  evidence: '"Create a Commit", "Create a Reference", "Create a Tree", schemas git-commit, git-ref, git-tree'
+  reason: Low-level git object and reference manipulation is source control, the core of Software Construction
+    Management.
+- tag: Repos
+  spec_file: github-repos-api-openapi.yml
+  capability_id: BC-4200.40
+  capability_id_l1: BC-4200
+  capability_name: Software Construction Management
+  confidence: 0.75
+  evidence: GET /repos/{owner}/{repo}/branches/{branch}/protection  repos/get-branch-protection
+  reason: Repository, branch and branch-protection management is the core source-control surface underpinning
+    software construction. Very broad tag (163 ops incl. pages, deployments, webhooks) so confidence tempered.
+- tag: Code-Scanning
+  spec_file: github-code-scanning-api-openapi.yml
+  capability_id: BC-620.40
+  capability_id_l1: BC-620
+  capability_name: Vulnerability Management
+  confidence: 0.7
+  evidence: '"List Code Scanning Alerts for a Repository", "Upload an Analysis as SARIF Data", schema
+    code-scanning-alert-rule-summary'
+  reason: Operations manage static-analysis security alerts and analyses over source code, i.e. scanning
+    for and remediating code vulnerabilities. Closest fit is Vulnerability Management; some chance a grader
+    prefers software quality engineering, hence 0.7.
+- tag: Issues
+  spec_file: github-issues-api-openapi.yml
+  capability_id: BC-4200
+  capability_id_l1: BC-4200
+  capability_name: Software Product Engineering Management
+  confidence: 0.7
+  evidence: '"Create an Issue", "List Assignees", "List Issue Events for a Repository", schemas issue-event-milestone,
+    issue-event-label'
+  reason: Issue tracking with assignees, labels, milestones and comments underpins software engineering
+    work management, spanning both backlog stewardship and defect management, so only the L1 is asserted.
+- tag: Oauth-Authorizations
+  spec_file: github-oauth-authorizations-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: 'POST /authorizations  oauth-authorizations/create-authorization  GitHub Create a New Authorization;
+    schemas: application-grant, authorization'
+  reason: Manages OAuth tokens and application grants — credential and access authorisation lifecycle,
+    i.e. identity & access management. Could also be read as developer credential management (BC-4270.40);
+    confidence moderated.
