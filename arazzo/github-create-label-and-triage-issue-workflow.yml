@@ -22,11 +22,8 @@ info:
       confidence: 0.75
     model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
-- name: githubReposApi
-  url: ../openapi/github-repos-api-openapi.yml
-  type: openapi
-- name: githubRepoIssuesApi
-  url: ../openapi/github-repo-issues-api-openapi.yml
+- name: issuesApi
+  url: ../openapi/github-issues-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: create-label-and-triage-issue
@@ -71,7 +68,7 @@ workflows:
   steps:
   - stepId: createLabel
     description: Create the triage label in the repository.
-    operationId: createLabel
+    operationId: issues/create-label
     parameters:
     - name: Authorization
       in: header
@@ -95,7 +92,7 @@ workflows:
       labelUrl: $response.body#/url
   - stepId: openIssue
     description: Open the issue that will be triaged with the new label.
-    operationId: createAnIssue
+    operationId: issues/create
     parameters:
     - name: Authorization
       in: header
@@ -120,7 +117,7 @@ workflows:
     description: >-
       Apply the newly created label to the issue using the issue number returned
       by the open step.
-    operationId: addLabelsToAnIssue
+    operationId: issues/add-labels
     parameters:
     - name: Authorization
       in: header

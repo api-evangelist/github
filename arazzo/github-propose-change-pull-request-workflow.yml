@@ -21,11 +21,14 @@ info:
       confidence: 0.75
     model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
-- name: githubReposApi
-  url: ../openapi/github-repos-api-openapi.yml
+- name: gitApi
+  url: ../openapi/github-git-api-openapi.yml
   type: openapi
-- name: githubRepoPullsApi
-  url: ../openapi/github-repo-pulls-api-openapi.yml
+- name: pullsApi
+  url: ../openapi/github-pulls-api-openapi.yml
+  type: openapi
+- name: reposApi
+  url: ../openapi/github-repos-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: propose-change-pull-request
@@ -79,7 +82,7 @@ workflows:
   steps:
   - stepId: getBaseRef
     description: Read the base branch reference to obtain its commit SHA.
-    operationId: getReference
+    operationId: git/get-ref
     parameters:
     - name: Authorization
       in: header
@@ -99,7 +102,7 @@ workflows:
       baseSha: $response.body#/object/sha
   - stepId: createBranchRef
     description: Create the new branch reference from the base commit SHA.
-    operationId: createReference
+    operationId: git/create-ref
     parameters:
     - name: Authorization
       in: header
@@ -121,7 +124,7 @@ workflows:
       newRef: $response.body#/ref
   - stepId: commitFile
     description: Commit the file onto the new branch.
-    operationId: createOrUpdateFileContents
+    operationId: repos/create-or-update-file-contents
     parameters:
     - name: Authorization
       in: header
@@ -149,7 +152,7 @@ workflows:
     description: >-
       Open a pull request from the new branch back to the base branch so the
       committed change can be reviewed.
-    operationId: createPullRequest
+    operationId: pulls/create
     parameters:
     - name: Authorization
       in: header

@@ -21,7 +21,10 @@ info:
       confidence: 0.75
     model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
-- name: githubReposApi
+- name: gitApi
+  url: ../openapi/github-git-api-openapi.yml
+  type: openapi
+- name: reposApi
   url: ../openapi/github-repos-api-openapi.yml
   type: openapi
 workflows:
@@ -71,7 +74,7 @@ workflows:
     description: >-
       Read the base branch reference to obtain the commit SHA the new branch
       will point at.
-    operationId: getReference
+    operationId: git/get-ref
     parameters:
     - name: Authorization
       in: header
@@ -93,7 +96,7 @@ workflows:
     description: >-
       Create the new branch reference pointing at the base commit SHA returned
       by the previous step.
-    operationId: createReference
+    operationId: git/create-ref
     parameters:
     - name: Authorization
       in: header
@@ -115,7 +118,7 @@ workflows:
       newRef: $response.body#/ref
   - stepId: commitFile
     description: Create the file on the new branch in a single commit.
-    operationId: createOrUpdateFileContents
+    operationId: repos/create-or-update-file-contents
     parameters:
     - name: Authorization
       in: header

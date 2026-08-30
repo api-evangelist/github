@@ -21,7 +21,10 @@ info:
       confidence: 0.75
     model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
-- name: githubReposApi
+- name: gitApi
+  url: ../openapi/github-git-api-openapi.yml
+  type: openapi
+- name: reposApi
   url: ../openapi/github-repos-api-openapi.yml
   type: openapi
 workflows:
@@ -63,7 +66,7 @@ workflows:
   steps:
   - stepId: getBranchTip
     description: Read the branch reference to obtain the tip commit SHA.
-    operationId: getReference
+    operationId: git/get-ref
     parameters:
     - name: Authorization
       in: header
@@ -85,7 +88,7 @@ workflows:
     description: >-
       Create a tag reference pointing at the branch tip SHA returned by the
       previous step.
-    operationId: createReference
+    operationId: git/create-ref
     parameters:
     - name: Authorization
       in: header
@@ -107,7 +110,7 @@ workflows:
       tagRef: $response.body#/ref
   - stepId: cutRelease
     description: Create a release for the tag that was just created.
-    operationId: createRelease
+    operationId: repos/create-release
     parameters:
     - name: Authorization
       in: header

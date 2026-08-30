@@ -23,7 +23,10 @@ info:
       confidence: 0.75
     model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
-- name: githubReposApi
+- name: gitApi
+  url: ../openapi/github-git-api-openapi.yml
+  type: openapi
+- name: reposApi
   url: ../openapi/github-repos-api-openapi.yml
   type: openapi
 workflows:
@@ -61,7 +64,7 @@ workflows:
     description: >-
       Fork the upstream repository into the authenticated account. The fork is
       created asynchronously and returns 202 Accepted.
-    operationId: createFork
+    operationId: repos/create-fork
     parameters:
     - name: Authorization
       in: header
@@ -85,7 +88,7 @@ workflows:
     description: >-
       Read the default branch reference on the fork to obtain its tip commit
       SHA.
-    operationId: getReference
+    operationId: git/get-ref
     parameters:
     - name: Authorization
       in: header
@@ -106,7 +109,7 @@ workflows:
   - stepId: createWorkingBranch
     description: >-
       Create the working branch on the fork from the default branch tip SHA.
-    operationId: createReference
+    operationId: git/create-ref
     parameters:
     - name: Authorization
       in: header
