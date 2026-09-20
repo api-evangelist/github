@@ -1,94 +1,124 @@
-specification: API Commons Rate Limits
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
-provider: GitHub
-providerId: github
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-reconciled: true
-tags:
-  - Rate Limiting
-  - API Management
-description: GitHub REST and GraphQL API rate limits, including secondary limits and Git LFS limits.
+# Rate limits transcribed from the provider's own documentation — see provenance. Quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
 sources:
-  - https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-  - https://github.com/pricing
-headers:
-  limit: x-ratelimit-limit
-  remaining: x-ratelimit-remaining
-  used: x-ratelimit-used
-  reset: x-ratelimit-reset
-  resource: x-ratelimit-resource
-responseCodes:
-  throttled: 403
-  secondaryAbuse: 429
+- https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
+provenance:
+  tool: planning/api-economics/harvest_ratelimits.py
+  run: 20260920T133210
+  grounding: every limit_text was found verbatim in the fetched page text
+published: true
+note: Page states 403 or 429 on exceeding primary and secondary rate limits.
+limit_count: 18
 limits:
-  - name: Unauthenticated
-    scope: ip
-    metric: requests_per_hour
-    limit: 60
-    timeFrame: hour
-  - name: Authenticated (Personal Access Token)
-    scope: user
-    metric: requests_per_hour
-    limit: 5000
-    timeFrame: hour
-  - name: GitHub App (Standard)
-    scope: installation
-    metric: requests_per_hour
-    limit: 5000
-    timeFrame: hour
-  - name: GitHub App (Enterprise Cloud)
-    scope: installation
-    metric: requests_per_hour
-    limit: 15000
-    timeFrame: hour
-  - name: OAuth App (Enterprise Cloud)
-    scope: oauth-app
-    metric: requests_per_hour
-    limit: 15000
-    timeFrame: hour
-  - name: GitHub Actions GITHUB_TOKEN
-    scope: repository
-    metric: requests_per_hour
-    limit: 1000
-    timeFrame: hour
-  - name: Git LFS Authenticated
-    scope: user
-    metric: requests_per_minute
-    limit: 3000
-    timeFrame: minute
-  - name: Search API
-    scope: user
-    metric: requests_per_minute
-    limit: 30
-    timeFrame: minute
-secondaryLimits:
-  - name: Concurrent Requests
-    scope: shared REST+GraphQL
-    limit: 100
-    metric: concurrent
-  - name: REST Endpoint Points Per Minute
-    scope: user
-    limit: 900
-    metric: points_per_minute
-    notes: Each REST endpoint has a point cost; sum cannot exceed 900/min.
-  - name: Content-Generating Requests
-    scope: user
-    limit: 80
-    metric: requests_per_minute
-    notes: Creating issues, comments, PRs, etc.
-  - name: Daily Content-Creating Limit
-    scope: user
-    limit: 500
-    metric: requests_per_hour
-policies:
-  - name: Continuing while limited triggers ban
-    description: Repeated requests after rate limit can result in integration banning.
-  - name: Reset time as Unix epoch
-    description: x-ratelimit-reset returns reset as UTC epoch seconds.
-  - name: Conditional requests free
-    description: Conditional requests (304 Not Modified) do not count against rate limits.
+- name: Unauthenticated requests
+  limit_text: 60 requests per hour
+  limit: 60
+  window: hour
+  scope: ip
+- name: Authenticated users
+  limit_text: 5,000 requests per hour
+  limit: 5000
+  window: hour
+  scope: user
+- name: GitHub App owned by Enterprise Cloud org
+  limit_text: 15,000 requests per hour
+  limit: 15000
+  window: hour
+  scope: user
+  plan: GitHub Enterprise Cloud
+- name: Git LFS unauthenticated
+  limit_text: 300 requests per minute for unauthenticated requests
+  limit: 300
+  window: minute
+  scope: ip
+  endpoint: Git LFS
+- name: Git LFS authenticated
+  limit_text: 3,000 requests per minute for authenticated requests
+  limit: 3000
+  window: minute
+  scope: user
+  endpoint: Git LFS
+- name: GitHub App installation
+  limit_text: 5,000 requests per hour
+  limit: 5000
+  window: hour
+  scope: account
+- name: Installation scaling increment
+  limit_text: 50 requests per hour for each repository
+  limit: 50
+  window: hour
+  scope: account
+- name: Installation max
+  limit_text: 12,500 requests per hour
+  limit: 12500
+  window: hour
+  scope: account
+- name: OAuth app client ID/secret public data
+  limit_text: 5,000 requests per hour per OAuth app
+  limit: 5000
+  window: hour
+  scope: api-key
+- name: GITHUB_TOKEN
+  limit_text: 1,000 requests per hour per repository
+  limit: 1000
+  window: hour
+  scope: endpoint
+  endpoint: GitHub Actions GITHUB_TOKEN
+- name: GITHUB_TOKEN enterprise
+  limit_text: 15,000 requests per hour per repository
+  limit: 15000
+  window: hour
+  scope: endpoint
+  plan: GitHub Enterprise Cloud
+  endpoint: GitHub Actions GITHUB_TOKEN
+- name: Concurrent requests
+  limit_text: No more than 100 concurrent requests are allowed
+  limit: 100
+  scope: account
+  kind: burst
+- name: Points per minute REST
+  limit_text: No more than 900 points per minute are allowed for REST API endpoints
+  limit: 900
+  window: minute
+  scope: endpoint
+  endpoint: REST API endpoints
+  kind: burst
+- name: Points per minute GraphQL
+  limit_text: no more than 2,000 points per minute are allowed for the GraphQL API endpoint
+  limit: 2000
+  window: minute
+  scope: endpoint
+  endpoint: GraphQL API endpoint
+  kind: burst
+- name: CPU time
+  limit_text: No more than 90 seconds of CPU time per 60 seconds of real time is allowed
+  limit: 90
+  scope: account
+  kind: burst
+- name: Content creation per minute
+  limit_text: no more than 80 content-generating requests per minute
+  limit: 80
+  window: minute
+  scope: account
+  kind: burst
+- name: Content creation per hour
+  limit_text: no more than 500 content-generating requests per hour
+  limit: 500
+  window: hour
+  scope: account
+- name: OAuth access token requests
+  limit_text: No more than 2,000 OAuth access token requests per hour
+  limit: 2000
+  window: hour
+  scope: account
+  kind: burst
+headers:
+- x-ratelimit-limit
+- x-ratelimit-remaining
+- x-ratelimit-used
+- x-ratelimit-reset
+- x-ratelimit-resource
+- retry-after
+exceeded_status: 429
