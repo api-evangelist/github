@@ -1,179 +1,65 @@
-specification: API Commons Plans
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
-provider: GitHub
-providerId: github
-created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-reconciled: true
-tags:
-  - DevOps
-  - Source Control
-  - CI/CD
-  - API Management
-description: GitHub plans aligned to product tiers (Free, Team, Enterprise). REST and GraphQL API access
-  is included with all plans; rate limits scale with plan/auth context.
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://github.com/pricing
 sources:
-  - https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-  - https://github.com/pricing
+- https://github.com/pricing
+provenance:
+  tool: planning/api-economics/harvest_pricing.py
+  run: 20260920T124425
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+published: true
+note: GitHub plan comparison page; per-user monthly pricing for Team/Enterprise plus usage-based add-ons
+  (Codespaces, LFS). Team and Enterprise prices noted as 'for the first 12 months *'. Enterprise also
+  offers 'Contact Sales'.
+plan_count: 6
+currency: USD
 plans:
-  - id: github-free
-    name: Free
-    type: freemium
-    description: Free tier for individuals and small teams. Includes REST and GraphQL API access.
-    entries:
-      - label: Authenticated REST API requests
-        name: rest_authenticated
-        type: rate
-        metric: requests
-        limit: 5000
-        timeFrame: hour
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Unauthenticated REST API requests
-        name: rest_unauthenticated
-        type: rate
-        metric: requests
-        limit: 60
-        timeFrame: hour
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: GitHub Actions minutes
-        name: actions_minutes
-        type: quota
-        metric: minutes
-        limit: 2000
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Packages storage
-        name: packages_storage
-        type: quota
-        metric: GB
-        limit: 500
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Unlimited public/private repos
-      - name: REST API
-      - name: GraphQL API
-      - name: GitHub Actions
-      - name: GitHub Packages
-      - name: Community support
-  - id: github-team
-    name: Team
-    type: paid
-    description: $4/user/month. Adds protected branches, code owners, draft PRs, required reviewers.
-    entries:
-      - label: Per user
-        name: seat
-        type: subscription
-        metric: user
-        limit: 1
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '4.00'
-        userMultiplied: true
-      - label: Authenticated REST API requests
-        name: rest_authenticated
-        type: rate
-        metric: requests
-        limit: 5000
-        timeFrame: hour
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: GitHub Actions minutes
-        name: actions_minutes
-        type: quota
-        metric: minutes
-        limit: 3000
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Packages storage
-        name: packages_storage
-        type: quota
-        metric: GB
-        limit: 2
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Protected branches
-      - name: Code owners
-      - name: Required reviewers
-      - name: Draft pull requests
-      - name: GitHub Pages
-      - name: Web-based support
-  - id: github-enterprise-cloud
-    name: Enterprise Cloud
-    type: enterprise
-    description: $21/user/month. SAML SSO, audit logs, advanced auditing, higher API limits.
-    entries:
-      - label: Per user
-        name: seat
-        type: subscription
-        metric: user
-        limit: 1
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '21.00'
-        userMultiplied: true
-      - label: Authenticated REST API requests (App)
-        name: rest_app
-        type: rate
-        metric: requests
-        limit: 15000
-        timeFrame: hour
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: GitHub Actions minutes
-        name: actions_minutes
-        type: quota
-        metric: minutes
-        limit: 50000
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Packages storage
-        name: packages_storage
-        type: quota
-        metric: GB
-        limit: 50
-        timeFrame: month
-        geo: global
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: SAML SSO
-      - name: User provisioning (SCIM)
-      - name: Audit log API
-      - name: Advanced auditing
-      - name: GitHub Connect
-      - name: Premium support
-      - name: Higher API rate limits (15,000/hr for Apps)
+- name: Free
+  price_text: $ 0 USD per month
+  price: 0
+  currency: USD
+  period: month
+  unit: account
+  included_quota: Unlimited public/private repositories, 2,000 CI/CD minutes/month, 500MB of Packages
+    storage, Community support
+- name: Team
+  price_text: $ 4 USD per user/month
+  price: 4
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Free, 3,000 CI/CD minutes/month, 2GB of Packages storage, Web-based support
+- name: Enterprise
+  price_text: $ 21 USD per user/month
+  price: 21
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Team, 50,000 CI/CD minutes/month, 50GB of Packages storage, SAML SSO,
+    data residency
+- name: GitHub Codespaces (add-on)
+  price_text: Starting at $0.18 per hour of compute and $0.07 per GB of storage.
+  currency: USD
+  period: per-use
+  unit: compute hour / GB storage
+- name: Git Large File Storage (add-on)
+  price_text: $5 per month for 50 GB bandwidth and 50 GB of storage.
+  price: 5
+  currency: USD
+  period: month
+  unit: 50 GB bandwidth and 50 GB storage
+  included_quota: 50 GB bandwidth and 50 GB of storage
+- name: GitHub Copilot (add-on)
+  price_text: Get started for free with up to 2,000 completions per month.
+  price: 2000
+  period: month
+  unit: completions
+  included_quota: up to 2,000 completions per month
+rate_limit_statements:
+- 2,000 CI/CD minutes/month
+- 3,000 CI/CD minutes/month
+- 50,000 CI/CD minutes/month
+- Get started for free with up to 2,000 completions per month.
