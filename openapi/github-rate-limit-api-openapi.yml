@@ -22,7 +22,7 @@ servers:
       description: Self-hosted Enterprise Server protocol
       default: http
 tags:
-- name: Rate-Limit
+- name: Rate Limit
   description: Check your current rate limit status
 paths:
   /rate_limit:
@@ -35,26 +35,26 @@ paths:
 
         * The `core` object provides your rate limit status for all non-search-related resources in the REST API.
 
-        * The `search` object provides your rate limit status for the REST API for searching (excluding code searches). For more information, see "[Search](https://docs.github.com/enterprise-server@3.9/rest/search/search)."
+        * The `search` object provides your rate limit status for the REST API for searching (excluding code searches). For more information, see "Search."
 
-        * The `code_search` object provides your rate limit status for the REST API for searching code. For more information, see "[Search code](https://docs.github.com/enterprise-server@3.9/rest/search/search#search-code)."
+        * The `code_search` object provides your rate limit status for the REST API for searching code. For more information, see "Search code."
 
-        * The `graphql` object provides your rate limit status for the GraphQL API. For more information, see "[Resource limitations](https://docs.github.com/enterprise-server@3.9/graphql/overview/resource-limitations#rate-limit)."
+        * The `graphql` object provides your rate limit status for the GraphQL API. For more information, see "Resource limitations."
 
-        * The `integration_manifest` object provides your rate limit status for the `POST /app-manifests/{code}/conversions` operation. For more information, see "[Creating a GitHub App from a manifest](https://docs.github.com/enterprise-server@3.9/apps/creating-github-apps/setting-up-a-github-app/creating-a-github-app-from-a-manifest#3-you-exchange-the-temporary-code-to-retrieve-the-app-configuration)."
+        * The `integration_manifest` object provides your rate limit status for the `POST /app-manifests/{code}/conversions` operation. For more information, see "Creating a GitHub App from a manifest."
 
-        * The `dependency_snapshots` object provides your rate limit status for submitting snapshots to the dependency graph. For more information, see "[Dependency graph](https://docs.github.com/enterprise-server@3.9/rest/dependency-graph)."
+        * The `dependency_snapshots` object provides your rate limit status for submitting snapshots to the dependency graph. For more information, see "Dependency graph."
 
-        * The `code_scanning_upload` object provides your rate limit status for uploading SARIF results to code scanning. For more information, see "[Uploading a SARIF file to GitHub](https://docs.github.com/enterprise-server@3.9/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github)."
+        * The `code_scanning_upload` object provides your rate limit status for uploading SARIF results to code scanning. For more information, see "Uploading a SARIF file to GitHub."
 
-        * The `actions_runner_registration` object provides your rate limit status for registering self-hosted runners in GitHub Actions. For more information, see "[Self-hosted runners](https://docs.github.com/enterprise-server@3.9/rest/actions/self-hosted-runners)."
+        * The `actions_runner_registration` object provides your rate limit status for registering self-hosted runners in GitHub Actions. For more information, see "Self-hosted runners."
 
-        * The `source_import` object is no longer in use for any API endpoints, and it will be removed in the next API version. For more information about API versions, see "[API Versions](https://docs.github.com/enterprise-server@3.9/rest/overview/api-versions)."
+        * The `source_import` object is no longer in use for any API endpoints, and it will be removed in the next API version. For more information about API versions, see "API Versions."
 
 
         **Note:** The `rate` object is deprecated. If you''re writing new API client code or updating existing code, you should use the `core` object instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.'
       tags:
-      - Rate-Limit
+      - Rate Limit
       operationId: rate-limit/get
       externalDocs:
         description: API method documentation
@@ -90,6 +90,20 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
+  headers:
+    x-rate-limit-reset:
+      example: 1590701888
+      schema:
+        type: integer
+        format: timestamp
+    x-rate-limit-remaining:
+      example: 4999
+      schema:
+        type: integer
+    x-rate-limit-limit:
+      example: 5000
+      schema:
+        type: integer
   examples:
     rate-limit-overview:
       value:
@@ -149,21 +163,24 @@ components:
           used: 1
           remaining: 4999
           reset: 1372700873
-  headers:
-    x-rate-limit-remaining:
-      example: 4999
-      schema:
-        type: integer
-    x-rate-limit-reset:
-      example: 1590701888
-      schema:
-        type: integer
-        format: timestamp
-    x-rate-limit-limit:
-      example: 5000
-      schema:
-        type: integer
   schemas:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     rate-limit:
       title: Rate Limit
       type: object
@@ -185,23 +202,6 @@ components:
       - remaining
       - reset
       - used
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
     rate-limit-overview:
       title: Rate Limit Overview
       description: Rate Limit Overview

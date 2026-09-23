@@ -1,12 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Reactions API
   version: 1.1.4
+  title: GitHub v3 REST Reactions API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Reactions across 6 of this provider''s published API definitions: github-openapi.yml, github-organizations-openapi.yml, github-repo-issues-api-openapi.yml, github-repo-pulls-api-openapi.yml, github-repo-tags-api-openapi.yml, github-teams-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -16,14 +21,6 @@ servers:
     protocol:
       description: Self-hosted Enterprise Server protocol
       default: http
-- url: '{protocol}://{hostname}'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: api.github.com
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: https
 tags:
 - name: Reactions
   description: Interact with reactions to various GitHub entities.
@@ -31,7 +28,7 @@ paths:
   /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions:
     get:
       summary: GitHub List Reactions for a Team Discussion Comment
-      description: 'List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).
+      description: 'List the reactions to a team discussion comment.
 
 
         **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions`.
@@ -92,7 +89,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Team Discussion Comment
-      description: 'Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).
+      description: 'Create a reaction to a team discussion comment.
 
 
         A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
@@ -165,22 +162,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete Team Discussion Comment Reaction
       description: '**Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/comments/:comment_number/reactions/:reaction_id`.
 
 
-        Delete a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).
+        Delete a reaction to a team discussion comment.
 
 
         OAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint.'
@@ -207,19 +195,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions:
     get:
       summary: GitHub List Reactions for a Team Discussion
-      description: 'List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.9/rest/teams/discussions#get-a-discussion).
+      description: 'List the reactions to a team discussion.
 
 
         **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions`.
@@ -279,7 +258,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Team Discussion
-      description: 'Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.9/rest/teams/discussions#get-a-discussion).
+      description: 'Create a reaction to a team discussion.
 
 
         A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
@@ -351,22 +330,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete Team Discussion Reaction
       description: '**Note:** You can also specify a team or organization with `team_id` and `org_id` using the route `DELETE /organizations/:org_id/team/:team_id/discussions/:discussion_number/reactions/:reaction_id`.
 
 
-        Delete a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.9/rest/teams/discussions#get-a-discussion).
+        Delete a reaction to a team discussion.
 
 
         OAuth app tokens and personal access tokens (classic) need the `write:discussion` scope to use this endpoint.'
@@ -392,19 +362,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/comments/{comment_id}/reactions:
     get:
       summary: GitHub List Reactions for a Commit Comment
-      description: List the reactions to a [commit comment](https://docs.github.com/enterprise-server@3.9/rest/commits/comments#get-a-commit-comment).
+      description: List the reactions to a commit comment.
       tags:
       - Reactions
       operationId: reactions/list-for-commit-comment
@@ -460,7 +421,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Commit Comment
-      description: Create a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.9/rest/commits/comments#get-a-commit-comment). A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
+      description: Create a reaction to a commit comment. A response with an HTTP `200` status means that you already added the reaction type to this commit comment.
       tags:
       - Reactions
       operationId: reactions/create-for-commit-comment
@@ -525,22 +486,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete a Commit Comment Reaction
       description: '**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/comments/:comment_id/reactions/:reaction_id`.
 
 
-        Delete a reaction to a [commit comment](https://docs.github.com/enterprise-server@3.9/rest/commits/comments#get-a-commit-comment).'
+        Delete a reaction to a commit comment.'
       tags:
       - Reactions
       operationId: reactions/delete-for-commit-comment
@@ -563,19 +515,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions:
     get:
       summary: GitHub List Reactions for an Issue Comment
-      description: List the reactions to an [issue comment](https://docs.github.com/enterprise-server@3.9/rest/issues/comments#get-an-issue-comment).
+      description: List the reactions to an issue comment.
       tags:
       - Reactions
       operationId: reactions/list-for-issue-comment
@@ -631,7 +574,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for an Issue Comment
-      description: Create a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.9/rest/issues/comments#get-an-issue-comment). A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
+      description: Create a reaction to an issue comment. A response with an HTTP `200` status means that you already added the reaction type to this issue comment.
       tags:
       - Reactions
       operationId: reactions/create-for-issue-comment
@@ -696,22 +639,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete an Issue Comment Reaction
       description: '**Note:** You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/issues/comments/:comment_id/reactions/:reaction_id`.
 
 
-        Delete a reaction to an [issue comment](https://docs.github.com/enterprise-server@3.9/rest/issues/comments#get-an-issue-comment).'
+        Delete a reaction to an issue comment.'
       tags:
       - Reactions
       operationId: reactions/delete-for-issue-comment
@@ -734,19 +668,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/issues/{issue_number}/reactions:
     get:
       summary: GitHub List Reactions for an Issue
-      description: List the reactions to an [issue](https://docs.github.com/enterprise-server@3.9/rest/issues/issues#get-an-issue).
+      description: List the reactions to an issue.
       tags:
       - Reactions
       operationId: reactions/list-for-issue
@@ -804,7 +729,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for an Issue
-      description: Create a reaction to an [issue](https://docs.github.com/enterprise-server@3.9/rest/issues/issues#get-an-issue). A response with an HTTP `200` status means that you already added the reaction type to this issue.
+      description: Create a reaction to an issue. A response with an HTTP `200` status means that you already added the reaction type to this issue.
       tags:
       - Reactions
       operationId: reactions/create-for-issue
@@ -869,22 +794,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete an Issue Reaction
       description: '**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/issues/:issue_number/reactions/:reaction_id`.
 
 
-        Delete a reaction to an [issue](https://docs.github.com/enterprise-server@3.9/rest/issues/issues#get-an-issue).'
+        Delete a reaction to an issue.'
       tags:
       - Reactions
       operationId: reactions/delete-for-issue
@@ -907,19 +823,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions:
     get:
       summary: GitHub List Reactions for a Pull Request Review Comment
-      description: List the reactions to a [pull request review comment](https://docs.github.com/enterprise-server@3.9/rest/pulls/comments#get-a-review-comment-for-a-pull-request).
+      description: List the reactions to a pull request review comment.
       tags:
       - Reactions
       operationId: reactions/list-for-pull-request-review-comment
@@ -975,7 +882,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Pull Request Review Comment
-      description: Create a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.9/rest/pulls/comments#get-a-review-comment-for-a-pull-request). A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
+      description: Create a reaction to a pull request review comment. A response with an HTTP `200` status means that you already added the reaction type to this pull request review comment.
       tags:
       - Reactions
       operationId: reactions/create-for-pull-request-review-comment
@@ -1040,22 +947,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete a Pull Request Comment Reaction
       description: '**Note:** You can also specify a repository by `repository_id` using the route `DELETE /repositories/:repository_id/pulls/comments/:comment_id/reactions/:reaction_id.`
 
 
-        Delete a reaction to a [pull request review comment](https://docs.github.com/enterprise-server@3.9/rest/pulls/comments#get-a-review-comment-for-a-pull-request).'
+        Delete a reaction to a pull request review comment.'
       tags:
       - Reactions
       operationId: reactions/delete-for-pull-request-comment
@@ -1078,19 +976,10 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/releases/{release_id}/reactions:
     get:
       summary: GitHub List Reactions for a Release
-      description: List the reactions to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release).
+      description: List the reactions to a release.
       tags:
       - Reactions
       operationId: reactions/list-for-release
@@ -1144,7 +1033,7 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Release
-      description: 'Create a reaction to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release). A response with a `Status: 200 OK` means that you already added the reaction type to this release.'
+      description: 'Create a reaction to a release. A response with a `Status: 200 OK` means that you already added the reaction type to this release.'
       tags:
       - Reactions
       operationId: reactions/create-for-release
@@ -1207,22 +1096,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}:
     delete:
       summary: GitHub Delete a Release Reaction
       description: '**Note:** You can also specify a repository by `repository_id` using the route `DELETE delete /repositories/:repository_id/releases/:release_id/reactions/:reaction_id`.
 
 
-        Delete a reaction to a [release](https://docs.github.com/enterprise-server@3.9/rest/releases/releases#get-a-release).'
+        Delete a reaction to a release.'
       tags:
       - Reactions
       operationId: reactions/delete-for-release
@@ -1245,22 +1125,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions:
     get:
       summary: GitHub List Reactions for a Team Discussion Comment (Legacy)
-      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion comment`](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#list-reactions-for-a-team-discussion-comment) endpoint.
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new `List reactions for a team discussion comment` endpoint.
 
 
-        List the reactions to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).
+        List the reactions to a team discussion comment.
 
 
         OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.'
@@ -1320,10 +1191,10 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Team Discussion Comment (Legacy)
-      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "[Create reaction for a team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#create-reaction-for-a-team-discussion-comment)" endpoint.
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new "Create reaction for a team discussion comment" endpoint.
 
 
-        Create a reaction to a [team discussion comment](https://docs.github.com/enterprise-server@3.9/rest/teams/discussion-comments#get-a-discussion-comment).
+        Create a reaction to a team discussion comment.
 
 
         A response with an HTTP `200` status means that you already added the reaction type to this team discussion comment.
@@ -1386,22 +1257,13 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /teams/{team_id}/discussions/{discussion_number}/reactions:
     get:
       summary: GitHub List Reactions for a Team Discussion (Legacy)
-      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`List reactions for a team discussion`](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#list-reactions-for-a-team-discussion) endpoint.
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new `List reactions for a team discussion` endpoint.
 
 
-        List the reactions to a [team discussion](https://docs.github.com/enterprise-server@3.9/rest/teams/discussions#get-a-discussion).
+        List the reactions to a team discussion.
 
 
         OAuth app tokens and personal access tokens (classic) need the `read:discussion` scope to use this endpoint.'
@@ -1460,10 +1322,10 @@ paths:
         dispatcher: FALLBACK
     post:
       summary: GitHub Create Reaction for a Team Discussion (Legacy)
-      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new [`Create reaction for a team discussion`](https://docs.github.com/enterprise-server@3.9/rest/reactions/reactions#create-reaction-for-a-team-discussion) endpoint.
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new `Create reaction for a team discussion` endpoint.
 
 
-        Create a reaction to a [team discussion](https://docs.github.com/enterprise-server@3.9/rest/teams/discussions#get-a-discussion).
+        Create a reaction to a team discussion.
 
 
         A response with an HTTP `200` status means that you already added the reaction type to this team discussion.
@@ -1525,17 +1387,15 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
   parameters:
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
     per-page:
       name: per_page
       description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
@@ -1543,6 +1403,27 @@ components:
       schema:
         type: integer
         default: 30
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+    reaction-id:
+      name: reaction_id
+      description: The unique identifier of the reaction.
+      in: path
+      required: true
+      schema:
+        type: integer
+    comment-id:
+      name: comment_id
+      description: The unique identifier of the comment.
+      in: path
+      required: true
+      schema:
+        type: integer
     discussion-number:
       name: discussion_number
       description: The number that identifies the discussion.
@@ -1557,20 +1438,6 @@ components:
       required: true
       schema:
         type: integer
-    release-id:
-      name: release_id
-      description: The unique identifier of the release.
-      in: path
-      required: true
-      schema:
-        type: integer
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
     repo:
       name: repo
       description: The name of the repository without the `.git` extension. The name is not case sensitive.
@@ -1585,30 +1452,9 @@ components:
       required: true
       schema:
         type: integer
-    team-slug:
-      name: team_slug
-      description: The slug of the team name.
-      in: path
-      required: true
-      schema:
-        type: string
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
-    reaction-id:
-      name: reaction_id
-      description: The unique identifier of the reaction.
-      in: path
-      required: true
-      schema:
-        type: integer
-    issue-number:
-      name: issue_number
-      description: The number that identifies the issue.
+    release-id:
+      name: release_id
+      description: The unique identifier of the release.
       in: path
       required: true
       schema:
@@ -1620,32 +1466,44 @@ components:
       required: true
       schema:
         type: string
-    comment-id:
-      name: comment_id
-      description: The unique identifier of the comment.
+    issue-number:
+      name: issue_number
+      description: The number that identifies the issue.
       in: path
       required: true
       schema:
         type: integer
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
   responses:
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
     validation_failed:
       description: Validation failed, or the endpoint has been spammed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/validation-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
     gone:
       description: Gone
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/basic-error'
+  headers:
+    link:
+      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
+      schema:
+        type: string
   examples:
     reaction:
       value:
@@ -1698,103 +1556,6 @@ components:
         content: heart
         created_at: '2016-05-20T20:09:31Z'
   schemas:
-    validation-error:
-      title: Validation Error
-      description: Validation Error
-      type: object
-      required:
-      - message
-      - documentation_url
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: object
-            required:
-            - code
-            properties:
-              resource:
-                type: string
-              field:
-                type: string
-              message:
-                type: string
-              code:
-                type: string
-              index:
-                type: integer
-              value:
-                oneOf:
-                - type:
-                  - string
-                  - 'null'
-                - type:
-                  - integer
-                  - 'null'
-                - type:
-                  - array
-                  - 'null'
-                  items:
-                    type: string
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-    reaction:
-      title: Reaction
-      description: Reactions to conversations provide a way to help people express their feelings more simply and effectively.
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDg6UmVhY3Rpb24x
-        user:
-          $ref: '#/components/schemas/nullable-simple-user'
-        content:
-          description: The reaction to use
-          example: heart
-          type: string
-          enum:
-          - '+1'
-          - '-1'
-          - laugh
-          - confused
-          - heart
-          - hooray
-          - rocket
-          - eyes
-        created_at:
-          type: string
-          format: date-time
-          example: '2016-05-20T20:09:31Z'
-      required:
-      - id
-      - node_id
-      - user
-      - content
-      - created_at
     nullable-simple-user:
       title: Simple User
       description: A GitHub user.
@@ -1898,103 +1659,7 @@ components:
       - subscriptions_url
       - type
       - url
-    nullable-simple-user_2:
-      title: Simple User
-      description: GitHub user.
-      type: object
-      properties:
-        name:
-          type: string
-          example: octocat
-        email:
-          type: string
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          format: int64
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type: string
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    validation-error_2:
+    validation-error:
       title: Validation Error
       description: Validation Error
       type: object
@@ -2027,114 +1692,21 @@ components:
                 type: integer
               value:
                 oneOf:
-                - type: string
-                - type: integer
-                - type: array
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
                   items:
                     type: string
-    nullable-simple-user_3:
-      title: Simple User
-      description: GitHub user.
+    basic-error:
+      title: Basic Error
+      description: Basic Error
       type: object
-      properties:
-        name:
-          type: string
-          example: octocat
-        email:
-          type: string
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          format: int64
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type: string
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    validation-error_3:
-      title: Validation Error
-      description: Validation Error
-      type: object
-      required:
-      - message
-      - documentation_url
       properties:
         message:
           type: string
@@ -2142,181 +1714,48 @@ components:
         documentation_url:
           type: string
           example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: object
-            required:
-            - code
-            properties:
-              resource:
-                type: string
-              field:
-                type: string
-              message:
-                type: string
-              code:
-                type: string
-              index:
-                type: integer
-              value:
-                oneOf:
-                - type: string
-                - type: integer
-                - type: array
-                  items:
-                    type: string
-    nullable-simple-user_4:
-      title: Simple User
-      description: GitHub user.
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    reaction:
+      title: Reaction
+      description: Reactions to conversations provide a way to help people express their feelings more simply and effectively.
       type: object
       properties:
-        name:
-          type: string
-          example: octocat
-        email:
-          type: string
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
         id:
           type: integer
-          format: int64
           example: 1
         node_id:
           type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
+          example: MDg6UmVhY3Rpb24x
+        user:
+          $ref: '#/components/schemas/nullable-simple-user'
+        content:
+          description: The reaction to use
+          example: heart
           type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
+          enum:
+          - '+1'
+          - '-1'
+          - laugh
+          - confused
+          - heart
+          - hooray
+          - rocket
+          - eyes
+        created_at:
           type: string
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
+          format: date-time
+          example: '2016-05-20T20:09:31Z'
       required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
       - id
       - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    validation-error_4:
-      title: Validation Error
-      description: Validation Error
-      type: object
-      required:
-      - message
-      - documentation_url
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: object
-            required:
-            - code
-            properties:
-              resource:
-                type: string
-              field:
-                type: string
-              message:
-                type: string
-              code:
-                type: string
-              index:
-                type: integer
-              value:
-                oneOf:
-                - type: string
-                - type: integer
-                - type: array
-                  items:
-                    type: string
-  headers:
-    link:
-      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
-      schema:
-        type: string
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
+      - user
+      - content
+      - created_at
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-openapi.yml
-- github-organizations-openapi.yml
-- github-repo-issues-api-openapi.yml
-- github-repo-pulls-api-openapi.yml
-- github-repo-tags-api-openapi.yml
-- github-teams-openapi.yml

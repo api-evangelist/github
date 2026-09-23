@@ -1,12 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Licenses API
   version: 1.1.4
+  title: GitHub v3 REST Licenses API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Licenses across 4 of this provider''s published API definitions: github-licenses-openapi.yml, github-openapi.yml, github-repo-tags-api-openapi.yml, github-setup-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -16,73 +21,14 @@ servers:
     protocol:
       description: Self-hosted Enterprise Server protocol
       default: http
-- url: '{protocol}://{hostname}'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: api.github.com
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: https
 tags:
 - name: Licenses
+  description: View various OSS licenses.
 paths:
-  /licenses/{license}:
-    get:
-      summary: GitHub Get License
-      description: The GitHub Licenses API endpoint `/licenses/{license}` allows developers to retrieve detailed information about a specific open source license by providing its unique license key as a path parameter. When you make a GET request to this endpoint, it returns comprehensive details about the specified license, including its full name, description, permissions, conditions, limitations, and the complete license text. This is particularly useful when you need to programmatically access license information for compliance purposes, display license details in your application, or help users understand the terms of a particular open source license before applying it to their repository.
-      tags:
-      - Licenses
-      operationId: getlicense
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/licenses/licenses#get-a-license
-      parameters:
-      - name: license
-        in: path
-        required: true
-        schema:
-          type: string
-        example: example_value
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/license'
-              examples:
-                default:
-                  $ref: '#/components/examples/license'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: true
-        category: licenses
-        subcategory: licenses
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /licenses:
     get:
       summary: GitHub Get All Commonly Used Licenses
-      description: Lists the most commonly used licenses on GitHub. For more information, see "[Licensing a repository ](https://docs.github.com/enterprise-server@3.9/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository)."
+      description: Lists the most commonly used licenses on GitHub. For more information, see "Licensing a repository ."
       tags:
       - Licenses
       operationId: licenses/get-all-commonly-used
@@ -120,27 +66,59 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
+  /licenses/{license}:
+    get:
+      summary: GitHub Get a License
+      description: Gets information about a specific license. For more information, see "Licensing a repository ."
+      tags:
+      - Licenses
+      operationId: licenses/get
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/licenses/licenses#get-a-license
+      parameters:
+      - name: license
+        in: path
+        required: true
+        schema:
+          type: string
+        example: example_value
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/license'
+              examples:
+                default:
+                  $ref: '#/components/examples/license'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: licenses
+        subcategory: licenses
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /repos/{owner}/{repo}/license:
     get:
       summary: GitHub Get the License for a Repository
       description: 'This method returns the contents of the repository''s license file, if one is detected.
 
 
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
+        This endpoint supports the following custom media types. For more information, see "Media types."
 
 
         - **`application/vnd.github.raw+json`**: Returns the raw contents of the license.
 
-        - **`application/vnd.github.html+json`**: Returns the license contents in HTML. Markup languages are rendered to HTML using GitHub''s open-source [Markup library](https://github.com/github/markup).'
+        - **`application/vnd.github.html+json`**: Returns the license contents in HTML. Markup languages are rendered to HTML using GitHub''s open-source Markup library.'
       tags:
       - Licenses
       operationId: licenses/get-for-repo
@@ -170,189 +148,8 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /setup/api/start:
-    post:
-      summary: GitHub Create Github License
-      description: 'When you boot a GitHub instance for the first time, you can use the following endpoint to upload a license.
-
-
-        Note that you need to `POST` to [`/setup/api/configure`](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#start-a-configuration-process) to start the actual configuration process.
-
-
-        When using this endpoint, your GitHub instance must have a password set. This can be accomplished two ways:
-
-
-        1.  If you''re working directly with the API before accessing the web interface, you must pass in the password parameter to set your password.
-
-        2.  If you set up your instance via the web interface before accessing the API, your calls to this endpoint do not need the password parameter.
-
-
-        **Note:** The request body for this operation must be submitted as `multipart/form-data` data. You can can reference the license file by prefixing the filename with the `@` symbol using `curl`. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#-F).'
-      operationId: createGithubLicense
-      tags:
-      - Licenses
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#create-a-github-license
-      servers:
-      - url: '{protocol}://{hostname}'
-        variables:
-          hostname:
-            default: HOSTNAME
-            description: Self-hosted Enterprise Server hostname
-          protocol:
-            default: http
-            description: Self-hosted Enterprise Server protocol
-      responses:
-        '202':
-          description: Response
-        '401':
-          description: Unauthorized
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                license:
-                  type: string
-                  description: The content of your _.ghl_ license file.
-                password:
-                  type: string
-                  description: You **must** provide a password _only if_ you are uploading your license for the first time. If you previously set a password through the web interface, you don't need this parameter.
-                settings:
-                  type: string
-                  description: An optional JSON string containing the installation settings. For a list of the available settings, see the [Get settings endpoint](https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#get-settings).
-              required:
-              - license
-            examples:
-              default:
-                value:
-                  license: '@enterprise.ghl'
-                  password: secret
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: enterprise-admin
-        subcategory: management-console
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /setup/api/upgrade:
-    post:
-      summary: GitHub Upgrade License
-      description: 'This API upgrades your license and also triggers the configuration process.
-
-
-        **Note:** The request body for this operation must be submitted as `multipart/form-data` data. You can can reference the license file by prefixing the filename with the `@` symbol using `curl`. For more information, see the [`curl` documentation](https://curl.se/docs/manpage.html#-F).'
-      operationId: upgradeLicense
-      tags:
-      - Licenses
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#upgrade-a-license
-      servers:
-      - url: '{protocol}://{hostname}'
-        variables:
-          hostname:
-            default: HOSTNAME
-            description: Self-hosted Enterprise Server hostname
-          protocol:
-            default: http
-            description: Self-hosted Enterprise Server protocol
-      responses:
-        '202':
-          description: Response
-        '401':
-          description: Unauthorized
-      requestBody:
-        required: false
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                license:
-                  type: string
-                  description: The content of your new _.ghl_ license file.
-            examples:
-              default:
-                value:
-                  license: '@enterprise.ghl'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: enterprise-admin
-        subcategory: management-console
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
-  responses:
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_modified:
-      description: Not modified
   schemas:
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
     license:
       title: License
       description: License
@@ -471,6 +268,23 @@ components:
       - limitations
       - body
       - featured
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     license-content:
       title: License Content
       description: License Content
@@ -627,175 +441,7 @@ components:
       - url
       - spdx_id
       - node_id
-    license-content_2:
-      title: License Content
-      description: License Content
-      type: object
-      properties:
-        name:
-          type: string
-          example: octocat
-        path:
-          type: string
-          example: src/index.js
-        sha:
-          type: string
-          example: abc123def456789012345678901234567890
-        size:
-          type: integer
-          example: 42
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        html_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        git_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        download_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        type:
-          type: string
-          example: User
-        content:
-          type: string
-          example: example_value
-        encoding:
-          type: string
-          example: example_value
-        _links:
-          type: object
-          properties:
-            git:
-              type: string
-              format: uri
-            html:
-              type: string
-              format: uri
-            self:
-              type: string
-              format: uri
-          required:
-          - git
-          - html
-          - self
-        license:
-          $ref: '#/components/schemas/nullable-license-simple_2'
-      required:
-      - _links
-      - git_url
-      - html_url
-      - download_url
-      - name
-      - path
-      - sha
-      - size
-      - type
-      - url
-      - content
-      - encoding
-      - license
-    nullable-license-simple_2:
-      title: License Simple
-      description: License Simple
-      type: object
-      properties:
-        key:
-          type: string
-          example: mit
-        name:
-          type: string
-          example: MIT License
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/licenses/mit
-        spdx_id:
-          type: string
-          example: MIT
-        node_id:
-          type: string
-          example: MDc6TGljZW5zZW1pdA==
-        html_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-      required:
-      - key
-      - name
-      - url
-      - spdx_id
-      - node_id
   examples:
-    license:
-      value:
-        key: mit
-        name: MIT License
-        spdx_id: MIT
-        url: https://api.github.com/licenses/mit
-        node_id: MDc6TGljZW5zZW1pdA==
-        html_url: http://choosealicense.com/licenses/mit/
-        description: A permissive license that is short and to the point. It lets people do anything with your code with proper attribution and without warranty.
-        implementation: Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders.
-        permissions:
-        - commercial-use
-        - modifications
-        - distribution
-        - sublicense
-        - private-use
-        conditions:
-        - include-copyright
-        limitations:
-        - no-liability
-        body: '
-
-
-          The MIT License (MIT)
-
-
-          Copyright (c) [year] [fullname]
-
-
-          Permission is hereby granted, free of charge, to any person obtaining a copy
-
-          of this software and associated documentation files (the "Software"), to deal
-
-          in the Software without restriction, including without limitation the rights
-
-          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-
-          copies of the Software, and to permit persons to whom the Software is
-
-          furnished to do so, subject to the following conditions:
-
-
-          The above copyright notice and this permission notice shall be included in all
-
-          copies or substantial portions of the Software.
-
-
-          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-
-          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-
-          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-
-          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-
-          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-
-          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-
-          SOFTWARE.
-
-          '
-        featured: true
     license-simple-items:
       value:
       - key: mit
@@ -904,6 +550,69 @@ components:
           spdx_id: MIT
           url: https://api.github.com/licenses/mit
           node_id: MDc6TGljZW5zZW1pdA==
+    license:
+      value:
+        key: mit
+        name: MIT License
+        spdx_id: MIT
+        url: https://api.github.com/licenses/mit
+        node_id: MDc6TGljZW5zZW1pdA==
+        html_url: http://choosealicense.com/licenses/mit/
+        description: A permissive license that is short and to the point. It lets people do anything with your code with proper attribution and without warranty.
+        implementation: Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders.
+        permissions:
+        - commercial-use
+        - modifications
+        - distribution
+        - sublicense
+        - private-use
+        conditions:
+        - include-copyright
+        limitations:
+        - no-liability
+        body: '
+
+
+          The MIT License (MIT)
+
+
+          Copyright (c) [year] [fullname]
+
+
+          Permission is hereby granted, free of charge, to any person obtaining a copy
+
+          of this software and associated documentation files (the "Software"), to deal
+
+          in the Software without restriction, including without limitation the rights
+
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+
+          copies of the Software, and to permit persons to whom the Software is
+
+          furnished to do so, subject to the following conditions:
+
+
+          The above copyright notice and this permission notice shall be included in all
+
+          copies or substantial portions of the Software.
+
+
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+
+          SOFTWARE.
+
+          '
+        featured: true
   parameters:
     per-page:
       name: per_page
@@ -912,16 +621,16 @@ components:
       schema:
         type: integer
         default: 30
-    owner:
-      name: owner
-      description: The account owner of the repository. The name is not case sensitive.
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
       in: path
       required: true
       schema:
         type: string
-    repo:
-      name: repo
-      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
       in: path
       required: true
       schema:
@@ -933,16 +642,21 @@ components:
       schema:
         type: integer
         default: 1
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
+  responses:
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_modified:
+      description: Not modified
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-licenses-openapi.yml
-- github-openapi.yml
-- github-repo-tags-api-openapi.yml
-- github-setup-openapi.yml

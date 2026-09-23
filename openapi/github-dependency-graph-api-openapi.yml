@@ -72,7 +72,7 @@ paths:
         dispatcher: FALLBACK
   /repos/{owner}/{repo}/dependency-graph/sbom:
     get:
-      summary: GitHub Export a Software Bill of Materials (SBOM) for a Repository.
+      summary: GitHub Export a Software Bill of Materials (SBOM) for a Repository
       description: Exports the software bill of materials (SBOM) for a repository in SPDX JSON format.
       tags:
       - Dependency-Graph
@@ -172,6 +172,30 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
+  responses:
+    dependency_review_forbidden:
+      description: Response if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  headers:
+    link:
+      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
+      schema:
+        type: string
   examples:
     dependency-graph-create-snapshot-success:
       value:
@@ -179,6 +203,28 @@ components:
         created_at: '2018-05-04T01:14:52Z'
         message: Dependency results for the repo have been successfully updated.
         result: SUCCESS
+    dependency-graph-export-sbom-response:
+      value:
+        sbom:
+          SPDXID: SPDXRef-DOCUMENT
+          spdxVersion: SPDX-2.3
+          creationInfo:
+            created: '2021-09-01T00:00:00Z'
+            creators:
+            - 'Tool: GitHub.com-Dependency-Graph'
+          name: github/example
+          dataLicense: CC0-1.0
+          documentDescribes:
+          - github/example
+          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
+          packages:
+          - SPDXID: SPDXRef-Package
+            name: rubygems:rails
+            versionInfo: 1.0.0
+            downloadLocation: NOASSERTION
+            filesAnalyzed: false
+            licenseConcluded: MIT
+            licenseDeclared: MIT
     dependency-graph-create-snapshot-request:
       value:
         version: 0
@@ -241,48 +287,34 @@ components:
           advisory_ghsa_id: GHSA-fqfj-cmh6-hj49
           advisory_summary: Ruby OpenID
           advisory_url: https://github.com/advisories/GHSA-fqfj-cmh6-hj49
-    dependency-graph-export-sbom-response:
-      value:
-        sbom:
-          SPDXID: SPDXRef-DOCUMENT
-          spdxVersion: SPDX-2.3
-          creationInfo:
-            created: '2021-09-01T00:00:00Z'
-            creators:
-            - 'Tool: GitHub.com-Dependency-Graph'
-          name: github/example
-          dataLicense: CC0-1.0
-          documentDescribes:
-          - github/example
-          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
-          packages:
-          - SPDXID: SPDXRef-Package
-            name: rubygems:rails
-            versionInfo: 1.0.0
-            downloadLocation: NOASSERTION
-            filesAnalyzed: false
-            licenseConcluded: MIT
-            licenseDeclared: MIT
-  responses:
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    dependency_review_forbidden:
-      description: Response if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
   schemas:
+    metadata:
+      title: metadata
+      description: User-defined metadata to store domain-specific information limited to 8 keys with scalar values.
+      type: object
+      maxProperties: 8
+      additionalProperties:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     dependency:
       type: object
       properties:
@@ -314,16 +346,142 @@ components:
           items:
             type: string
       additionalProperties: false
-    metadata:
-      title: metadata
-      description: User-defined metadata to store domain-specific information limited to 8 keys with scalar values.
+    dependency-graph-spdx-sbom:
+      title: Dependency Graph SPDX SBOM
+      description: A schema for the SPDX JSON format returned by the Dependency Graph.
       type: object
-      maxProperties: 8
-      additionalProperties:
-        anyOf:
-        - type: string
-        - type: number
-        - type: boolean
+      properties:
+        sbom:
+          type: object
+          properties:
+            SPDXID:
+              type: string
+              example: SPDXRef-DOCUMENT
+              description: The SPDX identifier for the SPDX document.
+            spdxVersion:
+              type: string
+              example: SPDX-2.3
+              description: The version of the SPDX specification that this document conforms to.
+            creationInfo:
+              type: object
+              properties:
+                created:
+                  type: string
+                  example: '2021-11-03T00:00:00Z'
+                  description: The date and time the SPDX document was created.
+                creators:
+                  type: array
+                  items:
+                    type: string
+                    example: GitHub
+                  description: The tools that were used to generate the SPDX document.
+              required:
+              - created
+              - creators
+            name:
+              type: string
+              example: github/github
+              description: The name of the SPDX document.
+            dataLicense:
+              type: string
+              example: CC0-1.0
+              description: The license under which the SPDX document is licensed.
+            documentDescribes:
+              type: array
+              items:
+                type: string
+                example: github/github
+              description: The name of the repository that the SPDX document describes.
+            documentNamespace:
+              type: string
+              example: https://github.com/example/dependency_graph/sbom-123
+              description: The namespace for the SPDX document.
+            packages:
+              type: array
+              items:
+                type: object
+                properties:
+                  SPDXID:
+                    type: string
+                    example: SPDXRef-Package
+                    description: A unique SPDX identifier for the package.
+                  name:
+                    type: string
+                    example: rubygems:github/github
+                    description: The name of the package.
+                  versionInfo:
+                    type: string
+                    example: 1.0.0
+                    description: 'The version of the package. If the package does not have an exact version specified,
+
+                      a version range is given.'
+                  downloadLocation:
+                    type: string
+                    example: NOASSERTION
+                    description: 'The location where the package can be downloaded,
+
+                      or NOASSERTION if this has not been determined.'
+                  filesAnalyzed:
+                    type: boolean
+                    example: false
+                    description: 'Whether the package''s file content has been subjected to
+
+                      analysis during the creation of the SPDX document.'
+                  licenseConcluded:
+                    type: string
+                    example: MIT
+                    description: The license of the package as determined while creating the SPDX document.
+                  licenseDeclared:
+                    type: string
+                    example: NOASSERTION
+                    description: 'The license of the package as declared by its author, or NOASSERTION if this information
+
+                      was not available when the SPDX document was created.'
+                  supplier:
+                    type: string
+                    example: NOASSERTION
+                    description: The distribution source of this package, or NOASSERTION if this was not determined.
+                  externalRefs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        referenceCategory:
+                          type: string
+                          example: PACKAGE-MANAGER
+                          description: The category of reference to an external resource this reference refers to.
+                        referenceLocator:
+                          type: string
+                          example: pkg:gem/rails@6.0.1
+                          description: A locator for the particular external resource this reference refers to.
+                        referenceType:
+                          type: string
+                          example: purl
+                          description: The category of reference to an external resource this reference refers to.
+                      required:
+                      - referenceCategory
+                      - referenceLocator
+                      - referenceType
+              required:
+              - SPDXID
+              - name
+              - versionInfo
+              - downloadLocation
+              - filesAnalyzed
+              - licenseConcluded
+              - licenseDeclared
+              - supplier
+          required:
+          - SPDXID
+          - spdxVersion
+          - creationInfo
+          - name
+          - dataLicense
+          - documentDescribes
+          - documentNamespace
+          - packages
+      required:
+      - sbom
     snapshot:
       title: snapshot
       description: Create a new snapshot of a repository's dependencies.
@@ -508,164 +666,6 @@ components:
       required:
       - name
       additionalProperties: false
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-    dependency-graph-spdx-sbom:
-      title: Dependency Graph SPDX SBOM
-      description: A schema for the SPDX JSON format returned by the Dependency Graph.
-      type: object
-      properties:
-        sbom:
-          type: object
-          properties:
-            SPDXID:
-              type: string
-              example: SPDXRef-DOCUMENT
-              description: The SPDX identifier for the SPDX document.
-            spdxVersion:
-              type: string
-              example: SPDX-2.3
-              description: The version of the SPDX specification that this document conforms to.
-            creationInfo:
-              type: object
-              properties:
-                created:
-                  type: string
-                  example: '2021-11-03T00:00:00Z'
-                  description: The date and time the SPDX document was created.
-                creators:
-                  type: array
-                  items:
-                    type: string
-                    example: GitHub
-                  description: The tools that were used to generate the SPDX document.
-              required:
-              - created
-              - creators
-            name:
-              type: string
-              example: github/github
-              description: The name of the SPDX document.
-            dataLicense:
-              type: string
-              example: CC0-1.0
-              description: The license under which the SPDX document is licensed.
-            documentDescribes:
-              type: array
-              items:
-                type: string
-                example: github/github
-              description: The name of the repository that the SPDX document describes.
-            documentNamespace:
-              type: string
-              example: https://github.com/example/dependency_graph/sbom-123
-              description: The namespace for the SPDX document.
-            packages:
-              type: array
-              items:
-                type: object
-                properties:
-                  SPDXID:
-                    type: string
-                    example: SPDXRef-Package
-                    description: A unique SPDX identifier for the package.
-                  name:
-                    type: string
-                    example: rubygems:github/github
-                    description: The name of the package.
-                  versionInfo:
-                    type: string
-                    example: 1.0.0
-                    description: 'The version of the package. If the package does not have an exact version specified,
-
-                      a version range is given.'
-                  downloadLocation:
-                    type: string
-                    example: NOASSERTION
-                    description: 'The location where the package can be downloaded,
-
-                      or NOASSERTION if this has not been determined.'
-                  filesAnalyzed:
-                    type: boolean
-                    example: false
-                    description: 'Whether the package''s file content has been subjected to
-
-                      analysis during the creation of the SPDX document.'
-                  licenseConcluded:
-                    type: string
-                    example: MIT
-                    description: The license of the package as determined while creating the SPDX document.
-                  licenseDeclared:
-                    type: string
-                    example: NOASSERTION
-                    description: 'The license of the package as declared by its author, or NOASSERTION if this information
-
-                      was not available when the SPDX document was created.'
-                  supplier:
-                    type: string
-                    example: NOASSERTION
-                    description: The distribution source of this package, or NOASSERTION if this was not determined.
-                  externalRefs:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        referenceCategory:
-                          type: string
-                          example: PACKAGE-MANAGER
-                          description: The category of reference to an external resource this reference refers to.
-                        referenceLocator:
-                          type: string
-                          example: pkg:gem/rails@6.0.1
-                          description: A locator for the particular external resource this reference refers to.
-                        referenceType:
-                          type: string
-                          example: purl
-                          description: The category of reference to an external resource this reference refers to.
-                      required:
-                      - referenceCategory
-                      - referenceLocator
-                      - referenceType
-              required:
-              - SPDXID
-              - name
-              - versionInfo
-              - downloadLocation
-              - filesAnalyzed
-              - licenseConcluded
-              - licenseDeclared
-              - supplier
-          required:
-          - SPDXID
-          - spdxVersion
-          - creationInfo
-          - name
-          - dataLicense
-          - documentDescribes
-          - documentNamespace
-          - packages
-      required:
-      - sbom
-  headers:
-    link:
-      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
-      schema:
-        type: string
   parameters:
     manifest-path:
       name: name
@@ -674,16 +674,16 @@ components:
       required: false
       schema:
         type: string
-    owner:
-      name: owner
-      description: The account owner of the repository. The name is not case sensitive.
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
       in: path
       required: true
       schema:
         type: string
-    repo:
-      name: repo
-      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
       in: path
       required: true
       schema:

@@ -1,15 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Gists API
   version: 1.1.4
-  contact:
-    name: Support
-    url: https://support.github.com/contact?tags=dotcom-rest-api
+  title: GitHub v3 REST Gists API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Gists across 2 of this provider''s published API definitions: github-gists-openapi.yml, github-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -21,916 +23,8 @@ servers:
       default: http
 tags:
 - name: Gists
+  description: View, modify your gists.
 paths:
-  /gists/public:
-    get:
-      summary: GitHub List Public Gists
-      description: 'List public gists sorted by most recently updated to least recently updated.
-
-
-        Note: With [pagination](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api), you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page.'
-      tags:
-      - Gists
-      operationId: listPublicGists
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-public-gists
-      parameters:
-      - $ref: '#/components/parameters/since'
-      - $ref: '#/components/parameters/per-page'
-      - $ref: '#/components/parameters/page'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/base-gist'
-              examples:
-                default:
-                  $ref: '#/components/examples/base-gist-items'
-          headers:
-            Link:
-              $ref: '#/components/headers/link'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '422':
-          $ref: '#/components/responses/validation_failed'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/starred:
-    get:
-      summary: GitHub List Starred Gists
-      description: The GitHub Gists API endpoint GET /gists/starred retrieves a list of all gists that the authenticated user has starred. This operation requires authentication and returns a paginated collection of gist objects, each containing metadata such as the gist's ID, description, owner information, files, creation and update timestamps, and visibility status. The endpoint supports standard pagination parameters to navigate through the results, allowing developers to programmatically access and manage the user's starred gists for integration into applications, backup utilities, or personal gist management tools.
-      tags:
-      - Gists
-      operationId: listStarredGists
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-starred-gists
-      parameters:
-      - $ref: '#/components/parameters/since'
-      - $ref: '#/components/parameters/per-page'
-      - $ref: '#/components/parameters/page'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/base-gist'
-              examples:
-                default:
-                  $ref: '#/components/examples/base-gist-items'
-          headers:
-            Link:
-              $ref: '#/components/headers/link'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}:
-    get:
-      summary: GitHub Getgist
-      description: 'Gets a specified gist.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: getgist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#get-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-simple'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden_gist'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    patch:
-      summary: GitHub Updategist
-      description: 'Allows you to update a gist''s description and to update, delete, or rename gist files. Files
-
-        from the previous version of the gist that aren''t explicitly changed during an edit
-
-        are unchanged.
-
-
-        At least one of `description` or `files` is required.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: updategist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#update-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                description:
-                  description: The description of the gist.
-                  example: Example Ruby script
-                  type: string
-                files:
-                  description: 'The gist files to be updated, renamed, or deleted. Each `key` must match the current filename
-
-                    (including extension) of the targeted gist file. For example: `hello.py`.
-
-
-                    To delete a file, set the whole file to null. For example: `hello.py : null`. The file will also be
-
-                    deleted if the specified object does not contain at least one of `content` or `filename`.'
-                  example:
-                    hello.rb:
-                      content: blah
-                      filename: goodbye.rb
-                  type: object
-                  additionalProperties:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      content:
-                        description: The new content of the file.
-                        type: string
-                      filename:
-                        description: The new filename for the file.
-                        type:
-                        - string
-                        - 'null'
-              type:
-              - object
-              - 'null'
-            examples:
-              updateGist:
-                summary: Updating a gist
-                value:
-                  description: An updated gist description
-                  files:
-                    README.md:
-                      content: Hello World from GitHub
-              deleteFile:
-                summary: Deleting a gist file
-                value:
-                  files:
-                    hello.py: null
-              renameFile:
-                summary: Renaming a gist file
-                value:
-                  files:
-                    hello.py:
-                      filename: goodbye.py
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-simple'
-              examples:
-                updateGist:
-                  $ref: '#/components/examples/gist'
-                deleteFile:
-                  $ref: '#/components/examples/delete-gist-file'
-                renameFile:
-                  $ref: '#/components/examples/rename-gist-file'
-        '404':
-          $ref: '#/components/responses/not_found'
-        '422':
-          $ref: '#/components/responses/validation_failed'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    delete:
-      summary: GitHub Deletegist
-      description: The DELETE operation on the /gists/{gist_id} endpoint allows authenticated users to permanently remove a specific gist from GitHub. This operation requires the gist_id path parameter to identify which gist should be deleted, and the user must be authenticated with proper authorization scopes (typically the 'gist' scope) to perform the deletion. Once executed successfully, the gist and all its associated content, revisions, and metadata are permanently removed from GitHub's servers and cannot be recovered. The operation returns a 204 No Content status code upon successful deletion, or appropriate error codes if the gist doesn't exist, the user lacks permission, or authentication fails.
-      tags:
-      - Gists
-      operationId: deletegist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#delete-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '204':
-          description: Response
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/comments:
-    get:
-      summary: GitHub List Gist Comments
-      description: 'Lists the comments on a gist.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: listGistComments
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#list-gist-comments
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/per-page'
-      - $ref: '#/components/parameters/page'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/gist-comment'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-comment-items'
-          headers:
-            Link:
-              $ref: '#/components/headers/link'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: comments
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    post:
-      summary: GitHub Creategist Comment
-      description: 'Creates a comment on a gist.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: creategistComment
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#create-a-gist-comment
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                body:
-                  description: The comment text.
-                  type: string
-                  maxLength: 65535
-                  example: Body of the attachment
-              type: object
-              required:
-              - body
-            examples:
-              default:
-                summary: Creating a comment in a gist
-                value:
-                  body: This is a comment to a gist
-      responses:
-        '201':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-comment'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-comment'
-          headers:
-            Location:
-              example: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
-              schema:
-                type: string
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: comments
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/comments/{comment_id}:
-    get:
-      summary: GitHub Getgist Comment
-      description: 'Gets a comment on a gist.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: getgistComment
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#get-a-gist-comment
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/comment-id'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-comment'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-comment'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden_gist'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: comments
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    patch:
-      summary: GitHub Updategist Comment
-      description: 'Updates a comment on a gist.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: updategistComment
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#update-a-gist-comment
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/comment-id'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                body:
-                  description: The comment text.
-                  type: string
-                  maxLength: 65535
-                  example: Body of the attachment
-              type: object
-              required:
-              - body
-            examples:
-              default:
-                summary: Updating a comment in a gist
-                value:
-                  body: This is an update to a comment in a gist
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-comment'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-comment'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: comments
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    delete:
-      summary: GitHub Deletegist Comment
-      description: This API operation allows you to delete a specific comment from a GitHub Gist by providing both the gist ID and the comment ID in the endpoint path. When executed, it permanently removes the targeted comment from the specified Gist, requiring proper authentication and authorization to ensure only the comment author or users with appropriate permissions can perform the deletion. The operation uses the DELETE HTTP method and returns a success status code when the comment is successfully removed from the Gist's comment thread.
-      tags:
-      - Gists
-      operationId: deletegistComment
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#delete-a-gist-comment
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/comment-id'
-      responses:
-        '204':
-          description: Response
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: comments
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/commits:
-    get:
-      summary: GitHub List Gist Commits
-      description: This API endpoint retrieves the commit history for a specific GitHub Gist by making a GET request to /gists/{gist_id}/commits, where {gist_id} is the unique identifier of the Gist you want to query. The response returns a chronological list of all commits made to that Gist, including information such as the commit version, URL, user who made the commit, timestamp of when it was committed, and change statistics showing additions, deletions, and total changes. This is particularly useful for tracking the evolution of a Gist over time, auditing changes, or implementing version control features in applications that work with Gists, allowing developers to see who modified the content and when those modifications occurred.
-      tags:
-      - Gists
-      operationId: listGistCommits
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-gist-commits
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/per-page'
-      - $ref: '#/components/parameters/page'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/gist-commit'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-commit-items'
-          headers:
-            Link:
-              example: <https://api.github.com/resource?page=2>; rel="next"
-              schema:
-                type: string
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/forks:
-    get:
-      summary: GitHub List Gist Forks
-      description: This API endpoint retrieves a list of all forks for a specific GitHub Gist identified by its gist_id parameter. When called with a GET request, it returns an array of fork objects, each containing details about users who have forked the gist, including their user information, the fork's creation date, and the forked gist's URL. This is useful for tracking how widely a gist has been shared and reused across the GitHub community, allowing developers to see who has created their own copy of the original gist and potentially made modifications to it.
-      tags:
-      - Gists
-      operationId: listGistForks
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-gist-forks
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - $ref: '#/components/parameters/per-page'
-      - $ref: '#/components/parameters/page'
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/gist-simple'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist-fork-items'
-          headers:
-            Link:
-              $ref: '#/components/headers/link'
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    post:
-      summary: GitHub Forkgist
-      description: This API endpoint allows authenticated users to create a fork (copy) of an existing gist by making a POST request to /gists/{gist_id}/forks, where {gist_id} is the unique identifier of the gist to be forked. When executed successfully, it creates a duplicate of the specified gist under the authenticated user's account, preserving all the original files and content while establishing a relationship between the forked gist and its parent. This operation requires authentication and returns the newly created forked gist object containing its own unique identifier, URLs, and metadata, making it useful for developers who want to build upon or customize existing code snippets shared by others in the GitHub community.
-      tags:
-      - Gists
-      operationId: forkgist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#fork-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '201':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/base-gist'
-              examples:
-                default:
-                  $ref: '#/components/examples/base-gist'
-          headers:
-            Location:
-              example: https://api.github.com/gists/aa5a315d61ae9438b18d
-              schema:
-                type: string
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-        '422':
-          $ref: '#/components/responses/validation_failed'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/star:
-    get:
-      summary: GitHub Check Ifgist is Starred
-      description: 'The Check If A Gist Is Starred operation is a GET request to the /gists/{gist_id}/star endpoint that allows authenticated users to verify whether they have starred a specific gist. This endpoint requires the gist_id path parameter to identify the target gist and returns a boolean-style HTTP status response: 204 No Content if the gist is starred by the authenticated user, or 404 Not Found if it is not starred or does not exist. This operation is useful for applications that need to display or track a user''s starred gists, enable conditional UI elements like star/unstar buttons, or maintain synchronization of gist preferences across different platforms.'
-      tags:
-      - Gists
-      operationId: checkIfgistIsStarred
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#check-if-a-gist-is-starred
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '204':
-          description: Response if gist is starred
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          description: Not Found if gist is not starred
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-                additionalProperties: false
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    put:
-      summary: GitHub Stargist
-      description: Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method)."
-      tags:
-      - Gists
-      operationId: stargist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#star-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '204':
-          description: Response
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    delete:
-      summary: GitHub Unstargist
-      description: This API operation allows authenticated users to remove their star from a previously starred GitHub Gist by sending a DELETE request to the endpoint with the specific Gist ID. When executed successfully, it removes the user's star designation from the specified Gist, effectively indicating that the user no longer wishes to mark that Gist as a favorite or bookmark it for later reference. This is part of GitHub's Gist starring functionality that helps users curate and organize code snippets they find valuable or want to track.
-      tags:
-      - Gists
-      operationId: unstargist
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#unstar-a-gist
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      responses:
-        '204':
-          description: Response
-        '304':
-          $ref: '#/components/responses/not_modified'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
-  /gists/{gist_id}/{sha}:
-    get:
-      summary: GitHub Getgist Revision
-      description: 'Gets a specified gist revision.
-
-
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
-
-
-        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
-
-        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
-      tags:
-      - Gists
-      operationId: getgistRevision
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#get-a-gist-revision
-      parameters:
-      - $ref: '#/components/parameters/gist-id'
-      - name: sha
-        in: path
-        required: true
-        schema:
-          type: string
-        example: abc123def456789012345678901234567890
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/gist-simple'
-              examples:
-                default:
-                  $ref: '#/components/examples/gist'
-        '403':
-          $ref: '#/components/responses/forbidden'
-        '404':
-          $ref: '#/components/responses/not_found'
-        '422':
-          $ref: '#/components/responses/validation_failed'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: false
-        category: gists
-        subcategory: gists
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /gists:
     get:
       summary: GitHub List Gists for the Authenticated User
@@ -1065,15 +159,800 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
+  /gists/public:
+    get:
+      summary: GitHub List Public Gists
+      description: 'List public gists sorted by most recently updated to least recently updated.
+
+
+        Note: With pagination, you can fetch up to 3000 gists. For example, you can fetch 100 pages with 30 gists per page or 30 pages with 100 gists per page.'
+      tags:
+      - Gists
+      operationId: gists/list-public
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-public-gists
+      parameters:
+      - $ref: '#/components/parameters/since'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/base-gist'
+              examples:
+                default:
+                  $ref: '#/components/examples/base-gist-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/starred:
+    get:
+      summary: GitHub List Starred Gists
+      description: 'List the authenticated user''s starred gists:'
+      tags:
+      - Gists
+      operationId: gists/list-starred
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-starred-gists
+      parameters:
+      - $ref: '#/components/parameters/since'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/base-gist'
+              examples:
+                default:
+                  $ref: '#/components/examples/base-gist-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}:
+    get:
+      summary: GitHub Get a Gist
+      description: 'Gets a specified gist.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/get
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#get-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-simple'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden_gist'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      summary: GitHub Update a Gist
+      description: 'Allows you to update a gist''s description and to update, delete, or rename gist files. Files
+
+        from the previous version of the gist that aren''t explicitly changed during an edit
+
+        are unchanged.
+
+
+        At least one of `description` or `files` is required.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/update
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#update-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                description:
+                  description: The description of the gist.
+                  example: Example Ruby script
+                  type: string
+                files:
+                  description: 'The gist files to be updated, renamed, or deleted. Each `key` must match the current filename
+
+                    (including extension) of the targeted gist file. For example: `hello.py`.
+
+
+                    To delete a file, set the whole file to null. For example: `hello.py : null`. The file will also be
+
+                    deleted if the specified object does not contain at least one of `content` or `filename`.'
+                  example:
+                    hello.rb:
+                      content: blah
+                      filename: goodbye.rb
+                  type: object
+                  additionalProperties:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      content:
+                        description: The new content of the file.
+                        type: string
+                      filename:
+                        description: The new filename for the file.
+                        type:
+                        - string
+                        - 'null'
+              type:
+              - object
+              - 'null'
+            examples:
+              updateGist:
+                summary: Updating a gist
+                value:
+                  description: An updated gist description
+                  files:
+                    README.md:
+                      content: Hello World from GitHub
+              deleteFile:
+                summary: Deleting a gist file
+                value:
+                  files:
+                    hello.py: null
+              renameFile:
+                summary: Renaming a gist file
+                value:
+                  files:
+                    hello.py:
+                      filename: goodbye.py
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-simple'
+              examples:
+                updateGist:
+                  $ref: '#/components/examples/gist'
+                deleteFile:
+                  $ref: '#/components/examples/delete-gist-file'
+                renameFile:
+                  $ref: '#/components/examples/rename-gist-file'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Delete a Gist
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/delete
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#delete-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/comments:
+    get:
+      summary: GitHub List Gist Comments
+      description: 'Lists the comments on a gist.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/list-comments
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#list-gist-comments
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/gist-comment'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-comment-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: comments
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Create a Gist Comment
+      description: 'Creates a comment on a gist.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/create-comment
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#create-a-gist-comment
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                body:
+                  description: The comment text.
+                  type: string
+                  maxLength: 65535
+                  example: Body of the attachment
+              type: object
+              required:
+              - body
+            examples:
+              default:
+                summary: Creating a comment in a gist
+                value:
+                  body: This is a comment to a gist
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-comment'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-comment'
+          headers:
+            Location:
+              example: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
+              schema:
+                type: string
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: comments
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/comments/{comment_id}:
+    get:
+      summary: GitHub Get a Gist Comment
+      description: 'Gets a comment on a gist.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/get-comment
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#get-a-gist-comment
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/comment-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-comment'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-comment'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden_gist'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: comments
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      summary: GitHub Update a Gist Comment
+      description: 'Updates a comment on a gist.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/update-comment
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#update-a-gist-comment
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/comment-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                body:
+                  description: The comment text.
+                  type: string
+                  maxLength: 65535
+                  example: Body of the attachment
+              type: object
+              required:
+              - body
+            examples:
+              default:
+                summary: Updating a comment in a gist
+                value:
+                  body: This is an update to a comment in a gist
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-comment'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-comment'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: comments
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Delete a Gist Comment
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/delete-comment
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/comments#delete-a-gist-comment
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/comment-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: comments
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/commits:
+    get:
+      summary: GitHub List Gist Commits
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/list-commits
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-gist-commits
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/gist-commit'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-commit-items'
+          headers:
+            Link:
+              example: <https://api.github.com/resource?page=2>; rel="next"
+              schema:
+                type: string
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/forks:
+    get:
+      summary: GitHub List Gist Forks
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/list-forks
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#list-gist-forks
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/gist-simple'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist-fork-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Fork a Gist
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/fork
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#fork-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/base-gist'
+              examples:
+                default:
+                  $ref: '#/components/examples/base-gist'
+          headers:
+            Location:
+              example: https://api.github.com/gists/aa5a315d61ae9438b18d
+              schema:
+                type: string
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/star:
+    get:
+      summary: GitHub Check if a Gist is Starred
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/check-is-starred
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#check-if-a-gist-is-starred
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '204':
+          description: Response if gist is starred
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          description: Not Found if gist is not starred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                additionalProperties: false
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      summary: GitHub Star a Gist
+      description: Note that you'll need to set `Content-Length` to zero when calling out to this endpoint. For more information, see "HTTP method."
+      tags:
+      - Gists
+      operationId: gists/star
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#star-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Unstar a Gist
+      description: ''
+      tags:
+      - Gists
+      operationId: gists/unstar
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#unstar-a-gist
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gists/{gist_id}/{sha}:
+    get:
+      summary: GitHub Get a Gist Revision
+      description: 'Gets a specified gist revision.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw markdown. This is the default if you do not pass any specific media type.
+
+        - **`application/vnd.github.base64+json`**: Returns the base64-encoded contents. This can be useful if your gist contains any invalid UTF-8 sequences.'
+      tags:
+      - Gists
+      operationId: gists/get-revision
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gists/gists#get-a-gist-revision
+      parameters:
+      - $ref: '#/components/parameters/gist-id'
+      - name: sha
+        in: path
+        required: true
+        schema:
+          type: string
+        example: abc123def456789012345678901234567890
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gist-simple'
+              examples:
+                default:
+                  $ref: '#/components/examples/gist'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: gists
+        subcategory: gists
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /users/{username}/gists:
     get:
       summary: GitHub List Gists for a User
@@ -1114,91 +993,8 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
   examples:
-    gist:
-      value:
-        url: https://api.github.com/gists/2decf6c462d9b4418f2
-        forks_url: https://api.github.com/gists/2decf6c462d9b4418f2/forks
-        commits_url: https://api.github.com/gists/2decf6c462d9b4418f2/commits
-        id: 2decf6c462d9b4418f2
-        node_id: G_kwDOBhHyLdZDliNDQxOGYy
-        git_pull_url: https://gist.github.com/2decf6c462d9b4418f2.git
-        git_push_url: https://gist.github.com/2decf6c462d9b4418f2.git
-        html_url: https://gist.github.com/2decf6c462d9b4418f2
-        files:
-          README.md:
-            filename: README.md
-            type: text/markdown
-            language: Markdown
-            raw_url: https://gist.githubusercontent.com/monalisa/2decf6c462d9b4418f2/raw/ac3e6daf176fafe73609fd000cd188e4472010fb/README.md
-            size: 23
-            truncated: false
-            content: Hello world from GitHub
-        public: true
-        created_at: '2022-09-20T12:11:58Z'
-        updated_at: '2022-09-21T10:28:06Z'
-        description: An updated gist description.
-        comments: 0
-        user: null
-        comments_url: https://api.github.com/gists/2decf6c462d9b4418f2/comments
-        owner:
-          login: monalisa
-          id: 104456405
-          node_id: U_kgDOBhHyLQ
-          avatar_url: https://avatars.githubusercontent.com/u/104456405?v=4
-          gravatar_id: ''
-          url: https://api.github.com/users/monalisa
-          html_url: https://github.com/monalisa
-          followers_url: https://api.github.com/users/monalisa/followers
-          following_url: https://api.github.com/users/monalisa/following{/other_user}
-          gists_url: https://api.github.com/users/monalisa/gists{/gist_id}
-          starred_url: https://api.github.com/users/monalisa/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/monalisa/subscriptions
-          organizations_url: https://api.github.com/users/monalisa/orgs
-          repos_url: https://api.github.com/users/monalisa/repos
-          events_url: https://api.github.com/users/monalisa/events{/privacy}
-          received_events_url: https://api.github.com/users/monalisa/received_events
-          type: User
-          site_admin: true
-        forks: []
-        history:
-        - user:
-            login: monalisa
-            id: 104456405
-            node_id: U_kgyLQ
-            avatar_url: https://avatars.githubusercontent.com/u/104456405?v=4
-            gravatar_id: ''
-            url: https://api.github.com/users/monalisa
-            html_url: https://github.com/monalisa
-            followers_url: https://api.github.com/users/monalisa/followers
-            following_url: https://api.github.com/users/monalisa/following{/other_user}
-            gists_url: https://api.github.com/users/monalisa/gists{/gist_id}
-            starred_url: https://api.github.com/users/monalisa/starred{/owner}{/repo}
-            subscriptions_url: https://api.github.com/users/monalisa/subscriptions
-            organizations_url: https://api.github.com/users/monalisa/orgs
-            repos_url: https://api.github.com/users/monalisa/repos
-            events_url: https://api.github.com/users/monalisa/events{/privacy}
-            received_events_url: https://api.github.com/users/monalisa/received_events
-            type: User
-            site_admin: true
-          version: 468aac8caed5f0c3b859b8286968
-          committed_at: '2022-09-21T10:28:06Z'
-          change_status:
-            total: 2
-            additions: 1
-            deletions: 1
-          url: https://api.github.com/gists/8481a81af6b7a2d418f2/468aac8caed5f0c3b859b8286968
-        truncated: false
     gist-fork-items:
       value:
       - url: https://api.github.com/gists/aa5a315d61ae9438b18d
@@ -1242,34 +1038,6 @@ components:
           received_events_url: https://api.github.com/users/octocat/received_events
           type: User
           site_admin: false
-    gist-comment:
-      value:
-        id: 1
-        node_id: MDExOkdpc3RDb21tZW50MQ==
-        url: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
-        body: Just commenting for the sake of commenting
-        user:
-          login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
-        created_at: '2011-04-18T23:23:56Z'
-        updated_at: '2011-04-18T23:23:56Z'
-        author_association: COLLABORATOR
     delete-gist-file:
       value:
         url: https://api.github.com/gists/2decf6c462d9b4418f2
@@ -1336,9 +1104,9 @@ components:
             deletions: 1
           url: https://api.github.com/gists/8481a81af6b7a2d418f2/468aac8caed5f0c3b859b8286968
         truncated: false
-    base-gist-items:
+    base-gist:
       value:
-      - url: https://api.github.com/gists/aa5a315d61ae9438b18d
+        url: https://api.github.com/gists/aa5a315d61ae9438b18d
         forks_url: https://api.github.com/gists/aa5a315d61ae9438b18d/forks
         commits_url: https://api.github.com/gists/aa5a315d61ae9438b18d/commits
         id: aa5a315d61ae9438b18d
@@ -1380,10 +1148,12 @@ components:
           type: User
           site_admin: false
         truncated: false
-    gist-commit-items:
+    gist-comment-items:
       value:
-      - url: https://api.github.com/gists/aa5a315d61ae9438b18d/57a7f021a713b1c5a6a199b54cc514735d2d462f
-        version: 57a7f021a713b1c5a6a199b54cc514735d2d462f
+      - id: 1
+        node_id: MDExOkdpc3RDb21tZW50MQ==
+        url: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
+        body: Just commenting for the sake of commenting
         user:
           login: octocat
           id: 1
@@ -1403,11 +1173,37 @@ components:
           received_events_url: https://api.github.com/users/octocat/received_events
           type: User
           site_admin: false
-        change_status:
-          deletions: 0
-          additions: 180
-          total: 180
-        committed_at: '2010-04-14T02:15:15Z'
+        created_at: '2011-04-18T23:23:56Z'
+        updated_at: '2011-04-18T23:23:56Z'
+        author_association: COLLABORATOR
+    gist-comment:
+      value:
+        id: 1
+        node_id: MDExOkdpc3RDb21tZW50MQ==
+        url: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
+        body: Just commenting for the sake of commenting
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-18T23:23:56Z'
+        updated_at: '2011-04-18T23:23:56Z'
+        author_association: COLLABORATOR
     rename-gist-file:
       value:
         url: https://api.github.com/gists/2decf6c462d9b4418f2
@@ -1482,12 +1278,84 @@ components:
             deletions: 0
           url: https://api.github.com/gists/8481a81af6b7a2d418f2/468aac8caed5f0c3b859b8286968
         truncated: false
-    gist-comment-items:
+    gist:
       value:
-      - id: 1
-        node_id: MDExOkdpc3RDb21tZW50MQ==
-        url: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
-        body: Just commenting for the sake of commenting
+        url: https://api.github.com/gists/2decf6c462d9b4418f2
+        forks_url: https://api.github.com/gists/2decf6c462d9b4418f2/forks
+        commits_url: https://api.github.com/gists/2decf6c462d9b4418f2/commits
+        id: 2decf6c462d9b4418f2
+        node_id: G_kwDOBhHyLdZDliNDQxOGYy
+        git_pull_url: https://gist.github.com/2decf6c462d9b4418f2.git
+        git_push_url: https://gist.github.com/2decf6c462d9b4418f2.git
+        html_url: https://gist.github.com/2decf6c462d9b4418f2
+        files:
+          README.md:
+            filename: README.md
+            type: text/markdown
+            language: Markdown
+            raw_url: https://gist.githubusercontent.com/monalisa/2decf6c462d9b4418f2/raw/ac3e6daf176fafe73609fd000cd188e4472010fb/README.md
+            size: 23
+            truncated: false
+            content: Hello world from GitHub
+        public: true
+        created_at: '2022-09-20T12:11:58Z'
+        updated_at: '2022-09-21T10:28:06Z'
+        description: An updated gist description.
+        comments: 0
+        user: null
+        comments_url: https://api.github.com/gists/2decf6c462d9b4418f2/comments
+        owner:
+          login: monalisa
+          id: 104456405
+          node_id: U_kgDOBhHyLQ
+          avatar_url: https://avatars.githubusercontent.com/u/104456405?v=4
+          gravatar_id: ''
+          url: https://api.github.com/users/monalisa
+          html_url: https://github.com/monalisa
+          followers_url: https://api.github.com/users/monalisa/followers
+          following_url: https://api.github.com/users/monalisa/following{/other_user}
+          gists_url: https://api.github.com/users/monalisa/gists{/gist_id}
+          starred_url: https://api.github.com/users/monalisa/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/monalisa/subscriptions
+          organizations_url: https://api.github.com/users/monalisa/orgs
+          repos_url: https://api.github.com/users/monalisa/repos
+          events_url: https://api.github.com/users/monalisa/events{/privacy}
+          received_events_url: https://api.github.com/users/monalisa/received_events
+          type: User
+          site_admin: true
+        forks: []
+        history:
+        - user:
+            login: monalisa
+            id: 104456405
+            node_id: U_kgyLQ
+            avatar_url: https://avatars.githubusercontent.com/u/104456405?v=4
+            gravatar_id: ''
+            url: https://api.github.com/users/monalisa
+            html_url: https://github.com/monalisa
+            followers_url: https://api.github.com/users/monalisa/followers
+            following_url: https://api.github.com/users/monalisa/following{/other_user}
+            gists_url: https://api.github.com/users/monalisa/gists{/gist_id}
+            starred_url: https://api.github.com/users/monalisa/starred{/owner}{/repo}
+            subscriptions_url: https://api.github.com/users/monalisa/subscriptions
+            organizations_url: https://api.github.com/users/monalisa/orgs
+            repos_url: https://api.github.com/users/monalisa/repos
+            events_url: https://api.github.com/users/monalisa/events{/privacy}
+            received_events_url: https://api.github.com/users/monalisa/received_events
+            type: User
+            site_admin: true
+          version: 468aac8caed5f0c3b859b8286968
+          committed_at: '2022-09-21T10:28:06Z'
+          change_status:
+            total: 2
+            additions: 1
+            deletions: 1
+          url: https://api.github.com/gists/8481a81af6b7a2d418f2/468aac8caed5f0c3b859b8286968
+        truncated: false
+    gist-commit-items:
+      value:
+      - url: https://api.github.com/gists/aa5a315d61ae9438b18d/57a7f021a713b1c5a6a199b54cc514735d2d462f
+        version: 57a7f021a713b1c5a6a199b54cc514735d2d462f
         user:
           login: octocat
           id: 1
@@ -1507,12 +1375,14 @@ components:
           received_events_url: https://api.github.com/users/octocat/received_events
           type: User
           site_admin: false
-        created_at: '2011-04-18T23:23:56Z'
-        updated_at: '2011-04-18T23:23:56Z'
-        author_association: COLLABORATOR
-    base-gist:
+        change_status:
+          deletions: 0
+          additions: 180
+          total: 180
+        committed_at: '2010-04-14T02:15:15Z'
+    base-gist-items:
       value:
-        url: https://api.github.com/gists/aa5a315d61ae9438b18d
+      - url: https://api.github.com/gists/aa5a315d61ae9438b18d
         forks_url: https://api.github.com/gists/aa5a315d61ae9438b18d/forks
         commits_url: https://api.github.com/gists/aa5a315d61ae9438b18d/commits
         id: aa5a315d61ae9438b18d
@@ -1554,141 +1424,7 @@ components:
           type: User
           site_admin: false
         truncated: false
-  responses:
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_modified:
-      description: Not modified
-    validation_failed:
-      description: Validation failed, or the endpoint has been spammed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/validation-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    forbidden_gist:
-      description: Forbidden Gist
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              block:
-                type: object
-                properties:
-                  reason:
-                    type: string
-                  created_at:
-                    type: string
-                  html_url:
-                    type:
-                    - string
-                    - 'null'
-              message:
-                type: string
-              documentation_url:
-                type: string
-    requires_authentication:
-      description: Requires authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-  parameters:
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-    gist-id:
-      name: gist_id
-      description: The unique identifier of the gist.
-      in: path
-      required: true
-      schema:
-        type: string
-    since:
-      name: since
-      description: 'Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.'
-      in: query
-      required: false
-      schema:
-        type: string
-        format: date-time
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
-    comment-id:
-      name: comment_id
-      description: The unique identifier of the comment.
-      in: path
-      required: true
-      schema:
-        type: integer
-    username:
-      name: username
-      description: The handle for the GitHub user account.
-      in: path
-      required: true
-      schema:
-        type: string
   schemas:
-    gist-comment:
-      title: Gist Comment
-      description: A comment made to a gist.
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDExOkdpc3RDb21tZW50MQ==
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
-        body:
-          description: The comment text.
-          type: string
-          maxLength: 65535
-          example: Body of the attachment
-        user:
-          $ref: '#/components/schemas/nullable-simple-user'
-        created_at:
-          type: string
-          format: date-time
-          example: '2011-04-18T23:23:56Z'
-        updated_at:
-          type: string
-          format: date-time
-          example: '2011-04-18T23:23:56Z'
-        author_association:
-          $ref: '#/components/schemas/author-association'
-      required:
-      - url
-      - id
-      - node_id
-      - user
-      - body
-      - author_association
-      - created_at
-      - updated_at
     simple-user:
       title: Simple User
       description: A GitHub user.
@@ -1790,100 +1526,47 @@ components:
       - subscriptions_url
       - type
       - url
-    gist-commit:
-      title: Gist Commit
-      description: Gist Commit
+    gist-comment:
+      title: Gist Comment
+      description: A comment made to a gist.
       type: object
       properties:
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDExOkdpc3RDb21tZW50MQ==
         url:
           type: string
           format: uri
-          example: https://api.github.com/gists/aa5a315d61ae9438b18d/57a7f021a713b1c5a6a199b54cc514735d2d462f
-        version:
+          example: https://api.github.com/gists/a6db0bec360bb87e9418/comments/1
+        body:
+          description: The comment text.
           type: string
-          example: 57a7f021a713b1c5a6a199b54cc514735d2d462f
+          maxLength: 65535
+          example: Body of the attachment
         user:
           $ref: '#/components/schemas/nullable-simple-user'
-        change_status:
-          type: object
-          properties:
-            total:
-              type: integer
-            additions:
-              type: integer
-            deletions:
-              type: integer
-        committed_at:
+        created_at:
           type: string
           format: date-time
-          example: '2010-04-14T02:15:15Z'
+          example: '2011-04-18T23:23:56Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2011-04-18T23:23:56Z'
+        author_association:
+          $ref: '#/components/schemas/author-association'
       required:
       - url
+      - id
+      - node_id
       - user
-      - version
-      - committed_at
-      - change_status
-    validation-error:
-      title: Validation Error
-      description: Validation Error
-      type: object
-      required:
-      - message
-      - documentation_url
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: object
-            required:
-            - code
-            properties:
-              resource:
-                type: string
-              field:
-                type: string
-              message:
-                type: string
-              code:
-                type: string
-              index:
-                type: integer
-              value:
-                oneOf:
-                - type:
-                  - string
-                  - 'null'
-                - type:
-                  - integer
-                  - 'null'
-                - type:
-                  - array
-                  - 'null'
-                  items:
-                    type: string
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
+      - body
+      - author_association
+      - created_at
+      - updated_at
     gist-history:
       title: Gist History
       description: Gist History
@@ -2014,6 +1697,404 @@ components:
       - files
       - created_at
       - updated_at
+    nullable-simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    public-user:
+      title: Public User
+      description: Public User
+      type: object
+      properties:
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 42
+        node_id:
+          type: string
+          example: '12345678'
+        avatar_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: '12345678'
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        html_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        following_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        gists_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        starred_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        events_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        company:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        blog:
+          type:
+          - string
+          - 'null'
+        location:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+        hireable:
+          type:
+          - boolean
+          - 'null'
+        bio:
+          type:
+          - string
+          - 'null'
+        twitter_username:
+          type:
+          - string
+          - 'null'
+        public_repos:
+          type: integer
+        public_gists:
+          type: integer
+        followers:
+          type: integer
+        following:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        plan:
+          type: object
+          properties:
+            collaborators:
+              type: integer
+            name:
+              type: string
+            space:
+              type: integer
+            private_repos:
+              type: integer
+          required:
+          - collaborators
+          - name
+          - space
+          - private_repos
+        suspended_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        private_gists:
+          type: integer
+          example: 1
+        total_private_repos:
+          type: integer
+          example: 2
+        owned_private_repos:
+          type: integer
+          example: 2
+        disk_usage:
+          type: integer
+          example: 1
+        collaborators:
+          type: integer
+          example: 3
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+      - bio
+      - blog
+      - company
+      - email
+      - followers
+      - following
+      - hireable
+      - location
+      - name
+      - public_gists
+      - public_repos
+      - created_at
+      - updated_at
+      additionalProperties: false
+    author-association:
+      title: author_association
+      type: string
+      example: OWNER
+      description: How the author is associated with the repository.
+      enum:
+      - COLLABORATOR
+      - CONTRIBUTOR
+      - FIRST_TIMER
+      - FIRST_TIME_CONTRIBUTOR
+      - MANNEQUIN
+      - MEMBER
+      - NONE
+      - OWNER
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    gist-commit:
+      title: Gist Commit
+      description: Gist Commit
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/gists/aa5a315d61ae9438b18d/57a7f021a713b1c5a6a199b54cc514735d2d462f
+        version:
+          type: string
+          example: 57a7f021a713b1c5a6a199b54cc514735d2d462f
+        user:
+          $ref: '#/components/schemas/nullable-simple-user'
+        change_status:
+          type: object
+          properties:
+            total:
+              type: integer
+            additions:
+              type: integer
+            deletions:
+              type: integer
+        committed_at:
+          type: string
+          format: date-time
+          example: '2010-04-14T02:15:15Z'
+      required:
+      - url
+      - user
+      - version
+      - committed_at
+      - change_status
     gist-simple:
       title: Gist Simple
       description: Gist Simple
@@ -2211,323 +2292,104 @@ components:
           $ref: '#/components/schemas/simple-user'
         truncated:
           type: boolean
-    author-association:
-      title: author_association
-      type: string
-      example: OWNER
-      description: How the author is associated with the repository.
-      enum:
-      - COLLABORATOR
-      - CONTRIBUTOR
-      - FIRST_TIMER
-      - FIRST_TIME_CONTRIBUTOR
-      - MANNEQUIN
-      - MEMBER
-      - NONE
-      - OWNER
-    nullable-simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type:
-      - object
-      - 'null'
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    public-user:
-      title: Public User
-      description: Public User
-      type: object
-      properties:
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          example: 42
-        node_id:
-          type: string
-          example: '12345678'
-        avatar_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: '12345678'
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        html_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        following_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        gists_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        starred_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        events_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        company:
-          type:
-          - string
-          - 'null'
-          example: example_value
-        blog:
-          type:
-          - string
-          - 'null'
-        location:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-        hireable:
-          type:
-          - boolean
-          - 'null'
-        bio:
-          type:
-          - string
-          - 'null'
-        twitter_username:
-          type:
-          - string
-          - 'null'
-        public_repos:
-          type: integer
-        public_gists:
-          type: integer
-        followers:
-          type: integer
-        following:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        plan:
-          type: object
-          properties:
-            collaborators:
-              type: integer
-            name:
-              type: string
-            space:
-              type: integer
-            private_repos:
-              type: integer
-          required:
-          - collaborators
-          - name
-          - space
-          - private_repos
-        suspended_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        private_gists:
-          type: integer
-          example: 1
-        total_private_repos:
-          type: integer
-          example: 2
-        owned_private_repos:
-          type: integer
-          example: 2
-        disk_usage:
-          type: integer
-          example: 1
-        collaborators:
-          type: integer
-          example: 3
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-      - bio
-      - blog
-      - company
-      - email
-      - followers
-      - following
-      - hireable
-      - location
-      - name
-      - public_gists
-      - public_repos
-      - created_at
-      - updated_at
-      additionalProperties: false
+  parameters:
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    comment-id:
+      name: comment_id
+      description: The unique identifier of the comment.
+      in: path
+      required: true
+      schema:
+        type: integer
+    gist-id:
+      name: gist_id
+      description: The unique identifier of the gist.
+      in: path
+      required: true
+      schema:
+        type: string
+    since:
+      name: since
+      description: 'Only show results that were last updated after the given time. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`.'
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+  responses:
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden_gist:
+      description: Forbidden Gist
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              block:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                  created_at:
+                    type: string
+                  html_url:
+                    type:
+                    - string
+                    - 'null'
+              message:
+                type: string
+              documentation_url:
+                type: string
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_modified:
+      description: Not modified
   headers:
     link:
       example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
       schema:
         type: string
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-gists-openapi.yml
-- github-openapi.yml

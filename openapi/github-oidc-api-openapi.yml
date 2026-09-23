@@ -22,17 +22,17 @@ servers:
       description: Self-hosted Enterprise Server protocol
       default: http
 tags:
-- name: Oidc
+- name: OIDC
 paths:
   /orgs/{org}/actions/oidc/customization/sub:
     get:
-      summary: GitHub Get the Customization Template for an OIDC Subject Claim for an Organization
+      summary: GitHub Get the Customization Template for an OIDC Subject Claim for an…
       description: 'Gets the customization template for an OpenID Connect (OIDC) subject claim.
 
 
         OAuth app tokens and personal access tokens (classic) need the `read:org` scope to use this endpoint.'
       tags:
-      - Oidc
+      - OIDC
       operationId: oidc/get-oidc-custom-sub-template-for-org
       externalDocs:
         description: API method documentation
@@ -57,13 +57,13 @@ paths:
         delay: 0
         dispatcher: FALLBACK
     put:
-      summary: GitHub Set the Customization Template for an OIDC Subject Claim for an Organization
+      summary: GitHub Set the Customization Template for an OIDC Subject Claim for an…
       description: 'Creates or updates the customization template for an OpenID Connect (OIDC) subject claim.
 
 
         OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.'
       tags:
-      - Oidc
+      - OIDC
       operationId: oidc/update-oidc-custom-sub-template-for-org
       externalDocs:
         description: API method documentation
@@ -102,20 +102,38 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  responses:
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
+  parameters:
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+  examples:
+    oidc-custom-sub:
+      value:
+        include_claim_keys:
+        - repo
+        - context
   schemas:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     empty-object:
       title: Empty Object
       description: An object without any properties.
@@ -134,37 +152,19 @@ components:
             type: string
       required:
       - include_claim_keys
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-  examples:
-    oidc-custom-sub:
-      value:
-        include_claim_keys:
-        - repo
-        - context
-  parameters:
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
+  responses:
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/

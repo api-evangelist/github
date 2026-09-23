@@ -22,13 +22,13 @@ servers:
       description: Self-hosted Enterprise Server protocol
       default: http
 tags:
-- name: Code-Scanning
+- name: Code Scanning
   description: Retrieve code scanning alerts from a repository.
 paths:
   /enterprises/{enterprise}/code-scanning/alerts:
     get:
       summary: GitHub List Code Scanning Alerts for an Enterprise
-      description: 'Lists code scanning alerts for the default branch for all eligible repositories in an enterprise. Eligible repositories are repositories that are owned by organizations that you own or for which you are a security manager. For more information, see "[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
+      description: 'Lists code scanning alerts for the default branch for all eligible repositories in an enterprise. Eligible repositories are repositories that are owned by organizations that you own or for which you are a security manager. For more information, see "Managing security managers in your organization."
 
 
         The authenticated user must be a member of the enterprise to use this endpoint.
@@ -36,7 +36,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` or `repo` scope to use this endpoint.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/list-alerts-for-enterprise
       externalDocs:
         description: API method documentation
@@ -99,7 +99,7 @@ paths:
   /orgs/{org}/code-scanning/alerts:
     get:
       summary: GitHub List Code Scanning Alerts for an Organization
-      description: 'Lists code scanning alerts for the default branch for all eligible repositories in an organization. Eligible repositories are repositories that are owned by organizations that you own or for which you are a security manager. For more information, see "[Managing security managers in your organization](https://docs.github.com/enterprise-server@3.9/organizations/managing-peoples-access-to-your-organization-with-roles/managing-security-managers-in-your-organization)."
+      description: 'Lists code scanning alerts for the default branch for all eligible repositories in an organization. Eligible repositories are repositories that are owned by organizations that you own or for which you are a security manager. For more information, see "Managing security managers in your organization."
 
 
         The authenticated user must be an owner or security manager for the organization to use this endpoint.
@@ -107,7 +107,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` or `repo`s cope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/list-alerts-for-org
       externalDocs:
         description: API method documentation
@@ -188,7 +188,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/list-alerts-for-repo
       externalDocs:
         description: API method documentation
@@ -263,7 +263,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/get-alert
       externalDocs:
         description: API method documentation
@@ -305,7 +305,7 @@ paths:
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/update-alert
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#update-a-code-scanning-alert
@@ -366,7 +366,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/list-alert-instances
       externalDocs:
         description: API method documentation
@@ -435,7 +435,7 @@ paths:
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/list-recent-analyses
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#list-code-scanning-analyses-for-a-repository
@@ -521,16 +521,16 @@ paths:
         and `0` is returned in this field.
 
 
-        This endpoint supports the following custom media types. For more information, see "[Media types](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/getting-started-with-the-rest-api#media-types)."
+        This endpoint supports the following custom media types. For more information, see "Media types."
 
 
-        - **`application/sarif+json`**: Instead of returning a summary of the analysis, this endpoint returns a subset of the analysis data that was uploaded. The data is formatted as [SARIF version 2.1.0](https://docs.oasis-open.org/sarif/sarif/v2.1.0/cs01/sarif-v2.1.0-cs01.html). It also returns additional data such as the `github/alertNumber` and `github/alertUrl` properties.
+        - **`application/sarif+json`**: Instead of returning a summary of the analysis, this endpoint returns a subset of the analysis data that was uploaded. The data is formatted as SARIF version 2.1.0. It also returns additional data such as the `github/alertNumber` and `github/alertUrl` properties.
 
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/get-analysis
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#get-a-code-scanning-analysis-for-a-repository
@@ -577,10 +577,123 @@ paths:
         dispatcher: FALLBACK
     delete:
       summary: GitHub Delete a Code Scanning Analysis from a Repository
-      description: "Deletes a specified code scanning analysis from a repository.\n\nYou can delete one analysis at a time.\nTo delete a series of analyses, start with the most recent analysis and work backwards.\nConceptually, the process is similar to the undo function in a text editor.\n\nWhen you list the analyses for a repository,\none or more will be identified as deletable in the response:\n\n```\n\"deletable\": true\n```\n\nAn analysis is deletable when it's the most recent in a set of analyses.\nTypically, a repository will have multiple sets of analyses\nfor each enabled code scanning tool,\nwhere a set is determined by a unique combination of analysis values:\n\n* `ref`\n* `tool`\n* `category`\n\nIf you attempt to delete an analysis that is not the most recent in a set,\nyou'll get a 400 response with the message:\n\n```\nAnalysis specified is not deletable.\n```\n\nThe response from a successful `DELETE` operation provides you with\ntwo alternative URLs for deleting the next analysis in the set:\n`next_analysis_url` and `confirm_delete_url`.\nUse the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis\nin a set. This is a useful option if you want to preserve at least one analysis\nfor the specified tool in your repository.\nUse the `confirm_delete_url` URL if you are content to remove all analyses for a tool.\nWhen you delete the last analysis in a set, the value of `next_analysis_url` and `confirm_delete_url`\nin the 200 response is `null`.\n\nAs an example of the deletion process,\nlet's imagine that you added a workflow that configured a particular code scanning tool\nto analyze the code in a repository. This tool has added 15 analyses:\n10 on the default branch, and another 5 on a topic branch.\nYou therefore have two separate sets of analyses for this tool.\nYou've now decided that you want to remove all of the analyses for the tool.\nTo do this you must make 15 separate deletion requests.\nTo start, you must find an analysis that's identified as deletable.\nEach set of analyses always has one that's identified as deletable.\nHaving found the deletable analysis for one of the two sets,\ndelete this analysis and then continue deleting the next analysis in the set until they're all deleted.\nThen repeat the process for the second set.\nThe procedure therefore consists of a nested loop:\n\n**Outer loop**:\n* List the analyses for the repository, filtered by tool.\n* Parse this list to find a deletable analysis. If found:\n\n  **Inner loop**:\n  * Delete the identified analysis.\n  * Parse the response for the value of `confirm_delete_url` and, if found, use this in the next iteration.\n\nThe above process assumes that you want to remove all trace of the tool's analyses from the GitHub user interface, for the specified repository, and it therefore uses the `confirm_delete_url` value. Alternatively, you could use the `next_analysis_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool's analysis entirely.\n\nOAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories."
+      description: 'Deletes a specified code scanning analysis from a repository.
+
+
+        You can delete one analysis at a time.
+
+        To delete a series of analyses, start with the most recent analysis and work backwards.
+
+        Conceptually, the process is similar to the undo function in a text editor.
+
+
+        When you list the analyses for a repository,
+
+        one or more will be identified as deletable in the response:
+
+
+        ```
+
+        "deletable": true
+
+        ```
+
+
+        An analysis is deletable when it''s the most recent in a set of analyses.
+
+        Typically, a repository will have multiple sets of analyses
+
+        for each enabled code scanning tool,
+
+        where a set is determined by a unique combination of analysis values:
+
+
+        * `ref`
+
+        * `tool`
+
+        * `category`
+
+
+        If you attempt to delete an analysis that is not the most recent in a set,
+
+        you''ll get a 400 response with the message:
+
+
+        ```
+
+        Analysis specified is not deletable.
+
+        ```
+
+
+        The response from a successful `DELETE` operation provides you with
+
+        two alternative URLs for deleting the next analysis in the set:
+
+        `next_analysis_url` and `confirm_delete_url`.
+
+        Use the `next_analysis_url` URL if you want to avoid accidentally deleting the final analysis
+
+        in a set. This is a useful option if you want to preserve at least one analysis
+
+        for the specified tool in your repository.
+
+        Use the `confirm_delete_url` URL if you are content to remove all analyses for a tool.
+
+        When you delete the last analysis in a set, the value of `next_analysis_url` and `confirm_delete_url`
+
+        in the 200 response is `null`.
+
+
+        As an example of the deletion process,
+
+        let''s imagine that you added a workflow that configured a particular code scanning tool
+
+        to analyze the code in a repository. This tool has added 15 analyses:
+
+        10 on the default branch, and another 5 on a topic branch.
+
+        You therefore have two separate sets of analyses for this tool.
+
+        You''ve now decided that you want to remove all of the analyses for the tool.
+
+        To do this you must make 15 separate deletion requests.
+
+        To start, you must find an analysis that''s identified as deletable.
+
+        Each set of analyses always has one that''s identified as deletable.
+
+        Having found the deletable analysis for one of the two sets,
+
+        delete this analysis and then continue deleting the next analysis in the set until they''re all deleted.
+
+        Then repeat the process for the second set.
+
+        The procedure therefore consists of a nested loop:
+
+
+        **Outer loop**:
+
+        * List the analyses for the repository, filtered by tool.
+
+        * Parse this list to find a deletable analysis. If found:
+
+
+        **Inner loop**:
+
+        * Delete the identified analysis.
+
+        * Parse the response for the value of `confirm_delete_url` and, if found, use this in the next iteration.
+
+
+        The above process assumes that you want to remove all trace of the tool''s analyses from the GitHub user interface, for the specified repository, and it therefore uses the `confirm_delete_url` value. Alternatively, you could use the `next_analysis_url` value, which would leave the last analysis in each set undeleted to avoid removing a tool''s analysis entirely.
+
+
+        OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/delete-analysis
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#delete-a-code-scanning-analysis-from-a-repository
@@ -637,7 +750,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/get-default-setup
       externalDocs:
         description: API method documentation
@@ -676,7 +789,7 @@ paths:
 
         OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       tags:
-      - Code-Scanning
+      - Code Scanning
       operationId: code-scanning/update-default-setup
       externalDocs:
         description: API method documentation
@@ -731,10 +844,61 @@ paths:
   /repos/{owner}/{repo}/code-scanning/sarifs:
     post:
       summary: GitHub Upload an Analysis as SARIF Data
-      description: "Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. For troubleshooting information, see \"[Troubleshooting SARIF uploads](https://docs.github.com/enterprise-server@3.9/code-security/code-scanning/troubleshooting-sarif).\"\n\nThere are two places where you can upload code scanning results.\n - If you upload to a pull request, for example `--ref refs/pull/42/merge` or `--ref refs/pull/42/head`, then the results appear as alerts in a pull request check. For more information, see \"[Triaging code scanning alerts in pull requests](/code-security/secure-coding/triaging-code-scanning-alerts-in-pull-requests).\"\n - If you upload to a branch, for example `--ref refs/heads/my-branch`, then the results appear in the **Security** tab for your repository. For more information, see \"[Managing code scanning alerts for your repository](/code-security/secure-coding/managing-code-scanning-alerts-for-your-repository#viewing-the-alerts-for-a-repository).\"\n\nYou must compress the SARIF-formatted analysis data that you want to upload, using `gzip`, and then encode it as a Base64 format string. For example:\n\n```\ngzip -c analysis-data.sarif | base64 -w0\n```\n\nSARIF upload supports a maximum number of entries per the following data objects, and an analysis will be rejected if any of these objects is above its maximum value. For some objects, there are additional values over which the entries will be ignored while keeping the most important entries whenever applicable.\nTo get the most out of your analysis when it includes data above the supported limits, try to optimize the analysis configuration. For example, for the CodeQL tool, identify and remove the most noisy queries. For more information, see \"[SARIF results exceed one or more limits](https://docs.github.com/enterprise-server@3.9/code-security/code-scanning/troubleshooting-sarif/results-exceed-limit).\"\n\n\n| **SARIF data**                   | **Maximum values** | **Additional limits**                                                            |\n|-|::|-|\n| Runs per file                    |         20         |                                                                                  |\n| Results per run                  |       25,000       | Only the top 5,000 results will be included, prioritized by severity.            |\n| Rules per run                    |       25,000       |                                                                                  |\n| Tool extensions per run          |        100         |                                                                                  |\n| Thread Flow Locations per result |       10,000       | Only the top 1,000 Thread Flow Locations will be included, using prioritization. |\n| Location per result\t             |       1,000        | Only 100 locations will be included.                                             |\n| Tags per rule\t                   |         20         | Only 10 tags will be included.                                                   |\n\n\nThe `202 Accepted` response includes an `id` value.\nYou can use this ID to check the status of the upload by using it in the `/sarifs/{sarif_id}` endpoint.\nFor more information, see \"[Get information about a SARIF upload](/rest/code-scanning/code-scanning#get-information-about-a-sarif-upload).\"\n\nOAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories."
+      description: 'Uploads SARIF data containing the results of a code scanning analysis to make the results available in a repository. For troubleshooting information, see "Troubleshooting SARIF uploads."
+
+
+        There are two places where you can upload code scanning results.
+
+        - If you upload to a pull request, for example `--ref refs/pull/42/merge` or `--ref refs/pull/42/head`, then the results appear as alerts in a pull request check. For more information, see "Triaging code scanning alerts in pull requests."
+
+        - If you upload to a branch, for example `--ref refs/heads/my-branch`, then the results appear in the **Security** tab for your repository. For more information, see "Managing code scanning alerts for your repository."
+
+
+        You must compress the SARIF-formatted analysis data that you want to upload, using `gzip`, and then encode it as a Base64 format string. For example:
+
+
+        ```
+
+        gzip -c analysis-data.sarif | base64 -w0
+
+        ```
+
+
+        SARIF upload supports a maximum number of entries per the following data objects, and an analysis will be rejected if any of these objects is above its maximum value. For some objects, there are additional values over which the entries will be ignored while keeping the most important entries whenever applicable.
+
+        To get the most out of your analysis when it includes data above the supported limits, try to optimize the analysis configuration. For example, for the CodeQL tool, identify and remove the most noisy queries. For more information, see "SARIF results exceed one or more limits."
+
+
+        | **SARIF data** | **Maximum values** | **Additional limits** |
+
+        |-|::|-|
+
+        | Runs per file | 20 | |
+
+        | Results per run | 25,000 | Only the top 5,000 results will be included, prioritized by severity. |
+
+        | Rules per run | 25,000 | |
+
+        | Tool extensions per run | 100 | |
+
+        | Thread Flow Locations per result | 10,000 | Only the top 1,000 Thread Flow Locations will be included, using prioritization. |
+
+        | Location per result | 1,000 | Only 100 locations will be included. |
+
+        | Tags per rule | 20 | Only 10 tags will be included. |
+
+
+        The `202 Accepted` response includes an `id` value.
+
+        You can use this ID to check the status of the upload by using it in the `/sarifs/{sarif_id}` endpoint.
+
+        For more information, see "Get information about a SARIF upload."
+
+
+        OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/upload-sarif
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#upload-an-analysis-as-sarif-data
@@ -810,12 +974,12 @@ paths:
   /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}:
     get:
       summary: GitHub Get Information About a SARIF Upload
-      description: 'Gets information about a SARIF upload, including the status and the URL of the analysis that was uploaded so that you can retrieve details of the analysis. For more information, see "[Get a code scanning analysis for a repository](/rest/code-scanning/code-scanning#get-a-code-scanning-analysis-for-a-repository)."
+      description: 'Gets information about a SARIF upload, including the status and the URL of the analysis that was uploaded so that you can retrieve details of the analysis. For more information, see "Get a code scanning analysis for a repository."
 
         OAuth app tokens and personal access tokens (classic) need the `security_events` scope to use this endpoint with private or public repositories, or the `public_repo` scope to use this endpoint with only public repositories.'
       operationId: code-scanning/get-sarif
       tags:
-      - Code-Scanning
+      - Code Scanning
       externalDocs:
         description: API method documentation
         url: https://docs.github.com/enterprise-server@3.9/rest/code-scanning/code-scanning#get-information-about-a-sarif-upload
@@ -855,310 +1019,149 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    code-scanning-ref:
-      type: string
-      description: 'The Git reference, formatted as `refs/pull/<number>/merge`, `refs/pull/<number>/head`,
-
-        `refs/heads/<branch name>` or simply `<branch name>`.'
-    code-scanning-alert-instance:
+    scim-error:
+      title: Scim Error
+      description: Scim Error
       type: object
       properties:
-        ref:
-          $ref: '#/components/schemas/code-scanning-ref'
-        analysis_key:
-          $ref: '#/components/schemas/code-scanning-analysis-analysis-key'
-        environment:
-          $ref: '#/components/schemas/code-scanning-alert-environment'
-        category:
-          $ref: '#/components/schemas/code-scanning-analysis-category'
-        state:
-          $ref: '#/components/schemas/code-scanning-alert-state'
-        commit_sha:
-          type: string
-          example: abc123def456789012345678901234567890
         message:
-          type: object
-          properties:
-            text:
-              type: string
-        location:
-          $ref: '#/components/schemas/code-scanning-alert-location'
-        html_url:
-          type: string
+          type:
+          - string
+          - 'null'
+          example: Example body text
+        documentation_url:
+          type:
+          - string
+          - 'null'
           example: https://api.github.com/repos/octocat/Hello-World
-        classifications:
+        detail:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        status:
+          type: integer
+          example: 42
+        scimType:
+          type:
+          - string
+          - 'null'
+          example: User
+        schemas:
           type: array
-          description: 'Classifications that have been applied to the file that triggered the alert.
-
-            For example identifying it as documentation, or a generated file.'
           items:
-            $ref: '#/components/schemas/code-scanning-alert-classification'
+            type: string
+    code-scanning-sarifs-receipt:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/code-scanning-analysis-sarif-id'
+        url:
+          type: string
+          description: The REST API URL for checking the status of the upload.
+          format: uri
+          readOnly: true
+          example: https://api.github.com/repos/octocat/Hello-World
+    code-scanning-alert-environment:
+      type: string
+      description: Identifies the variable values associated with the environment in which the analysis that generated this alert instance was performed, such as the language that was analyzed.
+    code-scanning-analysis-created-at:
+      type: string
+      description: 'The time that the analysis was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
+      format: date-time
+      readOnly: true
+    code-scanning-analysis-sarif-file:
+      description: A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. For more information, see "[SARIF support for code scanning](https://docs.github.com/enterprise-server@3.9/code-security/secure-coding/sarif-support-for-code-scanning)."
+      type: string
+    code-scanning-alert-state:
+      type: string
+      description: State of a code scanning alert.
+      enum:
+      - open
+      - dismissed
+      - fixed
+    code-scanning-default-setup:
+      description: Configuration for code scanning default setup.
+      type: object
+      properties:
+        state:
+          description: Code scanning default setup has been configured or not.
+          type: string
+          enum:
+          - configured
+          - not-configured
+          example: configured
+        languages:
+          description: Languages to be analyzed.
+          type: array
+          items:
+            type: string
+            enum:
+            - c-cpp
+            - csharp
+            - go
+            - java-kotlin
+            - javascript-typescript
+            - javascript
+            - python
+            - ruby
+            - typescript
+            - swift
+        query_suite:
+          description: CodeQL query suite to be used.
+          type: string
+          enum:
+          - default
+          - extended
+          example: default
+        updated_at:
+          description: Timestamp of latest configuration update.
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2023-12-06T14:20:20.000Z'
     code-scanning-analysis-tool-guid:
       type:
       - string
       - 'null'
       description: The GUID of the tool used to generate the code scanning analysis, if provided in the uploaded SARIF data.
-    code-scanning-analysis-tool-name:
-      type: string
-      description: The name of the tool used to generate the code scanning analysis.
-    alert-instances-url:
-      type: string
-      description: The REST API URL for fetching the list of instances for an alert.
-      format: uri
-      readOnly: true
-    code-scanning-default-setup-update-response:
-      description: 'You can use `run_url` to track the status of the run. This includes a property status and conclusion.
-
-        You should not rely on this always being an actions workflow run object.'
+    code-scanning-analysis-tool:
       type: object
-      properties:
-        run_id:
-          description: ID of the corresponding run.
-          type: integer
-          example: 42
-        run_url:
-          description: URL of the corresponding run.
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-    alert-dismissed-at:
-      type:
-      - string
-      - 'null'
-      description: 'The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
-      format: date-time
-      readOnly: true
-    code-scanning-analysis-sarif-id:
-      type: string
-      description: An identifier for the upload.
-      example: 6c81cd8e-b078-4ac3-a3be-1dad7dbd0b53
-    code-scanning-analysis:
-      type: object
-      properties:
-        ref:
-          $ref: '#/components/schemas/code-scanning-ref'
-        commit_sha:
-          $ref: '#/components/schemas/code-scanning-analysis-commit-sha'
-        analysis_key:
-          $ref: '#/components/schemas/code-scanning-analysis-analysis-key'
-        environment:
-          $ref: '#/components/schemas/code-scanning-analysis-environment'
-        category:
-          $ref: '#/components/schemas/code-scanning-analysis-category'
-        error:
-          type: string
-          example: error reading field xyz
-        created_at:
-          $ref: '#/components/schemas/code-scanning-analysis-created-at'
-        results_count:
-          type: integer
-          description: The total number of results in the analysis.
-          example: 42
-        rules_count:
-          type: integer
-          description: The total number of rules used in the analysis.
-          example: 42
-        id:
-          type: integer
-          description: Unique identifier for this analysis.
-          example: 42
-        url:
-          $ref: '#/components/schemas/code-scanning-analysis-url'
-        sarif_id:
-          $ref: '#/components/schemas/code-scanning-analysis-sarif-id'
-        tool:
-          $ref: '#/components/schemas/code-scanning-analysis-tool'
-        deletable:
-          type: boolean
-          example: true
-        warning:
-          type: string
-          description: Warning generated when processing the analysis
-          example: 123 results were ignored
-      required:
-      - ref
-      - commit_sha
-      - analysis_key
-      - environment
-      - error
-      - created_at
-      - results_count
-      - rules_count
-      - id
-      - url
-      - sarif_id
-      - tool
-      - deletable
-      - warning
-    code-scanning-alert-location:
-      type: object
-      description: Describe a region within a file for the alert.
-      properties:
-        path:
-          type: string
-          example: src/index.js
-        start_line:
-          type: integer
-          example: 42
-        end_line:
-          type: integer
-          example: 42
-        start_column:
-          type: integer
-          example: 42
-        end_column:
-          type: integer
-          example: 42
-    code-scanning-sarifs-status:
-      type: object
-      properties:
-        processing_status:
-          type: string
-          enum:
-          - pending
-          - complete
-          - failed
-          description: '`pending` files have not yet been processed, while `complete` means results from the SARIF have been stored. `failed` files have either not been processed at all, or could only be partially processed.'
-          example: pending
-        analyses_url:
-          type:
-          - string
-          - 'null'
-          description: The REST API URL for getting the analyses associated with the upload.
-          format: uri
-          readOnly: true
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Any errors that ocurred during processing of the delivery.
-          readOnly: true
-    code-scanning-alert-classification:
-      type:
-      - string
-      - 'null'
-      description: A classification of the file. For example to identify it as generated.
-      enum:
-      - source
-      - generated
-      - test
-      - library
-    nullable-simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type:
-      - object
-      - 'null'
       properties:
         name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    code-scanning-alert-environment:
+          $ref: '#/components/schemas/code-scanning-analysis-tool-name'
+        version:
+          $ref: '#/components/schemas/code-scanning-analysis-tool-version'
+        guid:
+          $ref: '#/components/schemas/code-scanning-analysis-tool-guid'
+    alert-html-url:
       type: string
-      description: Identifies the variable values associated with the environment in which the analysis that generated this alert instance was performed, such as the language that was analyzed.
-    code-scanning-analysis-analysis-key:
-      type: string
-      description: Identifies the configuration under which the analysis was executed. For example, in GitHub Actions this includes the workflow filename and job name.
+      description: The GitHub URL of the alert resource.
+      format: uri
+      readOnly: true
     alert-created-at:
       type: string
       description: 'The time that the alert was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
       format: date-time
       readOnly: true
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     code-scanning-alert-items:
       type: object
       properties:
@@ -1205,9 +1208,104 @@ components:
       - rule
       - tool
       - most_recent_instance
-    code-scanning-analysis-environment:
+    alert-instances-url:
       type: string
-      description: Identifies the variable values associated with the environment in which this analysis was performed.
+      description: The REST API URL for fetching the list of instances for an alert.
+      format: uri
+      readOnly: true
+    alert-number:
+      type: integer
+      description: The security alert number.
+      readOnly: true
+    code-scanning-alert-instance:
+      type: object
+      properties:
+        ref:
+          $ref: '#/components/schemas/code-scanning-ref'
+        analysis_key:
+          $ref: '#/components/schemas/code-scanning-analysis-analysis-key'
+        environment:
+          $ref: '#/components/schemas/code-scanning-alert-environment'
+        category:
+          $ref: '#/components/schemas/code-scanning-analysis-category'
+        state:
+          $ref: '#/components/schemas/code-scanning-alert-state'
+        commit_sha:
+          type: string
+          example: abc123def456789012345678901234567890
+        message:
+          type: object
+          properties:
+            text:
+              type: string
+        location:
+          $ref: '#/components/schemas/code-scanning-alert-location'
+        html_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        classifications:
+          type: array
+          description: 'Classifications that have been applied to the file that triggered the alert.
+
+            For example identifying it as documentation, or a generated file.'
+          items:
+            $ref: '#/components/schemas/code-scanning-alert-classification'
+    code-scanning-alert:
+      type: object
+      properties:
+        number:
+          $ref: '#/components/schemas/alert-number'
+        created_at:
+          $ref: '#/components/schemas/alert-created-at'
+        updated_at:
+          $ref: '#/components/schemas/alert-updated-at'
+        url:
+          $ref: '#/components/schemas/alert-url'
+        html_url:
+          $ref: '#/components/schemas/alert-html-url'
+        instances_url:
+          $ref: '#/components/schemas/alert-instances-url'
+        state:
+          $ref: '#/components/schemas/code-scanning-alert-state'
+        fixed_at:
+          $ref: '#/components/schemas/alert-fixed-at'
+        dismissed_by:
+          $ref: '#/components/schemas/nullable-simple-user'
+        dismissed_at:
+          $ref: '#/components/schemas/alert-dismissed-at'
+        dismissed_reason:
+          $ref: '#/components/schemas/code-scanning-alert-dismissed-reason'
+        dismissed_comment:
+          $ref: '#/components/schemas/code-scanning-alert-dismissed-comment'
+        rule:
+          $ref: '#/components/schemas/code-scanning-alert-rule'
+        tool:
+          $ref: '#/components/schemas/code-scanning-analysis-tool'
+        most_recent_instance:
+          $ref: '#/components/schemas/code-scanning-alert-instance'
+      required:
+      - number
+      - created_at
+      - url
+      - html_url
+      - instances_url
+      - state
+      - dismissed_by
+      - dismissed_at
+      - dismissed_reason
+      - rule
+      - tool
+      - most_recent_instance
+    code-scanning-alert-classification:
+      type:
+      - string
+      - 'null'
+      description: A classification of the file. For example to identify it as generated.
+      enum:
+      - source
+      - generated
+      - test
+      - library
     code-scanning-default-setup-update:
       description: Configuration for code scanning default setup.
       type: object
@@ -1229,57 +1327,6 @@ components:
       additionalProperties: true
       required:
       - state
-    code-scanning-sarifs-receipt:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/code-scanning-analysis-sarif-id'
-        url:
-          type: string
-          description: The REST API URL for checking the status of the upload.
-          format: uri
-          readOnly: true
-          example: https://api.github.com/repos/octocat/Hello-World
-    scim-error:
-      title: Scim Error
-      description: Scim Error
-      type: object
-      properties:
-        message:
-          type:
-          - string
-          - 'null'
-          example: Example body text
-        documentation_url:
-          type:
-          - string
-          - 'null'
-          example: https://api.github.com/repos/octocat/Hello-World
-        detail:
-          type:
-          - string
-          - 'null'
-          example: example_value
-        status:
-          type: integer
-          example: 42
-        scimType:
-          type:
-          - string
-          - 'null'
-          example: User
-        schemas:
-          type: array
-          items:
-            type: string
-    code-scanning-alert-state-query:
-      type: string
-      description: State of a code scanning alert.
-      enum:
-      - open
-      - closed
-      - dismissed
-      - fixed
     simple-repository:
       title: Simple Repository
       description: A GitHub repository.
@@ -1531,11 +1578,26 @@ components:
       - teams_url
       - trees_url
       - url
-    code-scanning-analysis-created-at:
-      type: string
-      description: 'The time that the analysis was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
-      format: date-time
-      readOnly: true
+    code-scanning-default-setup-update-response:
+      description: 'You can use `run_url` to track the status of the run. This includes a property status and conclusion.
+
+        You should not rely on this always being an actions workflow run object.'
+      type: object
+      properties:
+        run_id:
+          description: ID of the corresponding run.
+          type: integer
+          example: 42
+        run_url:
+          description: URL of the corresponding run.
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+    empty-object:
+      title: Empty Object
+      description: An object without any properties.
+      type: object
+      properties: {}
+      additionalProperties: false
     code-scanning-organization-alert-items:
       type: object
       properties:
@@ -1585,170 +1647,6 @@ components:
       - tool
       - most_recent_instance
       - repository
-    code-scanning-analysis-tool-version:
-      type:
-      - string
-      - 'null'
-      description: The version of the tool used to generate the code scanning analysis.
-    empty-object:
-      title: Empty Object
-      description: An object without any properties.
-      type: object
-      properties: {}
-      additionalProperties: false
-    code-scanning-analysis-tool:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/code-scanning-analysis-tool-name'
-        version:
-          $ref: '#/components/schemas/code-scanning-analysis-tool-version'
-        guid:
-          $ref: '#/components/schemas/code-scanning-analysis-tool-guid'
-    code-scanning-alert-dismissed-comment:
-      type:
-      - string
-      - 'null'
-      description: The dismissal comment associated with the dismissal of the alert.
-      maxLength: 280
-    alert-url:
-      type: string
-      description: The REST API URL of the alert resource.
-      format: uri
-      readOnly: true
-    code-scanning-analysis-sarif-file:
-      description: A Base64 string representing the SARIF file to upload. You must first compress your SARIF file using [`gzip`](http://www.gnu.org/software/gzip/manual/gzip.html) and then translate the contents of the file into a Base64 encoding string. For more information, see "[SARIF support for code scanning](https://docs.github.com/enterprise-server@3.9/code-security/secure-coding/sarif-support-for-code-scanning)."
-      type: string
-    code-scanning-alert-state:
-      type: string
-      description: State of a code scanning alert.
-      enum:
-      - open
-      - dismissed
-      - fixed
-    code-scanning-default-setup:
-      description: Configuration for code scanning default setup.
-      type: object
-      properties:
-        state:
-          description: Code scanning default setup has been configured or not.
-          type: string
-          enum:
-          - configured
-          - not-configured
-          example: configured
-        languages:
-          description: Languages to be analyzed.
-          type: array
-          items:
-            type: string
-            enum:
-            - c-cpp
-            - csharp
-            - go
-            - java-kotlin
-            - javascript-typescript
-            - javascript
-            - python
-            - ruby
-            - typescript
-            - swift
-        query_suite:
-          description: CodeQL query suite to be used.
-          type: string
-          enum:
-          - default
-          - extended
-          example: default
-        updated_at:
-          description: Timestamp of latest configuration update.
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2023-12-06T14:20:20.000Z'
-    code-scanning-alert-severity:
-      type: string
-      description: Severity of a code scanning alert.
-      enum:
-      - critical
-      - high
-      - medium
-      - low
-      - warning
-      - note
-      - error
-    alert-updated-at:
-      type: string
-      description: 'The time that the alert was last updated in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
-      format: date-time
-      readOnly: true
-    code-scanning-analysis-url:
-      type: string
-      description: The REST API URL of the analysis resource.
-      format: uri
-      readOnly: true
-    code-scanning-alert-dismissed-reason:
-      type:
-      - string
-      - 'null'
-      description: '**Required when the state is dismissed.** The reason for dismissing or closing the alert.'
-      enum:
-      - null
-      - false positive
-      - won't fix
-      - used in tests
-    alert-html-url:
-      type: string
-      description: The GitHub URL of the alert resource.
-      format: uri
-      readOnly: true
-    code-scanning-alert:
-      type: object
-      properties:
-        number:
-          $ref: '#/components/schemas/alert-number'
-        created_at:
-          $ref: '#/components/schemas/alert-created-at'
-        updated_at:
-          $ref: '#/components/schemas/alert-updated-at'
-        url:
-          $ref: '#/components/schemas/alert-url'
-        html_url:
-          $ref: '#/components/schemas/alert-html-url'
-        instances_url:
-          $ref: '#/components/schemas/alert-instances-url'
-        state:
-          $ref: '#/components/schemas/code-scanning-alert-state'
-        fixed_at:
-          $ref: '#/components/schemas/alert-fixed-at'
-        dismissed_by:
-          $ref: '#/components/schemas/nullable-simple-user'
-        dismissed_at:
-          $ref: '#/components/schemas/alert-dismissed-at'
-        dismissed_reason:
-          $ref: '#/components/schemas/code-scanning-alert-dismissed-reason'
-        dismissed_comment:
-          $ref: '#/components/schemas/code-scanning-alert-dismissed-comment'
-        rule:
-          $ref: '#/components/schemas/code-scanning-alert-rule'
-        tool:
-          $ref: '#/components/schemas/code-scanning-analysis-tool'
-        most_recent_instance:
-          $ref: '#/components/schemas/code-scanning-alert-instance'
-      required:
-      - number
-      - created_at
-      - url
-      - html_url
-      - instances_url
-      - state
-      - dismissed_by
-      - dismissed_at
-      - dismissed_reason
-      - rule
-      - tool
-      - most_recent_instance
     code-scanning-alert-rule:
       type: object
       properties:
@@ -1811,6 +1709,270 @@ components:
           - 'null'
           description: A link to the documentation for the rule used to detect the alert.
           example: example_value
+    code-scanning-analysis-category:
+      type: string
+      description: Identifies the configuration under which the analysis was executed. Used to distinguish between multiple analyses for the same tool and commit, but performed on different languages or different parts of the code.
+    code-scanning-analysis:
+      type: object
+      properties:
+        ref:
+          $ref: '#/components/schemas/code-scanning-ref'
+        commit_sha:
+          $ref: '#/components/schemas/code-scanning-analysis-commit-sha'
+        analysis_key:
+          $ref: '#/components/schemas/code-scanning-analysis-analysis-key'
+        environment:
+          $ref: '#/components/schemas/code-scanning-analysis-environment'
+        category:
+          $ref: '#/components/schemas/code-scanning-analysis-category'
+        error:
+          type: string
+          example: error reading field xyz
+        created_at:
+          $ref: '#/components/schemas/code-scanning-analysis-created-at'
+        results_count:
+          type: integer
+          description: The total number of results in the analysis.
+          example: 42
+        rules_count:
+          type: integer
+          description: The total number of rules used in the analysis.
+          example: 42
+        id:
+          type: integer
+          description: Unique identifier for this analysis.
+          example: 42
+        url:
+          $ref: '#/components/schemas/code-scanning-analysis-url'
+        sarif_id:
+          $ref: '#/components/schemas/code-scanning-analysis-sarif-id'
+        tool:
+          $ref: '#/components/schemas/code-scanning-analysis-tool'
+        deletable:
+          type: boolean
+          example: true
+        warning:
+          type: string
+          description: Warning generated when processing the analysis
+          example: 123 results were ignored
+      required:
+      - ref
+      - commit_sha
+      - analysis_key
+      - environment
+      - error
+      - created_at
+      - results_count
+      - rules_count
+      - id
+      - url
+      - sarif_id
+      - tool
+      - deletable
+      - warning
+    alert-fixed-at:
+      type:
+      - string
+      - 'null'
+      description: 'The time that the alert was no longer detected and was considered fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
+      format: date-time
+      readOnly: true
+    code-scanning-analysis-deletion:
+      title: Analysis deletion
+      description: Successful deletion of a code scanning analysis
+      type: object
+      properties:
+        next_analysis_url:
+          type:
+          - string
+          - 'null'
+          description: Next deletable analysis in chain, without last analysis deletion confirmation
+          format: uri
+          readOnly: true
+          example: https://api.github.com/repos/octocat/Hello-World
+        confirm_delete_url:
+          type:
+          - string
+          - 'null'
+          description: Next deletable analysis in chain, with last analysis deletion confirmation
+          format: uri
+          readOnly: true
+          example: https://api.github.com/repos/octocat/Hello-World
+      required:
+      - next_analysis_url
+      - confirm_delete_url
+    code-scanning-analysis-url:
+      type: string
+      description: The REST API URL of the analysis resource.
+      format: uri
+      readOnly: true
+    alert-url:
+      type: string
+      description: The REST API URL of the alert resource.
+      format: uri
+      readOnly: true
+    code-scanning-analysis-environment:
+      type: string
+      description: Identifies the variable values associated with the environment in which this analysis was performed.
+    code-scanning-analysis-tool-name:
+      type: string
+      description: The name of the tool used to generate the code scanning analysis.
+    code-scanning-alert-dismissed-comment:
+      type:
+      - string
+      - 'null'
+      description: The dismissal comment associated with the dismissal of the alert.
+      maxLength: 280
+    code-scanning-analysis-commit-sha:
+      description: The SHA of the commit to which the analysis you are uploading relates.
+      type: string
+      minLength: 40
+      maxLength: 40
+      pattern: ^[0-9a-fA-F]+$
+    code-scanning-sarifs-status:
+      type: object
+      properties:
+        processing_status:
+          type: string
+          enum:
+          - pending
+          - complete
+          - failed
+          description: '`pending` files have not yet been processed, while `complete` means results from the SARIF have been stored. `failed` files have either not been processed at all, or could only be partially processed.'
+          example: pending
+        analyses_url:
+          type:
+          - string
+          - 'null'
+          description: The REST API URL for getting the analyses associated with the upload.
+          format: uri
+          readOnly: true
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Any errors that ocurred during processing of the delivery.
+          readOnly: true
+    code-scanning-alert-severity:
+      type: string
+      description: Severity of a code scanning alert.
+      enum:
+      - critical
+      - high
+      - medium
+      - low
+      - warning
+      - note
+      - error
+    nullable-simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    code-scanning-analysis-analysis-key:
+      type: string
+      description: Identifies the configuration under which the analysis was executed. For example, in GitHub Actions this includes the workflow filename and job name.
     code-scanning-alert-rule-summary:
       type: object
       properties:
@@ -1857,6 +2019,18 @@ components:
           type: string
           description: A short description of the rule used to detect the alert.
           example: This is an example repository
+    code-scanning-ref:
+      type: string
+      description: 'The Git reference, formatted as `refs/pull/<number>/merge`, `refs/pull/<number>/head`,
+
+        `refs/heads/<branch name>` or simply `<branch name>`.'
+    alert-dismissed-at:
+      type:
+      - string
+      - 'null'
+      description: 'The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
+      format: date-time
+      readOnly: true
     simple-user:
       title: Simple User
       description: A GitHub user.
@@ -1958,42 +2132,6 @@ components:
       - subscriptions_url
       - type
       - url
-    code-scanning-analysis-commit-sha:
-      description: The SHA of the commit to which the analysis you are uploading relates.
-      type: string
-      minLength: 40
-      maxLength: 40
-      pattern: ^[0-9a-fA-F]+$
-    code-scanning-analysis-category:
-      type: string
-      description: Identifies the configuration under which the analysis was executed. Used to distinguish between multiple analyses for the same tool and commit, but performed on different languages or different parts of the code.
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-    code-scanning-alert-set-state:
-      description: Sets the state of the code scanning alert. You must provide `dismissed_reason` when you set the state to `dismissed`.
-      type: string
-      enum:
-      - open
-      - dismissed
-    alert-number:
-      type: integer
-      description: The security alert number.
-      readOnly: true
     code-scanning-ref-full:
       type: string
       description: 'The full Git reference, formatted as `refs/heads/<branch name>`,
@@ -2001,87 +2139,204 @@ components:
         `refs/tags/<tag>`, `refs/pull/<number>/merge`, or `refs/pull/<number>/head`.'
       pattern: ^refs/(heads|tags|pull)/.*$
       example: refs/heads/main
-    alert-fixed-at:
+    code-scanning-alert-location:
+      type: object
+      description: Describe a region within a file for the alert.
+      properties:
+        path:
+          type: string
+          example: src/index.js
+        start_line:
+          type: integer
+          example: 42
+        end_line:
+          type: integer
+          example: 42
+        start_column:
+          type: integer
+          example: 42
+        end_column:
+          type: integer
+          example: 42
+    alert-updated-at:
+      type: string
+      description: 'The time that the alert was last updated in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
+      format: date-time
+      readOnly: true
+    code-scanning-alert-set-state:
+      description: Sets the state of the code scanning alert. You must provide `dismissed_reason` when you set the state to `dismissed`.
+      type: string
+      enum:
+      - open
+      - dismissed
+    code-scanning-analysis-sarif-id:
+      type: string
+      description: An identifier for the upload.
+      example: 6c81cd8e-b078-4ac3-a3be-1dad7dbd0b53
+    code-scanning-alert-state-query:
+      type: string
+      description: State of a code scanning alert.
+      enum:
+      - open
+      - closed
+      - dismissed
+      - fixed
+    code-scanning-analysis-tool-version:
       type:
       - string
       - 'null'
-      description: 'The time that the alert was no longer detected and was considered fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.'
-      format: date-time
-      readOnly: true
-    code-scanning-analysis-deletion:
-      title: Analysis deletion
-      description: Successful deletion of a code scanning analysis
-      type: object
-      properties:
-        next_analysis_url:
-          type:
-          - string
-          - 'null'
-          description: Next deletable analysis in chain, without last analysis deletion confirmation
-          format: uri
-          readOnly: true
-          example: https://api.github.com/repos/octocat/Hello-World
-        confirm_delete_url:
-          type:
-          - string
-          - 'null'
-          description: Next deletable analysis in chain, with last analysis deletion confirmation
-          format: uri
-          readOnly: true
-          example: https://api.github.com/repos/octocat/Hello-World
-      required:
-      - next_analysis_url
-      - confirm_delete_url
-  responses:
-    service_unavailable:
-      description: Service unavailable
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              code:
-                type: string
-              message:
-                type: string
-              documentation_url:
-                type: string
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    bad_request:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    code_scanning_forbidden_write:
-      description: Response if the repository is archived or if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    code_scanning_forbidden_read:
-      description: Response if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    code_scanning_conflict:
-      description: Response if there is already a validation run in progress with a different default setup configuration
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_modified:
-      description: Not modified
+      description: The version of the tool used to generate the code scanning analysis.
+    code-scanning-alert-dismissed-reason:
+      type:
+      - string
+      - 'null'
+      description: '**Required when the state is dismissed.** The reason for dismissing or closing the alert.'
+      enum:
+      - null
+      - false positive
+      - won't fix
+      - used in tests
+  parameters:
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    tool-guid:
+      name: tool_guid
+      description: The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-analysis-tool-guid'
+    alert-number:
+      name: alert_number
+      in: path
+      description: The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation.
+      required: true
+      schema:
+        $ref: '#/components/schemas/alert-number'
+    direction:
+      name: direction
+      description: The direction to sort the results by.
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: desc
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    pagination-after:
+      name: after
+      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      required: false
+      schema:
+        type: string
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    tool-name:
+      name: tool_name
+      description: The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-analysis-tool-name'
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+    enterprise:
+      name: enterprise
+      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
+      in: path
+      required: true
+      schema:
+        type: string
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    pagination-before:
+      name: before
+      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      required: false
+      schema:
+        type: string
+    git-ref:
+      name: ref
+      description: The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-ref'
   examples:
+    code-scanning-alert-instances:
+      value:
+      - ref: refs/heads/main
+        analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
+        environment: ''
+        category: .github/workflows/codeql-analysis.yml:CodeQL-Build
+        state: open
+        fixed_at: null
+        commit_sha: 39406e42cb832f683daa691dd652a8dc36ee8930
+        message:
+          text: This path depends on a user-provided value.
+        location:
+          path: lib/ab12-gen.js
+          start_line: 917
+          end_line: 917
+          start_column: 7
+          end_column: 18
+        classifications:
+        - library
+      - ref: refs/pull/3740/merge
+        analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
+        environment: ''
+        category: .github/workflows/codeql-analysis.yml:CodeQL-Build
+        state: fixed
+        fixed_at: '2020-02-14T12:29:18Z'
+        commit_sha: b09da05606e27f463a2b49287684b4ae777092f2
+        message:
+          text: This suffix check is missing a length comparison to correctly handle lastIndexOf returning -1.
+        location:
+          path: app/script.js
+          start_line: 2
+          end_line: 2
+          start_column: 10
+          end_column: 50
+        classifications:
+        - source
+    code-scanning-default-setup-update:
+      value:
+        state: configured
+    code-scanning-analysis-deletion:
+      summary: Default response
+      value:
+        next_analysis_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41
+        confirm_delete_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41?confirm_delete
     code-scanning-analysis-sarif:
       summary: application/json+sarif response
       value:
@@ -2108,14 +2363,6 @@ components:
             properties:
             - github/alertNumber: 2
             - github/alertUrl: https://api.github.com/repos/monalisa/monalisa/code-scanning/alerts/2
-    code-scanning-default-setup:
-      value:
-        state: configured
-        languages:
-        - ruby
-        - python
-        query_suite: default
-        updated_at: '2023-01-19T11:21:34Z'
     code-scanning-analysis-items:
       value:
       - ref: refs/heads/main
@@ -2154,11 +2401,91 @@ components:
           version: 1.2.0
         deletable: true
         warning: ''
-    code-scanning-analysis-deletion:
-      summary: Default response
+    code-scanning-alert:
       value:
-        next_analysis_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41
-        confirm_delete_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/41?confirm_delete
+        number: 42
+        created_at: '2020-06-19T11:21:34Z'
+        url: https://api.github.com/repos/octocat/hello-world/code-scanning/alerts/42
+        html_url: https://github.com/octocat/hello-world/code-scanning/42
+        state: dismissed
+        fixed_at: null
+        dismissed_by:
+          login: octocat
+          id: 54933897
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        dismissed_at: '2020-02-14T12:29:18Z'
+        dismissed_reason: false positive
+        dismissed_comment: This alert is not actually correct, because there's a sanitizer included in the library.
+        rule:
+          id: js/zipslip
+          severity: error
+          security_severity_level: high
+          description: Arbitrary file write during zip extraction ("Zip Slip")
+          name: js/zipslip
+          full_description: Extracting files from a malicious zip archive without validating that the destination file path is within the destination directory can cause files outside the destination directory to be overwritten.
+          tags:
+          - security
+          - external/cwe/cwe-022
+          help: '# Arbitrary file write during zip extraction ("Zip Slip")\nExtracting files from a malicious zip archive without validating that the destination file path is within the destination directory can cause files outside the destination directory to be overwritten ...'
+          help_uri: https://codeql.github.com/
+        tool:
+          name: CodeQL
+          guid: null
+          version: 2.4.0
+        most_recent_instance:
+          ref: refs/heads/main
+          analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
+          category: .github/workflows/codeql-analysis.yml:CodeQL-Build
+          environment: '{}'
+          state: dismissed
+          commit_sha: 39406e42cb832f683daa691dd652a8dc36ee8930
+          message:
+            text: This path depends on a user-provided value.
+          location:
+            path: spec-main/api-session-spec.ts
+            start_line: 917
+            end_line: 917
+            start_column: 7
+            end_column: 18
+          classifications:
+          - test
+        instances_url: https://api.github.com/repos/octocat/hello-world/code-scanning/alerts/42/instances
+    code-scanning-analysis-default:
+      summary: application/json response
+      value:
+        ref: refs/heads/main
+        commit_sha: c18c69115654ff0166991962832dc2bd7756e655
+        analysis_key: .github/workflows/codeql-analysis.yml:analyze
+        environment: '{"language":"javascript"}'
+        error: ''
+        category: .github/workflows/codeql-analysis.yml:analyze/language:javascript
+        created_at: '2021-01-13T11:55:49Z'
+        results_count: 3
+        rules_count: 67
+        id: 3602840
+        url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/201
+        sarif_id: 47177e22-5596-11eb-80a1-c1e54ef945c6
+        tool:
+          name: CodeQL
+          guid: null
+          version: 2.4.0
+        deletable: true
+        warning: ''
     code-scanning-organization-alert-items:
       value:
       - number: 4
@@ -2386,91 +2713,11 @@ components:
           teams_url: https://api.github.com/repos/octocat/Hello-World/teams
           trees_url: https://api.github.com/repos/octocat/Hello-World/git/trees{/sha}
           hooks_url: https://api.github.com/repos/octocat/Hello-World/hooks
-    code-scanning-alert:
+    code-scanning-sarif-upload:
+      summary: Default response
       value:
-        number: 42
-        created_at: '2020-06-19T11:21:34Z'
-        url: https://api.github.com/repos/octocat/hello-world/code-scanning/alerts/42
-        html_url: https://github.com/octocat/hello-world/code-scanning/42
-        state: dismissed
-        fixed_at: null
-        dismissed_by:
-          login: octocat
-          id: 54933897
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
-        dismissed_at: '2020-02-14T12:29:18Z'
-        dismissed_reason: false positive
-        dismissed_comment: This alert is not actually correct, because there's a sanitizer included in the library.
-        rule:
-          id: js/zipslip
-          severity: error
-          security_severity_level: high
-          description: Arbitrary file write during zip extraction ("Zip Slip")
-          name: js/zipslip
-          full_description: Extracting files from a malicious zip archive without validating that the destination file path is within the destination directory can cause files outside the destination directory to be overwritten.
-          tags:
-          - security
-          - external/cwe/cwe-022
-          help: '# Arbitrary file write during zip extraction ("Zip Slip")\nExtracting files from a malicious zip archive without validating that the destination file path is within the destination directory can cause files outside the destination directory to be overwritten ...'
-          help_uri: https://codeql.github.com/
-        tool:
-          name: CodeQL
-          guid: null
-          version: 2.4.0
-        most_recent_instance:
-          ref: refs/heads/main
-          analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
-          category: .github/workflows/codeql-analysis.yml:CodeQL-Build
-          environment: '{}'
-          state: dismissed
-          commit_sha: 39406e42cb832f683daa691dd652a8dc36ee8930
-          message:
-            text: This path depends on a user-provided value.
-          location:
-            path: spec-main/api-session-spec.ts
-            start_line: 917
-            end_line: 917
-            start_column: 7
-            end_column: 18
-          classifications:
-          - test
-        instances_url: https://api.github.com/repos/octocat/hello-world/code-scanning/alerts/42/instances
-    code-scanning-analysis-default:
-      summary: application/json response
-      value:
-        ref: refs/heads/main
-        commit_sha: c18c69115654ff0166991962832dc2bd7756e655
-        analysis_key: .github/workflows/codeql-analysis.yml:analyze
-        environment: '{"language":"javascript"}'
-        error: ''
-        category: .github/workflows/codeql-analysis.yml:analyze/language:javascript
-        created_at: '2021-01-13T11:55:49Z'
-        results_count: 3
-        rules_count: 67
-        id: 3602840
-        url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses/201
-        sarif_id: 47177e22-5596-11eb-80a1-c1e54ef945c6
-        tool:
-          name: CodeQL
-          guid: null
-          version: 2.4.0
-        deletable: true
-        warning: ''
+        id: 47177e22-5596-11eb-80a1-c1e54ef945c6
+        url: https://api.github.com/repos/octocat/hello-world/code-scanning/sarifs/47177e22-5596-11eb-80a1-c1e54ef945c6
     code-scanning-alert-items:
       value:
       - number: 4
@@ -2570,6 +2817,19 @@ components:
             end_column: 18
           classifications: []
         instances_url: https://api.github.com/repos/octocat/hello-world/code-scanning/alerts/3/instances
+    code-scanning-default-setup:
+      value:
+        state: configured
+        languages:
+        - ruby
+        - python
+        query_suite: default
+        updated_at: '2023-01-19T11:21:34Z'
+    code-scanning-sarif-upload-status:
+      summary: Default response
+      value:
+        processing_status: complete
+        analyses_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses?sarif_id=47177e22-5596-11eb-80a1-c1e54ef945c6
     code-scanning-alert-dismissed:
       value:
         number: 42
@@ -2638,151 +2898,55 @@ components:
       value:
         run_id: 42
         run_url: https://api.github.com/repos/octoorg/octocat/actions/runs/42
-    code-scanning-default-setup-update:
-      value:
-        state: configured
-    code-scanning-sarif-upload-status:
-      summary: Default response
-      value:
-        processing_status: complete
-        analyses_url: https://api.github.com/repos/octocat/hello-world/code-scanning/analyses?sarif_id=47177e22-5596-11eb-80a1-c1e54ef945c6
-    code-scanning-alert-instances:
-      value:
-      - ref: refs/heads/main
-        analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
-        environment: ''
-        category: .github/workflows/codeql-analysis.yml:CodeQL-Build
-        state: open
-        fixed_at: null
-        commit_sha: 39406e42cb832f683daa691dd652a8dc36ee8930
-        message:
-          text: This path depends on a user-provided value.
-        location:
-          path: lib/ab12-gen.js
-          start_line: 917
-          end_line: 917
-          start_column: 7
-          end_column: 18
-        classifications:
-        - library
-      - ref: refs/pull/3740/merge
-        analysis_key: .github/workflows/codeql-analysis.yml:CodeQL-Build
-        environment: ''
-        category: .github/workflows/codeql-analysis.yml:CodeQL-Build
-        state: fixed
-        fixed_at: '2020-02-14T12:29:18Z'
-        commit_sha: b09da05606e27f463a2b49287684b4ae777092f2
-        message:
-          text: This suffix check is missing a length comparison to correctly handle lastIndexOf returning -1.
-        location:
-          path: app/script.js
-          start_line: 2
-          end_line: 2
-          start_column: 10
-          end_column: 50
-        classifications:
-        - source
-    code-scanning-sarif-upload:
-      summary: Default response
-      value:
-        id: 47177e22-5596-11eb-80a1-c1e54ef945c6
-        url: https://api.github.com/repos/octocat/hello-world/code-scanning/sarifs/47177e22-5596-11eb-80a1-c1e54ef945c6
-  parameters:
-    pagination-after:
-      name: after
-      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results after this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      required: false
-      schema:
-        type: string
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
-    tool-guid:
-      name: tool_guid
-      description: The GUID of a code scanning tool. Only results by this tool will be listed. Note that some code scanning tools may not include a GUID in their analysis data. You can specify the tool by using either `tool_guid` or `tool_name`, but not both.
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/code-scanning-analysis-tool-guid'
-    enterprise:
-      name: enterprise
-      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
-      in: path
-      required: true
-      schema:
-        type: string
-    alert-number:
-      name: alert_number
-      in: path
-      description: The number that identifies an alert. You can find this at the end of the URL for a code scanning alert within GitHub, and in the `number` field in the response from the `GET /repos/{owner}/{repo}/code-scanning/alerts` operation.
-      required: true
-      schema:
-        $ref: '#/components/schemas/alert-number'
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-    owner:
-      name: owner
-      description: The account owner of the repository. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    repo:
-      name: repo
-      description: The name of the repository without the `.git` extension. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    direction:
-      name: direction
-      description: The direction to sort the results by.
-      in: query
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: desc
-    pagination-before:
-      name: before
-      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for results before this cursor. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      required: false
-      schema:
-        type: string
-    tool-name:
-      name: tool_name
-      description: The name of a code scanning tool. Only results by this tool will be listed. You can specify the tool by using either `tool_name` or `tool_guid`, but not both.
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/code-scanning-analysis-tool-name'
-    git-ref:
-      name: ref
-      description: The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/code-scanning-ref'
+  responses:
+    bad_request:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    code_scanning_conflict:
+      description: Response if there is already a validation run in progress with a different default setup configuration
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    code_scanning_forbidden_read:
+      description: Response if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_modified:
+      description: Not modified
+    service_unavailable:
+      description: Service unavailable
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              documentation_url:
+                type: string
+    code_scanning_forbidden_write:
+      description: Response if the repository is archived or if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
   headers:
     link:
       example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"

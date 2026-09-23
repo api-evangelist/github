@@ -118,41 +118,6 @@ components:
           type: array
           items:
             type: string
-    scim-enterprise-group-list:
-      type: object
-      required:
-      - schemas
-      - totalResults
-      - Resources
-      - startIndex
-      - itemsPerPage
-      properties:
-        schemas:
-          type: array
-          description: The URIs that are used to indicate the namespaces of the list SCIM schemas.
-          items:
-            type: string
-            enum:
-            - urn:ietf:params:scim:api:messages:2.0:ListResponse
-          example:
-          - urn:ietf:params:scim:api:messages:2.0:ListResponse
-        totalResults:
-          type: integer
-          description: Number of results found
-          example: 1
-        Resources:
-          type: array
-          description: Information about each provisioned group.
-          items:
-            $ref: '#/components/schemas/scim-enterprise-group-response'
-        startIndex:
-          type: integer
-          description: A starting index for the returned page
-          example: 1
-        itemsPerPage:
-          type: integer
-          description: Number of objects per page
-          example: 20
     scim-enterprise-group-response:
       allOf:
       - $ref: '#/components/schemas/group-response'
@@ -254,67 +219,41 @@ components:
           type: string
           description: A URL location of an object
           example: example_value
-  responses:
-    scim_bad_request:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    permission_denied:
-      description: Permission denied
-    scim_internal_error:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    authorization_failure:
-      description: Authorization failure
-    scim_too_many_requests:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-  parameters:
-    start-index:
-      name: startIndex
-      description: 'Used for pagination: the starting index of the first result to return when paginating through values.'
-      in: query
-      required: false
-      schema:
-        type: integer
-        default: 1
-        format: int32
-        example: 1
-    count:
-      name: count
-      description: 'Used for pagination: the number of results to return per page.'
-      in: query
-      required: false
-      schema:
-        type: integer
-        default: 30
-        format: int32
-        example: 1
-    excluded-attributes:
-      name: excludedAttributes
-      description: Excludes the specified attribute from being returned in the results. Using this parameter can speed up response time.
-      in: query
-      required: false
-      schema:
-        type: string
-        example: members
+    scim-enterprise-group-list:
+      type: object
+      required:
+      - schemas
+      - totalResults
+      - Resources
+      - startIndex
+      - itemsPerPage
+      properties:
+        schemas:
+          type: array
+          description: The URIs that are used to indicate the namespaces of the list SCIM schemas.
+          items:
+            type: string
+            enum:
+            - urn:ietf:params:scim:api:messages:2.0:ListResponse
+          example:
+          - urn:ietf:params:scim:api:messages:2.0:ListResponse
+        totalResults:
+          type: integer
+          description: Number of results found
+          example: 1
+        Resources:
+          type: array
+          description: Information about each provisioned group.
+          items:
+            $ref: '#/components/schemas/scim-enterprise-group-response'
+        startIndex:
+          type: integer
+          description: A starting index for the returned page
+          example: 1
+        itemsPerPage:
+          type: integer
+          description: Number of objects per page
+          example: 20
   examples:
     scim-enterprise-group-list:
       value:
@@ -341,6 +280,67 @@ components:
             location: https://api.github.localhost/scim/v2/Groups/927fa2c08dcb4a7fae9e
         startIndex: 1
         itemsPerPage: 20
+  parameters:
+    count:
+      name: count
+      description: 'Used for pagination: the number of results to return per page.'
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 30
+        format: int32
+        example: 1
+    excluded-attributes:
+      name: excludedAttributes
+      description: Excludes the specified attribute from being returned in the results. Using this parameter can speed up response time.
+      in: query
+      required: false
+      schema:
+        type: string
+        example: members
+    start-index:
+      name: startIndex
+      description: 'Used for pagination: the starting index of the first result to return when paginating through values.'
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        format: int32
+        example: 1
+  responses:
+    scim_too_many_requests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    authorization_failure:
+      description: Authorization failure
+    scim_bad_request:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    scim_internal_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    permission_denied:
+      description: Permission denied
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/

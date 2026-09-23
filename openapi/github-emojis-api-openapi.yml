@@ -1,15 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Emojis API
   version: 1.1.4
-  contact:
-    name: Support
-    url: https://support.github.com/contact?tags=dotcom-rest-api
+  title: GitHub v3 REST Emojis API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Emojis across 2 of this provider''s published API definitions: github-emojis-openapi.yml, github-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -21,12 +23,13 @@ servers:
       default: http
 tags:
 - name: Emojis
+  description: List emojis available to use on GitHub.
 paths:
   /emojis:
     get:
       summary: GitHub Get Emojis
-      description: The GET /emojis endpoint retrieves a collection of emoji data from the API. This operation allows clients to fetch available emojis, which may include their Unicode representations, names, categories, or other relevant metadata depending on the API's implementation. It's a simple read-only operation that doesn't require any path parameters and typically returns an array or list of emoji objects that applications can use to display, search, or filter emojis for user selection.
-      operationId: getEmojis
+      description: Lists all the emojis available to use on GitHub Enterprise Server.
+      operationId: emojis/get
       tags:
       - Emojis
       externalDocs:
@@ -52,20 +55,9 @@ paths:
         enabledForGitHubApps: true
         category: emojis
         subcategory: emojis
-      security:
-      - bearerHttpAuthentication: []
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
   examples:
     emojis-get:
@@ -1948,14 +1940,6 @@ components:
   responses:
     not_modified:
       description: Not modified
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-emojis-openapi.yml
-- github-openapi.yml

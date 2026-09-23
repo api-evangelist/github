@@ -1,15 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Markdown API
   version: 1.1.4
-  contact:
-    name: Support
-    url: https://support.github.com/contact?tags=dotcom-rest-api
+  title: GitHub v3 REST Markdown API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Markdown across 2 of this provider''s published API definitions: github-markdown-openapi.yml, github-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -21,12 +23,13 @@ servers:
       default: http
 tags:
 - name: Markdown
+  description: Render GitHub flavored markdown
 paths:
   /markdown:
     post:
-      summary: GitHub Render Markdown Document
-      description: This API operation accepts a POST request to the /markdown endpoint and is used to render Markdown-formatted text into its processed output, typically HTML. When you send a Markdown document to this endpoint, it parses the Markdown syntax and returns the rendered result, allowing applications to convert user-written Markdown content into display-ready formatted text without implementing their own Markdown parser.
-      operationId: renderMarkdownDocument
+      summary: GitHub Render a Markdown Document
+      description: ''
+      operationId: markdown/render
       tags:
       - Markdown
       externalDocs:
@@ -88,25 +91,14 @@ paths:
         enabledForGitHubApps: true
         category: markdown
         subcategory: markdown
-      security:
-      - bearerHttpAuthentication: []
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /markdown/raw:
     post:
-      summary: GitHub Render Markdown Document in Raw Mode
-      description: You must send Markdown as plain text (using a `Content-Type` header of `text/plain` or `text/x-markdown`) to this endpoint, rather than using JSON format. In raw mode, [GitHub Flavored Markdown](https://github.github.com/gfm/) is not supported and Markdown will be rendered in plain format like a README.md file. Markdown content must be 400 KB or less.
-      operationId: renderMarkdownDocumentInRawMode
+      summary: GitHub Render a Markdown Document in Raw Mode
+      description: You must send Markdown as plain text (using a `Content-Type` header of `text/plain` or `text/x-markdown`) to this endpoint, rather than using JSON format. In raw mode, GitHub Flavored Markdown is not supported and Markdown will be rendered in plain format like a README.md file. Markdown content must be 400 KB or less.
+      operationId: markdown/render-raw
       tags:
       - Markdown
       externalDocs:
@@ -152,20 +144,9 @@ paths:
         enabledForGitHubApps: true
         category: markdown
         subcategory: markdown
-      security:
-      - bearerHttpAuthentication: []
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
   headers:
     content-type:
@@ -179,14 +160,6 @@ components:
   responses:
     not_modified:
       description: Not modified
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-markdown-openapi.yml
-- github-openapi.yml

@@ -1,15 +1,17 @@
 openapi: 3.2.0
 info:
-  title: Github Meta API
   version: 1.1.4
-  contact:
-    name: Support
-    url: https://support.github.com/contact?tags=dotcom-rest-api
+  title: GitHub v3 REST Meta API
+  description: GitHub's v3 REST API.
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  description: 'Operations tagged Meta across 2 of this provider''s published API definitions: github-meta-openapi.yml, github-openapi.yml. Each path carries the servers of the definition it was published in.'
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
 servers:
 - url: '{protocol}://{hostname}/api/v3'
   variables:
@@ -22,48 +24,6 @@ servers:
 tags:
 - name: Meta
 paths:
-  /meta:
-    get:
-      summary: GitHub Get Github Enterprise Server Meta Information
-      description: The GitHub Meta API's GET /meta endpoint retrieves essential metadata and configuration information about a GitHub Enterprise Server instance. This operation provides details such as IP address ranges used by GitHub services, supported SSH key fingerprints, webhook IP addresses, and other infrastructure-related information that is useful for network configuration, firewall rules, and security policies. The endpoint requires no authentication and returns data in JSON format, making it a straightforward way for administrators and developers to programmatically access current GitHub Enterprise Server environment settings and verify connectivity requirements.
-      tags:
-      - Meta
-      operationId: getGithubEnterpriseServerMetaInformation
-      externalDocs:
-        description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#get-apiname-meta-information
-      parameters: []
-      responses:
-        '200':
-          description: Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/api-overview'
-              examples:
-                default:
-                  $ref: '#/components/examples/api-overview'
-        '304':
-          $ref: '#/components/responses/not_modified'
-      x-github:
-        githubCloudOnly: false
-        enabledForGitHubApps: true
-        category: meta
-        subcategory: meta
-      security:
-      - bearerHttpAuthentication: []
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /:
     get:
       summary: GitHub API Root
@@ -92,15 +52,37 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
+  /meta:
+    get:
+      summary: GitHub Get GitHub Enterprise Server Meta Information
+      description: ''
+      tags:
+      - Meta
+      operationId: meta/get
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#get-apiname-meta-information
+      parameters: []
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/api-overview'
+              examples:
+                default:
+                  $ref: '#/components/examples/api-overview'
+        '304':
+          $ref: '#/components/responses/not_modified'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: meta
+        subcategory: meta
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
   /octocat:
     get:
       summary: GitHub Get Octocat
@@ -137,15 +119,6 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
   /zen:
     get:
       summary: GitHub Get the Zen of GitHub
@@ -175,16 +148,65 @@ paths:
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
-    servers:
-    - url: '{protocol}://{hostname}/api/v3'
-      variables:
-        hostname:
-          description: Self-hosted Enterprise Server hostname
-          default: HOSTNAME
-        protocol:
-          description: Self-hosted Enterprise Server protocol
-          default: http
 components:
+  examples:
+    api-overview:
+      value:
+        verifiable_password_authentication: true
+        packages:
+        - 192.0.2.1
+        dependabot:
+        - 192.0.2.1
+        domains:
+          website:
+          - '*.example.com'
+          codespaces:
+          - '*.example.com'
+          copilot:
+          - '*.example.com'
+          packages:
+          - '*.example.com'
+        installed_version: 3.9.0
+    octocat:
+      value: "               MMM.           .MMM\n               MMMMMMMMMMMMMMMMMMM\n               MMMMMMMMMMMMMMMMMMM      ___________________________________\n              MMMMMMMMMMMMMMMMMMMMM    |                                   |\n             MMMMMMMMMMMMMMMMMMMMMMM   | Avoid administrative distraction. |\n            MMMMMMMMMMMMMMMMMMMMMMMM   |_   _______________________________|\n            MMMM::- -:::::::- -::MMMM    |/\n             MM~:~ 00~:::::~ 00~:~MM\n        .. MMMMM::.00:::+:::.00::MMMMM ..\n              .MM::::: ._. :::::MM.\n                 MMMM;:::::;MMMM\n          -MM        MMMMMMM\n          ^  M+     MMMMMMMMM\n              MMMMMMM MM MM MM\n                   MM MM MM MM\n                   MM MM MM MM\n                .~~MM~MM~MM~MM~~.\n             ~~~~MM:~MM~~~MM~:MM~~~~\n            ~~~~~~==~==~~~==~==~~~~~~\n             ~~~~~~==~==~==~==~~~~~~\n                 :~==~==~==~==~~\n"
+    root:
+      value:
+        current_user_url: https://api.github.com/user
+        current_user_authorizations_html_url: https://github.com/settings/connections/applications{/client_id}
+        authorizations_url: https://api.github.com/authorizations
+        code_search_url: https://api.github.com/search/code?q={query}{&page,per_page,sort,order}
+        commit_search_url: https://api.github.com/search/commits?q={query}{&page,per_page,sort,order}
+        emails_url: https://api.github.com/user/emails
+        emojis_url: https://api.github.com/emojis
+        events_url: https://api.github.com/events
+        feeds_url: https://api.github.com/feeds
+        followers_url: https://api.github.com/user/followers
+        following_url: https://api.github.com/user/following{/target}
+        gists_url: https://api.github.com/gists{/gist_id}
+        hub_url: https://api.github.com/hub
+        issue_search_url: https://api.github.com/search/issues?q={query}{&page,per_page,sort,order}
+        issues_url: https://api.github.com/issues
+        keys_url: https://api.github.com/user/keys
+        label_search_url: https://api.github.com/search/labels?q={query}&repository_id={repository_id}{&page,per_page}
+        notifications_url: https://api.github.com/notifications
+        organization_url: https://api.github.com/orgs/{org}
+        organization_repositories_url: https://api.github.com/orgs/{org}/repos{?type,page,per_page,sort}
+        organization_teams_url: https://api.github.com/orgs/{org}/teams
+        public_gists_url: https://api.github.com/gists/public
+        rate_limit_url: https://api.github.com/rate_limit
+        repository_url: https://api.github.com/repos/{owner}/{repo}
+        repository_search_url: https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}
+        current_user_repositories_url: https://api.github.com/user/repos{?type,page,per_page,sort}
+        starred_url: https://api.github.com/user/starred{/owner}{/repo}
+        starred_gists_url: https://api.github.com/gists/starred
+        topic_search_url: https://api.github.com/search/topics?q={query}{&page,per_page}
+        user_url: https://api.github.com/users/{user}
+        user_organizations_url: https://api.github.com/user/orgs
+        user_repositories_url: https://api.github.com/users/{user}/repos{?type,page,per_page,sort}
+        user_search_url: https://api.github.com/search/users?q={query}{&page,per_page,sort,order}
+  responses:
+    not_modified:
+      description: Not modified
   schemas:
     api-overview:
       title: Api Overview
@@ -399,72 +421,6 @@ components:
       - user_organizations_url
       - user_repositories_url
       - user_search_url
-  responses:
-    not_modified:
-      description: Not modified
-  examples:
-    api-overview:
-      value:
-        verifiable_password_authentication: true
-        packages:
-        - 192.0.2.1
-        dependabot:
-        - 192.0.2.1
-        domains:
-          website:
-          - '*.example.com'
-          codespaces:
-          - '*.example.com'
-          copilot:
-          - '*.example.com'
-          packages:
-          - '*.example.com'
-        installed_version: 3.9.0
-    root:
-      value:
-        current_user_url: https://api.github.com/user
-        current_user_authorizations_html_url: https://github.com/settings/connections/applications{/client_id}
-        authorizations_url: https://api.github.com/authorizations
-        code_search_url: https://api.github.com/search/code?q={query}{&page,per_page,sort,order}
-        commit_search_url: https://api.github.com/search/commits?q={query}{&page,per_page,sort,order}
-        emails_url: https://api.github.com/user/emails
-        emojis_url: https://api.github.com/emojis
-        events_url: https://api.github.com/events
-        feeds_url: https://api.github.com/feeds
-        followers_url: https://api.github.com/user/followers
-        following_url: https://api.github.com/user/following{/target}
-        gists_url: https://api.github.com/gists{/gist_id}
-        hub_url: https://api.github.com/hub
-        issue_search_url: https://api.github.com/search/issues?q={query}{&page,per_page,sort,order}
-        issues_url: https://api.github.com/issues
-        keys_url: https://api.github.com/user/keys
-        label_search_url: https://api.github.com/search/labels?q={query}&repository_id={repository_id}{&page,per_page}
-        notifications_url: https://api.github.com/notifications
-        organization_url: https://api.github.com/orgs/{org}
-        organization_repositories_url: https://api.github.com/orgs/{org}/repos{?type,page,per_page,sort}
-        organization_teams_url: https://api.github.com/orgs/{org}/teams
-        public_gists_url: https://api.github.com/gists/public
-        rate_limit_url: https://api.github.com/rate_limit
-        repository_url: https://api.github.com/repos/{owner}/{repo}
-        repository_search_url: https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}
-        current_user_repositories_url: https://api.github.com/user/repos{?type,page,per_page,sort}
-        starred_url: https://api.github.com/user/starred{/owner}{/repo}
-        starred_gists_url: https://api.github.com/gists/starred
-        topic_search_url: https://api.github.com/search/topics?q={query}{&page,per_page}
-        user_url: https://api.github.com/users/{user}
-        user_organizations_url: https://api.github.com/user/orgs
-        user_repositories_url: https://api.github.com/users/{user}/repos{?type,page,per_page,sort}
-        user_search_url: https://api.github.com/search/users?q={query}{&page,per_page,sort,order}
-    octocat:
-      value: "               MMM.           .MMM\n               MMMMMMMMMMMMMMMMMMM\n               MMMMMMMMMMMMMMMMMMM      ___________________________________\n              MMMMMMMMMMMMMMMMMMMMM    |                                   |\n             MMMMMMMMMMMMMMMMMMMMMMM   | Avoid administrative distraction. |\n            MMMMMMMMMMMMMMMMMMMMMMMM   |_   _______________________________|\n            MMMM::- -:::::::- -::MMMM    |/\n             MM~:~ 00~:::::~ 00~:~MM\n        .. MMMMM::.00:::+:::.00::MMMMM ..\n              .MM::::: ._. :::::MM.\n                 MMMM;:::::;MMMM\n          -MM        MMMMMMM\n          ^  M+     MMMMMMMMM\n              MMMMMMM MM MM MM\n                   MM MM MM MM\n                   MM MM MM MM\n                .~~MM~MM~MM~MM~~.\n             ~~~~MM:~MM~~~MM~:MM~~~~\n            ~~~~~~==~==~~~==~==~~~~~~\n             ~~~~~~==~==~==~==~~~~~~\n                 :~==~==~==~==~~\n"
-  securitySchemes:
-    bearerHttpAuthentication:
-      description: Bearer Token
-      type: http
-      scheme: Bearer
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
-x-refined-from:
-- github-meta-openapi.yml
-- github-openapi.yml
