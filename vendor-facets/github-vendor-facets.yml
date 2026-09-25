@@ -1,0 +1,438 @@
+# Vendor facets — GitHub (Discussions, Pages, the organization and its repositories).
+# The one developer-community vendor with a real profile: nearly every pointer check it moves is
+# one the provider must DECLARE, and two of them (Discussions as Community, the org as
+# GitHubOrganization) grade at half credit today because the pointer probe never reads those types.
+# The open_source rows only apply to a provider whose PRODUCT is an open-source repository, and a
+# SECURITY.md earns os_security_policy only when it sits at that repository's root.
+vendor: github
+name: GitHub
+website: https://github.com
+areas:
+- community
+- hosting
+registry_keys:
+- github-discussions
+- github-pages
+rubric_schema_version: 0.22.0
+generated: '2026-09-25'
+features_refreshed: '2026-09-25'
+basis: measured
+summary: >-
+  GitHub moves more Kin Score checks than any other community vendor, but almost all of them are pointers
+  the provider has to declare in its apis.yml, and two land at half credit: a Discussions forum declared
+  as Community and an organization declared as GitHubOrganization both grade "unverified" (0.5) because
+  the pointer probe does not read either type. The four open_source checks (releases, SECURITY.md, CONTRIBUTING,
+  CODE_OF_CONDUCT) are real but conditional: that facet applies only when the provider's product is itself
+  an open-source repository we harvest (668 of ~26,700 providers), and an organization-default SECURITY.md
+  kept only in a .github repo is invisible to it. Hosting an OpenAPI or apis.yml in a repository earns
+  nothing by itself; serving the apis.yml from a Pages site does.
+features:
+- id: discussions
+  name: GitHub Discussions (repository and organization)
+  description: >-
+    A public forum attached to a repository or an organization, with Q&A categories, marked answers, announcements
+    and polls.
+  source: >-
+    https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/about-discussions
+  tier: all
+- id: organization
+  name: Organization account with public repositories
+  description: >-
+    A public home for a provider's repositories, and the place organization-wide defaults such as community
+    health files live.
+  source: >-
+    https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file
+  tier: all
+- id: releases
+  name: Releases with release notes
+  description: >-
+    Tagged, downloadable versions of a repository with hand-written or automatically generated release
+    notes and a release-only subscription.
+  source: https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
+  tier: all
+- id: security-policy
+  name: SECURITY.md security policy
+  description: >-
+    A file telling researchers which versions are supported and how to report a vulnerability, surfaced
+    on the repository's security tab.
+  source: https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository
+  tier: all
+- id: private-vulnerability-reporting
+  name: Private vulnerability reporting
+  description: >-
+    A structured private form for researchers to report a vulnerability in a public repository, enableable
+    per repository or across an organization.
+  source: >-
+    https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository
+  tier: all
+- id: security-advisories
+  name: Repository security advisories and CVE issuance
+  description: Draft, fix privately and publish advisories, with GitHub acting as CVE Numbering Authority.
+  source: >-
+    https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/about-repository-security-advisories
+  tier: all
+- id: contributing
+  name: CONTRIBUTING guide
+  description: A community health file stating how to contribute, linked from issues and pull requests.
+  source: >-
+    https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file
+  tier: all
+- id: code-of-conduct
+  name: CODE_OF_CONDUCT
+  description: A community health file stating the engagement standards for a project.
+  source: >-
+    https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file
+  tier: all
+- id: org-default-health-files
+  name: Organization-default community health files (.github repository)
+  description: >-
+    CONTRIBUTING, CODE_OF_CONDUCT, SECURITY and SUPPORT files kept once in a public .github repository
+    and used as fallbacks by every repository that lacks its own.
+  source: >-
+    https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file
+  tier: all
+- id: projects-roadmap
+  name: Public Projects with a roadmap layout
+  description: >-
+    A project board that can be set public and viewed as a table, a kanban board or a timeline-style roadmap.
+  source: >-
+    https://docs.github.com/en/issues/planning-and-tracking-with-projects/managing-your-project/managing-visibility-of-your-projects
+  tier: all
+- id: pages-site
+  name: GitHub Pages static hosting
+  description: Static site hosting straight from a repository, on github.io or a custom domain.
+  source: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages
+  tier: all
+- id: pages-jekyll-blog
+  name: Jekyll blog posts on Pages
+  description: Dated Markdown posts in a _posts directory built into a blog by the Pages Jekyll pipeline.
+  source: >-
+    https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-content-to-your-github-pages-site-using-jekyll
+  tier: all
+- id: repository-hosting
+  name: Public repositories (hosting an OpenAPI or apis.yml in a repo)
+  description: Code, files and revision history, readable by anyone when the repository is public.
+  source: https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories
+  tier: all
+- id: github-mcp-server
+  name: GitHub MCP Server
+  description: >-
+    GitHub's own MCP server, local or hosted at api.githubcopilot.com/mcp, exposing GitHub's repositories,
+    issues and pull requests.
+  source: https://github.com/github/github-mcp-server
+  tier: all
+maps:
+- feature: discussions
+  check: support_channel
+  layer: composite
+  credit: 0.5
+  provider_must: >-
+    Declare the Discussions URL in apis.yml common[]. Declared as Community it grades "unverified" (0.5)
+    because probe-pointers.py does not probe the Community type; declared as Support (or a SUPPORT.md
+    declared as Support) it is probed and earns 1.0 when live.
+  note: >-
+    Measured 2026-09-25: 195 providers whose only support-class pointer is Community all score support_channel
+    partial with "pointer liveness 0.5". Discussions URLs that were probed (typed Support) came back 30
+    live, 1 dead, 1 unreachable of 32. The discount is a probe-scope gap, not a rubric rule.
+  catalog_pass_rate: 0.45
+  facet: developer_ergonomics
+  points: 2
+  baseline_pass_rate: 0.69
+  cohort_pct: 66.7
+  control_pct: 69.0
+  delta_pp: -2.3
+- feature: organization
+  check: github_org_present
+  layer: composite
+  credit: 0.5
+  provider_must: Declare the organization URL in apis.yml common[] as GitHubOrganization.
+  note: >-
+    GitHubOrganization is not in the pointer probe's type list, so it grades "unverified" (0.5) for almost
+    everyone: 9,603 of 9,636 GitHubOrganization pointers in pointer-liveness.json.
+  catalog_pass_rate: 0.081
+  facet: operational_transparency
+  points: 2
+  baseline_pass_rate: 0.425
+  cohort_pct: 50.0
+  control_pct: 42.4
+  delta_pp: 7.6
+- feature: releases
+  check: os_releases
+  layer: composite
+  conditional: true
+  condition: >-
+    Only when the provider's product is itself an open-source repository the open-source harvest reads
+    live; the open_source facet is N/A for ~26,000 providers, and samples/SDK repos are refused as "not
+    the product".
+  catalog_pass_rate: 0.792
+  facet: open_source
+  points: 10
+  baseline_pass_rate: 0.829
+  cohort_pct: 83.3
+  control_pct: 82.9
+  delta_pp: 0.4
+- feature: releases
+  check: change_log_present
+  layer: composite
+  conditional: true
+  condition: >-
+    Only where the releases track the API or product itself (not an SDK's version history) and the provider
+    declares the releases page as a ChangeLog pointer.
+  catalog_pass_rate: 0.157
+  facet: operational_transparency
+  points: 6
+  baseline_pass_rate: 0.438
+  cohort_pct: 50.9
+  control_pct: 43.8
+  delta_pp: 7.1
+- feature: security-policy
+  check: os_security_policy
+  layer: composite
+  conditional: true
+  condition: >-
+    Only for an open-source product repository, and only when SECURITY.md sits at the repository ROOT:
+    harvest-open-source-surface.py lists the root contents and does not look in .github/ or docs/, both
+    of which GitHub itself honours.
+  catalog_pass_rate: 0.383
+  facet: open_source
+  points: 14
+  baseline_pass_rate: 0.44
+  cohort_pct: 33.3
+  control_pct: 44.3
+  delta_pp: -11.0
+- feature: security-policy
+  check: security_disclosure
+  layer: composite
+  provider_must: Declare the SECURITY.md (or the repository security tab) URL in apis.yml common[] as
+    Security.
+  catalog_pass_rate: 0.115
+  facet: operational_transparency
+  points: 4
+  baseline_pass_rate: 0.269
+  cohort_pct: 35.2
+  control_pct: 26.8
+  delta_pp: 8.4
+- feature: private-vulnerability-reporting
+  check: reg_vulnerability_disclosure
+  layer: composite
+  conditional: true
+  condition: >-
+    The regulatory facet applies only to providers in a matched regime; the provider must also declare
+    the reporting route as a VulnerabilityDisclosure pointer.
+  catalog_pass_rate: 0.175
+  facet: regulatory
+  points: 6
+  baseline_pass_rate: 0.336
+  cohort_pct: 31.5
+  control_pct: 33.7
+  delta_pp: -2.2
+- feature: contributing
+  check: os_contribution_guide
+  layer: composite
+  conditional: true
+  condition: >-
+    Only for an open-source product repository the harvest reads; keep the file in that repository itself
+    -- whether GitHub's community-profile API reports an org default from .github was not verified here.
+  catalog_pass_rate: 0.656
+  facet: open_source
+  points: 10
+  baseline_pass_rate: 0.731
+  cohort_pct: 83.3
+  control_pct: 72.9
+  delta_pp: 10.4
+- feature: code-of-conduct
+  check: os_code_of_conduct
+  layer: composite
+  conditional: true
+  condition: >-
+    Only for an open-source product repository the harvest reads; keep the file in that repository itself
+    -- whether GitHub's community-profile API reports an org default from .github was not verified here.
+  catalog_pass_rate: 0.54
+  facet: open_source
+  points: 6
+  baseline_pass_rate: 0.593
+  cohort_pct: 50.0
+  control_pct: 59.5
+  delta_pp: -9.5
+- feature: projects-roadmap
+  check: roadmap_present
+  layer: composite
+  provider_must: >-
+    Set the project's visibility to public, keep the planned items in public repositories (items from
+    private repositories stay hidden even on a public project), and declare the project URL as RoadMap.
+  catalog_pass_rate: 0.011
+  facet: operational_transparency
+  points: 2
+  baseline_pass_rate: 0.037
+  cohort_pct: 3.7
+  control_pct: 3.7
+  delta_pp: 0.0
+- feature: pages-jekyll-blog
+  check: blog_present
+  layer: composite
+  provider_must: >-
+    Write and keep publishing the posts, then declare the blog URL as Blog. Pages builds a blog; it does
+    not write one.
+  catalog_pass_rate: 0.529
+  facet: developer_ergonomics
+  points: 1
+  baseline_pass_rate: 0.731
+  cohort_pct: 63.9
+  control_pct: 73.2
+  delta_pp: -9.3
+- feature: pages-site
+  check: apis_json_self_hosted
+  layer: composite
+  provider_must: >-
+    Publish the apis.yml on the Pages site (github.io or a custom domain) and set its url: to that address.
+    Under 0.22.0 github.io is not a catalog host, so it passes; github.com and raw.githubusercontent.com
+    do not.
+  catalog_pass_rate: 0.06
+  facet: discoverability
+  points: 4
+  baseline_pass_rate: 0.047
+  cohort_pct: 1.9
+  control_pct: 4.8
+  delta_pp: -2.9
+earns_nothing:
+- feature: org-default-health-files
+  check: os_security_policy
+  why: >-
+    GitHub serves org-default files as fallbacks, but they do not appear in the product repository, and
+    the harvest reads that repository's own root listing and community profile. A SECURITY.md kept only
+    in the .github repo scores nothing.
+- feature: repository-hosting
+  check: apis_json_self_hosted
+  why: >-
+    An apis.yml whose url is on github.com or raw.githubusercontent.com is on a code-hosting platform,
+    not a host the provider controls; the check refuses it.
+- feature: repository-hosting
+  check: contract_present
+  why: >-
+    Hosting a file is not authoring it. The contract earns because the provider wrote it; putting it in
+    a repository changes where it is read from, not whether it counts.
+- feature: github-mcp-server
+  check: mcp_server
+  layer: agent_readiness
+  why: It exposes GitHub's API, not the provider's. No provider earns mcp_server because GitHub runs one.
+- feature: discussions
+  check: webhooks_advertised
+  why: Discussions has announcements and polls, not an event surface for the provider's API.
+out_of_reach:
+  checks:
+  - contract_present
+  - sdk_count_1
+  - status_page_present
+  - rate_limits_documented
+  - plans_present
+  note: >-
+    GitHub hosts and organizes what a provider already makes; it cannot create an API contract, SDKs,
+    a status page, rate limits or plans.
+unscored_practice:
+- feature: security-advisories
+  why: >-
+    Published advisories with CVE ids are a strong disclosure signal and no check reads them; only the
+    SECURITY.md or a declared pointer counts.
+- feature: org-default-health-files
+  why: >-
+    An organization-wide SECURITY default is real governance practice the open_source harvest cannot see
+    (it reads the product repository's own root).
+surface:
+  discoverability:
+    reachable: 4.0
+    total: 54
+  operational_transparency:
+    reachable: 13.0
+    total: 38
+  developer_ergonomics:
+    reachable: 2.0
+    total: 42
+  regulatory:
+    reachable: 6.0
+    total: 108
+  open_source:
+    reachable: 40.0
+    total: 40
+  agent_readiness:
+    reachable: 0
+    total: 139
+hard_rule: >-
+  A model, not a score. Adopting this vendor changes a provider's Kin Score only when the provider publishes
+  the resulting artifacts on its own surface; nothing here writes a score, and no sponsorship or partnership
+  can.
+method: searched
+source:
+- https://docs.github.com/en/code-security/getting-started/adding-a-security-policy-to-your-repository
+- >-
+  https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/about-repository-security-advisories
+- >-
+  https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/configuring-private-vulnerability-reporting-for-a-repository
+- >-
+  https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file
+- >-
+  https://docs.github.com/en/discussions/collaborating-with-your-community-using-discussions/about-discussions
+- >-
+  https://docs.github.com/en/issues/planning-and-tracking-with-projects/managing-your-project/managing-visibility-of-your-projects
+- https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages
+- >-
+  https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/adding-content-to-your-github-pages-site-using-jekyll
+- https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories
+- https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases
+- https://github.com/github/github-mcp-server
+measured:
+  cohort:
+    method: vendors-catalog.json detections (CNAME / header / URL shape / markup), never a name match
+    detected: 135
+    in_baseline: 54
+  control:
+    basis: providers earning contract_present + documentation_present + api_reference_present, minus the
+      cohort
+    n: 5162
+  metric: >-
+    cohort_pct / control_pct = mean share of the check's points earned (derived and platform credit weighted),
+    x100
+  measured_on: '2026-09-25'
+  composite_mean:
+    cohort: 43.8
+    control: 48.1
+  agent_readiness_mean:
+    cohort: 30.5
+    control: 32.5
+  status: measured
+  caveat: >-
+    A cohort delta is association, not cause: customers choose a vendor for reasons that also move their
+    score. Read it beside the capability map, never instead of it.
+simulation:
+  simulated_on: '2026-09-25'
+  rubric: 0.23.0
+  population: providers publishing a contract (contract_present earned), replayable exactly
+  providers: 8977
+  providers_unreplayable: 987
+  providers_moved: 8972
+  conditional_rows: excluded (they depend on what the API already does)
+  composite_lift:
+    median: 3.1
+    p75: 3.3
+    p90: 3.8
+    max: 4.1
+    mean_among_movers: 2.9
+  agent_readiness_lift:
+    median: 0.0
+    p75: 0.0
+    p90: 0.0
+    max: 0.0
+    mean_among_movers: 0.0
+  facet_lift_median_among_movers:
+    discoverability: 7.4
+    operational_transparency: 15.8
+    developer_ergonomics: 2.4
+  composite_band_moves:
+    thin -> developing: 1061
+    developing -> strong: 473
+    emerging -> thin: 239
+    strong -> exemplar: 144
+    minimal -> emerging: 2
+  agent_readiness_band_moves: {}
+  method: >-
+    each provider's own kin/checks file, the vendor's maps at their stated credit, the scorer's composite
+    formula; from -> to, nothing written
