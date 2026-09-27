@@ -172,30 +172,6 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  responses:
-    dependency_review_forbidden:
-      description: Response if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-  headers:
-    link:
-      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
-      schema:
-        type: string
   examples:
     dependency-graph-create-snapshot-success:
       value:
@@ -203,28 +179,6 @@ components:
         created_at: '2018-05-04T01:14:52Z'
         message: Dependency results for the repo have been successfully updated.
         result: SUCCESS
-    dependency-graph-export-sbom-response:
-      value:
-        sbom:
-          SPDXID: SPDXRef-DOCUMENT
-          spdxVersion: SPDX-2.3
-          creationInfo:
-            created: '2021-09-01T00:00:00Z'
-            creators:
-            - 'Tool: GitHub.com-Dependency-Graph'
-          name: github/example
-          dataLicense: CC0-1.0
-          documentDescribes:
-          - github/example
-          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
-          packages:
-          - SPDXID: SPDXRef-Package
-            name: rubygems:rails
-            versionInfo: 1.0.0
-            downloadLocation: NOASSERTION
-            filesAnalyzed: false
-            licenseConcluded: MIT
-            licenseDeclared: MIT
     dependency-graph-create-snapshot-request:
       value:
         version: 0
@@ -287,65 +241,29 @@ components:
           advisory_ghsa_id: GHSA-fqfj-cmh6-hj49
           advisory_summary: Ruby OpenID
           advisory_url: https://github.com/advisories/GHSA-fqfj-cmh6-hj49
+    dependency-graph-export-sbom-response:
+      value:
+        sbom:
+          SPDXID: SPDXRef-DOCUMENT
+          spdxVersion: SPDX-2.3
+          creationInfo:
+            created: '2021-09-01T00:00:00Z'
+            creators:
+            - 'Tool: GitHub.com-Dependency-Graph'
+          name: github/example
+          dataLicense: CC0-1.0
+          documentDescribes:
+          - github/example
+          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
+          packages:
+          - SPDXID: SPDXRef-Package
+            name: rubygems:rails
+            versionInfo: 1.0.0
+            downloadLocation: NOASSERTION
+            filesAnalyzed: false
+            licenseConcluded: MIT
+            licenseDeclared: MIT
   schemas:
-    metadata:
-      title: metadata
-      description: User-defined metadata to store domain-specific information limited to 8 keys with scalar values.
-      type: object
-      maxProperties: 8
-      additionalProperties:
-        anyOf:
-        - type: string
-        - type: number
-        - type: boolean
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-    dependency:
-      type: object
-      properties:
-        package_url:
-          type: string
-          description: Package-url (PURL) of dependency. See https://github.com/package-url/purl-spec for more details.
-          example: pkg:/npm/%40actions/http-client@1.0.11
-          pattern: ^pkg
-        metadata:
-          $ref: '#/components/schemas/metadata'
-        relationship:
-          type: string
-          description: A notation of whether a dependency is requested directly by this manifest or is a dependency of another dependency.
-          example: direct
-          enum:
-          - direct
-          - indirect
-        scope:
-          type: string
-          description: A notation of whether the dependency is required for the primary build artifact (runtime) or is only used for development. Future versions of this specification may allow for more granular scopes.
-          example: runtime
-          enum:
-          - runtime
-          - development
-        dependencies:
-          type: array
-          description: Array of package-url (PURLs) of direct child dependencies.
-          example: '@actions/http-client'
-          items:
-            type: string
-      additionalProperties: false
     dependency-graph-spdx-sbom:
       title: Dependency Graph SPDX SBOM
       description: A schema for the SPDX JSON format returned by the Dependency Graph.
@@ -482,85 +400,36 @@ components:
           - packages
       required:
       - sbom
-    snapshot:
-      title: snapshot
-      description: Create a new snapshot of a repository's dependencies.
+    dependency:
       type: object
       properties:
-        version:
-          description: The version of the repository snapshot submission.
-          type: integer
-          example: 42
-        job:
-          type: object
-          properties:
-            id:
-              type: string
-              description: The external ID of the job.
-              example: 5622a2b0-63f6-4732-8c34-a1ab27e102a11
-            correlator:
-              type: string
-              description: Correlator provides a key that is used to group snapshots submitted over time. Only the "latest" submitted snapshot for a given combination of `job.correlator` and `detector.name` will be considered when calculating a repository's current dependencies. Correlator should be as unique as it takes to distinguish all detection runs for a given "wave" of CI workflow you run. If you're using GitHub Actions, a good default value for this could be the environment variables GITHUB_WORKFLOW and GITHUB_JOB concatenated together. If you're using a build matrix, then you'll also need to add additional key(s) to distinguish between each submission inside a matrix variation.
-              example: yourworkflowname_yourjobname
-            html_url:
-              type: string
-              description: The url for the job.
-              example: http://example.com/build
-          required:
-          - id
-          - correlator
-          additionalProperties: false
-        sha:
-          description: 'The commit SHA associated with this dependency snapshot. Maximum length: 40 characters.'
+        package_url:
           type: string
-          example: ddc951f4b1293222421f2c8df679786153acf689
-          minLength: 40
-          maxLength: 40
-        ref:
-          description: The repository branch that triggered this snapshot.
-          type: string
-          pattern: ^refs/
-          example: refs/heads/main
-        detector:
-          type: object
-          description: A description of the detector used.
-          properties:
-            name:
-              type: string
-              description: The name of the detector used.
-              example: docker buildtime detector
-            version:
-              type: string
-              description: The version of the detector used.
-              example: 1.0.0
-            url:
-              type: string
-              description: The url of the detector used.
-              example: http://example.com/docker-buildtimer-detector
-          required:
-          - name
-          - version
-          - url
-          additionalProperties: false
+          description: Package-url (PURL) of dependency. See https://github.com/package-url/purl-spec for more details.
+          example: pkg:/npm/%40actions/http-client@1.0.11
+          pattern: ^pkg
         metadata:
           $ref: '#/components/schemas/metadata'
-        manifests:
-          type: object
-          description: A collection of package manifests, which are a collection of related dependencies declared in a file or representing a logical group of dependencies.
-          additionalProperties:
-            $ref: '#/components/schemas/manifest'
-        scanned:
+        relationship:
           type: string
-          format: date-time
-          description: The time at which the snapshot was scanned.
-          example: '2020-06-13T14:52:50-05:00'
-      required:
-      - detector
-      - version
-      - ref
-      - sha
-      - job
-      - scanned
+          description: A notation of whether a dependency is requested directly by this manifest or is a dependency of another dependency.
+          example: direct
+          enum:
+          - direct
+          - indirect
+        scope:
+          type: string
+          description: A notation of whether the dependency is required for the primary build artifact (runtime) or is only used for development. Future versions of this specification may allow for more granular scopes.
+          example: runtime
+          enum:
+          - runtime
+          - development
+        dependencies:
+          type: array
+          description: Array of package-url (PURLs) of direct child dependencies.
+          example: '@actions/http-client'
+          items:
+            type: string
       additionalProperties: false
     dependency-graph-diff:
       title: Dependency Graph Diff
@@ -666,12 +535,145 @@ components:
       required:
       - name
       additionalProperties: false
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    metadata:
+      title: metadata
+      description: User-defined metadata to store domain-specific information limited to 8 keys with scalar values.
+      type: object
+      maxProperties: 8
+      additionalProperties:
+        anyOf:
+        - type: string
+        - type: number
+        - type: boolean
+    snapshot:
+      title: snapshot
+      description: Create a new snapshot of a repository's dependencies.
+      type: object
+      properties:
+        version:
+          description: The version of the repository snapshot submission.
+          type: integer
+          example: 42
+        job:
+          type: object
+          properties:
+            id:
+              type: string
+              description: The external ID of the job.
+              example: 5622a2b0-63f6-4732-8c34-a1ab27e102a11
+            correlator:
+              type: string
+              description: Correlator provides a key that is used to group snapshots submitted over time. Only the "latest" submitted snapshot for a given combination of `job.correlator` and `detector.name` will be considered when calculating a repository's current dependencies. Correlator should be as unique as it takes to distinguish all detection runs for a given "wave" of CI workflow you run. If you're using GitHub Actions, a good default value for this could be the environment variables GITHUB_WORKFLOW and GITHUB_JOB concatenated together. If you're using a build matrix, then you'll also need to add additional key(s) to distinguish between each submission inside a matrix variation.
+              example: yourworkflowname_yourjobname
+            html_url:
+              type: string
+              description: The url for the job.
+              example: http://example.com/build
+          required:
+          - id
+          - correlator
+          additionalProperties: false
+        sha:
+          description: 'The commit SHA associated with this dependency snapshot. Maximum length: 40 characters.'
+          type: string
+          example: ddc951f4b1293222421f2c8df679786153acf689
+          minLength: 40
+          maxLength: 40
+        ref:
+          description: The repository branch that triggered this snapshot.
+          type: string
+          pattern: ^refs/
+          example: refs/heads/main
+        detector:
+          type: object
+          description: A description of the detector used.
+          properties:
+            name:
+              type: string
+              description: The name of the detector used.
+              example: docker buildtime detector
+            version:
+              type: string
+              description: The version of the detector used.
+              example: 1.0.0
+            url:
+              type: string
+              description: The url of the detector used.
+              example: http://example.com/docker-buildtimer-detector
+          required:
+          - name
+          - version
+          - url
+          additionalProperties: false
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        manifests:
+          type: object
+          description: A collection of package manifests, which are a collection of related dependencies declared in a file or representing a logical group of dependencies.
+          additionalProperties:
+            $ref: '#/components/schemas/manifest'
+        scanned:
+          type: string
+          format: date-time
+          description: The time at which the snapshot was scanned.
+          example: '2020-06-13T14:52:50-05:00'
+      required:
+      - detector
+      - version
+      - ref
+      - sha
+      - job
+      - scanned
+      additionalProperties: false
+  responses:
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    dependency_review_forbidden:
+      description: Response if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
   parameters:
     manifest-path:
       name: name
       description: The full path, relative to the repository root, of the dependency manifest file.
       in: query
       required: false
+      schema:
+        type: string
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
       schema:
         type: string
     repo:
@@ -681,11 +683,9 @@ components:
       required: true
       schema:
         type: string
-    owner:
-      name: owner
-      description: The account owner of the repository. The name is not case sensitive.
-      in: path
-      required: true
+  headers:
+    link:
+      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
       schema:
         type: string
 externalDocs:
