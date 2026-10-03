@@ -85,32 +85,33 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
+  examples:
+    scim-enterprise-group-list:
+      value:
+        schemas:
+        - urn:ietf:params:scim:api:messages:2.0:ListResponse
+        totalResults: 1
+        Resources:
+        - schemas:
+          - urn:ietf:params:scim:schemas:core:2.0:Group
+          externalId: 8aa1a0c0-c4c3-4bc0-b4a5-2ef676900159
+          id: 927fa2c08dcb4a7fae9e
+          displayName: Engineering
+          members:
+          - value: 879db59-3bdf-4490-ad68-ab880a2694745
+            $+ref: https://api.github.localhost/scim/v2/Users/879db59-3bdf-4490-ad68-ab880a2694745
+            displayName: User 1
+          - value: 0db508eb-91e2-46e4-809c-30dcbda0c685
+            $+ref: https://api.github.localhost/scim/v2/Users/0db508eb-91e2-46e4-809c-30dcbda0c685
+            displayName: User 2
+          meta:
+            resourceType: Group
+            created: '2012-03-27T19:59:26.000Z'
+            lastModified: '2018-03-27T19:59:26.000Z'
+            location: https://api.github.localhost/scim/v2/Groups/927fa2c08dcb4a7fae9e
+        startIndex: 1
+        itemsPerPage: 20
   schemas:
-    meta:
-      type: object
-      description: The metadata associated with the creation/updates to the user.
-      required:
-      - resourceType
-      properties:
-        resourceType:
-          type: string
-          description: A type of a resource
-          enum:
-          - User
-          - Group
-          example: User
-        created:
-          type: string
-          description: A date and time when the user was created.
-          example: '2022-03-27T19:59:26.000Z'
-        lastModified:
-          type: string
-          description: A data and time when the user was last modified.
-          example: '2022-03-27T19:59:26.000Z'
-        location:
-          type: string
-          description: A URL location of an object
-          example: example_value
     scim-error:
       title: Scim Error
       description: Scim Error
@@ -143,41 +144,6 @@ components:
           type: array
           items:
             type: string
-    scim-enterprise-group-list:
-      type: object
-      required:
-      - schemas
-      - totalResults
-      - Resources
-      - startIndex
-      - itemsPerPage
-      properties:
-        schemas:
-          type: array
-          description: The URIs that are used to indicate the namespaces of the list SCIM schemas.
-          items:
-            type: string
-            enum:
-            - urn:ietf:params:scim:api:messages:2.0:ListResponse
-          example:
-          - urn:ietf:params:scim:api:messages:2.0:ListResponse
-        totalResults:
-          type: integer
-          description: Number of results found
-          example: 1
-        Resources:
-          type: array
-          description: Information about each provisioned group.
-          items:
-            $ref: '#/components/schemas/scim-enterprise-group-response'
-        startIndex:
-          type: integer
-          description: A starting index for the returned page
-          example: 1
-        itemsPerPage:
-          type: integer
-          description: Number of objects per page
-          example: 20
     scim-enterprise-group-response:
       allOf:
       - $ref: '#/components/schemas/group-response'
@@ -254,75 +220,67 @@ components:
                 type: string
                 description: The display name associated with the member
                 example: Monalisa Octocat
-  examples:
     scim-enterprise-group-list:
-      value:
+      type: object
+      required:
+      - schemas
+      - totalResults
+      - Resources
+      - startIndex
+      - itemsPerPage
+      properties:
         schemas:
-        - urn:ietf:params:scim:api:messages:2.0:ListResponse
-        totalResults: 1
+          type: array
+          description: The URIs that are used to indicate the namespaces of the list SCIM schemas.
+          items:
+            type: string
+            enum:
+            - urn:ietf:params:scim:api:messages:2.0:ListResponse
+          example:
+          - urn:ietf:params:scim:api:messages:2.0:ListResponse
+        totalResults:
+          type: integer
+          description: Number of results found
+          example: 1
         Resources:
-        - schemas:
-          - urn:ietf:params:scim:schemas:core:2.0:Group
-          externalId: 8aa1a0c0-c4c3-4bc0-b4a5-2ef676900159
-          id: 927fa2c08dcb4a7fae9e
-          displayName: Engineering
-          members:
-          - value: 879db59-3bdf-4490-ad68-ab880a2694745
-            $+ref: https://api.github.localhost/scim/v2/Users/879db59-3bdf-4490-ad68-ab880a2694745
-            displayName: User 1
-          - value: 0db508eb-91e2-46e4-809c-30dcbda0c685
-            $+ref: https://api.github.localhost/scim/v2/Users/0db508eb-91e2-46e4-809c-30dcbda0c685
-            displayName: User 2
-          meta:
-            resourceType: Group
-            created: '2012-03-27T19:59:26.000Z'
-            lastModified: '2018-03-27T19:59:26.000Z'
-            location: https://api.github.localhost/scim/v2/Groups/927fa2c08dcb4a7fae9e
-        startIndex: 1
-        itemsPerPage: 20
-  responses:
-    permission_denied:
-      description: Permission denied
-    scim_internal_error:
-      description: Internal server error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    scim_bad_request:
-      description: Bad request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    scim_too_many_requests:
-      description: Too many requests
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    authorization_failure:
-      description: Authorization failure
+          type: array
+          description: Information about each provisioned group.
+          items:
+            $ref: '#/components/schemas/scim-enterprise-group-response'
+        startIndex:
+          type: integer
+          description: A starting index for the returned page
+          example: 1
+        itemsPerPage:
+          type: integer
+          description: Number of objects per page
+          example: 20
+    meta:
+      type: object
+      description: The metadata associated with the creation/updates to the user.
+      required:
+      - resourceType
+      properties:
+        resourceType:
+          type: string
+          description: A type of a resource
+          enum:
+          - User
+          - Group
+          example: User
+        created:
+          type: string
+          description: A date and time when the user was created.
+          example: '2022-03-27T19:59:26.000Z'
+        lastModified:
+          type: string
+          description: A data and time when the user was last modified.
+          example: '2022-03-27T19:59:26.000Z'
+        location:
+          type: string
+          description: A URL location of an object
+          example: example_value
   parameters:
-    start-index:
-      name: startIndex
-      description: 'Used for pagination: the starting index of the first result to return when paginating through values.'
-      in: query
-      required: false
-      schema:
-        type: integer
-        default: 1
-        format: int32
-        example: 1
     excluded-attributes:
       name: excludedAttributes
       description: Excludes the specified attribute from being returned in the results. Using this parameter can speed up response time.
@@ -341,6 +299,48 @@ components:
         default: 30
         format: int32
         example: 1
+    start-index:
+      name: startIndex
+      description: 'Used for pagination: the starting index of the first result to return when paginating through values.'
+      in: query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        format: int32
+        example: 1
+  responses:
+    scim_internal_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    authorization_failure:
+      description: Authorization failure
+    scim_too_many_requests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    scim_bad_request:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    permission_denied:
+      description: Permission denied
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/

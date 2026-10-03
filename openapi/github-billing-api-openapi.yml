@@ -122,23 +122,21 @@ components:
       required:
       - user_login
       - last_pushed_date
-    basic-error:
-      title: Basic Error
-      description: Basic Error
+    advanced-security-active-committers:
       type: object
       properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
+        total_advanced_security_committers:
+          type: integer
+          example: 25
+        total_count:
+          type: integer
+          example: 2
+        repositories:
+          type: array
+          items:
+            $ref: '#/components/schemas/advanced-security-active-committers-repository'
+      required:
+      - repositories
     advanced-security-active-committers-repository:
       type: object
       properties:
@@ -156,28 +154,23 @@ components:
       - name
       - advanced_security_committers
       - advanced_security_committers_breakdown
-    advanced-security-active-committers:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
       type: object
       properties:
-        total_advanced_security_committers:
-          type: integer
-          example: 25
-        total_count:
-          type: integer
-          example: 2
-        repositories:
-          type: array
-          items:
-            $ref: '#/components/schemas/advanced-security-active-committers-repository'
-      required:
-      - repositories
-  responses:
-    code_scanning_forbidden_read:
-      description: Response if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
   parameters:
     per-page:
       name: per_page
@@ -186,16 +179,16 @@ components:
       schema:
         type: integer
         default: 30
-    enterprise:
-      name: enterprise
-      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
       in: path
       required: true
       schema:
         type: string
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
+    enterprise:
+      name: enterprise
+      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
       in: path
       required: true
       schema:
@@ -225,6 +218,13 @@ components:
           advanced_security_committers_breakdown:
           - user_login: octokitten
             last_pushed_date: '2021-10-26'
+  responses:
+    code_scanning_forbidden_read:
+      description: Response if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/
