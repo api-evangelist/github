@@ -90,6 +90,102 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
+  responses:
+    not_modified:
+      description: Not modified
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  headers:
+    x-rate-limit-reset:
+      example: 1590701888
+      schema:
+        type: integer
+        format: timestamp
+    x-rate-limit-limit:
+      example: 5000
+      schema:
+        type: integer
+    x-rate-limit-remaining:
+      example: 4999
+      schema:
+        type: integer
+  schemas:
+    rate-limit-overview:
+      title: Rate Limit Overview
+      description: Rate Limit Overview
+      type: object
+      properties:
+        resources:
+          type: object
+          properties:
+            core:
+              $ref: '#/components/schemas/rate-limit'
+            graphql:
+              $ref: '#/components/schemas/rate-limit'
+            search:
+              $ref: '#/components/schemas/rate-limit'
+            code_search:
+              $ref: '#/components/schemas/rate-limit'
+            source_import:
+              $ref: '#/components/schemas/rate-limit'
+            integration_manifest:
+              $ref: '#/components/schemas/rate-limit'
+            code_scanning_upload:
+              $ref: '#/components/schemas/rate-limit'
+            actions_runner_registration:
+              $ref: '#/components/schemas/rate-limit'
+            scim:
+              $ref: '#/components/schemas/rate-limit'
+          required:
+          - core
+          - search
+        rate:
+          $ref: '#/components/schemas/rate-limit'
+      required:
+      - rate
+      - resources
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    rate-limit:
+      title: Rate Limit
+      type: object
+      properties:
+        limit:
+          type: integer
+          example: 42
+        remaining:
+          type: integer
+          example: 42
+        reset:
+          type: integer
+          example: 42
+        used:
+          type: integer
+          example: 42
+      required:
+      - limit
+      - remaining
+      - reset
+      - used
   examples:
     rate-limit-overview:
       value:
@@ -149,102 +245,6 @@ components:
           used: 1
           remaining: 4999
           reset: 1372700873
-  headers:
-    x-rate-limit-remaining:
-      example: 4999
-      schema:
-        type: integer
-    x-rate-limit-limit:
-      example: 5000
-      schema:
-        type: integer
-    x-rate-limit-reset:
-      example: 1590701888
-      schema:
-        type: integer
-        format: timestamp
-  responses:
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_modified:
-      description: Not modified
-  schemas:
-    rate-limit:
-      title: Rate Limit
-      type: object
-      properties:
-        limit:
-          type: integer
-          example: 42
-        remaining:
-          type: integer
-          example: 42
-        reset:
-          type: integer
-          example: 42
-        used:
-          type: integer
-          example: 42
-      required:
-      - limit
-      - remaining
-      - reset
-      - used
-    rate-limit-overview:
-      title: Rate Limit Overview
-      description: Rate Limit Overview
-      type: object
-      properties:
-        resources:
-          type: object
-          properties:
-            core:
-              $ref: '#/components/schemas/rate-limit'
-            graphql:
-              $ref: '#/components/schemas/rate-limit'
-            search:
-              $ref: '#/components/schemas/rate-limit'
-            code_search:
-              $ref: '#/components/schemas/rate-limit'
-            source_import:
-              $ref: '#/components/schemas/rate-limit'
-            integration_manifest:
-              $ref: '#/components/schemas/rate-limit'
-            code_scanning_upload:
-              $ref: '#/components/schemas/rate-limit'
-            actions_runner_registration:
-              $ref: '#/components/schemas/rate-limit'
-            scim:
-              $ref: '#/components/schemas/rate-limit'
-          required:
-          - core
-          - search
-        rate:
-          $ref: '#/components/schemas/rate-limit'
-      required:
-      - rate
-      - resources
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/

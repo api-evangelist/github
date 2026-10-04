@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-scim-enterprise-group-list-schema.json",
+  "title": "scim-enterprise-group-list",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-enterprise-admin-scim-api-openapi.yml#/components/schemas/scim-enterprise-group-list",
+  "type": "object",
+  "required": [
+    "schemas",
+    "totalResults",
+    "Resources",
+    "startIndex",
+    "itemsPerPage"
+  ],
+  "properties": {
+    "schemas": {
+      "type": "array",
+      "description": "The URIs that are used to indicate the namespaces of the list SCIM schemas.",
+      "items": {
+        "type": "string",
+        "enum": [
+          "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+        ]
+      }
+    },
+    "totalResults": {
+      "type": "integer",
+      "description": "Number of results found"
+    },
+    "Resources": {
+      "type": "array",
+      "description": "Information about each provisioned group.",
+      "items": {
+        "$ref": "#/$defs/scim-enterprise-group-response"
+      }
+    },
+    "startIndex": {
+      "type": "integer",
+      "description": "A starting index for the returned page"
+    },
+    "itemsPerPage": {
+      "type": "integer",
+      "description": "Number of objects per page"
+    }
+  },
+  "$defs": {
+    "group-response": {
+      "type": "object",
+      "required": [
+        "schemas"
+      ],
+      "properties": {
+        "schemas": {
+          "type": "array",
+          "description": "The URIs that are used to indicate the namespaces of the SCIM schemas.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "urn:ietf:params:scim:schemas:core:2.0:Group",
+              "urn:ietf:params:scim:api:messages:2.0:ListResponse"
+            ]
+          }
+        },
+        "externalId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A unique identifier for the resource as defined by the provisioning client."
+        },
+        "displayName": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "A human-readable name for a security group."
+        },
+        "members": {
+          "type": "array",
+          "description": "The group members.",
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "$ref"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "description": "The local unique identifier for the member"
+              },
+              "$ref": {
+                "type": "string"
+              },
+              "display": {
+                "type": "string",
+                "description": "The display name associated with the member"
+              }
+            }
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "description": "The metadata associated with the creation/updates to the user.",
+      "required": [
+        "resourceType"
+      ],
+      "properties": {
+        "resourceType": {
+          "type": "string",
+          "description": "A type of a resource",
+          "enum": [
+            "User",
+            "Group"
+          ]
+        },
+        "created": {
+          "type": "string",
+          "description": "A date and time when the user was created."
+        },
+        "lastModified": {
+          "type": "string",
+          "description": "A data and time when the user was last modified."
+        },
+        "location": {
+          "type": "string",
+          "description": "A URL location of an object"
+        }
+      }
+    },
+    "scim-enterprise-group-response": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/group-response"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The internally generated id for the group object."
+            },
+            "members": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "$ref": {
+                    "type": "string"
+                  },
+                  "display": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "The security group members."
+            },
+            "meta": {
+              "$ref": "#/$defs/meta"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

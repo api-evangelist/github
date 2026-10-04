@@ -1,0 +1,357 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-pending-deployment-schema.json",
+  "title": "Pending Deployment",
+  "description": "Details of a deployment that is waiting for protection rules to pass",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-actions-api-openapi.yml#/components/schemas/pending-deployment",
+  "type": "object",
+  "properties": {
+    "environment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "The id of the environment.",
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the environment.",
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "html_url": {
+          "type": "string"
+        }
+      }
+    },
+    "wait_timer": {
+      "type": "integer",
+      "description": "The set duration of the wait timer"
+    },
+    "wait_timer_started_at": {
+      "description": "The time that the wait timer began.",
+      "format": "date-time",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "current_user_can_approve": {
+      "description": "Whether the currently authenticated user can approve the deployment",
+      "type": "boolean"
+    },
+    "reviewers": {
+      "type": "array",
+      "description": "The people or teams that may approve jobs that reference the environment. You can list up to six users or teams as reviewers. The reviewers must have at least read access to the repository. Only one of the required reviewers needs to approve the job for it to proceed.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/$defs/deployment-reviewer-type"
+          },
+          "reviewer": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/simple-user"
+              },
+              {
+                "$ref": "#/$defs/team"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "environment",
+    "wait_timer",
+    "wait_timer_started_at",
+    "current_user_can_approve",
+    "reviewers"
+  ],
+  "$defs": {
+    "deployment-reviewer-type": {
+      "type": "string",
+      "description": "The type of reviewer.",
+      "enum": [
+        "User",
+        "Team"
+      ]
+    },
+    "nullable-team-simple": {
+      "title": "Team Simple",
+      "description": "Groups of organization members that gives permissions on specified repositories.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the team",
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "url": {
+          "description": "URL for the team",
+          "type": "string",
+          "format": "uri"
+        },
+        "members_url": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the team",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the team",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "permission": {
+          "description": "Permission that the team will have for its repositories",
+          "type": "string"
+        },
+        "privacy": {
+          "description": "The level of privacy this team should have",
+          "type": "string"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repositories_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "ldap_dn": {
+          "description": "Distinguished Name (DN) that team maps to within LDAP environment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "node_id",
+        "url",
+        "members_url",
+        "name",
+        "description",
+        "permission",
+        "html_url",
+        "repositories_url",
+        "slug"
+      ]
+    },
+    "simple-user": {
+      "title": "Simple User",
+      "description": "A GitHub user.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "gravatar_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "following_url": {
+          "type": "string"
+        },
+        "gists_url": {
+          "type": "string"
+        },
+        "starred_url": {
+          "type": "string"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "events_url": {
+          "type": "string"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "site_admin": {
+          "type": "boolean"
+        },
+        "starred_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "events_url",
+        "followers_url",
+        "following_url",
+        "gists_url",
+        "gravatar_id",
+        "html_url",
+        "id",
+        "node_id",
+        "login",
+        "organizations_url",
+        "received_events_url",
+        "repos_url",
+        "site_admin",
+        "starred_url",
+        "subscriptions_url",
+        "type",
+        "url"
+      ]
+    },
+    "team": {
+      "title": "Team",
+      "description": "Groups of organization members that gives permissions on specified repositories.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "privacy": {
+          "type": "string"
+        },
+        "permission": {
+          "type": "string"
+        },
+        "permissions": {
+          "type": "object",
+          "properties": {
+            "pull": {
+              "type": "boolean"
+            },
+            "triage": {
+              "type": "boolean"
+            },
+            "push": {
+              "type": "boolean"
+            },
+            "maintain": {
+              "type": "boolean"
+            },
+            "admin": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "pull",
+            "triage",
+            "push",
+            "maintain",
+            "admin"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "members_url": {
+          "type": "string"
+        },
+        "repositories_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "parent": {
+          "$ref": "#/$defs/nullable-team-simple"
+        }
+      },
+      "required": [
+        "id",
+        "node_id",
+        "url",
+        "members_url",
+        "name",
+        "description",
+        "permission",
+        "html_url",
+        "repositories_url",
+        "slug",
+        "parent"
+      ]
+    }
+  }
+}

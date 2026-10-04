@@ -2226,360 +2226,168 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
+  parameters:
+    hook-id:
+      name: hook_id
+      description: The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery.
+      in: path
+      required: true
+      schema:
+        type: integer
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    security-product:
+      name: security_product
+      in: path
+      description: The security feature to enable or disable.
+      required: true
+      schema:
+        type: string
+        enum:
+        - dependency_graph
+        - dependabot_alerts
+        - dependabot_security_updates
+        - advanced_security
+        - code_scanning_default_setup
+        - secret_scanning
+        - secret_scanning_push_protection
+    delivery-id:
+      name: delivery_id
+      in: path
+      required: true
+      schema:
+        type: integer
+    org-security-product-enablement:
+      name: enablement
+      in: path
+      description: 'The action to take.
+
+
+        `enable_all` means to enable the specified security feature for all repositories in the organization.
+
+        `disable_all` means to disable the specified security feature for all repositories in the organization.'
+      required: true
+      schema:
+        type: string
+        enum:
+        - enable_all
+        - disable_all
+    audit-log-order:
+      name: order
+      description: 'The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.
+
+
+        The default is `desc`.'
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - desc
+        - asc
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    cursor:
+      name: cursor
+      description: 'Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors.'
+      in: query
+      required: false
+      schema:
+        type: string
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+    role-id:
+      name: role_id
+      description: The unique identifier of the role.
+      in: path
+      required: true
+      schema:
+        type: integer
+    audit-log-phrase:
+      name: phrase
+      description: A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log).
+      in: query
+      required: false
+      schema:
+        type: string
+    audit-log-before:
+      name: before
+      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events before this cursor.
+      in: query
+      required: false
+      schema:
+        type: string
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    audit-log-include:
+      name: include
+      description: 'The event types to include:
+
+
+        - `web` - returns web (non-Git) events.
+
+        - `git` - returns Git events.
+
+        - `all` - returns both web and Git events.
+
+
+        The default is `web`.'
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - web
+        - git
+        - all
+    audit-log-after:
+      name: after
+      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events after this cursor.
+      in: query
+      required: false
+      schema:
+        type: string
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+    since-org:
+      name: since
+      description: An organization ID. Only return organizations with an ID greater than this ID.
+      in: query
+      required: false
+      schema:
+        type: integer
   examples:
-    installation-paginated:
+    webhook-config:
       value:
-        total_count: 1
-        installations:
-        - id: 25381
-          account:
-            login: octo-org
-            id: 6811672
-            node_id: MDEyOk9yZ2FuaXphdGlvbjY4MTE2NzI=
-            avatar_url: https://avatars3.githubusercontent.com/u/6811672?v=4
-            gravatar_id: ''
-            url: https://api.github.com/users/octo-org
-            html_url: https://github.com/octo-org
-            followers_url: https://api.github.com/users/octo-org/followers
-            following_url: https://api.github.com/users/octo-org/following{/other_user}
-            gists_url: https://api.github.com/users/octo-org/gists{/gist_id}
-            starred_url: https://api.github.com/users/octo-org/starred{/owner}{/repo}
-            subscriptions_url: https://api.github.com/users/octo-org/subscriptions
-            organizations_url: https://api.github.com/users/octo-org/orgs
-            repos_url: https://api.github.com/users/octo-org/repos
-            events_url: https://api.github.com/users/octo-org/events{/privacy}
-            received_events_url: https://api.github.com/users/octo-org/received_events
-            type: Organization
-            site_admin: false
-          repository_selection: selected
-          access_tokens_url: https://api.github.com/app/installations/25381/access_tokens
-          repositories_url: https://api.github.com/installation/repositories
-          html_url: https://github.com/organizations/octo-org/settings/installations/25381
-          app_id: 2218
-          target_id: 6811672
-          target_type: Organization
-          permissions:
-            deployments: write
-            metadata: read
-            pull_requests: read
-            statuses: read
-          events:
-          - deployment
-          - deployment_status
-          created_at: '2017-05-16T08:47:09.000-07:00'
-          updated_at: '2017-06-06T11:23:23.000-07:00'
-          single_file_name: config.yml
-          has_multiple_single_files: true
-          single_file_paths:
-          - config.yml
-          - .github/issue_TEMPLATE.md
-          app_slug: github-actions
-          suspended_at: null
-          suspended_by: null
-    announcement:
-      summary: Announcement banner
-      value:
-        announcement: Very **important** announcement about _something_.
-        expires_at: '2021-01-01T00:00:00.000+00:00'
-        user_dismissible: false
-    org-membership-response-if-user-has-an-active-admin-membership-with-organization:
-      summary: Response if user has an active admin membership with organization
-      value:
-        url: https://api.github.com/orgs/octocat/memberships/defunkt
-        state: active
-        role: admin
-        organization_url: https://api.github.com/orgs/octocat
-        organization:
-          login: github
-          id: 1
-          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-          url: https://api.github.com/orgs/github
-          repos_url: https://api.github.com/orgs/github/repos
-          events_url: https://api.github.com/orgs/github/events
-          hooks_url: https://api.github.com/orgs/github/hooks
-          issues_url: https://api.github.com/orgs/github/issues
-          members_url: https://api.github.com/orgs/github/members{/member}
-          public_members_url: https://api.github.com/orgs/github/public_members{/member}
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          description: A great organization
-        user:
-          login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
-    simple-user-items:
-      value:
-      - login: octocat
-        id: 1
-        node_id: MDQ6VXNlcjE=
-        avatar_url: https://github.com/images/error/octocat_happy.gif
-        gravatar_id: ''
-        url: https://api.github.com/users/octocat
-        html_url: https://github.com/octocat
-        followers_url: https://api.github.com/users/octocat/followers
-        following_url: https://api.github.com/users/octocat/following{/other_user}
-        gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url: https://api.github.com/users/octocat/subscriptions
-        organizations_url: https://api.github.com/users/octocat/orgs
-        repos_url: https://api.github.com/users/octocat/repos
-        events_url: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url: https://api.github.com/users/octocat/received_events
-        type: User
-        site_admin: false
-    hook-delivery-items:
-      value:
-      - id: 12345678
-        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-        delivered_at: '2019-06-03T00:57:16Z'
-        redelivery: false
-        duration: 0.27
-        status: OK
-        status_code: 200
-        event: issues
-        action: opened
-        installation_id: 123
-        repository_id: 456
-      - id: 123456789
-        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-        delivered_at: '2019-06-04T00:57:16Z'
-        redelivery: true
-        duration: 0.28
-        status: OK
-        status_code: 200
-        event: issues
-        action: opened
-        installation_id: 123
-        repository_id: 456
-    org-hook-items:
-      value:
-      - id: 1
-        url: https://api.github.com/orgs/octocat/hooks/1
-        ping_url: https://api.github.com/orgs/octocat/hooks/1/pings
-        deliveries_url: https://api.github.com/orgs/octocat/hooks/1/deliveries
-        name: web
-        events:
-        - push
-        - pull_request
-        active: true
-        config:
-          url: http://example.com
-          content_type: json
-        updated_at: '2011-09-06T20:39:23Z'
-        created_at: '2011-09-06T17:26:27Z'
-        type: Organization
-    organization-full:
-      value:
-        login: github
-        id: 1
-        node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-        url: https://api.github.com/orgs/github
-        repos_url: https://api.github.com/orgs/github/repos
-        events_url: https://api.github.com/orgs/github/events
-        hooks_url: https://api.github.com/orgs/github/hooks
-        issues_url: https://api.github.com/orgs/github/issues
-        members_url: https://api.github.com/orgs/github/members{/member}
-        public_members_url: https://api.github.com/orgs/github/public_members{/member}
-        avatar_url: https://github.com/images/error/octocat_happy.gif
-        description: A great organization
-        name: github
-        company: GitHub
-        blog: https://github.com/blog
-        location: San Francisco
-        email: octocat@github.com
-        twitter_username: github
-        is_verified: true
-        has_organization_projects: true
-        has_repository_projects: true
-        public_repos: 2
-        public_gists: 1
-        followers: 20
-        following: 0
-        html_url: https://github.com/octocat
-        created_at: '2008-01-14T04:33:35Z'
-        type: Organization
-        total_private_repos: 100
-        owned_private_repos: 100
-        private_gists: 81
-        disk_usage: 10000
-        collaborators: 8
-        billing_email: mona@github.com
-        plan:
-          name: Medium
-          space: 400
-          private_repos: 20
-          filled_seats: 4
-          seats: 5
-        default_repository_permission: read
-        members_can_create_repositories: true
-        two_factor_requirement_enabled: true
-        members_allowed_repository_creation_type: all
-        members_can_create_public_repositories: false
-        members_can_create_private_repositories: false
-        members_can_create_internal_repositories: false
-        members_can_create_pages: true
-        members_can_create_public_pages: true
-        members_can_create_private_pages: true
-        members_can_fork_private_repositories: false
-        web_commit_signoff_required: false
-        updated_at: '2014-03-03T18:58:10Z'
-        dependency_graph_enabled_for_new_repositories: false
-        dependabot_alerts_enabled_for_new_repositories: false
-        dependabot_security_updates_enabled_for_new_repositories: false
-        advanced_security_enabled_for_new_repositories: false
-        secret_scanning_enabled_for_new_repositories: false
-        secret_scanning_push_protection_enabled_for_new_repositories: false
-        secret_scanning_push_protection_custom_link: https://github.com/octo-org/octo-repo/blob/main/im-blocked.md
-        secret_scanning_push_protection_custom_link_enabled: false
-    organization-custom-repository-role-example:
-      value:
-        id: 8030
-        name: Security Engineer
-        description: Able to contribute code and maintain the security pipeline
-        base_role: maintain
-        permissions:
-        - delete_alerts_code_scanning
-        organization:
-          login: github
-          id: 1
-          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-          url: https://api.github.com/orgs/github
-          repos_url: https://api.github.com/orgs/github/repos
-          events_url: https://api.github.com/orgs/github/events
-          hooks_url: https://api.github.com/orgs/github/hooks
-          issues_url: https://api.github.com/orgs/github/issues
-          members_url: https://api.github.com/orgs/github/members{/member}
-          public_members_url: https://api.github.com/orgs/github/public_members{/member}
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          description: A great organization
-        created_at: '2022-07-04T22:19:11Z'
-        updated_at: '2022-07-04T22:20:11Z'
-    org-membership-items:
-      value:
-      - url: https://api.github.com/orgs/octocat/memberships/defunkt
-        state: active
-        role: admin
-        organization_url: https://api.github.com/orgs/octocat
-        organization:
-          login: github
-          id: 1
-          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-          url: https://api.github.com/orgs/github
-          repos_url: https://api.github.com/orgs/github/repos
-          events_url: https://api.github.com/orgs/github/events
-          hooks_url: https://api.github.com/orgs/github/hooks
-          issues_url: https://api.github.com/orgs/github/issues
-          members_url: https://api.github.com/orgs/github/members{/member}
-          public_members_url: https://api.github.com/orgs/github/public_members{/member}
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          description: A great organization
-        user:
-          login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
-      - url: https://api.github.com/orgs/invitocat/memberships/defunkt
-        state: pending
-        role: admin
-        organization_url: https://api.github.com/orgs/invitocat
-        organization:
-          login: github
-          id: 1
-          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-          url: https://api.github.com/orgs/github
-          repos_url: https://api.github.com/orgs/github/repos
-          events_url: https://api.github.com/orgs/github/events
-          hooks_url: https://api.github.com/orgs/github/hooks
-          issues_url: https://api.github.com/orgs/github/issues
-          members_url: https://api.github.com/orgs/github/members{/member}
-          public_members_url: https://api.github.com/orgs/github/public_members{/member}
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          description: A great organization
-        user:
-          login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
-    org-membership:
-      value:
-        url: https://api.github.com/orgs/invitocat/memberships/defunkt
-        state: pending
-        role: admin
-        organization_url: https://api.github.com/orgs/invitocat
-        organization:
-          login: github
-          id: 1
-          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-          url: https://api.github.com/orgs/github
-          repos_url: https://api.github.com/orgs/github/repos
-          events_url: https://api.github.com/orgs/github/events
-          hooks_url: https://api.github.com/orgs/github/hooks
-          issues_url: https://api.github.com/orgs/github/issues
-          members_url: https://api.github.com/orgs/github/members{/member}
-          public_members_url: https://api.github.com/orgs/github/public_members{/member}
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          description: A great organization
-        user:
-          login: octocat
-          id: 1
-          node_id: MDQ6VXNlcjE=
-          avatar_url: https://github.com/images/error/octocat_happy.gif
-          gravatar_id: ''
-          url: https://api.github.com/users/octocat
-          html_url: https://github.com/octocat
-          followers_url: https://api.github.com/users/octocat/followers
-          following_url: https://api.github.com/users/octocat/following{/other_user}
-          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
-          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/octocat/subscriptions
-          organizations_url: https://api.github.com/users/octocat/orgs
-          repos_url: https://api.github.com/users/octocat/repos
-          events_url: https://api.github.com/users/octocat/events{/privacy}
-          received_events_url: https://api.github.com/users/octocat/received_events
-          type: User
-          site_admin: false
+        content_type: json
+        insecure_ssl: '0'
+        secret: '********'
+        url: https://example.com/webhook
     audit-log:
       value:
       - actor_ip: 88.123.45.123
@@ -2700,21 +2508,77 @@ components:
           actor_session: 2
           pull_request_id: 1
           category_type: Resource Management
-    repository-fine-grained-permission-example:
+    announcement:
+      summary: Announcement banner
       value:
-      - name: add_assignee
-        description: Assign or remove a user
-      - name: remove_assignee
-        description: Remove an assigned user
-      - name: add_label
-        description: Add or remove a label
-    webhook-config:
+        announcement: Very **important** announcement about _something_.
+        expires_at: '2021-01-01T00:00:00.000+00:00'
+        user_dismissible: false
+    organization-full:
       value:
-        content_type: json
-        insecure_ssl: '0'
-        secret: '********'
-        url: https://example.com/webhook
-    org-membership-2:
+        login: github
+        id: 1
+        node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+        url: https://api.github.com/orgs/github
+        repos_url: https://api.github.com/orgs/github/repos
+        events_url: https://api.github.com/orgs/github/events
+        hooks_url: https://api.github.com/orgs/github/hooks
+        issues_url: https://api.github.com/orgs/github/issues
+        members_url: https://api.github.com/orgs/github/members{/member}
+        public_members_url: https://api.github.com/orgs/github/public_members{/member}
+        avatar_url: https://github.com/images/error/octocat_happy.gif
+        description: A great organization
+        name: github
+        company: GitHub
+        blog: https://github.com/blog
+        location: San Francisco
+        email: octocat@github.com
+        twitter_username: github
+        is_verified: true
+        has_organization_projects: true
+        has_repository_projects: true
+        public_repos: 2
+        public_gists: 1
+        followers: 20
+        following: 0
+        html_url: https://github.com/octocat
+        created_at: '2008-01-14T04:33:35Z'
+        type: Organization
+        total_private_repos: 100
+        owned_private_repos: 100
+        private_gists: 81
+        disk_usage: 10000
+        collaborators: 8
+        billing_email: mona@github.com
+        plan:
+          name: Medium
+          space: 400
+          private_repos: 20
+          filled_seats: 4
+          seats: 5
+        default_repository_permission: read
+        members_can_create_repositories: true
+        two_factor_requirement_enabled: true
+        members_allowed_repository_creation_type: all
+        members_can_create_public_repositories: false
+        members_can_create_private_repositories: false
+        members_can_create_internal_repositories: false
+        members_can_create_pages: true
+        members_can_create_public_pages: true
+        members_can_create_private_pages: true
+        members_can_fork_private_repositories: false
+        web_commit_signoff_required: false
+        updated_at: '2014-03-03T18:58:10Z'
+        dependency_graph_enabled_for_new_repositories: false
+        dependabot_alerts_enabled_for_new_repositories: false
+        dependabot_security_updates_enabled_for_new_repositories: false
+        advanced_security_enabled_for_new_repositories: false
+        secret_scanning_enabled_for_new_repositories: false
+        secret_scanning_push_protection_enabled_for_new_repositories: false
+        secret_scanning_push_protection_custom_link: https://github.com/octo-org/octo-repo/blob/main/im-blocked.md
+        secret_scanning_push_protection_custom_link_enabled: false
+    org-membership-response-if-user-has-an-active-admin-membership-with-organization:
+      summary: Response if user has an active admin membership with organization
       value:
         url: https://api.github.com/orgs/octocat/memberships/defunkt
         state: active
@@ -2752,50 +2616,111 @@ components:
           received_events_url: https://api.github.com/users/octocat/received_events
           type: User
           site_admin: false
-    organization-simple-items:
+    simple-user-items:
       value:
-      - login: github
+      - login: octocat
         id: 1
-        node_id: MDEyOk9yZ2FuaXphdGlvbjE=
-        url: https://api.github.com/orgs/github
-        repos_url: https://api.github.com/orgs/github/repos
-        events_url: https://api.github.com/orgs/github/events
-        hooks_url: https://api.github.com/orgs/github/hooks
-        issues_url: https://api.github.com/orgs/github/issues
-        members_url: https://api.github.com/orgs/github/members{/member}
-        public_members_url: https://api.github.com/orgs/github/public_members{/member}
+        node_id: MDQ6VXNlcjE=
         avatar_url: https://github.com/images/error/octocat_happy.gif
-        description: A great organization
-    team-items:
+        gravatar_id: ''
+        url: https://api.github.com/users/octocat
+        html_url: https://github.com/octocat
+        followers_url: https://api.github.com/users/octocat/followers
+        following_url: https://api.github.com/users/octocat/following{/other_user}
+        gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url: https://api.github.com/users/octocat/subscriptions
+        organizations_url: https://api.github.com/users/octocat/orgs
+        repos_url: https://api.github.com/users/octocat/repos
+        events_url: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url: https://api.github.com/users/octocat/received_events
+        type: User
+        site_admin: false
+    hook-delivery:
       value:
-      - id: 1
-        node_id: MDQ6VGVhbTE=
-        url: https://api.github.com/teams/1
-        html_url: https://github.com/orgs/github/teams/justice-league
-        name: Justice League
-        slug: justice-league
-        description: A great team.
-        privacy: closed
-        permission: admin
-        members_url: https://api.github.com/teams/1/members{/member}
-        repositories_url: https://api.github.com/teams/1/repos
-        parent: null
-    org-hook-2:
+        id: 12345678
+        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+        delivered_at: '2019-06-03T00:57:16Z'
+        redelivery: false
+        duration: 0.27
+        status: OK
+        status_code: 200
+        event: issues
+        action: opened
+        installation_id: 123
+        repository_id: 456
+        url: https://www.example.com
+        request:
+          headers:
+            X-GitHub-Delivery: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+            X-Hub-Signature-256: sha256=6dcb09b5b57875f334f61aebed695e2e4193db5e
+            Accept: '*/*'
+            X-GitHub-Hook-ID: '42'
+            User-Agent: GitHub-Hookshot/b8c71d8
+            X-GitHub-Event: issues
+            X-GitHub-Hook-Installation-Target-ID: '123'
+            X-GitHub-Hook-Installation-Target-Type: repository
+            content-type: application/json
+            X-Hub-Signature: sha1=a84d88e7554fc1fa21bcbc4efae3c782a70d2b9d
+          payload:
+            action: opened
+            issue:
+              body: foo
+            repository:
+              id: 123
+        response:
+          headers:
+            Content-Type: text/html;charset=utf-8
+          payload: ok
+    installation-paginated:
       value:
-        id: 1
-        url: https://api.github.com/orgs/octocat/hooks/1
-        ping_url: https://api.github.com/orgs/octocat/hooks/1/pings
-        deliveries_url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678/deliveries
-        name: web
-        events:
-        - pull_request
-        active: true
-        config:
-          url: http://example.com
-          content_type: json
-        updated_at: '2011-09-06T20:39:23Z'
-        created_at: '2011-09-06T17:26:27Z'
-        type: Organization
+        total_count: 1
+        installations:
+        - id: 25381
+          account:
+            login: octo-org
+            id: 6811672
+            node_id: MDEyOk9yZ2FuaXphdGlvbjY4MTE2NzI=
+            avatar_url: https://avatars3.githubusercontent.com/u/6811672?v=4
+            gravatar_id: ''
+            url: https://api.github.com/users/octo-org
+            html_url: https://github.com/octo-org
+            followers_url: https://api.github.com/users/octo-org/followers
+            following_url: https://api.github.com/users/octo-org/following{/other_user}
+            gists_url: https://api.github.com/users/octo-org/gists{/gist_id}
+            starred_url: https://api.github.com/users/octo-org/starred{/owner}{/repo}
+            subscriptions_url: https://api.github.com/users/octo-org/subscriptions
+            organizations_url: https://api.github.com/users/octo-org/orgs
+            repos_url: https://api.github.com/users/octo-org/repos
+            events_url: https://api.github.com/users/octo-org/events{/privacy}
+            received_events_url: https://api.github.com/users/octo-org/received_events
+            type: Organization
+            site_admin: false
+          repository_selection: selected
+          access_tokens_url: https://api.github.com/app/installations/25381/access_tokens
+          repositories_url: https://api.github.com/installation/repositories
+          html_url: https://github.com/organizations/octo-org/settings/installations/25381
+          app_id: 2218
+          target_id: 6811672
+          target_type: Organization
+          permissions:
+            deployments: write
+            metadata: read
+            pull_requests: read
+            statuses: read
+          events:
+          - deployment
+          - deployment_status
+          created_at: '2017-05-16T08:47:09.000-07:00'
+          updated_at: '2017-06-06T11:23:23.000-07:00'
+          single_file_name: config.yml
+          has_multiple_single_files: true
+          single_file_paths:
+          - config.yml
+          - .github/issue_TEMPLATE.md
+          app_slug: github-actions
+          suspended_at: null
+          suspended_by: null
     organization-custom-repository-role-list-example:
       value:
         total_count: 2
@@ -2859,42 +2784,6 @@ components:
             site_admin: false
           created_at: '2022-07-05T12:01:11Z'
           updated_at: '2022-07-05T12:20:11Z'
-    hook-delivery:
-      value:
-        id: 12345678
-        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-        delivered_at: '2019-06-03T00:57:16Z'
-        redelivery: false
-        duration: 0.27
-        status: OK
-        status_code: 200
-        event: issues
-        action: opened
-        installation_id: 123
-        repository_id: 456
-        url: https://www.example.com
-        request:
-          headers:
-            X-GitHub-Delivery: 0b989ba4-242f-11e5-81e1-c7b6966d2516
-            X-Hub-Signature-256: sha256=6dcb09b5b57875f334f61aebed695e2e4193db5e
-            Accept: '*/*'
-            X-GitHub-Hook-ID: '42'
-            User-Agent: GitHub-Hookshot/b8c71d8
-            X-GitHub-Event: issues
-            X-GitHub-Hook-Installation-Target-ID: '123'
-            X-GitHub-Hook-Installation-Target-Type: repository
-            content-type: application/json
-            X-Hub-Signature: sha1=a84d88e7554fc1fa21bcbc4efae3c782a70d2b9d
-          payload:
-            action: opened
-            issue:
-              body: foo
-            repository:
-              id: 123
-        response:
-          headers:
-            Content-Type: text/html;charset=utf-8
-          payload: ok
     org-hook:
       value:
         id: 1
@@ -2912,90 +2801,484 @@ components:
         updated_at: '2011-09-06T20:39:23Z'
         created_at: '2011-09-06T17:26:27Z'
         type: Organization
+    org-hook-items:
+      value:
+      - id: 1
+        url: https://api.github.com/orgs/octocat/hooks/1
+        ping_url: https://api.github.com/orgs/octocat/hooks/1/pings
+        deliveries_url: https://api.github.com/orgs/octocat/hooks/1/deliveries
+        name: web
+        events:
+        - push
+        - pull_request
+        active: true
+        config:
+          url: http://example.com
+          content_type: json
+        updated_at: '2011-09-06T20:39:23Z'
+        created_at: '2011-09-06T17:26:27Z'
+        type: Organization
+    org-hook-2:
+      value:
+        id: 1
+        url: https://api.github.com/orgs/octocat/hooks/1
+        ping_url: https://api.github.com/orgs/octocat/hooks/1/pings
+        deliveries_url: https://api.github.com/repos/octocat/Hello-World/hooks/12345678/deliveries
+        name: web
+        events:
+        - pull_request
+        active: true
+        config:
+          url: http://example.com
+          content_type: json
+        updated_at: '2011-09-06T20:39:23Z'
+        created_at: '2011-09-06T17:26:27Z'
+        type: Organization
+    org-membership-2:
+      value:
+        url: https://api.github.com/orgs/octocat/memberships/defunkt
+        state: active
+        role: admin
+        organization_url: https://api.github.com/orgs/octocat
+        organization:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          hooks_url: https://api.github.com/orgs/github/hooks
+          issues_url: https://api.github.com/orgs/github/issues
+          members_url: https://api.github.com/orgs/github/members{/member}
+          public_members_url: https://api.github.com/orgs/github/public_members{/member}
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          description: A great organization
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+    team-items:
+      value:
+      - id: 1
+        node_id: MDQ6VGVhbTE=
+        url: https://api.github.com/teams/1
+        html_url: https://github.com/orgs/github/teams/justice-league
+        name: Justice League
+        slug: justice-league
+        description: A great team.
+        privacy: closed
+        permission: admin
+        members_url: https://api.github.com/teams/1/members{/member}
+        repositories_url: https://api.github.com/teams/1/repos
+        parent: null
+    organization-simple-items:
+      value:
+      - login: github
+        id: 1
+        node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+        url: https://api.github.com/orgs/github
+        repos_url: https://api.github.com/orgs/github/repos
+        events_url: https://api.github.com/orgs/github/events
+        hooks_url: https://api.github.com/orgs/github/hooks
+        issues_url: https://api.github.com/orgs/github/issues
+        members_url: https://api.github.com/orgs/github/members{/member}
+        public_members_url: https://api.github.com/orgs/github/public_members{/member}
+        avatar_url: https://github.com/images/error/octocat_happy.gif
+        description: A great organization
+    organization-custom-repository-role-example:
+      value:
+        id: 8030
+        name: Security Engineer
+        description: Able to contribute code and maintain the security pipeline
+        base_role: maintain
+        permissions:
+        - delete_alerts_code_scanning
+        organization:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          hooks_url: https://api.github.com/orgs/github/hooks
+          issues_url: https://api.github.com/orgs/github/issues
+          members_url: https://api.github.com/orgs/github/members{/member}
+          public_members_url: https://api.github.com/orgs/github/public_members{/member}
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          description: A great organization
+        created_at: '2022-07-04T22:19:11Z'
+        updated_at: '2022-07-04T22:20:11Z'
+    repository-fine-grained-permission-example:
+      value:
+      - name: add_assignee
+        description: Assign or remove a user
+      - name: remove_assignee
+        description: Remove an assigned user
+      - name: add_label
+        description: Add or remove a label
+    hook-delivery-items:
+      value:
+      - id: 12345678
+        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+        delivered_at: '2019-06-03T00:57:16Z'
+        redelivery: false
+        duration: 0.27
+        status: OK
+        status_code: 200
+        event: issues
+        action: opened
+        installation_id: 123
+        repository_id: 456
+      - id: 123456789
+        guid: 0b989ba4-242f-11e5-81e1-c7b6966d2516
+        delivered_at: '2019-06-04T00:57:16Z'
+        redelivery: true
+        duration: 0.28
+        status: OK
+        status_code: 200
+        event: issues
+        action: opened
+        installation_id: 123
+        repository_id: 456
+    org-membership:
+      value:
+        url: https://api.github.com/orgs/invitocat/memberships/defunkt
+        state: pending
+        role: admin
+        organization_url: https://api.github.com/orgs/invitocat
+        organization:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          hooks_url: https://api.github.com/orgs/github/hooks
+          issues_url: https://api.github.com/orgs/github/issues
+          members_url: https://api.github.com/orgs/github/members{/member}
+          public_members_url: https://api.github.com/orgs/github/public_members{/member}
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          description: A great organization
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+    org-membership-items:
+      value:
+      - url: https://api.github.com/orgs/octocat/memberships/defunkt
+        state: active
+        role: admin
+        organization_url: https://api.github.com/orgs/octocat
+        organization:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          hooks_url: https://api.github.com/orgs/github/hooks
+          issues_url: https://api.github.com/orgs/github/issues
+          members_url: https://api.github.com/orgs/github/members{/member}
+          public_members_url: https://api.github.com/orgs/github/public_members{/member}
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          description: A great organization
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+      - url: https://api.github.com/orgs/invitocat/memberships/defunkt
+        state: pending
+        role: admin
+        organization_url: https://api.github.com/orgs/invitocat
+        organization:
+          login: github
+          id: 1
+          node_id: MDEyOk9yZ2FuaXphdGlvbjE=
+          url: https://api.github.com/orgs/github
+          repos_url: https://api.github.com/orgs/github/repos
+          events_url: https://api.github.com/orgs/github/events
+          hooks_url: https://api.github.com/orgs/github/hooks
+          issues_url: https://api.github.com/orgs/github/issues
+          members_url: https://api.github.com/orgs/github/members{/member}
+          public_members_url: https://api.github.com/orgs/github/public_members{/member}
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          description: A great organization
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
   schemas:
-    organization-simple:
-      title: Organization Simple
-      description: A GitHub organization.
+    hook-delivery-item:
+      title: Simple webhook delivery
+      description: Delivery made by a webhook, without request and response information.
       type: object
       properties:
-        login:
-          type: string
-          example: github
         id:
+          description: Unique identifier of the webhook delivery.
           type: integer
-          example: 1
-        node_id:
+          example: 42
+        guid:
+          description: Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).
           type: string
-          example: MDEyOk9yZ2FuaXphdGlvbjE=
-        url:
+          example: 58474f00-b361-11eb-836d-0e4f3503ccbe
+        delivered_at:
+          description: Time when the webhook delivery occurred.
           type: string
-          format: uri
-          example: https://api.github.com/orgs/github
-        repos_url:
+          format: date-time
+          example: '2021-05-12T20:33:44Z'
+        redelivery:
+          description: Whether the webhook delivery is a redelivery.
+          type: boolean
+          example: false
+        duration:
+          description: Time spent delivering.
+          type: number
+          example: 0.03
+        status:
+          description: Describes the response returned after attempting the delivery.
           type: string
-          format: uri
-          example: https://api.github.com/orgs/github/repos
-        events_url:
+          example: failed to connect
+        status_code:
+          description: Status code received when delivery was made.
+          type: integer
+          example: 502
+        event:
+          description: The event that triggered the delivery.
           type: string
-          format: uri
-          example: https://api.github.com/orgs/github/events
-        hooks_url:
-          type: string
-          example: https://api.github.com/orgs/github/hooks
-        issues_url:
-          type: string
-          example: https://api.github.com/orgs/github/issues
-        members_url:
-          type: string
-          example: https://api.github.com/orgs/github/members{/member}
-        public_members_url:
-          type: string
-          example: https://api.github.com/orgs/github/public_members{/member}
-        avatar_url:
-          type: string
-          example: https://github.com/images/error/octocat_happy.gif
-        description:
+          example: issues
+        action:
+          description: The type of activity for the event that triggered the delivery.
           type:
           - string
           - 'null'
-          example: A great organization
+          example: opened
+        installation_id:
+          description: The id of the GitHub App installation associated with this event.
+          type:
+          - integer
+          - 'null'
+          example: 123
+        repository_id:
+          description: The id of the repository associated with this event.
+          type:
+          - integer
+          - 'null'
+          example: 123
       required:
-      - login
-      - url
       - id
-      - node_id
-      - repos_url
-      - events_url
-      - hooks_url
-      - issues_url
-      - members_url
-      - public_members_url
-      - avatar_url
-      - description
-    basic-error:
-      title: Basic Error
-      description: Basic Error
+      - guid
+      - delivered_at
+      - redelivery
+      - duration
+      - status
+      - status_code
+      - event
+      - action
+      - installation_id
+      - repository_id
+    organization-custom-repository-role-create-schema:
       type: object
       properties:
-        message:
+        name:
+          description: The name of the custom role.
           type: string
-          example: Example body text
-        documentation_url:
+          example: octocat
+        description:
+          description: A short description about who this role is for or what permissions it grants.
+          type:
+          - string
+          - 'null'
+          example: This is an example repository
+        base_role:
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
+          description: The system role from which this role inherits permissions.
+          enum:
+          - read
+          - triage
+          - write
+          - maintain
+          example: read
+        permissions:
+          description: A list of additional permissions included in this role.
+          type: array
+          items:
+            type: string
+      required:
+      - name
+      - base_role
+      - permissions
+    webhook-config-insecure-ssl:
+      oneOf:
+      - type: string
+        description: Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.**
+        example: '"0"'
+      - type: number
+    installation:
+      title: Installation
+      description: Installation
+      type: object
+      properties:
+        id:
+          description: The ID of the installation.
+          type: integer
+          example: 1
+        account:
+          anyOf:
+          - $ref: '#/components/schemas/simple-user'
+          - $ref: '#/components/schemas/enterprise'
+          example: example_value
+        repository_selection:
+          description: Describe whether all repositories have been selected or there's a selection involved
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
+          enum:
+          - all
+          - selected
+          example: all
+        access_tokens_url:
           type: string
-          example: open
-    announcement-user-dismissible:
-      type:
-      - boolean
-      - 'null'
-      description: Whether an announcement can be dismissed by the user.
-      example: false
-      default: false
+          format: uri
+          example: https://api.github.com/app/installations/1/access_tokens
+        repositories_url:
+          type: string
+          format: uri
+          example: https://api.github.com/installation/repositories
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/organizations/github/settings/installations/1
+        app_id:
+          type: integer
+          example: 1
+        target_id:
+          description: The ID of the user or organization this token is being scoped to.
+          type: integer
+          example: 42
+        target_type:
+          type: string
+          example: Organization
+        permissions:
+          $ref: '#/components/schemas/app-permissions'
+        events:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+        single_file_name:
+          type:
+          - string
+          - 'null'
+          example: config.yaml
+        has_multiple_single_files:
+          type: boolean
+          example: true
+        single_file_paths:
+          type: array
+          items:
+            type: string
+          example:
+          - config.yml
+          - .github/issue_TEMPLATE.md
+        app_slug:
+          type: string
+          example: github-actions
+        suspended_by:
+          $ref: '#/components/schemas/nullable-simple-user'
+        suspended_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+        contact_email:
+          type:
+          - string
+          - 'null'
+          example: '"test_13f1e99741e3e004@d7e1eb0bc0a1ba12.com"'
+      required:
+      - id
+      - app_id
+      - app_slug
+      - target_id
+      - target_type
+      - single_file_name
+      - repository_selection
+      - access_tokens_url
+      - html_url
+      - repositories_url
+      - events
+      - account
+      - permissions
+      - created_at
+      - updated_at
+      - suspended_by
+      - suspended_at
     organization-custom-repository-role:
       title: Organization Custom Repository Role
       description: Custom repository roles created by organization owners
@@ -3047,57 +3330,127 @@ components:
       - organization
       - created_at
       - updated_at
-    organization-custom-repository-role-create-schema:
+    webhook-config-secret:
+      type: string
+      description: If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value for [delivery signature headers](https://docs.github.com/enterprise-server@3.9/webhooks/event-payloads/#delivery-headers).
+      example: '"********"'
+    hook-delivery:
+      title: Webhook delivery
+      description: Delivery made by a webhook.
       type: object
       properties:
-        name:
-          description: The name of the custom role.
+        id:
+          description: Unique identifier of the delivery.
+          type: integer
+          example: 42
+        guid:
+          description: Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).
           type: string
-          example: octocat
-        description:
-          description: A short description about who this role is for or what permissions it grants.
+          example: 58474f00-b361-11eb-836d-0e4f3503ccbe
+        delivered_at:
+          description: Time when the delivery was delivered.
+          type: string
+          format: date-time
+          example: '2021-05-12T20:33:44Z'
+        redelivery:
+          description: Whether the delivery is a redelivery.
+          type: boolean
+          example: false
+        duration:
+          description: Time spent delivering.
+          type: number
+          example: 0.03
+        status:
+          description: Description of the status of the attempted delivery
+          type: string
+          example: failed to connect
+        status_code:
+          description: Status code received when delivery was made.
+          type: integer
+          example: 502
+        event:
+          description: The event that triggered the delivery.
+          type: string
+          example: issues
+        action:
+          description: The type of activity for the event that triggered the delivery.
           type:
           - string
           - 'null'
-          example: This is an example repository
-        base_role:
-          type: string
-          description: The system role from which this role inherits permissions.
-          enum:
-          - read
-          - triage
-          - write
-          - maintain
-          example: read
-        permissions:
-          description: A list of additional permissions included in this role.
-          type: array
-          items:
-            type: string
-      required:
-      - name
-      - base_role
-      - permissions
-    announcement-expiration:
-      type:
-      - string
-      - 'null'
-      format: date-time
-      description: 'The time at which the announcement expires. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. To set an announcement that never expires, omit this parameter, set it to `null`, or set it to an empty string.'
-      example: '"2021-01-01T00:00:00.000-07:00"'
-    webhook-config:
-      title: Webhook Configuration
-      description: Configuration object of the webhook
-      type: object
-      properties:
+          example: opened
+        installation_id:
+          description: The id of the GitHub App installation associated with this event.
+          type:
+          - integer
+          - 'null'
+          example: 123
+        repository_id:
+          description: The id of the repository associated with this event.
+          type:
+          - integer
+          - 'null'
+          example: 123
         url:
-          $ref: '#/components/schemas/webhook-config-url'
-        content_type:
-          $ref: '#/components/schemas/webhook-config-content-type'
-        secret:
-          $ref: '#/components/schemas/webhook-config-secret'
-        insecure_ssl:
-          $ref: '#/components/schemas/webhook-config-insecure-ssl'
+          description: The URL target of the delivery.
+          type: string
+          example: https://www.example.com
+        request:
+          type: object
+          properties:
+            headers:
+              description: The request headers sent with the webhook delivery.
+              type:
+              - object
+              - 'null'
+              additionalProperties: true
+            payload:
+              description: The webhook payload.
+              type:
+              - object
+              - 'null'
+              additionalProperties: true
+          required:
+          - headers
+          - payload
+        response:
+          type: object
+          properties:
+            headers:
+              description: The response headers received when the delivery was made.
+              type:
+              - object
+              - 'null'
+              additionalProperties: true
+            payload:
+              description: The response payload received.
+              type:
+              - string
+              - 'null'
+              additionalProperties: true
+          required:
+          - headers
+          - payload
+      required:
+      - id
+      - guid
+      - delivered_at
+      - redelivery
+      - duration
+      - status
+      - status_code
+      - event
+      - action
+      - installation_id
+      - repository_id
+      - request
+      - response
+    announcement-user-dismissible:
+      type:
+      - boolean
+      - 'null'
+      description: Whether an announcement can be dismissed by the user.
+      example: false
+      default: false
     enterprise:
       title: Enterprise
       description: An enterprise on GitHub.
@@ -3160,6 +3513,670 @@ components:
       - created_at
       - updated_at
       - avatar_url
+    organization-custom-repository-role-update-schema:
+      type: object
+      properties:
+        name:
+          description: The name of the custom role.
+          type: string
+          example: octocat
+        description:
+          description: A short description about who this role is for or what permissions it grants.
+          type:
+          - string
+          - 'null'
+          example: This is an example repository
+        base_role:
+          type: string
+          description: The system role from which this role inherits permissions.
+          enum:
+          - read
+          - triage
+          - write
+          - maintain
+          example: read
+        permissions:
+          description: A list of additional permissions included in this role.
+          type: array
+          items:
+            type: string
+    app-permissions:
+      title: App Permissions
+      type: object
+      description: The permissions granted to the user access token.
+      properties:
+        actions:
+          type: string
+          description: The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.
+          enum:
+          - read
+          - write
+          example: read
+        administration:
+          type: string
+          description: The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.
+          enum:
+          - read
+          - write
+          example: read
+        checks:
+          type: string
+          description: The level of permission to grant the access token for checks on code.
+          enum:
+          - read
+          - write
+          example: read
+        codespaces:
+          type: string
+          description: The level of permission to grant the access token to create, edit, delete, and list Codespaces.
+          enum:
+          - read
+          - write
+          example: read
+        contents:
+          type: string
+          description: The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.
+          enum:
+          - read
+          - write
+          example: read
+        dependabot_secrets:
+          type: string
+          description: The leve of permission to grant the access token to manage Dependabot secrets.
+          enum:
+          - read
+          - write
+          example: read
+        deployments:
+          type: string
+          description: The level of permission to grant the access token for deployments and deployment statuses.
+          enum:
+          - read
+          - write
+          example: read
+        environments:
+          type: string
+          description: The level of permission to grant the access token for managing repository environments.
+          enum:
+          - read
+          - write
+          example: read
+        issues:
+          type: string
+          description: The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.
+          enum:
+          - read
+          - write
+          example: read
+        metadata:
+          type: string
+          description: The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.
+          enum:
+          - read
+          - write
+          example: read
+        packages:
+          type: string
+          description: The level of permission to grant the access token for packages published to GitHub Packages.
+          enum:
+          - read
+          - write
+          example: read
+        pages:
+          type: string
+          description: The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.
+          enum:
+          - read
+          - write
+          example: read
+        pull_requests:
+          type: string
+          description: The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.
+          enum:
+          - read
+          - write
+          example: read
+        repository_hooks:
+          type: string
+          description: The level of permission to grant the access token to manage the post-receive hooks for a repository.
+          enum:
+          - read
+          - write
+          example: read
+        repository_projects:
+          type: string
+          description: The level of permission to grant the access token to manage repository projects, columns, and cards.
+          enum:
+          - read
+          - write
+          - admin
+          example: read
+        secret_scanning_alerts:
+          type: string
+          description: The level of permission to grant the access token to view and manage secret scanning alerts.
+          enum:
+          - read
+          - write
+          example: read
+        secrets:
+          type: string
+          description: The level of permission to grant the access token to manage repository secrets.
+          enum:
+          - read
+          - write
+          example: read
+        security_events:
+          type: string
+          description: The level of permission to grant the access token to view and manage security events like code scanning alerts.
+          enum:
+          - read
+          - write
+          example: read
+        single_file:
+          type: string
+          description: The level of permission to grant the access token to manage just a single file.
+          enum:
+          - read
+          - write
+          example: read
+        statuses:
+          type: string
+          description: The level of permission to grant the access token for commit statuses.
+          enum:
+          - read
+          - write
+          example: read
+        vulnerability_alerts:
+          type: string
+          description: The level of permission to grant the access token to manage Dependabot alerts.
+          enum:
+          - read
+          - write
+        workflows:
+          type: string
+          description: The level of permission to grant the access token to update GitHub Actions workflow files.
+          enum:
+          - write
+        members:
+          type: string
+          description: The level of permission to grant the access token for organization teams and members.
+          enum:
+          - read
+          - write
+        organization_administration:
+          type: string
+          description: The level of permission to grant the access token to manage access to an organization.
+          enum:
+          - read
+          - write
+        organization_custom_roles:
+          type: string
+          description: The level of permission to grant the access token for custom repository roles management.
+          enum:
+          - read
+          - write
+        organization_copilot_seat_management:
+          type: string
+          description: The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in beta and is subject to change.
+          enum:
+          - write
+        organization_announcement_banners:
+          type: string
+          description: The level of permission to grant the access token to view and manage announcement banners for an organization.
+          enum:
+          - read
+          - write
+        organization_events:
+          type: string
+          description: The level of permission to grant the access token to view events triggered by an activity in an organization.
+          enum:
+          - read
+        organization_hooks:
+          type: string
+          description: The level of permission to grant the access token to manage the post-receive hooks for an organization.
+          enum:
+          - read
+          - write
+        organization_personal_access_tokens:
+          type: string
+          description: The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.
+          enum:
+          - read
+          - write
+        organization_personal_access_token_requests:
+          type: string
+          description: The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.
+          enum:
+          - read
+          - write
+        organization_plan:
+          type: string
+          description: The level of permission to grant the access token for viewing an organization's plan.
+          enum:
+          - read
+        organization_projects:
+          type: string
+          description: The level of permission to grant the access token to manage organization projects and projects beta (where available).
+          enum:
+          - read
+          - write
+          - admin
+        organization_packages:
+          type: string
+          description: The level of permission to grant the access token for organization packages published to GitHub Packages.
+          enum:
+          - read
+          - write
+        organization_secrets:
+          type: string
+          description: The level of permission to grant the access token to manage organization secrets.
+          enum:
+          - read
+          - write
+        organization_self_hosted_runners:
+          type: string
+          description: The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.
+          enum:
+          - read
+          - write
+        organization_user_blocking:
+          type: string
+          description: The level of permission to grant the access token to view and manage users blocked by the organization.
+          enum:
+          - read
+          - write
+        team_discussions:
+          type: string
+          description: The level of permission to grant the access token to manage team discussions and related comments.
+          enum:
+          - read
+          - write
+        email_addresses:
+          type: string
+          description: The level of permission to grant the access token to manage the email addresses belonging to a user.
+          enum:
+          - read
+          - write
+        followers:
+          type: string
+          description: The level of permission to grant the access token to manage the followers belonging to a user.
+          enum:
+          - read
+          - write
+        git_ssh_keys:
+          type: string
+          description: The level of permission to grant the access token to manage git SSH keys.
+          enum:
+          - read
+          - write
+        gpg_keys:
+          type: string
+          description: The level of permission to grant the access token to view and manage GPG keys belonging to a user.
+          enum:
+          - read
+          - write
+        interaction_limits:
+          type: string
+          description: The level of permission to grant the access token to view and manage interaction limits on a repository.
+          enum:
+          - read
+          - write
+        profile:
+          type: string
+          description: The level of permission to grant the access token to manage the profile settings belonging to a user.
+          enum:
+          - write
+        starring:
+          type: string
+          description: The level of permission to grant the access token to list and manage repositories a user is starring.
+          enum:
+          - read
+          - write
+      example:
+        contents: read
+        issues: read
+        deployments: write
+        single_file: read
+    announcement-expiration:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      description: 'The time at which the announcement expires. This is a timestamp in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format: `YYYY-MM-DDTHH:MM:SSZ`. To set an announcement that never expires, omit this parameter, set it to `null`, or set it to an empty string.'
+      example: '"2021-01-01T00:00:00.000-07:00"'
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    nullable-simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    announcement-banner:
+      title: Announcement Banner
+      description: Announcement at either the repository, organization, or enterprise level
+      type: object
+      properties:
+        announcement:
+          $ref: '#/components/schemas/announcement-message'
+        expires_at:
+          $ref: '#/components/schemas/announcement-expiration'
+        user_dismissible:
+          $ref: '#/components/schemas/announcement-user-dismissible'
+      required:
+      - announcement
+      - expires_at
+      - user_dismissible
+    webhook-config:
+      title: Webhook Configuration
+      description: Configuration object of the webhook
+      type: object
+      properties:
+        url:
+          $ref: '#/components/schemas/webhook-config-url'
+        content_type:
+          $ref: '#/components/schemas/webhook-config-content-type'
+        secret:
+          $ref: '#/components/schemas/webhook-config-secret'
+        insecure_ssl:
+          $ref: '#/components/schemas/webhook-config-insecure-ssl'
+    announcement-message:
+      type:
+      - string
+      - 'null'
+      description: The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Basic writing and formatting syntax](https://docs.github.com/enterprise-server@3.9/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)."
+      example: Very **important** announcement about _something_.
+    webhook-config-url:
+      type: string
+      description: The URL to which the payloads will be delivered.
+      example: https://example.com/webhook
+      format: uri
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    announcement:
+      title: Enterprise Announcement
+      description: Enterprise global announcement
+      type: object
+      properties:
+        announcement:
+          $ref: '#/components/schemas/announcement-message'
+        expires_at:
+          $ref: '#/components/schemas/announcement-expiration'
+      required:
+      - announcement
+    validation-error-simple:
+      title: Validation Error Simple
+      description: Validation Error Simple
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: string
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
     org-membership:
       title: Org Membership
       description: Org Membership
@@ -3206,12 +4223,6 @@ components:
       - url
       - organization
       - user
-    announcement-message:
-      type:
-      - string
-      - 'null'
-      description: The announcement text in GitHub Flavored Markdown. For more information about GitHub Flavored Markdown, see "[Basic writing and formatting syntax](https://docs.github.com/enterprise-server@3.9/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)."
-      example: Very **important** announcement about _something_.
     org-hook:
       title: Org Hook
       description: Org Hook
@@ -3282,57 +4293,6 @@ components:
       - ping_url
       - created_at
       - updated_at
-    webhook-config-insecure-ssl:
-      oneOf:
-      - type: string
-        description: Determines whether the SSL certificate of the host for `url` will be verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`. **We strongly recommend not setting this to `1` as you are subject to man-in-the-middle and other attacks.**
-        example: '"0"'
-      - type: number
-    webhook-config-content-type:
-      type: string
-      description: The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`.
-      example: '"json"'
-    repository-fine-grained-permission:
-      title: Repository Fine-Grained Permission
-      description: A fine-grained permission that protects repository resources.
-      type: object
-      properties:
-        name:
-          type: string
-          example: octocat
-        description:
-          type: string
-          example: This is an example repository
-      required:
-      - name
-      - description
-    organization-custom-repository-role-update-schema:
-      type: object
-      properties:
-        name:
-          description: The name of the custom role.
-          type: string
-          example: octocat
-        description:
-          description: A short description about who this role is for or what permissions it grants.
-          type:
-          - string
-          - 'null'
-          example: This is an example repository
-        base_role:
-          type: string
-          description: The system role from which this role inherits permissions.
-          enum:
-          - read
-          - triage
-          - write
-          - maintain
-          example: read
-        permissions:
-          description: A list of additional permissions included in this role.
-          type: array
-          items:
-            type: string
     audit-log-event:
       type: object
       properties:
@@ -3463,6 +4423,42 @@ components:
         visibility:
           type: string
           description: The repository visibility, for example `public` or `private`.
+    webhook-config-content-type:
+      type: string
+      description: The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`.
+      example: '"json"'
+    scim-error:
+      title: Scim Error
+      description: Scim Error
+      type: object
+      properties:
+        message:
+          type:
+          - string
+          - 'null'
+          example: Example body text
+        documentation_url:
+          type:
+          - string
+          - 'null'
+          example: https://api.github.com/repos/octocat/Hello-World
+        detail:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        status:
+          type: integer
+          example: 42
+        scimType:
+          type:
+          - string
+          - 'null'
+          example: User
+        schemas:
+          type: array
+          items:
+            type: string
     organization-full:
       title: Organization Full
       description: Organization Full
@@ -3803,1078 +4799,119 @@ components:
       - html_url
       - repositories_url
       - slug
-    announcement-banner:
-      title: Announcement Banner
-      description: Announcement at either the repository, organization, or enterprise level
+    organization-simple:
+      title: Organization Simple
+      description: A GitHub organization.
       type: object
       properties:
-        announcement:
-          $ref: '#/components/schemas/announcement-message'
-        expires_at:
-          $ref: '#/components/schemas/announcement-expiration'
-        user_dismissible:
-          $ref: '#/components/schemas/announcement-user-dismissible'
-      required:
-      - announcement
-      - expires_at
-      - user_dismissible
-    hook-delivery:
-      title: Webhook delivery
-      description: Delivery made by a webhook.
-      type: object
-      properties:
-        id:
-          description: Unique identifier of the delivery.
-          type: integer
-          example: 42
-        guid:
-          description: Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).
-          type: string
-          example: 58474f00-b361-11eb-836d-0e4f3503ccbe
-        delivered_at:
-          description: Time when the delivery was delivered.
-          type: string
-          format: date-time
-          example: '2021-05-12T20:33:44Z'
-        redelivery:
-          description: Whether the delivery is a redelivery.
-          type: boolean
-          example: false
-        duration:
-          description: Time spent delivering.
-          type: number
-          example: 0.03
-        status:
-          description: Description of the status of the attempted delivery
-          type: string
-          example: failed to connect
-        status_code:
-          description: Status code received when delivery was made.
-          type: integer
-          example: 502
-        event:
-          description: The event that triggered the delivery.
-          type: string
-          example: issues
-        action:
-          description: The type of activity for the event that triggered the delivery.
-          type:
-          - string
-          - 'null'
-          example: opened
-        installation_id:
-          description: The id of the GitHub App installation associated with this event.
-          type:
-          - integer
-          - 'null'
-          example: 123
-        repository_id:
-          description: The id of the repository associated with this event.
-          type:
-          - integer
-          - 'null'
-          example: 123
-        url:
-          description: The URL target of the delivery.
-          type: string
-          example: https://www.example.com
-        request:
-          type: object
-          properties:
-            headers:
-              description: The request headers sent with the webhook delivery.
-              type:
-              - object
-              - 'null'
-              additionalProperties: true
-            payload:
-              description: The webhook payload.
-              type:
-              - object
-              - 'null'
-              additionalProperties: true
-          required:
-          - headers
-          - payload
-        response:
-          type: object
-          properties:
-            headers:
-              description: The response headers received when the delivery was made.
-              type:
-              - object
-              - 'null'
-              additionalProperties: true
-            payload:
-              description: The response payload received.
-              type:
-              - string
-              - 'null'
-              additionalProperties: true
-          required:
-          - headers
-          - payload
-      required:
-      - id
-      - guid
-      - delivered_at
-      - redelivery
-      - duration
-      - status
-      - status_code
-      - event
-      - action
-      - installation_id
-      - repository_id
-      - request
-      - response
-    app-permissions:
-      title: App Permissions
-      type: object
-      description: The permissions granted to the user access token.
-      properties:
-        actions:
-          type: string
-          description: The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.
-          enum:
-          - read
-          - write
-          example: read
-        administration:
-          type: string
-          description: The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.
-          enum:
-          - read
-          - write
-          example: read
-        checks:
-          type: string
-          description: The level of permission to grant the access token for checks on code.
-          enum:
-          - read
-          - write
-          example: read
-        codespaces:
-          type: string
-          description: The level of permission to grant the access token to create, edit, delete, and list Codespaces.
-          enum:
-          - read
-          - write
-          example: read
-        contents:
-          type: string
-          description: The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.
-          enum:
-          - read
-          - write
-          example: read
-        dependabot_secrets:
-          type: string
-          description: The leve of permission to grant the access token to manage Dependabot secrets.
-          enum:
-          - read
-          - write
-          example: read
-        deployments:
-          type: string
-          description: The level of permission to grant the access token for deployments and deployment statuses.
-          enum:
-          - read
-          - write
-          example: read
-        environments:
-          type: string
-          description: The level of permission to grant the access token for managing repository environments.
-          enum:
-          - read
-          - write
-          example: read
-        issues:
-          type: string
-          description: The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.
-          enum:
-          - read
-          - write
-          example: read
-        metadata:
-          type: string
-          description: The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.
-          enum:
-          - read
-          - write
-          example: read
-        packages:
-          type: string
-          description: The level of permission to grant the access token for packages published to GitHub Packages.
-          enum:
-          - read
-          - write
-          example: read
-        pages:
-          type: string
-          description: The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.
-          enum:
-          - read
-          - write
-          example: read
-        pull_requests:
-          type: string
-          description: The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.
-          enum:
-          - read
-          - write
-          example: read
-        repository_hooks:
-          type: string
-          description: The level of permission to grant the access token to manage the post-receive hooks for a repository.
-          enum:
-          - read
-          - write
-          example: read
-        repository_projects:
-          type: string
-          description: The level of permission to grant the access token to manage repository projects, columns, and cards.
-          enum:
-          - read
-          - write
-          - admin
-          example: read
-        secret_scanning_alerts:
-          type: string
-          description: The level of permission to grant the access token to view and manage secret scanning alerts.
-          enum:
-          - read
-          - write
-          example: read
-        secrets:
-          type: string
-          description: The level of permission to grant the access token to manage repository secrets.
-          enum:
-          - read
-          - write
-          example: read
-        security_events:
-          type: string
-          description: The level of permission to grant the access token to view and manage security events like code scanning alerts.
-          enum:
-          - read
-          - write
-          example: read
-        single_file:
-          type: string
-          description: The level of permission to grant the access token to manage just a single file.
-          enum:
-          - read
-          - write
-          example: read
-        statuses:
-          type: string
-          description: The level of permission to grant the access token for commit statuses.
-          enum:
-          - read
-          - write
-          example: read
-        vulnerability_alerts:
-          type: string
-          description: The level of permission to grant the access token to manage Dependabot alerts.
-          enum:
-          - read
-          - write
-        workflows:
-          type: string
-          description: The level of permission to grant the access token to update GitHub Actions workflow files.
-          enum:
-          - write
-        members:
-          type: string
-          description: The level of permission to grant the access token for organization teams and members.
-          enum:
-          - read
-          - write
-        organization_administration:
-          type: string
-          description: The level of permission to grant the access token to manage access to an organization.
-          enum:
-          - read
-          - write
-        organization_custom_roles:
-          type: string
-          description: The level of permission to grant the access token for custom repository roles management.
-          enum:
-          - read
-          - write
-        organization_copilot_seat_management:
-          type: string
-          description: The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in beta and is subject to change.
-          enum:
-          - write
-        organization_announcement_banners:
-          type: string
-          description: The level of permission to grant the access token to view and manage announcement banners for an organization.
-          enum:
-          - read
-          - write
-        organization_events:
-          type: string
-          description: The level of permission to grant the access token to view events triggered by an activity in an organization.
-          enum:
-          - read
-        organization_hooks:
-          type: string
-          description: The level of permission to grant the access token to manage the post-receive hooks for an organization.
-          enum:
-          - read
-          - write
-        organization_personal_access_tokens:
-          type: string
-          description: The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.
-          enum:
-          - read
-          - write
-        organization_personal_access_token_requests:
-          type: string
-          description: The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.
-          enum:
-          - read
-          - write
-        organization_plan:
-          type: string
-          description: The level of permission to grant the access token for viewing an organization's plan.
-          enum:
-          - read
-        organization_projects:
-          type: string
-          description: The level of permission to grant the access token to manage organization projects and projects beta (where available).
-          enum:
-          - read
-          - write
-          - admin
-        organization_packages:
-          type: string
-          description: The level of permission to grant the access token for organization packages published to GitHub Packages.
-          enum:
-          - read
-          - write
-        organization_secrets:
-          type: string
-          description: The level of permission to grant the access token to manage organization secrets.
-          enum:
-          - read
-          - write
-        organization_self_hosted_runners:
-          type: string
-          description: The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.
-          enum:
-          - read
-          - write
-        organization_user_blocking:
-          type: string
-          description: The level of permission to grant the access token to view and manage users blocked by the organization.
-          enum:
-          - read
-          - write
-        team_discussions:
-          type: string
-          description: The level of permission to grant the access token to manage team discussions and related comments.
-          enum:
-          - read
-          - write
-        email_addresses:
-          type: string
-          description: The level of permission to grant the access token to manage the email addresses belonging to a user.
-          enum:
-          - read
-          - write
-        followers:
-          type: string
-          description: The level of permission to grant the access token to manage the followers belonging to a user.
-          enum:
-          - read
-          - write
-        git_ssh_keys:
-          type: string
-          description: The level of permission to grant the access token to manage git SSH keys.
-          enum:
-          - read
-          - write
-        gpg_keys:
-          type: string
-          description: The level of permission to grant the access token to view and manage GPG keys belonging to a user.
-          enum:
-          - read
-          - write
-        interaction_limits:
-          type: string
-          description: The level of permission to grant the access token to view and manage interaction limits on a repository.
-          enum:
-          - read
-          - write
-        profile:
-          type: string
-          description: The level of permission to grant the access token to manage the profile settings belonging to a user.
-          enum:
-          - write
-        starring:
-          type: string
-          description: The level of permission to grant the access token to list and manage repositories a user is starring.
-          enum:
-          - read
-          - write
-      example:
-        contents: read
-        issues: read
-        deployments: write
-        single_file: read
-    webhook-config-secret:
-      type: string
-      description: If provided, the `secret` will be used as the `key` to generate the HMAC hex digest value for [delivery signature headers](https://docs.github.com/enterprise-server@3.9/webhooks/event-payloads/#delivery-headers).
-      example: '"********"'
-    hook-delivery-item:
-      title: Simple webhook delivery
-      description: Delivery made by a webhook, without request and response information.
-      type: object
-      properties:
-        id:
-          description: Unique identifier of the webhook delivery.
-          type: integer
-          example: 42
-        guid:
-          description: Unique identifier for the event (shared with all deliveries for all webhooks that subscribe to this event).
-          type: string
-          example: 58474f00-b361-11eb-836d-0e4f3503ccbe
-        delivered_at:
-          description: Time when the webhook delivery occurred.
-          type: string
-          format: date-time
-          example: '2021-05-12T20:33:44Z'
-        redelivery:
-          description: Whether the webhook delivery is a redelivery.
-          type: boolean
-          example: false
-        duration:
-          description: Time spent delivering.
-          type: number
-          example: 0.03
-        status:
-          description: Describes the response returned after attempting the delivery.
-          type: string
-          example: failed to connect
-        status_code:
-          description: Status code received when delivery was made.
-          type: integer
-          example: 502
-        event:
-          description: The event that triggered the delivery.
-          type: string
-          example: issues
-        action:
-          description: The type of activity for the event that triggered the delivery.
-          type:
-          - string
-          - 'null'
-          example: opened
-        installation_id:
-          description: The id of the GitHub App installation associated with this event.
-          type:
-          - integer
-          - 'null'
-          example: 123
-        repository_id:
-          description: The id of the repository associated with this event.
-          type:
-          - integer
-          - 'null'
-          example: 123
-      required:
-      - id
-      - guid
-      - delivered_at
-      - redelivery
-      - duration
-      - status
-      - status_code
-      - event
-      - action
-      - installation_id
-      - repository_id
-    validation-error-simple:
-      title: Validation Error Simple
-      description: Validation Error Simple
-      type: object
-      required:
-      - message
-      - documentation_url
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: string
-    webhook-config-url:
-      type: string
-      description: The URL to which the payloads will be delivered.
-      example: https://example.com/webhook
-      format: uri
-    simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
         login:
           type: string
-          example: octocat
+          example: github
         id:
           type: integer
           example: 1
         node_id:
           type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
+          example: MDEyOk9yZ2FuaXphdGlvbjE=
         url:
           type: string
           format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
+          example: https://api.github.com/orgs/github
         repos_url:
           type: string
           format: uri
-          example: https://api.github.com/users/octocat/repos
+          example: https://api.github.com/orgs/github/repos
         events_url:
           type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
           format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
+          example: https://api.github.com/orgs/github/events
+        hooks_url:
           type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
+          example: https://api.github.com/orgs/github/hooks
+        issues_url:
           type: string
-          example: '"2020-07-09T00:17:55Z"'
+          example: https://api.github.com/orgs/github/issues
+        members_url:
+          type: string
+          example: https://api.github.com/orgs/github/members{/member}
+        public_members_url:
+          type: string
+          example: https://api.github.com/orgs/github/public_members{/member}
+        avatar_url:
+          type: string
+          example: https://github.com/images/error/octocat_happy.gif
+        description:
+          type:
+          - string
+          - 'null'
+          example: A great organization
       required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
+      - login
+      - url
       - id
       - node_id
-      - login
-      - organizations_url
-      - received_events_url
       - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    announcement:
-      title: Enterprise Announcement
-      description: Enterprise global announcement
+      - events_url
+      - hooks_url
+      - issues_url
+      - members_url
+      - public_members_url
+      - avatar_url
+      - description
+    repository-fine-grained-permission:
+      title: Repository Fine-Grained Permission
+      description: A fine-grained permission that protects repository resources.
       type: object
-      properties:
-        announcement:
-          $ref: '#/components/schemas/announcement-message'
-        expires_at:
-          $ref: '#/components/schemas/announcement-expiration'
-      required:
-      - announcement
-    scim-error:
-      title: Scim Error
-      description: Scim Error
-      type: object
-      properties:
-        message:
-          type:
-          - string
-          - 'null'
-          example: Example body text
-        documentation_url:
-          type:
-          - string
-          - 'null'
-          example: https://api.github.com/repos/octocat/Hello-World
-        detail:
-          type:
-          - string
-          - 'null'
-          example: example_value
-        status:
-          type: integer
-          example: 42
-        scimType:
-          type:
-          - string
-          - 'null'
-          example: User
-        schemas:
-          type: array
-          items:
-            type: string
-    installation:
-      title: Installation
-      description: Installation
-      type: object
-      properties:
-        id:
-          description: The ID of the installation.
-          type: integer
-          example: 1
-        account:
-          anyOf:
-          - $ref: '#/components/schemas/simple-user'
-          - $ref: '#/components/schemas/enterprise'
-          example: example_value
-        repository_selection:
-          description: Describe whether all repositories have been selected or there's a selection involved
-          type: string
-          enum:
-          - all
-          - selected
-          example: all
-        access_tokens_url:
-          type: string
-          format: uri
-          example: https://api.github.com/app/installations/1/access_tokens
-        repositories_url:
-          type: string
-          format: uri
-          example: https://api.github.com/installation/repositories
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/organizations/github/settings/installations/1
-        app_id:
-          type: integer
-          example: 1
-        target_id:
-          description: The ID of the user or organization this token is being scoped to.
-          type: integer
-          example: 42
-        target_type:
-          type: string
-          example: Organization
-        permissions:
-          $ref: '#/components/schemas/app-permissions'
-        events:
-          type: array
-          items:
-            type: string
-        created_at:
-          type: string
-          format: date-time
-          example: '2026-04-17T12:00:00Z'
-        updated_at:
-          type: string
-          format: date-time
-          example: '2026-04-17T12:00:00Z'
-        single_file_name:
-          type:
-          - string
-          - 'null'
-          example: config.yaml
-        has_multiple_single_files:
-          type: boolean
-          example: true
-        single_file_paths:
-          type: array
-          items:
-            type: string
-          example:
-          - config.yml
-          - .github/issue_TEMPLATE.md
-        app_slug:
-          type: string
-          example: github-actions
-        suspended_by:
-          $ref: '#/components/schemas/nullable-simple-user'
-        suspended_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2026-04-17T12:00:00Z'
-        contact_email:
-          type:
-          - string
-          - 'null'
-          example: '"test_13f1e99741e3e004@d7e1eb0bc0a1ba12.com"'
-      required:
-      - id
-      - app_id
-      - app_slug
-      - target_id
-      - target_type
-      - single_file_name
-      - repository_selection
-      - access_tokens_url
-      - html_url
-      - repositories_url
-      - events
-      - account
-      - permissions
-      - created_at
-      - updated_at
-      - suspended_by
-      - suspended_at
-    validation-error:
-      title: Validation Error
-      description: Validation Error
-      type: object
-      required:
-      - message
-      - documentation_url
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        errors:
-          type: array
-          items:
-            type: object
-            required:
-            - code
-            properties:
-              resource:
-                type: string
-              field:
-                type: string
-              message:
-                type: string
-              code:
-                type: string
-              index:
-                type: integer
-              value:
-                oneOf:
-                - type:
-                  - string
-                  - 'null'
-                - type:
-                  - integer
-                  - 'null'
-                - type:
-                  - array
-                  - 'null'
-                  items:
-                    type: string
-    nullable-simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type:
-      - object
-      - 'null'
       properties:
         name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
-        login:
           type: string
           example: octocat
-        id:
-          type: integer
-          example: 1
-        node_id:
+        description:
           type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
+          example: This is an example repository
       required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-  parameters:
-    since-org:
-      name: since
-      description: An organization ID. Only return organizations with an ID greater than this ID.
-      in: query
-      required: false
-      schema:
-        type: integer
-    username:
-      name: username
-      description: The handle for the GitHub user account.
-      in: path
-      required: true
+      - name
+      - description
+  headers:
+    link:
+      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
       schema:
         type: string
-    role-id:
-      name: role_id
-      description: The unique identifier of the role.
-      in: path
-      required: true
-      schema:
-        type: integer
-    audit-log-include:
-      name: include
-      description: 'The event types to include:
-
-
-        - `web` - returns web (non-Git) events.
-
-        - `git` - returns Git events.
-
-        - `all` - returns both web and Git events.
-
-
-        The default is `web`.'
-      in: query
-      required: false
-      schema:
-        type: string
-        enum:
-        - web
-        - git
-        - all
-    cursor:
-      name: cursor
-      description: 'Used for pagination: the starting delivery from which the page of deliveries is fetched. Refer to the `link` header for the next and previous page cursors.'
-      in: query
-      required: false
-      schema:
-        type: string
-    team-slug:
-      name: team_slug
-      description: The slug of the team name.
-      in: path
-      required: true
-      schema:
-        type: string
-    delivery-id:
-      name: delivery_id
-      in: path
-      required: true
-      schema:
-        type: integer
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    audit-log-phrase:
-      name: phrase
-      description: A search phrase. For more information, see [Searching the audit log](https://docs.github.com/enterprise-server@3.9/github/setting-up-and-managing-organizations-and-teams/reviewing-the-audit-log-for-your-organization#searching-the-audit-log).
-      in: query
-      required: false
-      schema:
-        type: string
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-    audit-log-after:
-      name: after
-      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events after this cursor.
-      in: query
-      required: false
-      schema:
-        type: string
-    org-security-product-enablement:
-      name: enablement
-      in: path
-      description: 'The action to take.
-
-
-        `enable_all` means to enable the specified security feature for all repositories in the organization.
-
-        `disable_all` means to disable the specified security feature for all repositories in the organization.'
-      required: true
-      schema:
-        type: string
-        enum:
-        - enable_all
-        - disable_all
-    hook-id:
-      name: hook_id
-      description: The unique identifier of the hook. You can find this value in the `X-GitHub-Hook-ID` header of a webhook delivery.
-      in: path
-      required: true
-      schema:
-        type: integer
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
-    audit-log-before:
-      name: before
-      description: A cursor, as given in the [Link header](https://docs.github.com/enterprise-server@3.9/rest/guides/using-pagination-in-the-rest-api#using-link-headers). If specified, the query only searches for events before this cursor.
-      in: query
-      required: false
-      schema:
-        type: string
-    audit-log-order:
-      name: order
-      description: 'The order of audit log events. To list newest events first, specify `desc`. To list oldest events first, specify `asc`.
-
-
-        The default is `desc`.'
-      in: query
-      required: false
-      schema:
-        type: string
-        enum:
-        - desc
-        - asc
-    security-product:
-      name: security_product
-      in: path
-      description: The security feature to enable or disable.
-      required: true
-      schema:
-        type: string
-        enum:
-        - dependency_graph
-        - dependabot_alerts
-        - dependabot_security_updates
-        - advanced_security
-        - code_scanning_default_setup
-        - secret_scanning
-        - secret_scanning_push_protection
   responses:
+    bad_request:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
     not_found:
       description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    accepted:
+      description: Accepted
+      content:
+        application/json:
+          schema:
+            type: object
+          examples:
+            default:
+              value: null
+    not_modified:
+      description: Not modified
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
@@ -4885,49 +4922,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/basic-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_modified:
-      description: Not modified
-    bad_request:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-        application/scim+json:
-          schema:
-            $ref: '#/components/schemas/scim-error'
-    accepted:
-      description: Accepted
-      content:
-        application/json:
-          schema:
-            type: object
-          examples:
-            default:
-              value: null
-    validation_failed:
-      description: Validation failed, or the endpoint has been spammed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/validation-error'
     requires_authentication:
       description: Requires authentication
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/basic-error'
-  headers:
-    link:
-      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
-      schema:
-        type: string
 externalDocs:
   description: GitHub Enterprise Developer Docs
   url: https://docs.github.com/enterprise-server@3.9/rest/

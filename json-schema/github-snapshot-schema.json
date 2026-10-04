@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-snapshot-schema.json",
+  "title": "snapshot",
+  "description": "Create a new snapshot of a repository's dependencies.",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-dependency-graph-api-openapi.yml#/components/schemas/snapshot",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "The version of the repository snapshot submission.",
+      "type": "integer"
+    },
+    "job": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The external ID of the job."
+        },
+        "correlator": {
+          "type": "string",
+          "description": "Correlator provides a key that is used to group snapshots submitted over time. Only the \"latest\" submitted snapshot for a given combination of `job.correlator` and `detector.name` will be considered when calculating a repository's current dependencies. Correlator should be as unique as it takes to distinguish all detection runs for a given \"wave\" of CI workflow you run. If you're using GitHub Actions, a good default value for this could be the environment variables GITHUB_WORKFLOW and GITHUB_JOB concatenated together. If you're using a build matrix, then you'll also need to add additional key(s) to distinguish between each submission inside a matrix variation."
+        },
+        "html_url": {
+          "type": "string",
+          "description": "The url for the job."
+        }
+      },
+      "required": [
+        "id",
+        "correlator"
+      ],
+      "additionalProperties": false
+    },
+    "sha": {
+      "description": "The commit SHA associated with this dependency snapshot. Maximum length: 40 characters.",
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 40
+    },
+    "ref": {
+      "description": "The repository branch that triggered this snapshot.",
+      "type": "string",
+      "pattern": "^refs/"
+    },
+    "detector": {
+      "type": "object",
+      "description": "A description of the detector used.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the detector used."
+        },
+        "version": {
+          "type": "string",
+          "description": "The version of the detector used."
+        },
+        "url": {
+          "type": "string",
+          "description": "The url of the detector used."
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "url"
+      ],
+      "additionalProperties": false
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "manifests": {
+      "type": "object",
+      "description": "A collection of package manifests, which are a collection of related dependencies declared in a file or representing a logical group of dependencies.",
+      "additionalProperties": {
+        "$ref": "#/$defs/manifest"
+      }
+    },
+    "scanned": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The time at which the snapshot was scanned."
+    }
+  },
+  "required": [
+    "detector",
+    "version",
+    "ref",
+    "sha",
+    "job",
+    "scanned"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "dependency": {
+      "type": "object",
+      "properties": {
+        "package_url": {
+          "type": "string",
+          "description": "Package-url (PURL) of dependency. See https://github.com/package-url/purl-spec for more details.",
+          "pattern": "^pkg"
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "relationship": {
+          "type": "string",
+          "description": "A notation of whether a dependency is requested directly by this manifest or is a dependency of another dependency.",
+          "enum": [
+            "direct",
+            "indirect"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "description": "A notation of whether the dependency is required for the primary build artifact (runtime) or is only used for development. Future versions of this specification may allow for more granular scopes.",
+          "enum": [
+            "runtime",
+            "development"
+          ]
+        },
+        "dependencies": {
+          "type": "array",
+          "description": "Array of package-url (PURLs) of direct child dependencies.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the manifest."
+        },
+        "file": {
+          "type": "object",
+          "properties": {
+            "source_location": {
+              "type": "string",
+              "description": "The path of the manifest file relative to the root of the Git repository."
+            }
+          },
+          "additionalProperties": false
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "resolved": {
+          "type": "object",
+          "description": "A collection of resolved package dependencies.",
+          "additionalProperties": {
+            "$ref": "#/$defs/dependency"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "metadata": {
+      "title": "metadata",
+      "description": "User-defined metadata to store domain-specific information limited to 8 keys with scalar values.",
+      "type": "object",
+      "maxProperties": 8,
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      }
+    }
+  }
+}

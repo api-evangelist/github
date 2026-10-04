@@ -110,18 +110,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    advanced-security-active-committers-user:
-      type: object
-      properties:
-        user_login:
-          type: string
-          example: octocat
-        last_pushed_date:
-          type: string
-          example: '2021-11-03'
-      required:
-      - user_login
-      - last_pushed_date
     advanced-security-active-committers:
       type: object
       properties:
@@ -171,35 +159,18 @@ components:
         status:
           type: string
           example: open
-  parameters:
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    enterprise:
-      name: enterprise
-      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
-      in: path
-      required: true
-      schema:
-        type: string
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
+    advanced-security-active-committers-user:
+      type: object
+      properties:
+        user_login:
+          type: string
+          example: octocat
+        last_pushed_date:
+          type: string
+          example: '2021-11-03'
+      required:
+      - user_login
+      - last_pushed_date
   examples:
     advanced-security-active-committers:
       value:
@@ -218,6 +189,35 @@ components:
           advanced_security_committers_breakdown:
           - user_login: octokitten
             last_pushed_date: '2021-10-26'
+  parameters:
+    enterprise:
+      name: enterprise
+      description: The slug version of the enterprise name. You can also substitute this value with the enterprise id.
+      in: path
+      required: true
+      schema:
+        type: string
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
   responses:
     code_scanning_forbidden_read:
       description: Response if GitHub Advanced Security is not enabled for this repository

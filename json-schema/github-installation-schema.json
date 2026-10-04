@@ -1,0 +1,779 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-installation-schema.json",
+  "title": "Installation",
+  "description": "Installation",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-apps-api-openapi.yml#/components/schemas/installation",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "The ID of the installation.",
+      "type": "integer"
+    },
+    "account": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/simple-user"
+        },
+        {
+          "$ref": "#/$defs/enterprise"
+        }
+      ]
+    },
+    "repository_selection": {
+      "description": "Describe whether all repositories have been selected or there's a selection involved",
+      "type": "string",
+      "enum": [
+        "all",
+        "selected"
+      ]
+    },
+    "access_tokens_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "repositories_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "html_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "app_id": {
+      "type": "integer"
+    },
+    "target_id": {
+      "description": "The ID of the user or organization this token is being scoped to.",
+      "type": "integer"
+    },
+    "target_type": {
+      "type": "string"
+    },
+    "permissions": {
+      "$ref": "#/$defs/app-permissions"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "single_file_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "has_multiple_single_files": {
+      "type": "boolean"
+    },
+    "single_file_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "app_slug": {
+      "type": "string"
+    },
+    "suspended_by": {
+      "$ref": "#/$defs/nullable-simple-user"
+    },
+    "suspended_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "contact_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "app_id",
+    "app_slug",
+    "target_id",
+    "target_type",
+    "single_file_name",
+    "repository_selection",
+    "access_tokens_url",
+    "html_url",
+    "repositories_url",
+    "events",
+    "account",
+    "permissions",
+    "created_at",
+    "updated_at",
+    "suspended_by",
+    "suspended_at"
+  ],
+  "$defs": {
+    "app-permissions": {
+      "title": "App Permissions",
+      "type": "object",
+      "description": "The permissions granted to the user access token.",
+      "properties": {
+        "actions": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "administration": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "checks": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for checks on code.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "codespaces": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to create, edit, delete, and list Codespaces.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "contents": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "dependabot_secrets": {
+          "type": "string",
+          "description": "The leve of permission to grant the access token to manage Dependabot secrets.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "deployments": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for deployments and deployment statuses.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "environments": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for managing repository environments.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "issues": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "metadata": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "packages": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for packages published to GitHub Packages.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "pages": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "pull_requests": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "repository_hooks": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage the post-receive hooks for a repository.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "repository_projects": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage repository projects, columns, and cards.",
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ]
+        },
+        "secret_scanning_alerts": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage secret scanning alerts.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "secrets": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage repository secrets.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "security_events": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage security events like code scanning alerts.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "single_file": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage just a single file.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "statuses": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for commit statuses.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "vulnerability_alerts": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage Dependabot alerts.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "workflows": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to update GitHub Actions workflow files.",
+          "enum": [
+            "write"
+          ]
+        },
+        "members": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for organization teams and members.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_administration": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage access to an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_custom_roles": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for custom repository roles management.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_copilot_seat_management": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in beta and is subject to change.",
+          "enum": [
+            "write"
+          ]
+        },
+        "organization_announcement_banners": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage announcement banners for an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_events": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view events triggered by an activity in an organization.",
+          "enum": [
+            "read"
+          ]
+        },
+        "organization_hooks": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage the post-receive hooks for an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_personal_access_tokens": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_personal_access_token_requests": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_plan": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for viewing an organization's plan.",
+          "enum": [
+            "read"
+          ]
+        },
+        "organization_projects": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage organization projects and projects beta (where available).",
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ]
+        },
+        "organization_packages": {
+          "type": "string",
+          "description": "The level of permission to grant the access token for organization packages published to GitHub Packages.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_secrets": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage organization secrets.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_self_hosted_runners": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "organization_user_blocking": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage users blocked by the organization.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "team_discussions": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage team discussions and related comments.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "email_addresses": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage the email addresses belonging to a user.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "followers": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage the followers belonging to a user.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "git_ssh_keys": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage git SSH keys.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "gpg_keys": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage GPG keys belonging to a user.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "interaction_limits": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to view and manage interaction limits on a repository.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        },
+        "profile": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to manage the profile settings belonging to a user.",
+          "enum": [
+            "write"
+          ]
+        },
+        "starring": {
+          "type": "string",
+          "description": "The level of permission to grant the access token to list and manage repositories a user is starring.",
+          "enum": [
+            "read",
+            "write"
+          ]
+        }
+      }
+    },
+    "enterprise": {
+      "title": "Enterprise",
+      "description": "An enterprise on GitHub.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "A short description of the enterprise.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "website_url": {
+          "description": "The enterprise's website URL.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "id": {
+          "description": "Unique identifier of the enterprise",
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the enterprise.",
+          "type": "string"
+        },
+        "slug": {
+          "description": "The slug url identifier for the enterprise.",
+          "type": "string"
+        },
+        "created_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "node_id",
+        "name",
+        "slug",
+        "html_url",
+        "created_at",
+        "updated_at",
+        "avatar_url"
+      ]
+    },
+    "nullable-simple-user": {
+      "title": "Simple User",
+      "description": "A GitHub user.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "gravatar_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "following_url": {
+          "type": "string"
+        },
+        "gists_url": {
+          "type": "string"
+        },
+        "starred_url": {
+          "type": "string"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "events_url": {
+          "type": "string"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "site_admin": {
+          "type": "boolean"
+        },
+        "starred_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "events_url",
+        "followers_url",
+        "following_url",
+        "gists_url",
+        "gravatar_id",
+        "html_url",
+        "id",
+        "node_id",
+        "login",
+        "organizations_url",
+        "received_events_url",
+        "repos_url",
+        "site_admin",
+        "starred_url",
+        "subscriptions_url",
+        "type",
+        "url"
+      ]
+    },
+    "simple-user": {
+      "title": "Simple User",
+      "description": "A GitHub user.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "gravatar_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "following_url": {
+          "type": "string"
+        },
+        "gists_url": {
+          "type": "string"
+        },
+        "starred_url": {
+          "type": "string"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "events_url": {
+          "type": "string"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "site_admin": {
+          "type": "boolean"
+        },
+        "starred_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "events_url",
+        "followers_url",
+        "following_url",
+        "gists_url",
+        "gravatar_id",
+        "html_url",
+        "id",
+        "node_id",
+        "login",
+        "organizations_url",
+        "received_events_url",
+        "repos_url",
+        "site_admin",
+        "starred_url",
+        "subscriptions_url",
+        "type",
+        "url"
+      ]
+    }
+  }
+}

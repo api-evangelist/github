@@ -172,26 +172,105 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  responses:
-    dependency_review_forbidden:
-      description: Response if GitHub Advanced Security is not enabled for this repository
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
+  examples:
+    dependency-graph-export-sbom-response:
+      value:
+        sbom:
+          SPDXID: SPDXRef-DOCUMENT
+          spdxVersion: SPDX-2.3
+          creationInfo:
+            created: '2021-09-01T00:00:00Z'
+            creators:
+            - 'Tool: GitHub.com-Dependency-Graph'
+          name: github/example
+          dataLicense: CC0-1.0
+          documentDescribes:
+          - github/example
+          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
+          packages:
+          - SPDXID: SPDXRef-Package
+            name: rubygems:rails
+            versionInfo: 1.0.0
+            downloadLocation: NOASSERTION
+            filesAnalyzed: false
+            licenseConcluded: MIT
+            licenseDeclared: MIT
+    dependency-graph-create-snapshot-success:
+      value:
+        id: 12345
+        created_at: '2018-05-04T01:14:52Z'
+        message: Dependency results for the repo have been successfully updated.
+        result: SUCCESS
+    dependency-graph-create-snapshot-request:
+      value:
+        version: 0
+        sha: ce587453ced02b1526dfb4cb910479d431683101
+        ref: refs/heads/main
+        job:
+          correlator: yourworkflowname_youractionname
+          id: yourrunid
+        detector:
+          name: octo-detector
+          version: 0.0.1
+          url: https://github.com/octo-org/octo-repo
+        scanned: '2022-06-14T20:25:00Z'
+        manifests:
+          package-lock.json:
+            name: package-lock.json
+            file:
+              source_location: src/package-lock.json
+            resolved:
+              '@actions/core':
+                package_url: pkg:/npm/%40actions/core@1.1.9
+                dependencies:
+                - '@actions/http-client'
+              '@actions/http-client':
+                package_url: pkg:/npm/%40actions/http-client@1.0.7
+                dependencies:
+                - tunnel
+              tunnel:
+                package_url: pkg:/npm/tunnel@0.0.6
+    diff-range-response:
+      value:
+      - change_type: removed
+        manifest: package.json
+        ecosystem: npm
+        name: helmet
+        version: 4.6.0
+        package_url: pkg:npm/helmet@4.6.0
+        license: MIT
+        source_repository_url: https://github.com/helmetjs/helmet
+        vulnerabilities: []
+      - change_type: added
+        manifest: package.json
+        ecosystem: npm
+        name: helmet
+        version: 5.0.0
+        package_url: pkg:npm/helmet@5.0.0
+        license: MIT
+        source_repository_url: https://github.com/helmetjs/helmet
+        vulnerabilities: []
+      - change_type: added
+        manifest: Gemfile
+        ecosystem: rubygems
+        name: ruby-openid
+        version: 2.7.0
+        package_url: pkg:gem/ruby-openid@2.7.0
+        license: null
+        source_repository_url: https://github.com/openid/ruby-openid
+        vulnerabilities:
+        - severity: critical
+          advisory_ghsa_id: GHSA-fqfj-cmh6-hj49
+          advisory_summary: Ruby OpenID
+          advisory_url: https://github.com/advisories/GHSA-fqfj-cmh6-hj49
   parameters:
+    manifest-path:
+      name: name
+      description: The full path, relative to the repository root, of the dependency manifest file.
+      in: query
+      required: false
+      schema:
+        type: string
     owner:
       name: owner
       description: The account owner of the repository. The name is not case sensitive.
@@ -204,13 +283,6 @@ components:
       description: The name of the repository without the `.git` extension. The name is not case sensitive.
       in: path
       required: true
-      schema:
-        type: string
-    manifest-path:
-      name: name
-      description: The full path, relative to the repository root, of the dependency manifest file.
-      in: query
-      required: false
       schema:
         type: string
   schemas:
@@ -244,110 +316,6 @@ components:
           example: '@actions/http-client'
           items:
             type: string
-      additionalProperties: false
-    dependency-graph-diff:
-      title: Dependency Graph Diff
-      description: A diff of the dependencies between two commits.
-      type: array
-      items:
-        type: object
-        properties:
-          change_type:
-            type: string
-            enum:
-            - added
-            - removed
-          manifest:
-            type: string
-            example: path/to/package-lock.json
-          ecosystem:
-            type: string
-            example: npm
-          name:
-            type: string
-            example: '@actions/core'
-          version:
-            type: string
-            example: 1.0.0
-          package_url:
-            type:
-            - string
-            - 'null'
-            example: pkg:/npm/%40actions/core@1.1.0
-          license:
-            type:
-            - string
-            - 'null'
-            example: MIT
-          source_repository_url:
-            type:
-            - string
-            - 'null'
-            example: https://github.com/github/actions
-          vulnerabilities:
-            type: array
-            items:
-              type: object
-              properties:
-                severity:
-                  type: string
-                  example: critical
-                advisory_ghsa_id:
-                  type: string
-                  example: GHSA-rf4j-j272-fj86
-                advisory_summary:
-                  type: string
-                  example: A summary of the advisory.
-                advisory_url:
-                  type: string
-                  example: https://github.com/advisories/GHSA-rf4j-j272-fj86
-              required:
-              - severity
-              - advisory_ghsa_id
-              - advisory_summary
-              - advisory_url
-          scope:
-            description: Where the dependency is utilized. `development` means that the dependency is only utilized in the development environment. `runtime` means that the dependency is utilized at runtime and in the development environment.
-            type: string
-            enum:
-            - unknown
-            - runtime
-            - development
-        required:
-        - change_type
-        - manifest
-        - ecosystem
-        - name
-        - version
-        - package_url
-        - license
-        - source_repository_url
-        - vulnerabilities
-        - scope
-    manifest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the manifest.
-          example: package-lock.json
-        file:
-          type: object
-          properties:
-            source_location:
-              type: string
-              description: The path of the manifest file relative to the root of the Git repository.
-              example: /src/build/package-lock.json
-          additionalProperties: false
-        metadata:
-          $ref: '#/components/schemas/metadata'
-        resolved:
-          type: object
-          description: A collection of resolved package dependencies.
-          additionalProperties:
-            $ref: '#/components/schemas/dependency'
-      required:
-      - name
       additionalProperties: false
     snapshot:
       title: snapshot
@@ -429,6 +397,102 @@ components:
       - job
       - scanned
       additionalProperties: false
+    dependency-graph-diff:
+      title: Dependency Graph Diff
+      description: A diff of the dependencies between two commits.
+      type: array
+      items:
+        type: object
+        properties:
+          change_type:
+            type: string
+            enum:
+            - added
+            - removed
+          manifest:
+            type: string
+            example: path/to/package-lock.json
+          ecosystem:
+            type: string
+            example: npm
+          name:
+            type: string
+            example: '@actions/core'
+          version:
+            type: string
+            example: 1.0.0
+          package_url:
+            type:
+            - string
+            - 'null'
+            example: pkg:/npm/%40actions/core@1.1.0
+          license:
+            type:
+            - string
+            - 'null'
+            example: MIT
+          source_repository_url:
+            type:
+            - string
+            - 'null'
+            example: https://github.com/github/actions
+          vulnerabilities:
+            type: array
+            items:
+              type: object
+              properties:
+                severity:
+                  type: string
+                  example: critical
+                advisory_ghsa_id:
+                  type: string
+                  example: GHSA-rf4j-j272-fj86
+                advisory_summary:
+                  type: string
+                  example: A summary of the advisory.
+                advisory_url:
+                  type: string
+                  example: https://github.com/advisories/GHSA-rf4j-j272-fj86
+              required:
+              - severity
+              - advisory_ghsa_id
+              - advisory_summary
+              - advisory_url
+          scope:
+            description: Where the dependency is utilized. `development` means that the dependency is only utilized in the development environment. `runtime` means that the dependency is utilized at runtime and in the development environment.
+            type: string
+            enum:
+            - unknown
+            - runtime
+            - development
+        required:
+        - change_type
+        - manifest
+        - ecosystem
+        - name
+        - version
+        - package_url
+        - license
+        - source_repository_url
+        - vulnerabilities
+        - scope
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
     dependency-graph-spdx-sbom:
       title: Dependency Graph SPDX SBOM
       description: A schema for the SPDX JSON format returned by the Dependency Graph.
@@ -565,23 +629,31 @@ components:
           - packages
       required:
       - sbom
-    basic-error:
-      title: Basic Error
-      description: Basic Error
+    manifest:
       type: object
       properties:
-        message:
+        name:
           type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
+          description: The name of the manifest.
+          example: package-lock.json
+        file:
+          type: object
+          properties:
+            source_location:
+              type: string
+              description: The path of the manifest file relative to the root of the Git repository.
+              example: /src/build/package-lock.json
+          additionalProperties: false
+        metadata:
+          $ref: '#/components/schemas/metadata'
+        resolved:
+          type: object
+          description: A collection of resolved package dependencies.
+          additionalProperties:
+            $ref: '#/components/schemas/dependency'
+      required:
+      - name
+      additionalProperties: false
     metadata:
       title: metadata
       description: User-defined metadata to store domain-specific information limited to 8 keys with scalar values.
@@ -592,97 +664,25 @@ components:
         - type: string
         - type: number
         - type: boolean
-  examples:
-    dependency-graph-create-snapshot-request:
-      value:
-        version: 0
-        sha: ce587453ced02b1526dfb4cb910479d431683101
-        ref: refs/heads/main
-        job:
-          correlator: yourworkflowname_youractionname
-          id: yourrunid
-        detector:
-          name: octo-detector
-          version: 0.0.1
-          url: https://github.com/octo-org/octo-repo
-        scanned: '2022-06-14T20:25:00Z'
-        manifests:
-          package-lock.json:
-            name: package-lock.json
-            file:
-              source_location: src/package-lock.json
-            resolved:
-              '@actions/core':
-                package_url: pkg:/npm/%40actions/core@1.1.9
-                dependencies:
-                - '@actions/http-client'
-              '@actions/http-client':
-                package_url: pkg:/npm/%40actions/http-client@1.0.7
-                dependencies:
-                - tunnel
-              tunnel:
-                package_url: pkg:/npm/tunnel@0.0.6
-    dependency-graph-create-snapshot-success:
-      value:
-        id: 12345
-        created_at: '2018-05-04T01:14:52Z'
-        message: Dependency results for the repo have been successfully updated.
-        result: SUCCESS
-    diff-range-response:
-      value:
-      - change_type: removed
-        manifest: package.json
-        ecosystem: npm
-        name: helmet
-        version: 4.6.0
-        package_url: pkg:npm/helmet@4.6.0
-        license: MIT
-        source_repository_url: https://github.com/helmetjs/helmet
-        vulnerabilities: []
-      - change_type: added
-        manifest: package.json
-        ecosystem: npm
-        name: helmet
-        version: 5.0.0
-        package_url: pkg:npm/helmet@5.0.0
-        license: MIT
-        source_repository_url: https://github.com/helmetjs/helmet
-        vulnerabilities: []
-      - change_type: added
-        manifest: Gemfile
-        ecosystem: rubygems
-        name: ruby-openid
-        version: 2.7.0
-        package_url: pkg:gem/ruby-openid@2.7.0
-        license: null
-        source_repository_url: https://github.com/openid/ruby-openid
-        vulnerabilities:
-        - severity: critical
-          advisory_ghsa_id: GHSA-fqfj-cmh6-hj49
-          advisory_summary: Ruby OpenID
-          advisory_url: https://github.com/advisories/GHSA-fqfj-cmh6-hj49
-    dependency-graph-export-sbom-response:
-      value:
-        sbom:
-          SPDXID: SPDXRef-DOCUMENT
-          spdxVersion: SPDX-2.3
-          creationInfo:
-            created: '2021-09-01T00:00:00Z'
-            creators:
-            - 'Tool: GitHub.com-Dependency-Graph'
-          name: github/example
-          dataLicense: CC0-1.0
-          documentDescribes:
-          - github/example
-          documentNamespace: https://github.com/github/example/dependency_graph/sbom-abcdef123456
-          packages:
-          - SPDXID: SPDXRef-Package
-            name: rubygems:rails
-            versionInfo: 1.0.0
-            downloadLocation: NOASSERTION
-            filesAnalyzed: false
-            licenseConcluded: MIT
-            licenseDeclared: MIT
+  responses:
+    dependency_review_forbidden:
+      description: Response if GitHub Advanced Security is not enabled for this repository
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
   headers:
     link:
       example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"

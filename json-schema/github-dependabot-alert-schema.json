@@ -1,0 +1,559 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-dependabot-alert-schema.json",
+  "title": "dependabot-alert",
+  "description": "A Dependabot alert.",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-dependabot-api-openapi.yml#/components/schemas/dependabot-alert",
+  "type": "object",
+  "properties": {
+    "number": {
+      "$ref": "#/$defs/alert-number"
+    },
+    "state": {
+      "type": "string",
+      "description": "The state of the Dependabot alert.",
+      "readOnly": true,
+      "enum": [
+        "auto_dismissed",
+        "dismissed",
+        "fixed",
+        "open"
+      ]
+    },
+    "dependency": {
+      "type": "object",
+      "description": "Details for the vulnerable dependency.",
+      "readOnly": true,
+      "properties": {
+        "package": {
+          "$ref": "#/$defs/dependabot-alert-package"
+        },
+        "manifest_path": {
+          "type": "string",
+          "description": "The full path to the dependency manifest file, relative to the root of the repository.",
+          "readOnly": true
+        },
+        "scope": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The execution scope of the vulnerable dependency.",
+          "readOnly": true,
+          "enum": [
+            "development",
+            "runtime"
+          ]
+        }
+      }
+    },
+    "security_advisory": {
+      "$ref": "#/$defs/dependabot-alert-security-advisory"
+    },
+    "security_vulnerability": {
+      "$ref": "#/$defs/dependabot-alert-security-vulnerability"
+    },
+    "url": {
+      "$ref": "#/$defs/alert-url"
+    },
+    "html_url": {
+      "$ref": "#/$defs/alert-html-url"
+    },
+    "created_at": {
+      "$ref": "#/$defs/alert-created-at"
+    },
+    "updated_at": {
+      "$ref": "#/$defs/alert-updated-at"
+    },
+    "dismissed_at": {
+      "$ref": "#/$defs/alert-dismissed-at"
+    },
+    "dismissed_by": {
+      "$ref": "#/$defs/nullable-simple-user"
+    },
+    "dismissed_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The reason that the alert was dismissed.",
+      "enum": [
+        "fix_started",
+        "inaccurate",
+        "no_bandwidth",
+        "not_used",
+        "tolerable_risk"
+      ]
+    },
+    "dismissed_comment": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "An optional comment associated with the alert's dismissal.",
+      "maxLength": 280
+    },
+    "fixed_at": {
+      "$ref": "#/$defs/alert-fixed-at"
+    },
+    "auto_dismissed_at": {
+      "$ref": "#/$defs/alert-auto-dismissed-at"
+    }
+  },
+  "required": [
+    "number",
+    "state",
+    "dependency",
+    "security_advisory",
+    "security_vulnerability",
+    "url",
+    "html_url",
+    "created_at",
+    "updated_at",
+    "dismissed_at",
+    "dismissed_by",
+    "dismissed_reason",
+    "dismissed_comment",
+    "fixed_at"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "alert-auto-dismissed-at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The time that the alert was auto-dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "alert-created-at": {
+      "type": "string",
+      "description": "The time that the alert was created in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "alert-dismissed-at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The time that the alert was dismissed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "alert-fixed-at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The time that the alert was no longer detected and was considered fixed in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "alert-html-url": {
+      "type": "string",
+      "description": "The GitHub URL of the alert resource.",
+      "format": "uri",
+      "readOnly": true
+    },
+    "alert-number": {
+      "type": "integer",
+      "description": "The security alert number.",
+      "readOnly": true
+    },
+    "alert-updated-at": {
+      "type": "string",
+      "description": "The time that the alert was last updated in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "alert-url": {
+      "type": "string",
+      "description": "The REST API URL of the alert resource.",
+      "format": "uri",
+      "readOnly": true
+    },
+    "dependabot-alert-package": {
+      "type": "object",
+      "description": "Details for the vulnerable package.",
+      "readOnly": true,
+      "properties": {
+        "ecosystem": {
+          "type": "string",
+          "description": "The package's language or package management ecosystem.",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "description": "The unique package name within its ecosystem.",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "ecosystem",
+        "name"
+      ],
+      "additionalProperties": false
+    },
+    "dependabot-alert-security-advisory": {
+      "type": "object",
+      "description": "Details for the GitHub Security Advisory.",
+      "readOnly": true,
+      "properties": {
+        "ghsa_id": {
+          "type": "string",
+          "description": "The unique GitHub Security Advisory ID assigned to the advisory.",
+          "readOnly": true
+        },
+        "cve_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The unique CVE ID assigned to the advisory.",
+          "readOnly": true
+        },
+        "summary": {
+          "type": "string",
+          "description": "A short, plain text summary of the advisory.",
+          "readOnly": true,
+          "maxLength": 1024
+        },
+        "description": {
+          "type": "string",
+          "description": "A long-form Markdown-supported description of the advisory.",
+          "readOnly": true
+        },
+        "vulnerabilities": {
+          "type": "array",
+          "description": "Vulnerable version range information for the advisory.",
+          "readOnly": true,
+          "items": {
+            "$ref": "#/$defs/dependabot-alert-security-vulnerability"
+          }
+        },
+        "severity": {
+          "type": "string",
+          "description": "The severity of the advisory.",
+          "readOnly": true,
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "cvss": {
+          "type": "object",
+          "description": "Details for the advisory pertaining to the Common Vulnerability Scoring System.",
+          "readOnly": true,
+          "properties": {
+            "score": {
+              "type": "number",
+              "description": "The overall CVSS score of the advisory.",
+              "minimum": 0,
+              "maximum": 10,
+              "readOnly": true
+            },
+            "vector_string": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The full CVSS vector string for the advisory.",
+              "readOnly": true
+            }
+          },
+          "required": [
+            "score",
+            "vector_string"
+          ],
+          "additionalProperties": false
+        },
+        "cwes": {
+          "type": "array",
+          "description": "Details for the advisory pertaining to Common Weakness Enumeration.",
+          "readOnly": true,
+          "items": {
+            "type": "object",
+            "description": "A CWE weakness assigned to the advisory.",
+            "readOnly": true,
+            "properties": {
+              "cwe_id": {
+                "type": "string",
+                "description": "The unique CWE ID.",
+                "readOnly": true
+              },
+              "name": {
+                "type": "string",
+                "description": "The short, plain text name of the CWE.",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "cwe_id",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "identifiers": {
+          "type": "array",
+          "description": "Values that identify this advisory among security information sources.",
+          "readOnly": true,
+          "items": {
+            "type": "object",
+            "description": "An advisory identifier.",
+            "readOnly": true,
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "The type of advisory identifier.",
+                "readOnly": true,
+                "enum": [
+                  "CVE",
+                  "GHSA"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "description": "The value of the advisory identifer.",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "value",
+              "type"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "references": {
+          "type": "array",
+          "description": "Links to additional advisory information.",
+          "readOnly": true,
+          "items": {
+            "type": "object",
+            "description": "A link to additional advisory information.",
+            "readOnly": true,
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "The URL of the reference.",
+                "format": "uri",
+                "readOnly": true
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "published_at": {
+          "type": "string",
+          "description": "The time that the advisory was published in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "The time that the advisory was last modified in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "withdrawn_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The time that the advisory was withdrawn in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "ghsa_id",
+        "cve_id",
+        "summary",
+        "description",
+        "vulnerabilities",
+        "severity",
+        "cvss",
+        "cwes",
+        "identifiers",
+        "references",
+        "published_at",
+        "updated_at",
+        "withdrawn_at"
+      ],
+      "additionalProperties": false
+    },
+    "dependabot-alert-security-vulnerability": {
+      "type": "object",
+      "description": "Details pertaining to one vulnerable version range for the advisory.",
+      "readOnly": true,
+      "properties": {
+        "package": {
+          "$ref": "#/$defs/dependabot-alert-package"
+        },
+        "severity": {
+          "type": "string",
+          "description": "The severity of the vulnerability.",
+          "readOnly": true,
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "vulnerable_version_range": {
+          "type": "string",
+          "description": "Conditions that identify vulnerable versions of this vulnerability's package.",
+          "readOnly": true
+        },
+        "first_patched_version": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Details pertaining to the package version that patches this vulnerability.",
+          "readOnly": true,
+          "properties": {
+            "identifier": {
+              "type": "string",
+              "description": "The package version that patches this vulnerability.",
+              "readOnly": true
+            }
+          },
+          "required": [
+            "identifier"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "package",
+        "severity",
+        "vulnerable_version_range",
+        "first_patched_version"
+      ],
+      "additionalProperties": false
+    },
+    "nullable-simple-user": {
+      "title": "Simple User",
+      "description": "A GitHub user.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "gravatar_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "following_url": {
+          "type": "string"
+        },
+        "gists_url": {
+          "type": "string"
+        },
+        "starred_url": {
+          "type": "string"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "events_url": {
+          "type": "string"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "site_admin": {
+          "type": "boolean"
+        },
+        "starred_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "events_url",
+        "followers_url",
+        "following_url",
+        "gists_url",
+        "gravatar_id",
+        "html_url",
+        "id",
+        "node_id",
+        "login",
+        "organizations_url",
+        "received_events_url",
+        "repos_url",
+        "site_admin",
+        "starred_url",
+        "subscriptions_url",
+        "type",
+        "url"
+      ]
+    }
+  }
+}

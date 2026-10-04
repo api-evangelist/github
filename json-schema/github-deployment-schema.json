@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/github/main/json-schema/github-deployment-schema.json",
+  "title": "Deployment",
+  "description": "A request for a specific ref(branch,sha,tag) to be deployed",
+  "x-generated": "2026-10-03",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/github-actions-api-openapi.yml#/components/schemas/deployment",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "id": {
+      "description": "Unique identifier of the deployment",
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "sha": {
+      "type": "string"
+    },
+    "ref": {
+      "description": "The ref to deploy. This can be a branch, tag, or sha.",
+      "type": "string"
+    },
+    "task": {
+      "description": "Parameter to specify a task to execute",
+      "type": "string"
+    },
+    "payload": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "original_environment": {
+      "type": "string"
+    },
+    "environment": {
+      "description": "Name for the target deployment environment.",
+      "type": "string"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "creator": {
+      "$ref": "#/$defs/nullable-simple-user"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "statuses_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "repository_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "transient_environment": {
+      "description": "Specifies if the given environment is will no longer exist at some point in the future. Default: false.",
+      "type": "boolean"
+    },
+    "production_environment": {
+      "description": "Specifies if the given environment is one that end-users directly interact with. Default: false.",
+      "type": "boolean"
+    },
+    "performed_via_github_app": {
+      "$ref": "#/$defs/nullable-integration"
+    }
+  },
+  "required": [
+    "id",
+    "node_id",
+    "sha",
+    "ref",
+    "task",
+    "environment",
+    "creator",
+    "payload",
+    "description",
+    "statuses_url",
+    "repository_url",
+    "url",
+    "created_at",
+    "updated_at"
+  ],
+  "$defs": {
+    "nullable-integration": {
+      "title": "GitHub app",
+      "description": "GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "id": {
+          "description": "Unique identifier of the GitHub app",
+          "type": "integer"
+        },
+        "slug": {
+          "description": "The slug name of the GitHub app",
+          "type": "string"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "owner": {
+          "$ref": "#/$defs/nullable-simple-user"
+        },
+        "name": {
+          "description": "The name of the GitHub app",
+          "type": "string"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "external_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "permissions": {
+          "description": "The set of permissions for the GitHub app",
+          "type": "object",
+          "properties": {
+            "issues": {
+              "type": "string"
+            },
+            "checks": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "string"
+            },
+            "contents": {
+              "type": "string"
+            },
+            "deployments": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "events": {
+          "description": "The list of events for the GitHub app",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "installations_count": {
+          "description": "The number of installations associated with the GitHub app",
+          "type": "integer"
+        },
+        "client_id": {
+          "type": "string"
+        },
+        "client_secret": {
+          "type": "string"
+        },
+        "webhook_secret": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "pem": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "node_id",
+        "owner",
+        "name",
+        "description",
+        "external_url",
+        "html_url",
+        "created_at",
+        "updated_at",
+        "permissions",
+        "events"
+      ]
+    },
+    "nullable-simple-user": {
+      "title": "Simple User",
+      "description": "A GitHub user.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "login": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "node_id": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "gravatar_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "html_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "followers_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "following_url": {
+          "type": "string"
+        },
+        "gists_url": {
+          "type": "string"
+        },
+        "starred_url": {
+          "type": "string"
+        },
+        "subscriptions_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "organizations_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "repos_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "events_url": {
+          "type": "string"
+        },
+        "received_events_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "type": {
+          "type": "string"
+        },
+        "site_admin": {
+          "type": "boolean"
+        },
+        "starred_at": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "avatar_url",
+        "events_url",
+        "followers_url",
+        "following_url",
+        "gists_url",
+        "gravatar_id",
+        "html_url",
+        "id",
+        "node_id",
+        "login",
+        "organizations_url",
+        "received_events_url",
+        "repos_url",
+        "site_admin",
+        "starred_url",
+        "subscriptions_url",
+        "type",
+        "url"
+      ]
+    }
+  }
+}
