@@ -1,0 +1,1050 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub v3 REST Interactions API
+  description: GitHub's v3 REST API.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: api.github.com
+servers:
+- url: https://api.github.com
+tags:
+- name: Interactions
+  description: Owner or admin management of users interactions.
+paths:
+  /orgs/{org}/interaction-limits:
+    get:
+      summary: Get interaction restrictions for an organization
+      description: Shows which type of GitHub user can interact with this organization and when the restriction expires. If there is no restrictions, you will see an empty response.
+      tags:
+      - Interactions
+      operationId: interactions/get-restrictions-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/orgs#get-interaction-restrictions-for-an-organization
+      parameters:
+      - $ref: '#/components/parameters/org'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/interaction-limit-response'
+                - type: object
+                  properties: {}
+                  additionalProperties: false
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-response'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: orgs
+    put:
+      summary: Set interaction restrictions for an organization
+      description: Temporarily restricts interactions to a certain type of GitHub user in any public repository in the given organization. You must be an organization owner to set these restrictions. Setting the interaction limit at the organization level will overwrite any interaction limits that are set for individual repositories owned by the organization.
+      tags:
+      - Interactions
+      operationId: interactions/set-restrictions-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/orgs#set-interaction-restrictions-for-an-organization
+      parameters:
+      - $ref: '#/components/parameters/org'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interaction-limit'
+            examples:
+              default:
+                value:
+                  limit: collaborators_only
+                  expiry: one_month
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interaction-limit-response'
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-response'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: orgs
+    delete:
+      summary: Remove interaction restrictions for an organization
+      description: Removes all interaction restrictions from public repositories in the given organization. You must be an organization owner to remove restrictions.
+      tags:
+      - Interactions
+      operationId: interactions/remove-restrictions-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/orgs#remove-interaction-restrictions-for-an-organization
+      parameters:
+      - $ref: '#/components/parameters/org'
+      responses:
+        '204':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: orgs
+  /orgs/{org}/interaction-limits/pulls/creation-cap:
+    get:
+      summary: Get pull request creation cap for an org
+      description: 'Gets the pull request creation cap configuration for an organization.
+
+        The cap limits the total number of open pull requests a user can have across all public
+
+        repositories in the organization at one time.
+
+
+        Only users with admin access to the organization can view the cap configuration.'
+      tags:
+      - Interactions
+      operationId: interactions/get-pull-request-creation-cap-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/orgs#get-pull-request-creation-cap-for-an-org
+      parameters:
+      - $ref: '#/components/parameters/org'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    description: Whether the pull request creation cap is enabled
+                  max_open_pull_requests:
+                    type: integer
+                    description: The maximum number of open pull requests a user can have at one time
+                    minimum: 1
+                    maximum: 1000
+                  include_drafts:
+                    type: boolean
+                    description: Whether draft pull requests count toward the pull request creation cap
+                required:
+                - enabled
+                - max_open_pull_requests
+              examples:
+                default:
+                  summary: Response when cap is enabled
+                  value:
+                    enabled: true
+                    max_open_pull_requests: 1
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basic-error'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: orgs
+    patch:
+      summary: Update pull request creation cap for an org
+      description: 'Updates the pull request creation cap for an organization. The cap limits the total number
+
+        of open pull requests a user can have across all public repositories in the organization
+
+        at one time.
+
+
+        Only users with admin access to the organization can configure the cap.'
+      tags:
+      - Interactions
+      operationId: interactions/update-pull-request-creation-cap-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/orgs#update-pull-request-creation-cap-for-an-org
+      parameters:
+      - $ref: '#/components/parameters/org'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether the pull request creation cap is enabled
+                max_open_pull_requests:
+                  type: integer
+                  description: The maximum number of open pull requests a user can have at one time
+                  minimum: 1
+                  maximum: 1000
+                include_drafts:
+                  type: boolean
+                  description: Whether draft pull requests count toward the pull request creation cap
+              required:
+              - enabled
+            examples:
+              default:
+                summary: Example request body
+                value:
+                  enabled: true
+                  max_open_pull_requests: 1
+                  include_drafts: true
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    description: Whether the pull request creation cap is enabled
+                  max_open_pull_requests:
+                    type: integer
+                    description: The maximum number of open pull requests a user can have at one time
+                    minimum: 1
+                    maximum: 1000
+                  include_drafts:
+                    type: boolean
+                    description: Whether draft pull requests count toward the pull request creation cap
+                required:
+                - enabled
+                - max_open_pull_requests
+              examples:
+                default:
+                  summary: Response
+                  value:
+                    enabled: true
+                    max_open_pull_requests: 1
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basic-error'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: orgs
+  /repos/{owner}/{repo}/interaction-limits:
+    get:
+      summary: Get interaction restrictions for a repository
+      description: Shows which type of GitHub user can interact with this repository and when the restriction expires. If there are no restrictions, you will see an empty response.
+      tags:
+      - Interactions
+      operationId: interactions/get-restrictions-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#get-interaction-restrictions-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/interaction-limit-response'
+                - type: object
+                  properties: {}
+                  additionalProperties: false
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-2'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+    put:
+      summary: Set interaction restrictions for a repository
+      description: Temporarily restricts interactions to a certain type of GitHub user within the given repository. You must have owner or admin access to set these restrictions. If an interaction limit is set for the user or organization that owns this repository, you will receive a `409 Conflict` response and will not be able to use this endpoint to change the interaction limit for a single repository.
+      tags:
+      - Interactions
+      operationId: interactions/set-restrictions-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#set-interaction-restrictions-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interaction-limit'
+            examples:
+              default:
+                summary: Example request body
+                value:
+                  limit: collaborators_only
+                  expiry: one_day
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interaction-limit-response'
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-2'
+        '409':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+    delete:
+      summary: Remove interaction restrictions for a repository
+      description: Removes all interaction restrictions from the given repository. You must have owner or admin access to remove restrictions. If the interaction limit is set for the user or organization that owns this repository, you will receive a `409 Conflict` response and will not be able to use this endpoint to change the interaction limit for a single repository.
+      tags:
+      - Interactions
+      operationId: interactions/remove-restrictions-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#remove-interaction-restrictions-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      responses:
+        '204':
+          description: Response
+        '409':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+  /repos/{owner}/{repo}/interaction-limits/pulls/bypass-list:
+    get:
+      summary: Get pull request creation cap bypass list for a repository
+      description: 'Lists the users that are on the pull request creation cap bypass list for a
+
+        repository. Users on this list can create pull requests regardless of any
+
+        configured pull request creation cap.
+
+
+        Only users with maintainer permissions can view the bypass list.'
+      tags:
+      - Interactions
+      operationId: interactions/get-pull-request-bypass-list-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#get-pull-request-creation-cap-bypass-list-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/simple-user'
+              examples:
+                default:
+                  $ref: '#/components/examples/pull-request-bypass-list-items'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+    put:
+      summary: Add users to the pull request creation cap bypass list for a repository
+      description: 'Adds users to the pull request creation cap bypass list for a repository.
+
+        Users on this list can create pull requests regardless of any configured
+
+        pull request creation cap.
+
+
+        Only users with maintainer permissions can modify the bypass list.
+
+        You can add a maximum of 100 users per request.
+
+        The bypass list can only hold a maximum of 100 users.'
+      tags:
+      - Interactions
+      operationId: interactions/set-pull-request-bypass-list-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#add-users-to-the-pull-request-creation-cap-bypass-list-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interaction-limit-pull-request-bypass-list'
+            examples:
+              default:
+                summary: Example request body
+                value:
+                  users:
+                  - octocat
+                  - monalisa
+      responses:
+        '204':
+          description: Response
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+    delete:
+      summary: Remove users from the pull request creation cap bypass list for a repository
+      description: 'Removes users from the pull request creation cap bypass list for a repository.
+
+        Removed users will be subject to any configured pull request creation cap.
+
+
+        Only users with maintainer permissions can modify the bypass list.
+
+        You can remove a maximum of 100 users per request.'
+      tags:
+      - Interactions
+      operationId: interactions/remove-pull-request-bypass-list-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#remove-users-from-the-pull-request-creation-cap-bypass-list-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interaction-limit-pull-request-bypass-list'
+            examples:
+              default:
+                summary: Example request body
+                value:
+                  users:
+                  - octocat
+      responses:
+        '204':
+          description: Response
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+  /repos/{owner}/{repo}/interaction-limits/pulls/creation-cap:
+    get:
+      summary: Get pull request creation cap for a repository
+      description: 'Gets the pull request creation cap configuration for a repository.
+
+        The cap limits the number of open pull requests a user can have at one time.
+
+
+        Only users with admin access to the repository can view the cap configuration.'
+      tags:
+      - Interactions
+      operationId: interactions/get-pull-request-creation-cap-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#get-pull-request-creation-cap-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    description: Whether the pull request creation cap is enabled
+                  max_open_pull_requests:
+                    type: integer
+                    description: The maximum number of open pull requests a user can have at one time
+                    minimum: 1
+                    maximum: 1000
+                  include_drafts:
+                    type: boolean
+                    description: Whether draft pull requests count toward the pull request creation cap
+                required:
+                - enabled
+                - max_open_pull_requests
+              examples:
+                default:
+                  summary: Response when cap is enabled
+                  value:
+                    enabled: true
+                    max_open_pull_requests: 1
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basic-error'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+    patch:
+      summary: Update pull request creation cap for a repository
+      description: 'Updates the pull request creation cap for a repository. The cap limits the number
+
+        of open pull requests a user can have at one time.
+
+
+        Only users with admin access to the repository can configure the cap.'
+      tags:
+      - Interactions
+      operationId: interactions/update-pull-request-creation-cap-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/repos#update-pull-request-creation-cap-for-a-repository
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  description: Whether the pull request creation cap is enabled
+                max_open_pull_requests:
+                  type: integer
+                  description: The maximum number of open pull requests a user can have at one time
+                  minimum: 1
+                  maximum: 1000
+                include_drafts:
+                  type: boolean
+                  description: Whether draft pull requests count toward the pull request creation cap
+              required:
+              - enabled
+            examples:
+              default:
+                summary: Example request body
+                value:
+                  enabled: true
+                  max_open_pull_requests: 1
+                  include_drafts: true
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enabled:
+                    type: boolean
+                    description: Whether the pull request creation cap is enabled
+                  max_open_pull_requests:
+                    type: integer
+                    description: The maximum number of open pull requests a user can have at one time
+                    minimum: 1
+                    maximum: 1000
+                  include_drafts:
+                    type: boolean
+                    description: Whether draft pull requests count toward the pull request creation cap
+                required:
+                - enabled
+                - max_open_pull_requests
+              examples:
+                default:
+                  summary: Response
+                  value:
+                    enabled: true
+                    max_open_pull_requests: 1
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/basic-error'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: interactions
+        subcategory: repos
+  /user/interaction-limits:
+    get:
+      summary: Get interaction restrictions for your public repositories
+      description: Shows which type of GitHub user can interact with your public repositories and when the restriction expires.
+      tags:
+      - Interactions
+      operationId: interactions/get-restrictions-for-authenticated-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/user#get-interaction-restrictions-for-your-public-repositories
+      responses:
+        '200':
+          description: Default response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/interaction-limit-response'
+                - type: object
+                  properties: {}
+                  additionalProperties: false
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-response'
+        '204':
+          description: Response when there are no restrictions
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: interactions
+        subcategory: user
+    put:
+      summary: Set interaction restrictions for your public repositories
+      description: Temporarily restricts which type of GitHub user can interact with your public repositories. Setting the interaction limit at the user level will overwrite any interaction limits that are set for individual repositories owned by the user.
+      tags:
+      - Interactions
+      operationId: interactions/set-restrictions-for-authenticated-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/user#set-interaction-restrictions-for-your-public-repositories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interaction-limit'
+            examples:
+              default:
+                value:
+                  limit: collaborators_only
+                  expiry: one_month
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interaction-limit-response'
+              examples:
+                default:
+                  $ref: '#/components/examples/interaction-limit-user'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: interactions
+        subcategory: user
+    delete:
+      summary: Remove interaction restrictions from your public repositories
+      description: Removes any interaction restrictions from your public repositories.
+      tags:
+      - Interactions
+      operationId: interactions/remove-restrictions-for-authenticated-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/interactions/user#remove-interaction-restrictions-from-your-public-repositories
+      responses:
+        '204':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: interactions
+        subcategory: user
+components:
+  examples:
+    interaction-limit-2:
+      value:
+        limit: collaborators_only
+        origin: repository
+        expires_at: '2018-08-17T04:18:39Z'
+    pull-request-bypass-list-items:
+      value:
+      - login: octocat
+        id: 1
+        node_id: MDQ6VXNlcjE=
+        avatar_url: https://github.com/images/error/octocat_happy.gif
+        gravatar_id: ''
+        url: https://api.github.com/users/octocat
+        html_url: https://github.com/octocat
+        followers_url: https://api.github.com/users/octocat/followers
+        following_url: https://api.github.com/users/octocat/following{/other_user}
+        gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url: https://api.github.com/users/octocat/subscriptions
+        organizations_url: https://api.github.com/users/octocat/orgs
+        repos_url: https://api.github.com/users/octocat/repos
+        events_url: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url: https://api.github.com/users/octocat/received_events
+        type: User
+        site_admin: false
+    interaction-limit-user:
+      value:
+        limit: collaborators_only
+        origin: user
+        expires_at: '2018-08-17T04:18:39Z'
+    interaction-limit-response:
+      value:
+        limit: collaborators_only
+        origin: organization
+        expires_at: '2018-08-17T04:18:39Z'
+  schemas:
+    interaction-group:
+      type: string
+      description: The type of GitHub user that can comment, open issues, or create pull requests while the interaction limit is in effect.
+      enum:
+      - existing_users
+      - contributors_only
+      - collaborators_only
+      examples:
+      - collaborators_only
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+        documentation_url:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    interaction-limit-pull-request-bypass-list:
+      title: Interaction Limits Pull Request Bypass List
+      description: A list of user logins to add or remove from the pull request creation cap bypass list.
+      type: object
+      properties:
+        users:
+          description: A list of user logins to add or remove from the bypass list.
+          type: array
+          items:
+            type: string
+          examples:
+          - octocat
+          - monalisa
+      required:
+      - users
+    interaction-limit-response:
+      title: Interaction Limits
+      description: Interaction limit settings.
+      type: object
+      properties:
+        limit:
+          $ref: '#/components/schemas/interaction-group'
+        origin:
+          type: string
+          examples:
+          - repository
+        expires_at:
+          type: string
+          format: date-time
+          examples:
+          - '2018-08-17T04:18:39Z'
+      required:
+      - limit
+      - origin
+      - expires_at
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        login:
+          type: string
+          examples:
+          - octocat
+        id:
+          type: integer
+          format: int64
+          examples:
+          - 1
+        node_id:
+          type: string
+          examples:
+          - MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          examples:
+          - https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          examples:
+          - 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          examples:
+          - https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          examples:
+          - User
+        site_admin:
+          type: boolean
+        starred_at:
+          type: string
+          examples:
+          - '"2020-07-09T00:17:55Z"'
+        user_view_type:
+          type: string
+          examples:
+          - public
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    interaction-limit:
+      title: Interaction Restrictions
+      description: Limit interactions to a specific type of user for a specified duration
+      type: object
+      properties:
+        limit:
+          $ref: '#/components/schemas/interaction-group'
+        expiry:
+          $ref: '#/components/schemas/interaction-expiry'
+      required:
+      - limit
+    interaction-expiry:
+      type: string
+      description: 'The duration of the interaction restriction. Default: `one_day`.'
+      enum:
+      - one_day
+      - three_days
+      - one_week
+      - one_month
+      - six_months
+      examples:
+      - one_month
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+        documentation_url:
+          type: string
+        url:
+          type: string
+        status:
+          type: string
+  parameters:
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+externalDocs:
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

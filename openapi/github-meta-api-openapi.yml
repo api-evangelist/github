@@ -10,19 +10,12 @@ info:
   contact:
     name: Support
     url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-github-plan: api.github.com
 servers:
-- url: '{protocol}://{hostname}/api/v3'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: HOSTNAME
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: http
+- url: https://api.github.com
 tags:
 - name: Meta
+  description: Endpoints that give information about the API.
 paths:
   /:
     get:
@@ -48,20 +41,28 @@ paths:
         subcategory: meta
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#github-api-root
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+        url: https://docs.github.com/rest/meta/meta#github-api-root
   /meta:
     get:
-      summary: GitHub Get GitHub Enterprise Server Meta Information
-      description: ''
+      summary: Get GitHub meta information
+      description: 'Returns meta information about GitHub, including a list of GitHub''s IP addresses. For more information, see "About GitHub''s IP addresses."
+
+
+        The API''s response also includes a list of GitHub''s domain names, and the public keys used by GitHub to sign commits made through the web UI.
+
+
+        The values shown in the documentation''s response are example values. You must always query the API directly to get the latest values.
+
+
+        > [!NOTE]
+
+        > This endpoint returns both IPv4 and IPv6 addresses. However, not all features support IPv6. You should refer to the specific documentation for each feature to determine if IPv6 is supported.'
       tags:
       - Meta
       operationId: meta/get
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#get-apiname-meta-information
+        url: https://docs.github.com/rest/meta/meta#get-apiname-meta-information
       parameters: []
       responses:
         '200':
@@ -80,12 +81,9 @@ paths:
         enabledForGitHubApps: true
         category: meta
         subcategory: meta
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /octocat:
     get:
-      summary: GitHub Get Octocat
+      summary: Get Octocat
       description: Get the octocat as ASCII art
       tags:
       - Meta
@@ -97,7 +95,6 @@ paths:
         schema:
           type: string
         required: false
-        example: example_value
       responses:
         '200':
           description: Response
@@ -110,30 +107,62 @@ paths:
                   $ref: '#/components/examples/octocat'
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#get-octocat
+        url: https://docs.github.com/rest/meta/meta#get-octocat
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: true
         category: meta
         subcategory: meta
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+  /versions:
+    get:
+      summary: Get all API versions
+      description: Get all supported GitHub API versions.
+      tags:
+      - Meta
+      operationId: meta/get-all-versions
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/rest/meta/meta#get-all-api-versions
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: date
+                  examples:
+                  - '2021-01-01'
+              examples:
+                default:
+                  value:
+                  - '2021-01-01'
+                  - '2021-06-01'
+                  - '2022-01-01'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: meta
+        subcategory: meta
   /zen:
     get:
-      summary: GitHub Get the Zen of GitHub
+      summary: Get the Zen of GitHub
       description: Get a random sentence from the Zen of GitHub
       tags:
       - Meta
       operationId: meta/get-zen
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/meta/meta#get-the-zen-of-github
+        url: https://docs.github.com/rest/meta/meta#get-the-zen-of-github
       responses:
         '200':
           description: Response
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
               examples:
@@ -145,30 +174,8 @@ paths:
         enabledForGitHubApps: true
         category: meta
         subcategory: meta
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
   examples:
-    api-overview:
-      value:
-        verifiable_password_authentication: true
-        packages:
-        - 192.0.2.1
-        dependabot:
-        - 192.0.2.1
-        domains:
-          website:
-          - '*.example.com'
-          codespaces:
-          - '*.example.com'
-          copilot:
-          - '*.example.com'
-          packages:
-          - '*.example.com'
-        installed_version: 3.9.0
-    octocat:
-      value: "               MMM.           .MMM\n               MMMMMMMMMMMMMMMMMMM\n               MMMMMMMMMMMMMMMMMMM      ___________________________________\n              MMMMMMMMMMMMMMMMMMMMM    |                                   |\n             MMMMMMMMMMMMMMMMMMMMMMM   | Avoid administrative distraction. |\n            MMMMMMMMMMMMMMMMMMMMMMMM   |_   _______________________________|\n            MMMM::- -:::::::- -::MMMM    |/\n             MM~:~ 00~:::::~ 00~:~MM\n        .. MMMMM::.00:::+:::.00::MMMMM ..\n              .MM::::: ._. :::::MM.\n                 MMMM;:::::;MMMM\n          -MM        MMMMMMM\n          ^  M+     MMMMMMMMM\n              MMMMMMM MM MM MM\n                   MM MM MM MM\n                   MM MM MM MM\n                .~~MM~MM~MM~MM~~.\n             ~~~~MM:~MM~~~MM~:MM~~~~\n            ~~~~~~==~==~~~==~==~~~~~~\n             ~~~~~~==~==~==~==~~~~~~\n                 :~==~==~==~==~~\n"
     root:
       value:
         current_user_url: https://api.github.com/user
@@ -204,6 +211,64 @@ components:
         user_organizations_url: https://api.github.com/user/orgs
         user_repositories_url: https://api.github.com/users/{user}/repos{?type,page,per_page,sort}
         user_search_url: https://api.github.com/search/users?q={query}{&page,per_page,sort,order}
+    octocat:
+      value: "               MMM.           .MMM\n               MMMMMMMMMMMMMMMMMMM\n               MMMMMMMMMMMMMMMMMMM      ___________________________________\n              MMMMMMMMMMMMMMMMMMMMM    |                                   |\n             MMMMMMMMMMMMMMMMMMMMMMM   | Avoid administrative distraction. |\n            MMMMMMMMMMMMMMMMMMMMMMMM   |_   _______________________________|\n            MMMM::- -:::::::- -::MMMM    |/\n             MM~:~ 00~:::::~ 00~:~MM\n        .. MMMMM::.00:::+:::.00::MMMMM ..\n              .MM::::: ._. :::::MM.\n                 MMMM;:::::;MMMM\n          -MM        MMMMMMM\n          ^  M+     MMMMMMMMM\n              MMMMMMM MM MM MM\n                   MM MM MM MM\n                   MM MM MM MM\n                .~~MM~MM~MM~MM~~.\n             ~~~~MM:~MM~~~MM~:MM~~~~\n            ~~~~~~==~==~~~==~==~~~~~~\n             ~~~~~~==~==~==~==~~~~~~\n                 :~==~==~==~==~~\n"
+    api-overview:
+      value:
+        verifiable_password_authentication: true
+        ssh_key_fingerprints:
+          SHA256_RSA: 1234567890
+          SHA256_DSA: 1234567890
+          SHA256_ECDSA: 1234567890
+          SHA256_ED25519: 1234567890
+        ssh_keys:
+        - ssh-ed25519 ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        - ecdsa-sha2-nistp256 ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        - ssh-rsa ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        hooks:
+        - 192.0.2.1
+        github_enterprise_importer:
+        - 192.0.2.1
+        web:
+        - 192.0.2.1
+        api:
+        - 192.0.2.1
+        git:
+        - 192.0.2.1
+        packages:
+        - 192.0.2.1
+        pages:
+        - 192.0.2.1
+        importer:
+        - 192.0.2.1
+        actions:
+        - 192.0.2.1
+        actions_macos:
+        - 192.0.2.1
+        dependabot:
+        - 192.0.2.1
+        copilot:
+        - 192.0.2.1
+        commit_signing_keys:
+        - ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        domains:
+          website:
+          - '*.example.com'
+          codespaces:
+          - '*.example.com'
+          copilot:
+          - '*.example.com'
+          packages:
+          - '*.example.com'
+  responses:
+    not_modified:
+      description: Not modified
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
   schemas:
     api-overview:
       title: Api Overview
@@ -212,19 +277,109 @@ components:
       properties:
         verifiable_password_authentication:
           type: boolean
-          example: true
+          examples:
+          - true
+        ssh_key_fingerprints:
+          type: object
+          properties:
+            SHA256_RSA:
+              type: string
+            SHA256_DSA:
+              type: string
+            SHA256_ECDSA:
+              type: string
+            SHA256_ED25519:
+              type: string
+        ssh_keys:
+          type: array
+          items:
+            type: string
+          examples:
+          - ssh-ed25519 ABCDEFGHIJKLMNOPQRSTUVWXYZ
+        hooks:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        github_enterprise_importer:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        web:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        api:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        git:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
         packages:
           type: array
           items:
             type: string
-          example:
+          examples:
+          - 192.0.2.1
+        pages:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        importer:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        actions:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        actions_macos:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        codespaces:
+          type: array
+          items:
+            type: string
+          examples:
           - 192.0.2.1
         dependabot:
           type: array
           items:
             type: string
-          example:
+          examples:
           - 192.0.2.1
+        copilot:
+          type: array
+          items:
+            type: string
+          examples:
+          - 192.0.2.1
+        commit_signing_keys:
+          type: array
+          items:
+            type: string
+          examples:
+          - ABCDEFGHIJKLMNOPQRSTUVWXYZ
         domains:
           type: object
           properties:
@@ -232,120 +387,145 @@ components:
               type: array
               items:
                 type: string
-                example:
+                examples:
                 - example.com
             codespaces:
               type: array
               items:
                 type: string
-                example:
+                examples:
                 - example.com
             copilot:
               type: array
               items:
                 type: string
-                example:
+                examples:
                 - example.com
             packages:
               type: array
               items:
                 type: string
-                example:
+                examples:
+                - example.com
+            storage:
+              type: array
+              items:
+                type: string
+                examples:
                 - example.com
             actions:
               type: array
               items:
                 type: string
-                example:
+                examples:
                 - example.com
-        installed_version:
-          type: string
-          example: 3.9.0
+            actions_inbound:
+              type: object
+              properties:
+                full_domains:
+                  type: array
+                  items:
+                    type: string
+                    examples:
+                    - example.com
+                wildcard_domains:
+                  type: array
+                  items:
+                    type: string
+                    examples:
+                    - example.com
+            artifact_attestations:
+              type: object
+              properties:
+                trust_domain:
+                  type: string
+                  examples:
+                  - example
+                services:
+                  type: array
+                  items:
+                    type: string
+                    examples:
+                    - example.com
       required:
       - verifiable_password_authentication
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+        documentation_url:
+          type: string
+        url:
+          type: string
+        status:
+          type: string
     root:
       type: object
       properties:
         current_user_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         current_user_authorizations_html_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         authorizations_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         code_search_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         commit_search_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         emails_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         emojis_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         events_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         feeds_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         followers_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         following_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         gists_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         hub_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
+          deprecated: true
         issue_search_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         issues_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         keys_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         label_search_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         notifications_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         organization_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         organization_repositories_url:
           type: string
           format: uri-template
-          example: https://api.github.com/repos/octocat/Hello-World
         organization_teams_url:
           type: string
           format: uri-template
@@ -398,7 +578,6 @@ components:
       - followers_url
       - following_url
       - gists_url
-      - hub_url
       - issue_search_url
       - issues_url
       - keys_url
@@ -418,9 +597,6 @@ components:
       - user_organizations_url
       - user_repositories_url
       - user_search_url
-  responses:
-    not_modified:
-      description: Not modified
 externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

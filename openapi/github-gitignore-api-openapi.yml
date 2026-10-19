@@ -10,30 +10,23 @@ info:
   contact:
     name: Support
     url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-github-plan: api.github.com
 servers:
-- url: '{protocol}://{hostname}/api/v3'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: HOSTNAME
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: http
+- url: https://api.github.com
 tags:
-- name: Gitignore
+- name: gitignore
+  description: View gitignore templates
 paths:
   /gitignore/templates:
     get:
-      summary: GitHub Get All Gitignore Templates
+      summary: Get all gitignore templates
       description: List all templates available to pass as an option when creating a repository.
       operationId: gitignore/get-all-templates
       tags:
-      - Gitignore
+      - gitignore
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gitignore/gitignore#get-all-gitignore-templates
+        url: https://docs.github.com/rest/gitignore/gitignore#get-all-gitignore-templates
       parameters: []
       responses:
         '200':
@@ -61,12 +54,9 @@ paths:
         enabledForGitHubApps: true
         category: gitignore
         subcategory: gitignore
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /gitignore/templates/{name}:
     get:
-      summary: GitHub Get a Gitignore Template
+      summary: Get a gitignore template
       description: 'Get the content of a gitignore template.
 
 
@@ -76,17 +66,16 @@ paths:
         - **`application/vnd.github.raw+json`**: Returns the raw .gitignore contents.'
       operationId: gitignore/get-template
       tags:
-      - Gitignore
+      - gitignore
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/gitignore/gitignore#get-a-gitignore-template
+        url: https://docs.github.com/rest/gitignore/gitignore#get-a-gitignore-template
       parameters:
       - name: name
         in: path
         required: true
         schema:
           type: string
-        example: octocat
       responses:
         '200':
           description: Response
@@ -104,9 +93,6 @@ paths:
         enabledForGitHubApps: true
         category: gitignore
         subcategory: gitignore
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
   schemas:
     gitignore-template:
@@ -116,10 +102,12 @@ components:
       properties:
         name:
           type: string
-          example: C
+          examples:
+          - C
         source:
           type: string
-          example: '# Object files
+          examples:
+          - '# Object files
 
             *.o
 
@@ -154,6 +142,9 @@ components:
       required:
       - name
       - source
+  responses:
+    not_modified:
+      description: Not modified
   examples:
     gitignore-template:
       value:
@@ -190,9 +181,6 @@ components:
           *.app
 
           '
-  responses:
-    not_modified:
-      description: Not modified
 externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

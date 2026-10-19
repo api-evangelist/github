@@ -1,0 +1,525 @@
+openapi: 3.2.0
+info:
+  title: Github Delete API
+  version: 1.1.4
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  x-github-plan: ghes
+  x-github-release: 3.9
+  description: 'Operations tagged Delete across 3 of this provider''s published API definitions: github-auth-api-openapi.yml, github-projects-openapi.yml, github-scim-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
+tags:
+- name: Delete
+paths:
+  /admin/users/{username}/authorizations:
+    delete:
+      summary: GitHub Delete an Impersonation Oauth Token
+      description: Deletes an impersonation OAuth token for a specified user, allowing administrators to revoke access tokens that were created to impersonate that user. This endpoint requires admin authentication and removes the authorization token associated with the given username, effectively terminating any active sessions or API access using that impersonated token. This is typically used for security purposes or when administrative access to a user's account is no longer needed.
+      operationId: deleteAnImpersonationOauthToken
+      tags:
+      - Delete
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/users#delete-an-impersonation-oauth-token
+      parameters:
+      - $ref: '#/components/parameters/username'
+      responses:
+        '204':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: users
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: api.github.com
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: https
+  /authorizations/{authorization_id}:
+    delete:
+      summary: GitHub Delete an Authorization
+      description: '**Deprecation Notice:** GitHub Enterprise Server will discontinue the OAuth Authorizations API, which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our web application flow. The OAuth Authorizations API will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the blog post.'
+      tags:
+      - Delete
+      operationId: deleteAnAuthorization
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations#delete-an-authorization
+      parameters:
+      - $ref: '#/components/parameters/authorization-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        removalDate: '2020-11-13'
+        deprecationDate: '2020-02-14'
+        category: oauth-authorizations
+        subcategory: oauth-authorizations
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: api.github.com
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: https
+  /projects/columns/cards/{card_id}:
+    delete:
+      summary: GitHub Delete Project Card
+      description: Deletes an existing card from a GitHub project board column by its unique card identifier. This operation permanently removes the specified project card and cannot be undone. The authenticated user must have write access to the repository or organization that owns the project board to successfully delete the card. Once deleted, the card and its associated metadata are removed from the project, though any linked issues or pull requests remain unaffected in their respective repositories.
+      tags:
+      - Delete
+      operationId: deleteProjectCard
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#delete-a-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/columns/{column_id}:
+    delete:
+      summary: GitHub Delete Project Column
+      description: The Delete Project Column operation removes a specific column from a GitHub project board by making a DELETE request to the /projects/columns/{column_id} endpoint. This API call permanently deletes the specified column identified by its unique column_id parameter, along with all the cards contained within that column. The operation requires appropriate authentication and permissions to modify the project, typically needing write access to the repository or organization that owns the project. Once executed successfully, the column and its contents are irreversibly removed from the project board, so users should exercise caution when performing this operation to avoid accidental data loss.
+      tags:
+      - Delete
+      operationId: deleteProjectColumn
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#delete-a-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/{project_id}:
+    delete:
+      summary: GitHub Delete Project
+      description: The DELETE operation on the /projects/{project_id} endpoint allows users to permanently remove a GitHub project by specifying its unique project identifier in the URL path. This destructive action deletes the project along with all its associated data, including columns, cards, and configurations, and cannot be undone. Authentication is required to perform this operation, and the user must have the appropriate permissions (typically admin access) to delete the specified project. Upon successful deletion, the API returns a 204 No Content status code, while attempting to delete a non-existent project or lacking proper permissions will result in appropriate error responses.
+      operationId: deleteProject
+      tags:
+      - Delete
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#delete-a-project
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '204':
+          description: Delete Success
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          $ref: '#/components/responses/not_found'
+        '410':
+          $ref: '#/components/responses/gone'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /scim/v2/Groups/{scim_group_id}:
+    delete:
+      summary: GitHub Delete Scim Group from an Enterprise
+      description: '**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.
+
+
+        Deletes a SCIM group from an enterprise.'
+      operationId: deleteScimGroupFromAnEnterprise
+      tags:
+      - Delete
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/scim#delete-a-scim-group-from-an-enterprise
+      parameters:
+      - $ref: '#/components/parameters/scim-group-id'
+      responses:
+        '204':
+          description: Group was deleted, no content
+        '400':
+          $ref: '#/components/responses/scim_bad_request'
+        '401':
+          $ref: '#/components/responses/authorization_failure'
+        '403':
+          $ref: '#/components/responses/permission_denied'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/scim_too_many_requests'
+        '500':
+          $ref: '#/components/responses/scim_internal_error'
+      x-github:
+        enabledForGitHubApps: true
+        githubCloudOnly: true
+        category: enterprise-admin
+        subcategory: scim
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /scim/v2/Users/{scim_user_id}:
+    delete:
+      summary: GitHub Delete Scim User from an Enterprise
+      description: '**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.
+
+
+        Permanently suspends a SCIM user from an enterprise, removes all data for the user, obfuscates the login, email, and display name of the user, removes all external-identity SCIM attributes, and deletes the emails, avatar, PATs, SSH keys, OAuth authorizations credentials, GPG keys, and SAML mappings for the user. You will not be able to undo this action.'
+      operationId: deleteScimUserFromAnEnterprise
+      tags:
+      - Delete
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/scim#delete-a-scim-user-from-an-enterprise
+      parameters:
+      - $ref: '#/components/parameters/scim-user-id'
+      responses:
+        '204':
+          description: User was deleted, no content
+        '400':
+          $ref: '#/components/responses/scim_bad_request'
+        '401':
+          $ref: '#/components/responses/authorization_failure'
+        '403':
+          $ref: '#/components/responses/permission_denied'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '429':
+          $ref: '#/components/responses/scim_too_many_requests'
+        '500':
+          $ref: '#/components/responses/scim_internal_error'
+      x-github:
+        enabledForGitHubApps: true
+        githubCloudOnly: true
+        category: enterprise-admin
+        subcategory: scim
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+components:
+  parameters:
+    authorization-id:
+      name: authorization_id
+      description: The unique identifier of the authorization.
+      in: path
+      required: true
+      schema:
+        type: integer
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    card-id:
+      name: card_id
+      description: The unique identifier of the card.
+      in: path
+      required: true
+      schema:
+        type: integer
+    column-id:
+      name: column_id
+      description: The unique identifier of the column.
+      in: path
+      required: true
+      schema:
+        type: integer
+    scim-user-id:
+      name: scim_user_id
+      description: The unique identifier of the SCIM user.
+      in: path
+      required: true
+      schema:
+        type: string
+    scim-group-id:
+      name: scim_group_id
+      description: A unique identifier of the SCIM group.
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 7fce0092-d52e-4f76-b727-3955bd72c939
+  responses:
+    not_modified:
+      description: Not modified
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    gone:
+      description: Gone
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    scim_bad_request:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    scim_too_many_requests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    permission_denied:
+      description: Permission denied
+    authorization_failure:
+      description: Authorization failure
+    scim_internal_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+  schemas:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    scim-error:
+      title: Scim Error
+      description: Scim Error
+      type: object
+      properties:
+        message:
+          type:
+          - string
+          - 'null'
+          example: Example body text
+        documentation_url:
+          type:
+          - string
+          - 'null'
+          example: https://api.github.com/repos/octocat/Hello-World
+        detail:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        status:
+          type: integer
+          example: 42
+        scimType:
+          type:
+          - string
+          - 'null'
+          example: User
+        schemas:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/
+x-refined-from:
+- github-auth-api-openapi.yml
+- github-projects-openapi.yml
+- github-scim-openapi.yml

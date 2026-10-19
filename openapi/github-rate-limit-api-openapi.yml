@@ -10,25 +10,22 @@ info:
   contact:
     name: Support
     url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-github-plan: api.github.com
 servers:
-- url: '{protocol}://{hostname}/api/v3'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: HOSTNAME
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: http
+- url: https://api.github.com
 tags:
-- name: Rate Limit
-  description: Check your current rate limit status
+- name: rate-limit
+  description: Check your current rate limit status.
 paths:
   /rate_limit:
     get:
-      summary: GitHub Get Rate Limit Status for the Authenticated User
-      description: '**Note:** Accessing this endpoint does not count against your REST API rate limit.
+      summary: Get rate limit status for the authenticated user
+      description: '> [!NOTE]
+
+        > Accessing this endpoint does not count against your REST API rate limit.
+
+
+        Rate limit status reflects the applicable limits for the requester and resource category, not the hostname used for the request. Requests authenticated as a user share the user''s rate limit across credentials. Requests without authentication use the requesting IP address. API requests routed through either an API hostname or a web hostname can count against the same applicable limit.
 
 
         Some categories of endpoints have custom rate limits that are separate from the rate limit governing the other REST API endpoints. For this reason, the API response categorizes your rate limit. Under `resources`, you''ll see objects relating to different categories:
@@ -45,20 +42,22 @@ paths:
 
         * The `dependency_snapshots` object provides your rate limit status for submitting snapshots to the dependency graph. For more information, see "Dependency graph."
 
-        * The `code_scanning_upload` object provides your rate limit status for uploading SARIF results to code scanning. For more information, see "Uploading a SARIF file to GitHub."
+        * The `dependency_sbom` object provides your rate limit status for requesting SBOMs from the dependency graph. For more information, see "Dependency graph."
 
         * The `actions_runner_registration` object provides your rate limit status for registering self-hosted runners in GitHub Actions. For more information, see "Self-hosted runners."
 
         * The `source_import` object is no longer in use for any API endpoints, and it will be removed in the next API version. For more information about API versions, see "API Versions."
 
 
-        **Note:** The `rate` object is deprecated. If you''re writing new API client code or updating existing code, you should use the `core` object instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.'
+        > [!NOTE]
+
+        > The `rate` object is closing down. If you''re writing new API client code or updating existing code, you should use the `core` object instead of the `rate` object. The `core` object contains the same information that is present in the `rate` object.'
       tags:
-      - Rate Limit
+      - rate-limit
       operationId: rate-limit/get
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/rate-limit/rate-limit#get-rate-limit-status-for-the-authenticated-user
+        url: https://docs.github.com/rest/rate-limit/rate-limit#get-rate-limit-status-for-the-authenticated-user
       parameters: []
       responses:
         '200':
@@ -86,37 +85,48 @@ paths:
         enabledForGitHubApps: true
         category: rate-limit
         subcategory: rate-limit
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
-  responses:
-    not_modified:
-      description: Not modified
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
   headers:
+    x-rate-limit-remaining:
+      example: 4999
+      schema:
+        type: integer
+    x-rate-limit-limit:
+      example: 5000
+      schema:
+        type: integer
     x-rate-limit-reset:
       example: 1590701888
       schema:
         type: integer
         format: timestamp
-    x-rate-limit-limit:
-      example: 5000
-      schema:
-        type: integer
-    x-rate-limit-remaining:
-      example: 4999
-      schema:
-        type: integer
   schemas:
+    rate-limit:
+      title: Rate Limit
+      type: object
+      properties:
+        limit:
+          type: integer
+        remaining:
+          type: integer
+        reset:
+          type: integer
+        used:
+          type: integer
+      required:
+      - limit
+      - remaining
+      - reset
+      - used
     rate-limit-overview:
       title: Rate Limit Overview
-      description: Rate Limit Overview
+      description: 'Rate limit status for the applicable requester and resource category. Requests
+
+        authenticated as a user share the user''s rate limit across credentials. Requests
+
+        without authentication use the requesting IP address. API requests routed through
+
+        either an API hostname or a web hostname can count against the same applicable limit.'
       type: object
       properties:
         resources:
@@ -134,11 +144,17 @@ components:
               $ref: '#/components/schemas/rate-limit'
             integration_manifest:
               $ref: '#/components/schemas/rate-limit'
-            code_scanning_upload:
-              $ref: '#/components/schemas/rate-limit'
             actions_runner_registration:
               $ref: '#/components/schemas/rate-limit'
             scim:
+              $ref: '#/components/schemas/rate-limit'
+            dependency_snapshots:
+              $ref: '#/components/schemas/rate-limit'
+            dependency_sbom:
+              $ref: '#/components/schemas/rate-limit'
+            code_scanning_autofix:
+              $ref: '#/components/schemas/rate-limit'
+            copilot_usage_records:
               $ref: '#/components/schemas/rate-limit'
           required:
           - core
@@ -155,37 +171,12 @@ components:
       properties:
         message:
           type: string
-          example: Example body text
         documentation_url:
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
-          example: open
-    rate-limit:
-      title: Rate Limit
-      type: object
-      properties:
-        limit:
-          type: integer
-          example: 42
-        remaining:
-          type: integer
-          example: 42
-        reset:
-          type: integer
-          example: 42
-        used:
-          type: integer
-          example: 42
-      required:
-      - limit
-      - remaining
-      - reset
-      - used
   examples:
     rate-limit-overview:
       value:
@@ -215,11 +206,6 @@ components:
             used: 1
             remaining: 99
             reset: 1691591091
-          code_scanning_upload:
-            limit: 500
-            used: 1
-            remaining: 499
-            reset: 1691594631
           actions_runner_registration:
             limit: 10000
             used: 0
@@ -240,11 +226,25 @@ components:
             used: 0
             remaining: 10
             reset: 1691591091
+          code_scanning_autofix:
+            limit: 10
+            used: 0
+            remaining: 10
+            reset: 1691591091
         rate:
           limit: 5000
           used: 1
           remaining: 4999
           reset: 1372700873
+  responses:
+    not_modified:
+      description: Not modified
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
 externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

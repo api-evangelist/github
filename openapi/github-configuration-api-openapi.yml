@@ -1,0 +1,163 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub Setup Configuration API
+  description: The GitHub Setup APIs provide endpoints for configuring and managing the initial setup and administrative settings of GitHub Enterprise Server instances. These APIs allow system administrators to programmatically control enterprise-level configurations such as authentication settings, license management, maintenance mode operations, server statistics and health checks, and other foundational setup tasks required to deploy and maintain a GitHub Enterprise Server installation. This API is primarily used by DevOps teams and system administrators to automate GitHub Enterprise Server deployments, integrate server management into infrastructure-as-code workflows, monitor server health and performance, and ensure consistent configuration across multiple enterprise instances.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
+tags:
+- name: Configuration
+paths:
+  /setup/api/configcheck:
+    get:
+      summary: GitHub Get the Configuration Status
+      description: 'This endpoint allows you to check the status of the most recent configuration process:
+
+
+        Note that you may need to wait several seconds after you start a process before you can check its status.
+
+
+        The different statuses are:
+
+
+        | Status | Description |
+
+        | - | |
+
+        | `PENDING` | The job has not started yet |
+
+        | `CONFIGURING` | The job is running |
+
+        | `DONE` | The job has finished correctly |
+
+        | `FAILED` | The job has finished unexpectedly |'
+      operationId: getTheConfigurationStatus
+      tags:
+      - Configuration
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#get-the-configuration-status
+      servers:
+      - url: '{protocol}://{hostname}'
+        variables:
+          hostname:
+            default: HOSTNAME
+            description: Self-hosted Enterprise Server hostname
+          protocol:
+            default: http
+            description: Self-hosted Enterprise Server protocol
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration-status'
+              examples:
+                default:
+                  $ref: '#/components/examples/configuration-status'
+        '401':
+          description: Unauthorized
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: management-console
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /setup/api/configure:
+    post:
+      summary: GitHub Start Configuration Process
+      description: The GitHub Setup API's `/setup/api/configure` endpoint accepts POST requests to initiate the configuration process for a new GitHub Enterprise Server instance. This endpoint is typically called during the initial setup phase when administrators need to establish basic system settings such as management console password, hostname, and other foundational configurations. The API operation triggers the configuration workflow that prepares the instance for use, and it returns a response indicating whether the configuration process has successfully started or if any errors occurred during initialization.
+      operationId: startConfigurationProcess
+      tags:
+      - Configuration
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#start-a-configuration-process
+      servers:
+      - url: '{protocol}://{hostname}'
+        variables:
+          hostname:
+            default: HOSTNAME
+            description: Self-hosted Enterprise Server hostname
+          protocol:
+            default: http
+            description: Self-hosted Enterprise Server protocol
+      responses:
+        '202':
+          description: Response
+        '401':
+          description: Unauthorized
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: management-console
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  examples:
+    configuration-status:
+      value:
+        status: running
+        progress:
+        - status: DONE
+          key: Appliance core components
+        - status: DONE
+          key: GitHub utilities
+        - status: DONE
+          key: GitHub applications
+        - status: CONFIGURING
+          key: GitHub services
+        - status: PENDING
+          key: Reloading appliance services
+  schemas:
+    configuration-status:
+      type: object
+      properties:
+        status:
+          type: string
+          example: open
+        progress:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              key:
+                type: string
+            required:
+            - status
+            - key
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/

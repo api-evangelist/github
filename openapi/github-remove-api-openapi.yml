@@ -1,0 +1,378 @@
+openapi: 3.2.0
+info:
+  title: Github Remove API
+  version: 1.1.4
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  x-github-plan: ghes
+  x-github-release: 3.9
+  description: 'Operations tagged Remove across 2 of this provider''s published API definitions: github-auth-api-openapi.yml, github-projects-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
+tags:
+- name: Remove
+paths:
+  /setup/api/settings/authorized-keys:
+    delete:
+      summary: GitHub Remove an Authorized Ssh Key
+      description: '**Note:** The request body for this operation must be submitted as `application/x-www-form-urlencoded` data. You can submit a parameter value as a string, or you can use a tool such as `curl` to submit a parameter value as the contents of a text file. For more information, see the `curl` documentation.'
+      operationId: removeAnAuthorizedSshKey
+      tags:
+      - Remove
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#remove-an-authorized-ssh-key
+      servers:
+      - url: '{protocol}://{hostname}'
+        variables:
+          hostname:
+            default: HOSTNAME
+            description: Self-hosted Enterprise Server hostname
+          protocol:
+            default: http
+            description: Self-hosted Enterprise Server protocol
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ssh-key'
+              examples:
+                default:
+                  $ref: '#/components/examples/ssh-key-items'
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                authorized_key:
+                  type: string
+                  description: The public SSH key.
+              required:
+              - authorized_key
+            examples:
+              default:
+                value:
+                  authorized_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCssTL/Vtu/ODLTj0VtZoRAbvf7uiv5997GyDq0MoAZUjb5jmA5wYe2/wF6sFuhiZTnZoF1ZtCHunPp0hM/GHrn6VySBhNncx14YO8FPt1CIhEeRMSEjUK9cY3xAbS365oXY8vnUHJsS9+1tr/2bx/+4NJfcUt/Ezf1OR/0LStQXw==
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: management-console
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: api.github.com
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: https
+  /orgs/{org}/teams/{team_slug}/projects/{project_id}:
+    delete:
+      summary: GitHub Remove Project from Team
+      description: 'Removes an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user must have `read` access to both the team and project, or `admin` access to the team or project. This endpoint removes the project from the team, but does not delete the project.
+
+
+        **Note:** You can also specify a team by `org_id` and `team_id` using the route `DELETE /organizations/{org_id}/team/{team_id}/projects/{project_id}`.'
+      tags:
+      - Remove
+      operationId: removeProjectFromTeam
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#remove-a-project-from-a-team
+      parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/team-slug'
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '204':
+          description: Response
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: teams
+        subcategory: teams
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/{project_id}/collaborators/{username}:
+    delete:
+      summary: GitHub Remove User as Collaborator
+      description: Removes a collaborator from an organization project. You must be an organization owner or a project `admin` to remove a collaborator.
+      tags:
+      - Remove
+      operationId: removeUserAsCollaborator
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/collaborators#remove-user-as-a-collaborator
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - $ref: '#/components/parameters/username'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: collaborators
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /teams/{team_id}/projects/{project_id}:
+    delete:
+      summary: GitHub Remove Project from Team (legacy)
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new Remove a project from a team endpoint.
+
+
+        Removes an organization project from a team. An organization owner or a team maintainer can remove any project from the team. To remove a project from a team as an organization member, the authenticated user must have `read` access to both the team and project, or `admin` access to the team or project. **Note:** This endpoint removes the project from the team, but does not delete it.'
+      tags:
+      - Remove
+      operationId: removeProjectFromTeamLegacy
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#remove-a-project-from-a-team-legacy
+      parameters:
+      - $ref: '#/components/parameters/team-id'
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '204':
+          description: Response
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        removalDate: '2021-02-01'
+        deprecationDate: '2020-01-21'
+        category: teams
+        subcategory: teams
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+components:
+  examples:
+    ssh-key-items:
+      value:
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+  schemas:
+    ssh-key:
+      type: object
+      properties:
+        key:
+          type: string
+          example: example_value
+        pretty-print:
+          type: string
+          example: example_value
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+  parameters:
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    team-id:
+      name: team_id
+      description: The unique identifier of the team.
+      in: path
+      required: true
+      schema:
+        type: integer
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    not_modified:
+      description: Not modified
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/
+x-refined-from:
+- github-auth-api-openapi.yml
+- github-projects-openapi.yml

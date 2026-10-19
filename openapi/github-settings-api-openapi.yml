@@ -1,0 +1,97 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub Auth Settings API
+  description: You can authenticate to the REST API to access more endpoints and have a higher rate limit. Many REST API endpoints require authentication or return additional information if you are authenticated. Additionally, you can make more requests per hour when you are authenticated.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
+tags:
+- name: Settings
+paths:
+  /setup/api/settings/authorized-keys:
+    get:
+      summary: GitHub Get All Authorized Ssh Keys
+      description: The GET endpoint at /setup/api/settings/authorized-keys in the GitHub Authorization API retrieves a complete list of all authorized SSH keys that have been configured for the system. This endpoint is typically used during setup or administrative operations to audit and review which SSH public keys have been granted access to the GitHub instance, allowing administrators to manage and verify authorized access points for secure shell connections.
+      operationId: getAllAuthorizedSshKeys
+      tags:
+      - Settings
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#get-all-authorized-ssh-keys
+      servers:
+      - url: '{protocol}://{hostname}'
+        variables:
+          hostname:
+            default: HOSTNAME
+            description: Self-hosted Enterprise Server hostname
+          protocol:
+            default: http
+            description: Self-hosted Enterprise Server protocol
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ssh-key'
+              examples:
+                default:
+                  $ref: '#/components/examples/ssh-key-items'
+        '401':
+          description: Unauthorized
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: management-console
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  examples:
+    ssh-key-items:
+      value:
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+      - key: ssh-rsa AAAAB3NzaC1yc2EAAAAB...
+        pretty-print: ssh-rsa 01:14:0f:f2:0f:e2:fe:e8:f4:72:62:af:75:f7:1a:88:3e:04:92:64
+  schemas:
+    ssh-key:
+      type: object
+      properties:
+        key:
+          type: string
+          example: example_value
+        pretty-print:
+          type: string
+          example: example_value
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/

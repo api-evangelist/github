@@ -1,0 +1,577 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub Projects Permissions API
+  description: The GitHub Projects API enables developers to programmatically create and manage GitHub Projects, which are flexible tools for planning and tracking work using customizable boards, tables, and roadmaps. Through these REST API endpoints, you can create projects at the repository, organization, or user level, add and organize items like issues and pull requests, manage project fields and views, update item statuses and metadata, and automate project workflows. This API is particularly useful for integrating project management functionality into custom applications, automating project updates based on repository events, building dashboards and reporting tools, or synchronizing GitHub project data with external project management systems.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
+tags:
+- name: Permissions
+paths:
+  /orgs/{org}/teams/{team_slug}/projects/{project_id}:
+    get:
+      summary: GitHub Check Team Permissions for Project
+      description: 'Checks whether a team has `read`, `write`, or `admin` permissions for an organization project. The response includes projects inherited from a parent team.
+
+
+        **Note:** You can also specify a team by `org_id` and `team_id` using the route `GET /organizations/{org_id}/team/{team_id}/projects/{project_id}`.'
+      tags:
+      - Permissions
+      operationId: checkTeamPermissionsForProject
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#check-team-permissions-for-a-project
+      parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/team-slug'
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team-project'
+              examples:
+                default:
+                  $ref: '#/components/examples/team-project'
+        '404':
+          description: Not Found if project is not managed by this team
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: teams
+        subcategory: teams
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      summary: GitHub Add or Update Team Project Permissions
+      description: 'Adds an organization project to a team. To add a project to a team or update the team''s permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.
+
+
+        **Note:** You can also specify a team by `org_id` and `team_id` using the route `PUT /organizations/{org_id}/team/{team_id}/projects/{project_id}`.'
+      tags:
+      - Permissions
+      operationId: addOrUpdateTeamProjectPermissions
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+      parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/team-slug'
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+              properties:
+                permission:
+                  type: string
+                  description: 'The permission to grant to the team for this project. Default: the team''s `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you''ll need to set `Content-Length` to zero when calling this endpoint. For more information, see "[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method)."'
+                  enum:
+                  - read
+                  - write
+                  - admin
+            examples:
+              default:
+                summary: Updates the permissions for the team to write for the project
+                value:
+                  permission: write
+      responses:
+        '204':
+          description: Response
+        '403':
+          description: Forbidden if the project is not owned by the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+              examples:
+                response-if-the-project-is-not-owned-by-the-organization:
+                  value:
+                    message: Must have admin rights to Repository.
+                    documentation_url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: teams
+        subcategory: teams
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /teams/{team_id}/projects/{project_id}:
+    get:
+      summary: GitHub Check Team Permissions for Project (legacy)
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new Check team permissions for a project endpoint.
+
+
+        Checks whether a team has `read`, `write`, or `admin` permissions for an organization project. The response includes projects inherited from a parent team.'
+      tags:
+      - Permissions
+      operationId: checkTeamPermissionsForProjectLegacy
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#check-team-permissions-for-a-project-legacy
+      parameters:
+      - $ref: '#/components/parameters/team-id'
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team-project'
+              examples:
+                default:
+                  $ref: '#/components/examples/team-project'
+        '404':
+          description: Not Found if project is not managed by this team
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        removalDate: '2021-02-01'
+        deprecationDate: '2020-01-21'
+        category: teams
+        subcategory: teams
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      summary: GitHub Add or Update Team Project Permissions (legacy)
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new Add or update team project permissions endpoint.
+
+
+        Adds an organization project to a team. To add a project to a team or update the team''s permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.'
+      tags:
+      - Permissions
+      operationId: addOrUpdateTeamProjectPermissionsLegacy
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions-legacy
+      parameters:
+      - $ref: '#/components/parameters/team-id'
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: 'The permission to grant to the team for this project. Default: the team''s `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you''ll need to set `Content-Length` to zero when calling this endpoint. For more information, see "[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method)."'
+                  enum:
+                  - read
+                  - write
+                  - admin
+            examples:
+              default:
+                summary: Example of setting permission to read
+                value:
+                  permission: read
+      responses:
+        '204':
+          description: Response
+        '403':
+          description: Forbidden if the project is not owned by the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+              examples:
+                response-if-the-project-is-not-owned-by-the-organization:
+                  value:
+                    message: Must have admin rights to Repository.
+                    documentation_url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        removalDate: '2021-02-01'
+        deprecationDate: '2020-01-21'
+        category: teams
+        subcategory: teams
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  parameters:
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    team-id:
+      name: team_id
+      description: The unique identifier of the team.
+      in: path
+      required: true
+      schema:
+        type: integer
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+  examples:
+    team-project:
+      value:
+        owner_url: https://api.github.com/orgs/octocat
+        url: https://api.github.com/projects/1002605
+        html_url: https://github.com/orgs/api-playground/projects/1
+        columns_url: https://api.github.com/projects/1002605/columns
+        id: 1002605
+        node_id: MDc6UHJvamVjdDEwMDI2MDU=
+        name: Organization Roadmap
+        body: High-level roadmap for the upcoming year.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-11T20:09:31Z'
+        updated_at: '2014-03-04T18:58:10Z'
+        organization_permission: write
+        private: false
+        permissions:
+          read: true
+          write: true
+          admin: false
+  responses:
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  schemas:
+    team-project:
+      title: Team Project
+      description: A team's access to a project.
+      type: object
+      properties:
+        owner_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        html_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        columns_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        id:
+          type: integer
+          example: 42
+        node_id:
+          type: string
+          example: '12345678'
+        name:
+          type: string
+          example: octocat
+        body:
+          type:
+          - string
+          - 'null'
+          example: Example body text
+        number:
+          type: integer
+          example: 42
+        state:
+          type: string
+          example: open
+        creator:
+          $ref: '#/components/schemas/simple-user'
+        created_at:
+          type: string
+          example: '2026-04-17T12:00:00Z'
+        updated_at:
+          type: string
+          example: '2026-04-17T12:00:00Z'
+        organization_permission:
+          description: The organization permission for this project. Only present when owner is an organization.
+          type: string
+          example: example_value
+        private:
+          description: Whether the project is private or not. Only present when owner is an organization.
+          type: boolean
+          example: true
+        permissions:
+          type: object
+          properties:
+            read:
+              type: boolean
+            write:
+              type: boolean
+            admin:
+              type: boolean
+          required:
+          - read
+          - write
+          - admin
+      required:
+      - owner_url
+      - url
+      - html_url
+      - columns_url
+      - id
+      - node_id
+      - name
+      - body
+      - number
+      - state
+      - creator
+      - created_at
+      - updated_at
+      - permissions
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/

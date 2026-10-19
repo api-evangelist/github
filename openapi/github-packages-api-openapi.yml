@@ -10,24 +10,16 @@ info:
   contact:
     name: Support
     url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-github-plan: api.github.com
 servers:
-- url: '{protocol}://{hostname}/api/v3'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: HOSTNAME
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: http
+- url: https://api.github.com
 tags:
 - name: Packages
   description: Manage packages for authenticated users and organizations.
 paths:
   /orgs/{org}/docker/conflicts:
     get:
-      summary: GitHub Get List of Conflicting Packages During Docker Migration for Organization
+      summary: Get list of conflicting packages during Docker migration for organization
       description: 'Lists all packages that are in a specific organization, are readable by the requesting user, and that encountered a conflict during a Docker migration.
 
 
@@ -37,7 +29,7 @@ paths:
       operationId: packages/list-docker-migration-conflicting-packages-for-organization
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-organization
+        url: https://docs.github.com/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-organization
       parameters:
       - $ref: '#/components/parameters/org'
       responses:
@@ -52,31 +44,28 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/packages-for-org'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
         '403':
           $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages:
     get:
-      summary: GitHub List Packages for an Organization
+      summary: List packages for an organization
       description: 'Lists packages in an organization readable by the user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/list-packages-for-organization
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-packages-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#list-packages-for-an-organization
       parameters:
       - name: package_type
         description: The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry.
@@ -91,23 +80,20 @@ paths:
           - docker
           - nuget
           - container
-        example: npm
       - $ref: '#/components/parameters/org'
       - $ref: '#/components/parameters/package-visibility'
       - name: page
-        description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+        description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
         in: query
         schema:
           type: integer
           default: 1
-        example: 42
       - name: per_page
-        description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+        description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
         in: query
         schema:
           type: integer
           default: 30
-        example: 42
       responses:
         '200':
           description: Response
@@ -120,33 +106,30 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/packages-for-org'
-        '400':
-          $ref: '#/components/responses/package_es_list_error'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
         '403':
           $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '400':
+          $ref: '#/components/responses/package_es_list_error'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages/{package_type}/{package_name}:
     get:
-      summary: GitHub Get a Package for an Organization
+      summary: Get a package for an organization
       description: 'Gets a specific package in an organization.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-for-organization
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#get-a-package-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -166,24 +149,21 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete a Package for an Organization
+      summary: Delete a package for an organization
       description: 'Deletes an entire package in an organization. You cannot delete a public package if any version of the package has more than 5,000 downloads. In this scenario, contact GitHub support for further assistance.
 
 
         The authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-for-org
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-a-package-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#delete-a-package-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -191,23 +171,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages/{package_type}/{package_name}/restore:
     post:
-      summary: GitHub Restore a Package for an Organization
+      summary: Restore a package for an organization
       description: 'Restores an entire package in an organization.
 
 
@@ -215,20 +192,19 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
         The authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-for-org
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-a-package-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#restore-a-package-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -239,37 +215,33 @@ paths:
           type: string
         required: false
         in: query
-        example: example_value
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages/{package_type}/{package_name}/versions:
     get:
-      summary: GitHub List Package Versions for a Package Owned by an Organization
+      summary: List package versions for a package owned by an organization
       description: 'Lists package versions for a package owned by an organization.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `repo` scope to use this endpoint if the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-all-package-versions-for-package-owned-by-org
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-package-versions-for-a-package-owned-by-an-organization
+        url: https://docs.github.com/rest/packages/packages#list-package-versions-for-a-package-owned-by-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -286,7 +258,6 @@ paths:
           - active
           - deleted
           default: active
-        example: active
       responses:
         '200':
           description: Response
@@ -299,33 +270,30 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/package-versions-for-org'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}:
     get:
-      summary: GitHub Get a Package Version for an Organization
+      summary: Get a package version for an organization
       description: 'Gets a specific package version in an organization.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-version-for-organization
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-version-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#get-a-package-version-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -346,24 +314,21 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete Package Version for an Organization
+      summary: Delete package version for an organization
       description: 'Deletes a specific package version in an organization. If the package is public and the package version has more than 5,000 downloads, you cannot delete the package version. In this scenario, contact GitHub support for further assistance.
 
 
         The authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-version-for-org
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-package-version-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#delete-package-version-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -372,23 +337,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore:
     post:
-      summary: GitHub Restore Package Version for an Organization
+      summary: Restore package version for an organization
       description: 'Restores a specific package version in an organization.
 
 
@@ -396,20 +358,19 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
         The authenticated user must have admin permissions in the organization to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must also have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-version-for-org
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-package-version-for-an-organization
+        url: https://docs.github.com/rest/packages/packages#restore-package-version-for-an-organization
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -418,23 +379,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/docker/conflicts:
     get:
-      summary: GitHub Get List of Conflicting Packages During Docker Migration for…
+      summary: Get list of conflicting packages during Docker migration for authenticated-user
       description: 'Lists all packages that are owned by the authenticated user within the user''s namespace, and that encountered a conflict during a Docker migration.
 
 
@@ -444,7 +402,7 @@ paths:
       operationId: packages/list-docker-migration-conflicting-packages-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-authenticated-user
       responses:
         '200':
           description: Response
@@ -462,22 +420,19 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages:
     get:
-      summary: GitHub List Packages for the Authenticated User's Namespace
+      summary: List packages for the authenticated user's namespace
       description: 'Lists packages owned by the authenticated user within the user''s namespace.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/list-packages-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-packages-for-the-authenticated-users-namespace
+        url: https://docs.github.com/rest/packages/packages#list-packages-for-the-authenticated-users-namespace
       parameters:
       - name: package_type
         description: The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry.
@@ -492,7 +447,6 @@ paths:
           - docker
           - nuget
           - container
-        example: npm
       - $ref: '#/components/parameters/package-visibility'
       - $ref: '#/components/parameters/page'
       - $ref: '#/components/parameters/per-page'
@@ -515,22 +469,19 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages/{package_type}/{package_name}:
     get:
-      summary: GitHub Get a Package for the Authenticated User
+      summary: Get a package for the authenticated user
       description: 'Gets a specific package for a package owned by the authenticated user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#get-a-package-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -549,44 +500,38 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete a Package for the Authenticated User
+      summary: Delete a package for the authenticated user
       description: 'Deletes a package owned by the authenticated user. You cannot delete a public package if any version of the package has more than 5,000 downloads. In this scenario, contact GitHub support for further assistance.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, `repo` scope is also required. For the list these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-a-package-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#delete-a-package-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages/{package_type}/{package_name}/restore:
     post:
-      summary: GitHub Restore a Package for the Authenticated User
+      summary: Restore a package for the authenticated user
       description: 'Restores a package owned by the authenticated user.
 
 
@@ -594,17 +539,16 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-a-package-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#restore-a-package-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -614,37 +558,33 @@ paths:
           type: string
         required: false
         in: query
-        example: example_value
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages/{package_type}/{package_name}/versions:
     get:
-      summary: GitHub List Package Versions for a Package Owned by the Authenticated User
+      summary: List package versions for a package owned by the authenticated user
       description: 'Lists package versions for a package owned by the authenticated user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-all-package-versions-for-package-owned-by-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-package-versions-for-a-package-owned-by-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#list-package-versions-for-a-package-owned-by-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -660,7 +600,6 @@ paths:
           - active
           - deleted
           default: active
-        example: active
       responses:
         '200':
           description: Response
@@ -673,33 +612,30 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/package-versions-for-authenticated-user'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages/{package_type}/{package_name}/versions/{package_version_id}:
     get:
-      summary: GitHub Get a Package Version for the Authenticated User
+      summary: Get a package version for the authenticated user
       description: 'Gets a specific package version for a package owned by the authenticated user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-version-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-version-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#get-a-package-version-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -719,24 +655,21 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete a Package Version for the Authenticated User
+      summary: Delete a package version for the authenticated user
       description: 'Deletes a specific package version for a package owned by the authenticated user. If the package is public and the package version has more than 5,000 downloads, you cannot delete the package version. In this scenario, contact GitHub support for further assistance.
 
 
         The authenticated user must have admin permissions in the organization to use this endpoint.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-version-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-a-package-version-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#delete-a-package-version-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -744,23 +677,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore:
     post:
-      summary: GitHub Restore a Package Version for the Authenticated User
+      summary: Restore a package version for the authenticated user
       description: 'Restores a package version owned by the authenticated user.
 
 
@@ -768,17 +698,16 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-version-for-authenticated-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-a-package-version-for-the-authenticated-user
+        url: https://docs.github.com/rest/packages/packages#restore-a-package-version-for-the-authenticated-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -786,23 +715,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/docker/conflicts:
     get:
-      summary: GitHub Get List of Conflicting Packages During Docker Migration for User
+      summary: Get list of conflicting packages during Docker migration for user
       description: 'Lists all packages that are in a specific user''s namespace, that the requesting user has access to, and that encountered a conflict during Docker migration.
 
 
@@ -812,7 +738,7 @@ paths:
       operationId: packages/list-docker-migration-conflicting-packages-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-user
+        url: https://docs.github.com/rest/packages/packages#get-list-of-conflicting-packages-during-docker-migration-for-user
       parameters:
       - $ref: '#/components/parameters/username'
       responses:
@@ -827,31 +753,28 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/packages-for-user'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
         '403':
           $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages:
     get:
-      summary: GitHub List Packages for a User
+      summary: List packages for a user
       description: 'Lists all packages in a user''s namespace for which the requesting user has access.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/list-packages-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-packages-for-a-user
+        url: https://docs.github.com/rest/packages/packages#list-packages-for-a-user
       parameters:
       - name: package_type
         description: The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry.
@@ -866,7 +789,6 @@ paths:
           - docker
           - nuget
           - container
-        example: npm
       - $ref: '#/components/parameters/package-visibility'
       - $ref: '#/components/parameters/username'
       - $ref: '#/components/parameters/page'
@@ -883,33 +805,30 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/packages-for-user'
-        '400':
-          $ref: '#/components/responses/package_es_list_error'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
         '403':
           $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '400':
+          $ref: '#/components/responses/package_es_list_error'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages/{package_type}/{package_name}:
     get:
-      summary: GitHub Get a Package for a User
+      summary: Get a package for a user
       description: 'Gets a specific package metadata for a public package owned by a user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-for-a-user
+        url: https://docs.github.com/rest/packages/packages#get-a-package-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -929,24 +848,21 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete a Package for a User
+      summary: Delete a package for a user
       description: 'Deletes an entire package for a user. You cannot delete a public package if any version of the package has more than 5,000 downloads. In this scenario, contact GitHub support for further assistance.
 
 
         If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-a-package-for-a-user
+        url: https://docs.github.com/rest/packages/packages#delete-a-package-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -954,23 +870,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages/{package_type}/{package_name}/restore:
     post:
-      summary: GitHub Restore a Package for a User
+      summary: Restore a package for a user
       description: 'Restores an entire package for a user.
 
 
@@ -978,20 +891,19 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
         If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-a-package-for-a-user
+        url: https://docs.github.com/rest/packages/packages#restore-a-package-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -1002,37 +914,33 @@ paths:
           type: string
         required: false
         in: query
-        example: example_value
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages/{package_type}/{package_name}/versions:
     get:
-      summary: GitHub List Package Versions for a Package Owned by a User
+      summary: List package versions for a package owned by a user
       description: 'Lists package versions for a public package owned by a specified user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-all-package-versions-for-package-owned-by-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#list-package-versions-for-a-package-owned-by-a-user
+        url: https://docs.github.com/rest/packages/packages#list-package-versions-for-a-package-owned-by-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -1049,33 +957,30 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/package-versions-for-user'
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}:
     get:
-      summary: GitHub Get a Package Version for a User
+      summary: Get a package version for a user
       description: 'Gets a specific package version for a public package owned by a specified user.
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` scope to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/get-package-version-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#get-a-package-version-for-a-user
+        url: https://docs.github.com/rest/packages/packages#get-a-package-version-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -1096,24 +1001,21 @@ paths:
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
     delete:
-      summary: GitHub Delete Package Version for a User
+      summary: Delete package version for a user
       description: 'Deletes a specific package version for a user. If the package is public and the package version has more than 5,000 downloads, you cannot delete the package version. In this scenario, contact GitHub support for further assistance.
 
 
         If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `delete:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/delete-package-version-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#delete-package-version-for-a-user
+        url: https://docs.github.com/rest/packages/packages#delete-package-version-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -1122,23 +1024,20 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore:
     post:
-      summary: GitHub Restore Package Version for a User
+      summary: Restore package version for a user
       description: 'Restores a specific package version for a user.
 
 
@@ -1146,20 +1045,19 @@ paths:
 
         - The package was deleted within the last 30 days.
 
-        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this
+        - The same package namespace and version is still available and not reused for a new package. If the same package namespace is not available, you will not be able to restore your package. In this scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
-        scenario, to restore the deleted package, you must delete the new package that uses the deleted package''s namespace first.
 
         If the `package_type` belongs to a GitHub Packages registry that supports granular permissions, the authenticated user must have admin permissions to the package. For the list of these registries, see "About permissions for GitHub Packages."
 
 
-        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. If the `package_type` belongs to a GitHub Packages registry that only supports repository-scoped permissions, the `repo` scope is also required. For the list of these registries, see "About permissions for GitHub Packages."'
+        OAuth app tokens and personal access tokens (classic) need the `read:packages` and `write:packages` scopes to use this endpoint. For more information, see "About permissions for GitHub Packages."'
       tags:
       - Packages
       operationId: packages/restore-package-version-for-user
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/packages/packages#restore-package-version-for-a-user
+        url: https://docs.github.com/rest/packages/packages#restore-package-version-for-a-user
       parameters:
       - $ref: '#/components/parameters/package-type'
       - $ref: '#/components/parameters/package-name'
@@ -1168,879 +1066,18 @@ paths:
       responses:
         '204':
           description: Response
-        '401':
-          $ref: '#/components/responses/requires_authentication'
-        '403':
-          $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: false
         category: packages
         subcategory: packages
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
-  schemas:
-    security-and-analysis:
-      type:
-      - object
-      - 'null'
-      properties:
-        advanced_security:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-              - enabled
-              - disabled
-        secret_scanning:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-              - enabled
-              - disabled
-        secret_scanning_push_protection:
-          type: object
-          properties:
-            status:
-              type: string
-              enum:
-              - enabled
-              - disabled
-    basic-error:
-      title: Basic Error
-      description: Basic Error
-      type: object
-      properties:
-        message:
-          type: string
-          example: Example body text
-        documentation_url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        url:
-          type: string
-          example: https://api.github.com/repos/octocat/Hello-World
-        status:
-          type: string
-          example: open
-    simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    package:
-      title: Package
-      description: A software package
-      type: object
-      properties:
-        id:
-          description: Unique identifier of the package.
-          type: integer
-          example: 1
-        name:
-          description: The name of the package.
-          type: string
-          example: super-linter
-        package_type:
-          type: string
-          example: docker
-          enum:
-          - npm
-          - maven
-          - rubygems
-          - docker
-          - nuget
-          - container
-        url:
-          type: string
-          example: https://api.github.com/orgs/github/packages/container/super-linter
-        html_url:
-          type: string
-          example: https://github.com/orgs/github/packages/container/package/super-linter
-        version_count:
-          description: The number of versions of the package.
-          type: integer
-          example: 1
-        visibility:
-          type: string
-          example: private
-          enum:
-          - private
-          - public
-        owner:
-          $ref: '#/components/schemas/nullable-simple-user'
-        repository:
-          $ref: '#/components/schemas/nullable-minimal-repository'
-        created_at:
-          type: string
-          format: date-time
-          example: '2026-04-17T12:00:00Z'
-        updated_at:
-          type: string
-          format: date-time
-          example: '2026-04-17T12:00:00Z'
-      required:
-      - id
-      - name
-      - package_type
-      - visibility
-      - url
-      - html_url
-      - version_count
-      - created_at
-      - updated_at
-    package-version:
-      title: Package Version
-      description: A version of a software package
-      type: object
-      properties:
-        id:
-          description: Unique identifier of the package version.
-          type: integer
-          example: 1
-        name:
-          description: The name of the package version.
-          type: string
-          example: latest
-        url:
-          type: string
-          example: https://api.github.com/orgs/github/packages/container/super-linter/versions/786068
-        package_html_url:
-          type: string
-          example: https://github.com/orgs/github/packages/container/package/super-linter
-        html_url:
-          type: string
-          example: https://github.com/orgs/github/packages/container/super-linter/786068
-        license:
-          type: string
-          example: MIT
-        description:
-          type: string
-          example: This is an example repository
-        created_at:
-          type: string
-          format: date-time
-          example: '2011-04-10T20:09:31Z'
-        updated_at:
-          type: string
-          format: date-time
-          example: '2014-03-03T18:58:10Z'
-        deleted_at:
-          type: string
-          format: date-time
-          example: '2014-03-03T18:58:10Z'
-        metadata:
-          type: object
-          title: Package Version Metadata
-          properties:
-            package_type:
-              type: string
-              example: docker
-              enum:
-              - npm
-              - maven
-              - rubygems
-              - docker
-              - nuget
-              - container
-            container:
-              type: object
-              title: Container Metadata
-              properties:
-                tags:
-                  type: array
-                  items:
-                    type: string
-              required:
-              - tags
-            docker:
-              type: object
-              title: Docker Metadata
-              properties:
-                tag:
-                  type: array
-                  items:
-                    type: string
-              required:
-              - tags
-          required:
-          - package_type
-      required:
-      - id
-      - name
-      - url
-      - package_html_url
-      - created_at
-      - updated_at
-    code-of-conduct:
-      title: Code Of Conduct
-      description: Code Of Conduct
-      type: object
-      properties:
-        key:
-          type: string
-          example: contributor_covenant
-        name:
-          type: string
-          example: Contributor Covenant
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/codes_of_conduct/contributor_covenant
-        body:
-          type: string
-          example: "# Contributor Covenant Code of Conduct\n\n## Our Pledge\n\nIn the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.\n\n## Our Standards\n\nExamples of behavior that contributes to creating a positive environment include:\n\n* Using welcoming and inclusive language\n* Being respectful of differing viewpoints and experiences\n* Gracefully accepting constructive criticism\n* Focusing on what is best for the community\n* Showing empathy towards other community members\n\nExamples of unacceptable behavior by participants include:\n\n* The use of sexualized language or imagery and unwelcome sexual attention or advances\n* Trolling, insulting/derogatory comments, and personal or political attacks\n* Public or private harassment\n* Publishing others' private information, such as a physical or electronic address, without explicit permission\n* Other conduct which could reasonably be considered inappropriate in a professional setting\n\n## Our Responsibilities\n\nProject maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response\n                  to any instances of unacceptable behavior.\n\nProject maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.\n\n## Scope\n\nThis Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address,\n                  posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and\nclarified by project maintainers.\n## Enforcement\n\nInstances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at [EMAIL]. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.\n\nProject maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.\n\n## Attribution\n\nThis Code of Conduct is adapted from the [Contributor Covenant](http://contributor-covenant.org), version 1.4, available at [http://contributor-covenant.org/version/1/4](http://contributor-covenant.org/version/1/4/).\n"
-        html_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-      required:
-      - url
-      - html_url
-      - key
-      - name
-    nullable-simple-user:
-      title: Simple User
-      description: A GitHub user.
-      type:
-      - object
-      - 'null'
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: octocat
-        email:
-          type:
-          - string
-          - 'null'
-          example: octocat@github.com
-        login:
-          type: string
-          example: octocat
-        id:
-          type: integer
-          example: 1
-        node_id:
-          type: string
-          example: MDQ6VXNlcjE=
-        avatar_url:
-          type: string
-          format: uri
-          example: https://github.com/images/error/octocat_happy.gif
-        gravatar_id:
-          type:
-          - string
-          - 'null'
-          example: 41d064eb2195891e12d0413f63227ea7
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat
-        followers_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/followers
-        following_url:
-          type: string
-          example: https://api.github.com/users/octocat/following{/other_user}
-        gists_url:
-          type: string
-          example: https://api.github.com/users/octocat/gists{/gist_id}
-        starred_url:
-          type: string
-          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
-        subscriptions_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/subscriptions
-        organizations_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/orgs
-        repos_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/repos
-        events_url:
-          type: string
-          example: https://api.github.com/users/octocat/events{/privacy}
-        received_events_url:
-          type: string
-          format: uri
-          example: https://api.github.com/users/octocat/received_events
-        type:
-          type: string
-          example: User
-        site_admin:
-          type: boolean
-          example: true
-        starred_at:
-          type: string
-          example: '"2020-07-09T00:17:55Z"'
-      required:
-      - avatar_url
-      - events_url
-      - followers_url
-      - following_url
-      - gists_url
-      - gravatar_id
-      - html_url
-      - id
-      - node_id
-      - login
-      - organizations_url
-      - received_events_url
-      - repos_url
-      - site_admin
-      - starred_url
-      - subscriptions_url
-      - type
-      - url
-    nullable-minimal-repository:
-      title: Minimal Repository
-      description: Minimal Repository
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: integer
-          example: 1296269
-        node_id:
-          type: string
-          example: MDEwOlJlcG9zaXRvcnkxMjk2MjY5
-        name:
-          type: string
-          example: Hello-World
-        full_name:
-          type: string
-          example: octocat/Hello-World
-        owner:
-          $ref: '#/components/schemas/simple-user'
-        private:
-          type: boolean
-          example: true
-        html_url:
-          type: string
-          format: uri
-          example: https://github.com/octocat/Hello-World
-        description:
-          type:
-          - string
-          - 'null'
-          example: This your first repo!
-        fork:
-          type: boolean
-          example: true
-        url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-        archive_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/{archive_format}{/ref}
-        assignees_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/assignees{/user}
-        blobs_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/git/blobs{/sha}
-        branches_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/branches{/branch}
-        collaborators_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/collaborators{/collaborator}
-        comments_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/comments{/number}
-        commits_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/commits{/sha}
-        compare_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/compare/{base}...{head}
-        contents_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/contents/{+path}
-        contributors_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/contributors
-        deployments_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/deployments
-        downloads_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/downloads
-        events_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/events
-        forks_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/forks
-        git_commits_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/git/commits{/sha}
-        git_refs_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/git/refs{/sha}
-        git_tags_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/git/tags{/sha}
-        git_url:
-          type: string
-        issue_comment_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/issues/comments{/number}
-        issue_events_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/issues/events{/number}
-        issues_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/issues{/number}
-        keys_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/keys{/key_id}
-        labels_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/labels{/name}
-        languages_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/languages
-        merges_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/merges
-        milestones_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/milestones{/number}
-        notifications_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/notifications{?since,all,participating}
-        pulls_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/pulls{/number}
-        releases_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/releases{/id}
-        ssh_url:
-          type: string
-        stargazers_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/stargazers
-        statuses_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/statuses/{sha}
-        subscribers_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/subscribers
-        subscription_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/subscription
-        tags_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/tags
-        teams_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/teams
-        trees_url:
-          type: string
-          example: http://api.github.com/repos/octocat/Hello-World/git/trees{/sha}
-        clone_url:
-          type: string
-        mirror_url:
-          type:
-          - string
-          - 'null'
-        hooks_url:
-          type: string
-          format: uri
-          example: http://api.github.com/repos/octocat/Hello-World/hooks
-        svn_url:
-          type: string
-        homepage:
-          type:
-          - string
-          - 'null'
-        language:
-          type:
-          - string
-          - 'null'
-        forks_count:
-          type: integer
-        stargazers_count:
-          type: integer
-        watchers_count:
-          type: integer
-        size:
-          description: The size of the repository, in kilobytes. Size is calculated hourly. When a repository is initially created, the size is 0.
-          type: integer
-        default_branch:
-          type: string
-        open_issues_count:
-          type: integer
-        is_template:
-          type: boolean
-        topics:
-          type: array
-          items:
-            type: string
-        has_issues:
-          type: boolean
-        has_projects:
-          type: boolean
-        has_wiki:
-          type: boolean
-        has_pages:
-          type: boolean
-        has_downloads:
-          type: boolean
-        has_discussions:
-          type: boolean
-        archived:
-          type: boolean
-        disabled:
-          type: boolean
-        visibility:
-          type: string
-        pushed_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2011-01-26T19:06:43Z'
-        created_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2011-01-26T19:01:12Z'
-        updated_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2011-01-26T19:14:43Z'
-        permissions:
-          type: object
-          properties:
-            admin:
-              type: boolean
-            maintain:
-              type: boolean
-            push:
-              type: boolean
-            triage:
-              type: boolean
-            pull:
-              type: boolean
-        role_name:
-          type: string
-          example: admin
-        temp_clone_token:
-          type: string
-        delete_branch_on_merge:
-          type: boolean
-        subscribers_count:
-          type: integer
-        network_count:
-          type: integer
-        code_of_conduct:
-          $ref: '#/components/schemas/code-of-conduct'
-        license:
-          type:
-          - object
-          - 'null'
-          properties:
-            key:
-              type: string
-            name:
-              type: string
-            spdx_id:
-              type: string
-            url:
-              type: string
-            node_id:
-              type: string
-        forks:
-          type: integer
-          example: 0
-        open_issues:
-          type: integer
-          example: 0
-        watchers:
-          type: integer
-          example: 0
-        allow_forking:
-          type: boolean
-        web_commit_signoff_required:
-          type: boolean
-          example: false
-        security_and_analysis:
-          $ref: '#/components/schemas/security-and-analysis'
-      required:
-      - archive_url
-      - assignees_url
-      - blobs_url
-      - branches_url
-      - collaborators_url
-      - comments_url
-      - commits_url
-      - compare_url
-      - contents_url
-      - contributors_url
-      - deployments_url
-      - description
-      - downloads_url
-      - events_url
-      - fork
-      - forks_url
-      - full_name
-      - git_commits_url
-      - git_refs_url
-      - git_tags_url
-      - hooks_url
-      - html_url
-      - id
-      - node_id
-      - issue_comment_url
-      - issue_events_url
-      - issues_url
-      - keys_url
-      - labels_url
-      - languages_url
-      - merges_url
-      - milestones_url
-      - name
-      - notifications_url
-      - owner
-      - private
-      - pulls_url
-      - releases_url
-      - stargazers_url
-      - statuses_url
-      - subscribers_url
-      - subscription_url
-      - tags_url
-      - teams_url
-      - trees_url
-      - url
-  parameters:
-    package-version-id:
-      name: package_version_id
-      description: Unique identifier of the package version.
-      in: path
-      required: true
-      schema:
-        type: integer
-    package-name:
-      name: package_name
-      description: The name of the package.
-      in: path
-      required: true
-      schema:
-        type: string
-    package-type:
-      name: package_type
-      description: The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry.
-      in: path
-      required: true
-      schema:
-        type: string
-        enum:
-        - npm
-        - maven
-        - rubygems
-        - docker
-        - nuget
-        - container
-    org:
-      name: org
-      description: The organization name. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
-    package-visibility:
-      name: visibility
-      description: 'The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
-
-
-        The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
-
-        For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/enterprise-server@3.9/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."'
-      in: query
-      required: false
-      schema:
-        type: string
-        enum:
-        - public
-        - private
-        - internal
-    username:
-      name: username
-      description: The handle for the GitHub user account.
-      in: path
-      required: true
-      schema:
-        type: string
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-  responses:
-    package_es_list_error:
-      description: The value of `per_page` multiplied by `page` cannot be greater than 10000.
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    requires_authentication:
-      description: Requires authentication
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
   examples:
     package-user:
       value:
@@ -2137,189 +1174,6 @@ components:
           releases_url: https://api.github.com/repos/octocat/octo-name-repo/releases{/id}
           deployments_url: https://api.github.com/repos/octocat/octo-name-repo/deployments
         html_url: https://github.com/octocat/octo-name-repo/packages/40201
-    package-org:
-      value:
-        id: 197
-        name: hello_docker
-        package_type: container
-        owner:
-          login: github
-          id: 9919
-          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
-          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
-          gravatar_id: ''
-          url: https://api.github.com/users/github
-          html_url: https://github.com/github
-          followers_url: https://api.github.com/users/github/followers
-          following_url: https://api.github.com/users/github/following{/other_user}
-          gists_url: https://api.github.com/users/github/gists{/gist_id}
-          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/github/subscriptions
-          organizations_url: https://api.github.com/users/github/orgs
-          repos_url: https://api.github.com/users/github/repos
-          events_url: https://api.github.com/users/github/events{/privacy}
-          received_events_url: https://api.github.com/users/github/received_events
-          type: Organization
-          site_admin: false
-        version_count: 1
-        visibility: private
-        url: https://api.github.com/orgs/github/packages/container/hello_docker
-        created_at: '2020-05-19T22:19:11Z'
-        updated_at: '2020-05-19T22:19:11Z'
-        html_url: https://github.com/orgs/github/packages/container/package/hello_docker
-    package-versions-for-org:
-      value:
-      - id: 245301
-        name: 1.0.4
-        url: https://api.github.com/orgs/octo-org/packages/npm/hello-world-npm/versions/245301
-        package_html_url: https://github.com/octo-org/hello-world-npm/packages/43752
-        created_at: '2019-11-05T22:49:04Z'
-        updated_at: '2019-11-05T22:49:04Z'
-        html_url: https://github.com/octo-org/hello-world-npm/packages/43752?version=1.0.4
-        metadata:
-          package_type: npm
-      - id: 209672
-        name: 1.0.3
-        url: https://api.github.com/orgs/octo-org/packages/npm/hello-world-npm/versions/209672
-        package_html_url: https://github.com/octo-org/hello-world-npm/packages/43752
-        created_at: '2019-10-29T15:42:11Z'
-        updated_at: '2019-10-29T15:42:12Z'
-        html_url: https://github.com/octo-org/hello-world-npm/packages/43752?version=1.0.3
-        metadata:
-          package_type: npm
-    package-version-org:
-      value:
-        id: 836
-        name: sha256:b3d3e366b55f9a54599220198b3db5da8f53592acbbb7dc7e4e9878762fc5344
-        url: https://api.github.com/orgs/github/packages/container/hello_docker/versions/836
-        package_html_url: https://github.com/orgs/github/packages/container/package/hello_docker
-        created_at: '2020-05-19T22:19:11Z'
-        updated_at: '2020-05-19T22:19:11Z'
-        html_url: https://github.com/orgs/github/packages/container/hello_docker/836
-        metadata:
-          package_type: container
-          container:
-            tags:
-            - latest
-    package-version-user:
-      value:
-        id: 387039
-        name: 0.2.0
-        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/387039
-        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
-        license: MIT
-        created_at: '2019-12-01T20:49:29Z'
-        updated_at: '2019-12-01T20:49:30Z'
-        description: Octo-name client for Ruby
-        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.2.0
-        metadata:
-          package_type: rubygems
-    packages-for-org:
-      value:
-      - id: 197
-        name: hello_docker
-        package_type: container
-        owner:
-          login: github
-          id: 9919
-          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
-          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
-          gravatar_id: ''
-          url: https://api.github.com/users/github
-          html_url: https://github.com/github
-          followers_url: https://api.github.com/users/github/followers
-          following_url: https://api.github.com/users/github/following{/other_user}
-          gists_url: https://api.github.com/users/github/gists{/gist_id}
-          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/github/subscriptions
-          organizations_url: https://api.github.com/users/github/orgs
-          repos_url: https://api.github.com/users/github/repos
-          events_url: https://api.github.com/users/github/events{/privacy}
-          received_events_url: https://api.github.com/users/github/received_events
-          type: Organization
-          site_admin: false
-        version_count: 1
-        visibility: private
-        url: https://api.github.com/orgs/github/packages/container/hello_docker
-        created_at: '2020-05-19T22:19:11Z'
-        updated_at: '2020-05-19T22:19:11Z'
-        html_url: https://github.com/orgs/github/packages/container/package/hello_docker
-      - id: 198
-        name: goodbye_docker
-        package_type: container
-        owner:
-          login: github
-          id: 9919
-          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
-          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
-          gravatar_id: ''
-          url: https://api.github.com/users/github
-          html_url: https://github.com/github
-          followers_url: https://api.github.com/users/github/followers
-          following_url: https://api.github.com/users/github/following{/other_user}
-          gists_url: https://api.github.com/users/github/gists{/gist_id}
-          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
-          subscriptions_url: https://api.github.com/users/github/subscriptions
-          organizations_url: https://api.github.com/users/github/orgs
-          repos_url: https://api.github.com/users/github/repos
-          events_url: https://api.github.com/users/github/events{/privacy}
-          received_events_url: https://api.github.com/users/github/received_events
-          type: Organization
-          site_admin: false
-        version_count: 2
-        visibility: private
-        url: https://api.github.com/orgs/github/packages/container/goodbye_docker
-        created_at: '2020-05-20T22:19:11Z'
-        updated_at: '2020-05-20T22:19:11Z'
-        html_url: https://github.com/orgs/github/packages/container/package/goodbye_docker
-    package-version-authenticated-user:
-      value:
-        id: 214
-        name: sha256:3561f0cff06caccddb99c93bd26e712fcc56a811de0f8ea7a17bb865f30b176a
-        url: https://api.github.com/users/octocat/packages/container/hello_docker/versions/214
-        package_html_url: https://github.com/users/octocat/packages/container/package/hello_docker
-        created_at: '2020-05-15T03:46:45Z'
-        updated_at: '2020-05-15T03:46:45Z'
-        html_url: https://github.com/users/octocat/packages/container/hello_docker/214
-        metadata:
-          package_type: container
-          container:
-            tags:
-            - 1.13.6
-    package-versions-for-user:
-      value:
-      - id: 3497268
-        name: 0.3.0
-        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/3497268
-        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
-        license: MIT
-        created_at: '2020-08-31T15:22:11Z'
-        updated_at: '2020-08-31T15:22:12Z'
-        description: Project for octocats
-        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.3.0
-        metadata:
-          package_type: rubygems
-      - id: 387039
-        name: 0.2.0
-        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/387039
-        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
-        license: MIT
-        created_at: '2019-12-01T20:49:29Z'
-        updated_at: '2019-12-01T20:49:30Z'
-        description: Project for octocats
-        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.2.0
-        metadata:
-          package_type: rubygems
-      - id: 169770
-        name: 0.1.0
-        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/169770
-        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
-        license: MIT
-        created_at: '2019-10-20T14:17:14Z'
-        updated_at: '2019-10-20T14:17:15Z'
-        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.1.0
-        metadata:
-          package_type: rubygems
     packages-for-user:
       value:
       - id: 197
@@ -2403,6 +1257,1127 @@ components:
           package_type: container
           container:
             tags: []
+    package-version-org:
+      value:
+        id: 836
+        name: sha256:b3d3e366b55f9a54599220198b3db5da8f53592acbbb7dc7e4e9878762fc5344
+        url: https://api.github.com/orgs/github/packages/container/hello_docker/versions/836
+        package_html_url: https://github.com/orgs/github/packages/container/package/hello_docker
+        created_at: '2020-05-19T22:19:11Z'
+        updated_at: '2020-05-19T22:19:11Z'
+        html_url: https://github.com/orgs/github/packages/container/hello_docker/836
+        metadata:
+          package_type: container
+          container:
+            tags:
+            - latest
+    package-versions-for-org:
+      value:
+      - id: 245301
+        name: 1.0.4
+        url: https://api.github.com/orgs/octo-org/packages/npm/hello-world-npm/versions/245301
+        package_html_url: https://github.com/octo-org/hello-world-npm/packages/43752
+        created_at: '2019-11-05T22:49:04Z'
+        updated_at: '2019-11-05T22:49:04Z'
+        html_url: https://github.com/octo-org/hello-world-npm/packages/43752?version=1.0.4
+        metadata:
+          package_type: npm
+      - id: 209672
+        name: 1.0.3
+        url: https://api.github.com/orgs/octo-org/packages/npm/hello-world-npm/versions/209672
+        package_html_url: https://github.com/octo-org/hello-world-npm/packages/43752
+        created_at: '2019-10-29T15:42:11Z'
+        updated_at: '2019-10-29T15:42:12Z'
+        html_url: https://github.com/octo-org/hello-world-npm/packages/43752?version=1.0.3
+        metadata:
+          package_type: npm
+    package-versions-for-user:
+      value:
+      - id: 3497268
+        name: 0.3.0
+        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/3497268
+        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
+        license: MIT
+        created_at: '2020-08-31T15:22:11Z'
+        updated_at: '2020-08-31T15:22:12Z'
+        description: Project for octocats
+        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.3.0
+        metadata:
+          package_type: rubygems
+      - id: 387039
+        name: 0.2.0
+        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/387039
+        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
+        license: MIT
+        created_at: '2019-12-01T20:49:29Z'
+        updated_at: '2019-12-01T20:49:30Z'
+        description: Project for octocats
+        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.2.0
+        metadata:
+          package_type: rubygems
+      - id: 169770
+        name: 0.1.0
+        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/169770
+        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
+        license: MIT
+        created_at: '2019-10-20T14:17:14Z'
+        updated_at: '2019-10-20T14:17:15Z'
+        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.1.0
+        metadata:
+          package_type: rubygems
+    packages-for-org:
+      value:
+      - id: 197
+        name: hello_docker
+        package_type: container
+        owner:
+          login: github
+          id: 9919
+          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
+          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+          gravatar_id: ''
+          url: https://api.github.com/users/github
+          html_url: https://github.com/github
+          followers_url: https://api.github.com/users/github/followers
+          following_url: https://api.github.com/users/github/following{/other_user}
+          gists_url: https://api.github.com/users/github/gists{/gist_id}
+          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/github/subscriptions
+          organizations_url: https://api.github.com/users/github/orgs
+          repos_url: https://api.github.com/users/github/repos
+          events_url: https://api.github.com/users/github/events{/privacy}
+          received_events_url: https://api.github.com/users/github/received_events
+          type: Organization
+          site_admin: false
+        version_count: 1
+        visibility: private
+        url: https://api.github.com/orgs/github/packages/container/hello_docker
+        created_at: '2020-05-19T22:19:11Z'
+        updated_at: '2020-05-19T22:19:11Z'
+        html_url: https://github.com/orgs/github/packages/container/package/hello_docker
+      - id: 198
+        name: goodbye_docker
+        package_type: container
+        owner:
+          login: github
+          id: 9919
+          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
+          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+          gravatar_id: ''
+          url: https://api.github.com/users/github
+          html_url: https://github.com/github
+          followers_url: https://api.github.com/users/github/followers
+          following_url: https://api.github.com/users/github/following{/other_user}
+          gists_url: https://api.github.com/users/github/gists{/gist_id}
+          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/github/subscriptions
+          organizations_url: https://api.github.com/users/github/orgs
+          repos_url: https://api.github.com/users/github/repos
+          events_url: https://api.github.com/users/github/events{/privacy}
+          received_events_url: https://api.github.com/users/github/received_events
+          type: Organization
+          site_admin: false
+        version_count: 2
+        visibility: private
+        url: https://api.github.com/orgs/github/packages/container/goodbye_docker
+        created_at: '2020-05-20T22:19:11Z'
+        updated_at: '2020-05-20T22:19:11Z'
+        html_url: https://github.com/orgs/github/packages/container/package/goodbye_docker
+    package-version-authenticated-user:
+      value:
+        id: 214
+        name: sha256:3561f0cff06caccddb99c93bd26e712fcc56a811de0f8ea7a17bb865f30b176a
+        url: https://api.github.com/users/octocat/packages/container/hello_docker/versions/214
+        package_html_url: https://github.com/users/octocat/packages/container/package/hello_docker
+        created_at: '2020-05-15T03:46:45Z'
+        updated_at: '2020-05-15T03:46:45Z'
+        html_url: https://github.com/users/octocat/packages/container/hello_docker/214
+        metadata:
+          package_type: container
+          container:
+            tags:
+            - 1.13.6
+    package-version-user:
+      value:
+        id: 387039
+        name: 0.2.0
+        url: https://api.github.com/users/octocat/packages/rubygems/octo-name/versions/387039
+        package_html_url: https://github.com/octocat/octo-name-repo/packages/40201
+        license: MIT
+        created_at: '2019-12-01T20:49:29Z'
+        updated_at: '2019-12-01T20:49:30Z'
+        description: Octo-name client for Ruby
+        html_url: https://github.com/octocat/octo-name-repo/packages/40201?version=0.2.0
+        metadata:
+          package_type: rubygems
+    package-org:
+      value:
+        id: 197
+        name: hello_docker
+        package_type: container
+        owner:
+          login: github
+          id: 9919
+          node_id: MDEyOk9yZ2FuaXphdGlvbjk5MTk=
+          avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+          gravatar_id: ''
+          url: https://api.github.com/users/github
+          html_url: https://github.com/github
+          followers_url: https://api.github.com/users/github/followers
+          following_url: https://api.github.com/users/github/following{/other_user}
+          gists_url: https://api.github.com/users/github/gists{/gist_id}
+          starred_url: https://api.github.com/users/github/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/github/subscriptions
+          organizations_url: https://api.github.com/users/github/orgs
+          repos_url: https://api.github.com/users/github/repos
+          events_url: https://api.github.com/users/github/events{/privacy}
+          received_events_url: https://api.github.com/users/github/received_events
+          type: Organization
+          site_admin: false
+        version_count: 1
+        visibility: private
+        url: https://api.github.com/orgs/github/packages/container/hello_docker
+        created_at: '2020-05-19T22:19:11Z'
+        updated_at: '2020-05-19T22:19:11Z'
+        html_url: https://github.com/orgs/github/packages/container/package/hello_docker
+  parameters:
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    package-version-id:
+      name: package_version_id
+      description: Unique identifier of the package version.
+      in: path
+      required: true
+      schema:
+        type: integer
+    package-visibility:
+      name: visibility
+      description: 'The selected visibility of the packages.  This parameter is optional and only filters an existing result set.
+
+
+        The `internal` visibility is only supported for GitHub Packages registries that allow for granular permissions. For other ecosystems `internal` is synonymous with `private`.
+
+        For the list of GitHub Packages registries that support granular permissions, see "[About permissions for GitHub Packages](https://docs.github.com/packages/learn-github-packages/about-permissions-for-github-packages#granular-permissions-for-userorganization-scoped-packages)."'
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - public
+        - private
+        - internal
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    package-name:
+      name: package_name
+      description: The name of the package.
+      in: path
+      required: true
+      schema:
+        type: string
+    package-type:
+      name: package_type
+      description: The type of supported package. Packages in GitHub's Gradle registry have the type `maven`. Docker images pushed to GitHub's Container registry (`ghcr.io`) have the type `container`. You can use the type `docker` to find images that were pushed to GitHub's Docker registry (`docker.pkg.github.com`), even if these have now been migrated to the Container registry.
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+        - npm
+        - maven
+        - rubygems
+        - docker
+        - nuget
+        - container
+  schemas:
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        login:
+          type: string
+          examples:
+          - octocat
+        id:
+          type: integer
+          format: int64
+          examples:
+          - 1
+        node_id:
+          type: string
+          examples:
+          - MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          examples:
+          - https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          examples:
+          - 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          examples:
+          - https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          examples:
+          - https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          examples:
+          - User
+        site_admin:
+          type: boolean
+        starred_at:
+          type: string
+          examples:
+          - '"2020-07-09T00:17:55Z"'
+        user_view_type:
+          type: string
+          examples:
+          - public
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    minimal-repository:
+      title: Minimal Repository
+      description: Minimal Repository
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+          - 1296269
+        node_id:
+          type: string
+          examples:
+          - MDEwOlJlcG9zaXRvcnkxMjk2MjY5
+        name:
+          type: string
+          examples:
+          - Hello-World
+        full_name:
+          type: string
+          examples:
+          - octocat/Hello-World
+        owner:
+          $ref: '#/components/schemas/simple-user'
+        private:
+          type: boolean
+        html_url:
+          type: string
+          format: uri
+          examples:
+          - https://github.com/octocat/Hello-World
+        description:
+          type:
+          - string
+          - 'null'
+          examples:
+          - This your first repo!
+        fork:
+          type: boolean
+        url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/repos/octocat/Hello-World
+        archive_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/{archive_format}{/ref}
+        assignees_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/assignees{/user}
+        blobs_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/git/blobs{/sha}
+        branches_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/branches{/branch}
+        collaborators_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/collaborators{/collaborator}
+        comments_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/comments{/number}
+        commits_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/commits{/sha}
+        compare_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/compare/{base}...{head}
+        contents_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/contents/{+path}
+        contributors_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/contributors
+        deployments_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/deployments
+        downloads_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/downloads
+        events_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/events
+        forks_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/forks
+        git_commits_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/git/commits{/sha}
+        git_refs_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/git/refs{/sha}
+        git_tags_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/git/tags{/sha}
+        git_url:
+          type: string
+        issue_comment_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/issues/comments{/number}
+        issue_events_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/issues/events{/number}
+        issues_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/issues{/number}
+        keys_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/keys{/key_id}
+        labels_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/labels{/name}
+        languages_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/languages
+        merges_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/merges
+        milestones_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/milestones{/number}
+        notifications_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/notifications{?since,all,participating}
+        pulls_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/pulls{/number}
+        releases_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/releases{/id}
+        ssh_url:
+          type: string
+        stargazers_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/stargazers
+        statuses_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/statuses/{sha}
+        subscribers_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/subscribers
+        subscription_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/subscription
+        tags_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/tags
+        teams_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/teams
+        trees_url:
+          type: string
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/git/trees{/sha}
+        clone_url:
+          type: string
+        mirror_url:
+          type:
+          - string
+          - 'null'
+        hooks_url:
+          type: string
+          format: uri
+          examples:
+          - http://api.github.com/repos/octocat/Hello-World/hooks
+        svn_url:
+          type: string
+        homepage:
+          type:
+          - string
+          - 'null'
+        language:
+          type:
+          - string
+          - 'null'
+        forks_count:
+          type: integer
+        stargazers_count:
+          type: integer
+        watchers_count:
+          type: integer
+        size:
+          description: The size of the repository, in kilobytes. Size is calculated hourly. When a repository is initially created, the size is 0.
+          type: integer
+        default_branch:
+          type: string
+        open_issues_count:
+          type: integer
+        is_template:
+          type: boolean
+        topics:
+          type: array
+          items:
+            type: string
+        has_issues:
+          type: boolean
+        has_projects:
+          type: boolean
+        has_wiki:
+          type: boolean
+        has_pages:
+          type: boolean
+        has_downloads:
+          type: boolean
+        has_discussions:
+          type: boolean
+        has_pull_requests:
+          type: boolean
+        pull_request_creation_policy:
+          description: 'The policy controlling who can create pull requests: all or collaborators_only.'
+          type: string
+          enum:
+          - all
+          - collaborators_only
+        archived:
+          type: boolean
+        disabled:
+          type: boolean
+        visibility:
+          type: string
+        pushed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          examples:
+          - '2011-01-26T19:06:43Z'
+        created_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          examples:
+          - '2011-01-26T19:01:12Z'
+        updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          examples:
+          - '2011-01-26T19:14:43Z'
+        permissions:
+          type: object
+          properties:
+            admin:
+              type: boolean
+            maintain:
+              type: boolean
+            push:
+              type: boolean
+            triage:
+              type: boolean
+            pull:
+              type: boolean
+        role_name:
+          type: string
+          examples:
+          - admin
+        temp_clone_token:
+          type: string
+        delete_branch_on_merge:
+          type: boolean
+        subscribers_count:
+          type: integer
+        network_count:
+          type: integer
+        code_of_conduct:
+          $ref: '#/components/schemas/code-of-conduct'
+        license:
+          type:
+          - object
+          - 'null'
+          properties:
+            key:
+              type: string
+            name:
+              type: string
+            spdx_id:
+              type: string
+            url:
+              type:
+              - string
+              - 'null'
+            node_id:
+              type: string
+        forks:
+          type: integer
+          examples:
+          - 0
+        open_issues:
+          type: integer
+          examples:
+          - 0
+        watchers:
+          type: integer
+          examples:
+          - 0
+        allow_forking:
+          type: boolean
+        web_commit_signoff_required:
+          type: boolean
+          examples:
+          - false
+        security_and_analysis:
+          $ref: '#/components/schemas/security-and-analysis'
+        custom_properties:
+          type: object
+          description: The custom properties that were defined for the repository. The keys are the custom property names, and the values are the corresponding custom property values.
+          additionalProperties: true
+      required:
+      - archive_url
+      - assignees_url
+      - blobs_url
+      - branches_url
+      - collaborators_url
+      - comments_url
+      - commits_url
+      - compare_url
+      - contents_url
+      - contributors_url
+      - deployments_url
+      - description
+      - downloads_url
+      - events_url
+      - fork
+      - forks_url
+      - full_name
+      - git_commits_url
+      - git_refs_url
+      - git_tags_url
+      - hooks_url
+      - html_url
+      - id
+      - node_id
+      - issue_comment_url
+      - issue_events_url
+      - issues_url
+      - keys_url
+      - labels_url
+      - languages_url
+      - merges_url
+      - milestones_url
+      - name
+      - notifications_url
+      - owner
+      - private
+      - pulls_url
+      - releases_url
+      - stargazers_url
+      - statuses_url
+      - subscribers_url
+      - subscription_url
+      - tags_url
+      - teams_url
+      - trees_url
+      - url
+    package:
+      title: Package
+      description: A software package
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the package.
+          type: integer
+          examples:
+          - 1
+        name:
+          description: The name of the package.
+          type: string
+          examples:
+          - super-linter
+        package_type:
+          type: string
+          enum:
+          - npm
+          - maven
+          - rubygems
+          - docker
+          - nuget
+          - container
+          examples:
+          - docker
+        url:
+          type: string
+          examples:
+          - https://api.github.com/orgs/github/packages/container/super-linter
+        html_url:
+          type: string
+          examples:
+          - https://github.com/orgs/github/packages/container/package/super-linter
+        version_count:
+          description: The number of versions of the package.
+          type: integer
+          examples:
+          - 1
+        visibility:
+          type: string
+          enum:
+          - private
+          - public
+          examples:
+          - private
+        owner:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/simple-user'
+        repository:
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/minimal-repository'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - name
+      - package_type
+      - visibility
+      - url
+      - html_url
+      - version_count
+      - created_at
+      - updated_at
+    security-and-analysis:
+      type:
+      - object
+      - 'null'
+      properties:
+        advanced_security:
+          description: 'Enable or disable GitHub Advanced Security for the repository.
+
+
+            For standalone Code Scanning or Secret Protection products, this parameter cannot be used.
+
+            '
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        code_security:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        dependabot_security_updates:
+          description: Enable or disable Dependabot security updates for the repository.
+          type: object
+          properties:
+            status:
+              description: The enablement status of Dependabot security updates for the repository.
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_push_protection:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_non_provider_patterns:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_ai_detection:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_delegated_alert_dismissal:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_delegated_bypass:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+              - enabled
+              - disabled
+        secret_scanning_delegated_bypass_options:
+          type: object
+          properties:
+            reviewers:
+              type: array
+              description: The bypass reviewers for secret scanning delegated bypass
+              items:
+                type: object
+                required:
+                - reviewer_id
+                - reviewer_type
+                properties:
+                  reviewer_id:
+                    type: integer
+                    description: The ID of the team or role selected as a bypass reviewer
+                  reviewer_type:
+                    type: string
+                    description: The type of the bypass reviewer
+                    enum:
+                    - TEAM
+                    - ROLE
+                  mode:
+                    type: string
+                    description: The bypass mode for the reviewer
+                    enum:
+                    - ALWAYS
+                    - EXEMPT
+                    default: ALWAYS
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+        documentation_url:
+          type: string
+        url:
+          type: string
+        status:
+          type: string
+    package-version:
+      title: Package Version
+      description: A version of a software package
+      type: object
+      properties:
+        id:
+          description: Unique identifier of the package version.
+          type: integer
+          examples:
+          - 1
+        name:
+          description: The name of the package version.
+          type: string
+          examples:
+          - latest
+        url:
+          type: string
+          examples:
+          - https://api.github.com/orgs/github/packages/container/super-linter/versions/786068
+        package_html_url:
+          type: string
+          examples:
+          - https://github.com/orgs/github/packages/container/package/super-linter
+        html_url:
+          type: string
+          examples:
+          - https://github.com/orgs/github/packages/container/super-linter/786068
+        license:
+          type: string
+          examples:
+          - MIT
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          examples:
+          - '2011-04-10T20:09:31Z'
+        updated_at:
+          type: string
+          format: date-time
+          examples:
+          - '2014-03-03T18:58:10Z'
+        deleted_at:
+          type: string
+          format: date-time
+          examples:
+          - '2014-03-03T18:58:10Z'
+        metadata:
+          type: object
+          title: Package Version Metadata
+          properties:
+            package_type:
+              type: string
+              enum:
+              - npm
+              - maven
+              - rubygems
+              - docker
+              - nuget
+              - container
+              examples:
+              - docker
+            container:
+              type: object
+              title: Container Metadata
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+              required:
+              - tags
+            docker:
+              type: object
+              title: Docker Metadata
+              properties:
+                tag:
+                  type: array
+                  items:
+                    type: string
+              required:
+              - tags
+          required:
+          - package_type
+      required:
+      - id
+      - name
+      - url
+      - package_html_url
+      - created_at
+      - updated_at
+    code-of-conduct:
+      title: Code Of Conduct
+      description: Code Of Conduct
+      type: object
+      properties:
+        key:
+          type: string
+          examples:
+          - contributor_covenant
+        name:
+          type: string
+          examples:
+          - Contributor Covenant
+        url:
+          type: string
+          format: uri
+          examples:
+          - https://api.github.com/codes_of_conduct/contributor_covenant
+        body:
+          type: string
+          examples:
+          - "# Contributor Covenant Code of Conduct\n\n## Our Pledge\n\nIn the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.\n\n## Our Standards\n\nExamples of behavior that contributes to creating a positive environment include:\n\n* Using welcoming and inclusive language\n* Being respectful of differing viewpoints and experiences\n* Gracefully accepting constructive criticism\n* Focusing on what is best for the community\n* Showing empathy towards other community members\n\nExamples of unacceptable behavior by participants include:\n\n* The use of sexualized language or imagery and unwelcome sexual attention or advances\n* Trolling, insulting/derogatory comments, and personal or political attacks\n* Public or private harassment\n* Publishing others' private information, such as a physical or electronic address, without explicit permission\n* Other conduct which could reasonably be considered inappropriate in a professional setting\n\n## Our Responsibilities\n\nProject maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response\n                  to any instances of unacceptable behavior.\n\nProject maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.\n\n## Scope\n\nThis Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address,\n                  posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.\n\n## Enforcement\n\nInstances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at [EMAIL]. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.\n\nProject maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.\n\n## Attribution\n\nThis Code of Conduct is adapted from the [Contributor Covenant](http://contributor-covenant.org), version 1.4, available at [http://contributor-covenant.org/version/1/4](http://contributor-covenant.org/version/1/4/).\n"
+        html_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+      required:
+      - url
+      - html_url
+      - key
+      - name
+  responses:
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    package_es_list_error:
+      description: The value of `per_page` multiplied by `page` cannot be greater than 10000.
 externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

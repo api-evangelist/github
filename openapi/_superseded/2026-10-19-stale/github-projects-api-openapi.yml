@@ -1,0 +1,2344 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub v3 REST Projects API
+  description: GitHub's v3 REST API.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
+tags:
+- name: Projects
+  description: Interact with GitHub Projects.
+paths:
+  /orgs/{org}/projects:
+    get:
+      summary: GitHub List Organization Projects
+      description: Lists the projects in an organization. Returns a `404 Not Found` status if projects are disabled in the organization. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/list-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#list-organization-projects
+      parameters:
+      - $ref: '#/components/parameters/org'
+      - name: state
+        description: Indicates the state of the projects to return.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - all
+          default: open
+        example: open
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Create an Organization Project
+      description: Creates an organization project board. Returns a `410 Gone` status if projects are disabled in the organization or if the organization does not have existing classic projects. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/create-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#create-an-organization-project
+      parameters:
+      - $ref: '#/components/parameters/org'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                body:
+                  type: string
+                  description: The description of the project.
+              required:
+              - name
+            examples:
+              default:
+                value:
+                  name: Organization Roadmap
+                  body: High-level roadmap for the upcoming year.
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-2'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '410':
+          $ref: '#/components/responses/gone'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/columns/cards/{card_id}:
+    get:
+      summary: GitHub Get a Project Card
+      description: Gets information about a project card.
+      tags:
+      - Projects
+      operationId: projects/get-card
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#get-a-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-card'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-card'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      summary: GitHub Update an Existing Project Card
+      description: ''
+      tags:
+      - Projects
+      operationId: projects/update-card
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#update-an-existing-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  description: The project card's note
+                  example: Update all gems
+                  type:
+                  - string
+                  - 'null'
+                archived:
+                  description: Whether or not the card is archived
+                  example: false
+                  type: boolean
+            examples:
+              default:
+                summary: Change the note on the card
+                value:
+                  note: Add payload for delete Project column
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-card'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-card'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Delete a Project Card
+      description: Deletes a project card
+      tags:
+      - Projects
+      operationId: projects/delete-card
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#delete-a-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/columns/cards/{card_id}/moves:
+    post:
+      summary: GitHub Move a Project Card
+      description: ''
+      tags:
+      - Projects
+      operationId: projects/move-card
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#move-a-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                position:
+                  description: 'The position of the card in a column. Can be one of: `top`, `bottom`, or `after:<card_id>` to place after the specified card.'
+                  example: bottom
+                  type: string
+                  pattern: ^(?:top|bottom|after:\d+)$
+                column_id:
+                  description: The unique identifier of the column the card should be moved to
+                  example: 42
+                  type: integer
+              required:
+              - position
+              type: object
+            examples:
+              default:
+                summary: Move the card to the bottom of the column
+                value:
+                  column_id: 42
+                  position: bottom
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                additionalProperties: false
+              examples:
+                default:
+                  value: null
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        message:
+                          type: string
+                        resource:
+                          type: string
+                        field:
+                          type: string
+        '422':
+          $ref: '#/components/responses/validation_failed'
+        '503':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        message:
+                          type: string
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/columns/{column_id}:
+    get:
+      summary: GitHub Get a Project Column
+      description: Gets information about a project column.
+      tags:
+      - Projects
+      operationId: projects/get-column
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#get-a-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-column'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-column'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      summary: GitHub Update an Existing Project Column
+      description: ''
+      tags:
+      - Projects
+      operationId: projects/update-column
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#update-an-existing-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project column
+                  example: Remaining tasks
+                  type: string
+              required:
+              - name
+              type: object
+            examples:
+              default:
+                summary: Rename the project column
+                value:
+                  name: To Do
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-column'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-column'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Delete a Project Column
+      description: Deletes a project column.
+      tags:
+      - Projects
+      operationId: projects/delete-column
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#delete-a-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/columns/{column_id}/cards:
+    get:
+      summary: GitHub List Project Cards
+      description: Lists the project cards in a project.
+      tags:
+      - Projects
+      operationId: projects/list-cards
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#list-project-cards
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      - name: archived_state
+        description: Filters the project cards that are returned by the card's state.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - all
+          - archived
+          - not_archived
+          default: not_archived
+        example: all
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project-card'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-card-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Create a Project Card
+      description: ''
+      tags:
+      - Projects
+      operationId: projects/create-card
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#create-a-project-card
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - type: object
+                properties:
+                  note:
+                    description: The project card's note
+                    example: Update all gems
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - note
+              - type: object
+                properties:
+                  content_id:
+                    description: The unique identifier of the content associated with the card
+                    example: 42
+                    type: integer
+                  content_type:
+                    description: The piece of content associated with the card
+                    example: PullRequest
+                    type: string
+                required:
+                - content_id
+                - content_type
+            examples:
+              default:
+                summary: Create a new card
+                value:
+                  note: Add payload for delete Project column
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-card'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-card'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/validation-error'
+                - $ref: '#/components/schemas/validation-error-simple'
+        '503':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        message:
+                          type: string
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/columns/{column_id}/moves:
+    post:
+      summary: GitHub Move a Project Column
+      description: ''
+      tags:
+      - Projects
+      operationId: projects/move-column
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#move-a-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                position:
+                  description: 'The position of the column in a project. Can be one of: `first`, `last`, or `after:<column_id>` to place after the specified column.'
+                  example: last
+                  type: string
+                  pattern: ^(?:first|last|after:\d+)$
+              required:
+              - position
+              type: object
+            examples:
+              default:
+                summary: Move the column to the end of the board
+                value:
+                  position: last
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                additionalProperties: false
+              examples:
+                default:
+                  value: null
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/{project_id}:
+    get:
+      summary: GitHub Get a Project
+      description: Gets a project by its `id`. Returns a `404 Not Found` status if projects are disabled. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/get
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#get-a-project
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-3'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      summary: GitHub Update a Project
+      description: Updates a project board's information. Returns a `404 Not Found` status if projects are disabled. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      operationId: projects/update
+      tags:
+      - Projects
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#update-a-project
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project
+                  example: Week One Sprint
+                  type: string
+                body:
+                  description: Body of the project
+                  example: This project represents the sprint of the first week in January
+                  type:
+                  - string
+                  - 'null'
+                state:
+                  description: State of the project; either 'open' or 'closed'
+                  example: open
+                  type: string
+                organization_permission:
+                  description: The baseline permission that all organization members have on this project
+                  type: string
+                  enum:
+                  - read
+                  - write
+                  - admin
+                  - none
+                private:
+                  description: Whether or not this project can be seen by everyone.
+                  type: boolean
+              type: object
+            examples:
+              default:
+                summary: Change the name, state, and permissions for a project
+                value:
+                  name: Week One Sprint
+                  state: open
+                  organization_permission: write
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-3'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Not Found if the authenticated user does not have access to the project
+        '410':
+          $ref: '#/components/responses/gone'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Delete a Project
+      description: Deletes a project board. Returns a `404 Not Found` status if projects are disabled.
+      operationId: projects/delete
+      tags:
+      - Projects
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#delete-a-project
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      responses:
+        '204':
+          description: Delete Success
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          $ref: '#/components/responses/not_found'
+        '410':
+          $ref: '#/components/responses/gone'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/{project_id}/collaborators:
+    get:
+      summary: GitHub List Project Collaborators
+      description: Lists the collaborators for an organization project. For a project, the list of collaborators includes outside collaborators, organization members that are direct collaborators, organization members with access through team memberships, organization members with access through default organization permissions, and organization owners. You must be an organization owner or a project `admin` to list collaborators.
+      tags:
+      - Projects
+      operationId: projects/list-collaborators
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/collaborators#list-project-collaborators
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - name: affiliation
+        description: Filters the collaborators by their affiliation. `outside` means outside collaborators of a project that are not a member of the project's organization. `direct` means collaborators with permissions to a project, regardless of organization membership status. `all` means all collaborators the authenticated user can see.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - outside
+          - direct
+          - all
+          default: all
+        example: outside
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/simple-user'
+              examples:
+                default:
+                  $ref: '#/components/examples/simple-user-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: collaborators
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/{project_id}/collaborators/{username}:
+    put:
+      summary: GitHub Add Project Collaborator
+      description: Adds a collaborator to an organization project and sets their permission level. You must be an organization owner or a project `admin` to add a collaborator.
+      tags:
+      - Projects
+      operationId: projects/add-collaborator
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/collaborators#add-project-collaborator
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - $ref: '#/components/parameters/username'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+              properties:
+                permission:
+                  description: The permission to grant the collaborator.
+                  enum:
+                  - read
+                  - write
+                  - admin
+                  default: write
+                  example: write
+                  type: string
+            examples:
+              default:
+                summary: Applying write permissions for the new collaborator
+                value:
+                  permission: write
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: collaborators
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      summary: GitHub Remove User as a Collaborator
+      description: Removes a collaborator from an organization project. You must be an organization owner or a project `admin` to remove a collaborator.
+      tags:
+      - Projects
+      operationId: projects/remove-collaborator
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/collaborators#remove-user-as-a-collaborator
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - $ref: '#/components/parameters/username'
+      responses:
+        '204':
+          description: Response
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: collaborators
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/{project_id}/collaborators/{username}/permission:
+    get:
+      summary: GitHub Get Project Permission for a User
+      description: 'Returns the collaborator''s permission level for an organization project. Possible values for the `permission` key: `admin`, `write`, `read`, `none`. You must be an organization owner or a project `admin` to review a user''s permission level.'
+      tags:
+      - Projects
+      operationId: projects/get-permission-for-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/collaborators#get-project-permission-for-a-user
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - $ref: '#/components/parameters/username'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-collaborator-permission'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-collaborator-permission'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: collaborators
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /projects/{project_id}/columns:
+    get:
+      summary: GitHub List Project Columns
+      description: Lists the project columns in a project.
+      tags:
+      - Projects
+      operationId: projects/list-columns
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#list-project-columns
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project-column'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-column-items'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Create a Project Column
+      description: Creates a new project column.
+      tags:
+      - Projects
+      operationId: projects/create-column
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#create-a-project-column
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project column
+                  example: Remaining tasks
+                  type: string
+              required:
+              - name
+              type: object
+            examples:
+              default:
+                value:
+                  name: Remaining tasks
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-column'
+              examples:
+                default:
+                  value:
+                    url: https://api.github.com/projects/columns/367
+                    project_url: https://api.github.com/projects/120
+                    cards_url: https://api.github.com/projects/columns/367/cards
+                    id: 367
+                    node_id: MDEzOlByb2plY3RDb2x1bW4zNjc=
+                    name: To Do
+                    created_at: '2016-09-05T14:18:44Z'
+                    updated_at: '2016-09-05T14:22:28Z'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /repos/{owner}/{repo}/projects:
+    get:
+      summary: GitHub List Repository Projects
+      description: Lists the projects in a repository. Returns a `404 Not Found` status if projects are disabled in the repository. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/list-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#list-repository-projects
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      - name: state
+        description: Indicates the state of the projects to return.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - all
+          default: open
+        example: open
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-items-2'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '410':
+          $ref: '#/components/responses/gone'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      summary: GitHub Create a Repository Project
+      description: Creates a repository project board. Returns a `410 Gone` status if projects are disabled in the repository or if the repository does not have existing classic projects. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/create-for-repo
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#create-a-repository-project
+      parameters:
+      - $ref: '#/components/parameters/owner'
+      - $ref: '#/components/parameters/repo'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                body:
+                  type: string
+                  description: The description of the project.
+              required:
+              - name
+            examples:
+              default:
+                value:
+                  name: Projects Documentation
+                  body: Developer documentation project for the developer site.
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-3'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '410':
+          $ref: '#/components/responses/gone'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /user/projects:
+    post:
+      summary: GitHub Create a User Project
+      description: Creates a user project board. Returns a `410 Gone` status if the user does not have existing classic projects. If you do not have sufficient privileges to perform this action, a `401 Unauthorized` or `410 Gone` status is returned.
+      tags:
+      - Projects
+      operationId: projects/create-for-authenticated-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#create-a-user-project
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project
+                  example: Week One Sprint
+                  type: string
+                body:
+                  description: Body of the project
+                  example: This project represents the sprint of the first week in January
+                  type:
+                  - string
+                  - 'null'
+              required:
+              - name
+              type: object
+            examples:
+              default:
+                summary: Create a new project
+                value:
+                  name: My Projects
+                  body: A board to manage my personal projects.
+      responses:
+        '201':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /users/{username}/projects:
+    get:
+      summary: GitHub List User Projects
+      description: Lists projects for a user.
+      tags:
+      - Projects
+      operationId: projects/list-for-user
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#list-user-projects
+      parameters:
+      - $ref: '#/components/parameters/username'
+      - name: state
+        description: Indicates the state of the projects to return.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - open
+          - closed
+          - all
+          default: open
+        example: open
+      - $ref: '#/components/parameters/per-page'
+      - $ref: '#/components/parameters/page'
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-items-3'
+          headers:
+            Link:
+              $ref: '#/components/headers/link'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: projects
+        subcategory: projects
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  examples:
+    project-items-3:
+      value:
+      - owner_url: https://api.github.com/users/octocat
+        url: https://api.github.com/projects/1002603
+        html_url: https://github.com/users/octocat/projects/1
+        columns_url: https://api.github.com/projects/1002603/columns
+        id: 1002603
+        node_id: MDc6UHJvamVjdDEwMDI2MDM=
+        name: My Projects
+        body: A board to manage my personal projects.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
+    project-items-2:
+      value:
+      - owner_url: https://api.github.com/repos/api-playground/projects-test
+        url: https://api.github.com/projects/1002604
+        html_url: https://github.com/api-playground/projects-test/projects/1
+        columns_url: https://api.github.com/projects/1002604/columns
+        id: 1002604
+        node_id: MDc6UHJvamVjdDEwMDI2MDQ=
+        name: Projects Documentation
+        body: Developer documentation project for the developer site.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
+    simple-user-items:
+      value:
+      - login: octocat
+        id: 1
+        node_id: MDQ6VXNlcjE=
+        avatar_url: https://github.com/images/error/octocat_happy.gif
+        gravatar_id: ''
+        url: https://api.github.com/users/octocat
+        html_url: https://github.com/octocat
+        followers_url: https://api.github.com/users/octocat/followers
+        following_url: https://api.github.com/users/octocat/following{/other_user}
+        gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url: https://api.github.com/users/octocat/subscriptions
+        organizations_url: https://api.github.com/users/octocat/orgs
+        repos_url: https://api.github.com/users/octocat/repos
+        events_url: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url: https://api.github.com/users/octocat/received_events
+        type: User
+        site_admin: false
+    project-3:
+      value:
+        owner_url: https://api.github.com/repos/api-playground/projects-test
+        url: https://api.github.com/projects/1002604
+        html_url: https://github.com/api-playground/projects-test/projects/1
+        columns_url: https://api.github.com/projects/1002604/columns
+        id: 1002604
+        node_id: MDc6UHJvamVjdDEwMDI2MDQ=
+        name: Projects Documentation
+        body: Developer documentation project for the developer site.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
+    project:
+      value:
+        owner_url: https://api.github.com/users/octocat
+        url: https://api.github.com/projects/1002603
+        html_url: https://github.com/users/octocat/projects/1
+        columns_url: https://api.github.com/projects/1002603/columns
+        id: 1002603
+        node_id: MDc6UHJvamVjdDEwMDI2MDM=
+        name: My Projects
+        body: A board to manage my personal projects.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
+    project-column-items:
+      value:
+      - url: https://api.github.com/projects/columns/367
+        project_url: https://api.github.com/projects/120
+        cards_url: https://api.github.com/projects/columns/367/cards
+        id: 367
+        node_id: MDEzOlByb2plY3RDb2x1bW4zNjc=
+        name: To Do
+        created_at: '2016-09-05T14:18:44Z'
+        updated_at: '2016-09-05T14:22:28Z'
+    project-collaborator-permission:
+      value:
+        permission: admin
+        user:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+    project-card:
+      value:
+        url: https://api.github.com/projects/columns/cards/1478
+        id: 1478
+        node_id: MDExOlByb2plY3RDYXJkMTQ3OA==
+        note: Add payload for delete Project column
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2016-09-05T14:21:06Z'
+        updated_at: '2016-09-05T14:20:22Z'
+        archived: false
+        column_url: https://api.github.com/projects/columns/367
+        content_url: https://api.github.com/repos/api-playground/projects-test/issues/3
+        project_url: https://api.github.com/projects/120
+    project-card-items:
+      value:
+      - url: https://api.github.com/projects/columns/cards/1478
+        id: 1478
+        node_id: MDExOlByb2plY3RDYXJkMTQ3OA==
+        note: Add payload for delete Project column
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2016-09-05T14:21:06Z'
+        updated_at: '2016-09-05T14:20:22Z'
+        archived: false
+        column_url: https://api.github.com/projects/columns/367
+        content_url: https://api.github.com/repos/api-playground/projects-test/issues/3
+        project_url: https://api.github.com/projects/120
+    project-2:
+      value:
+        owner_url: https://api.github.com/orgs/octocat
+        url: https://api.github.com/projects/1002605
+        html_url: https://github.com/orgs/api-playground/projects/1
+        columns_url: https://api.github.com/projects/1002605/columns
+        id: 1002605
+        node_id: MDc6UHJvamVjdDEwMDI2MDU=
+        name: Organization Roadmap
+        body: High-level roadmap for the upcoming year.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-11T20:09:31Z'
+        updated_at: '2014-03-04T18:58:10Z'
+    project-items:
+      value:
+      - owner_url: https://api.github.com/orgs/octocat
+        url: https://api.github.com/projects/1002605
+        html_url: https://github.com/orgs/api-playground/projects/1
+        columns_url: https://api.github.com/projects/1002605/columns
+        id: 1002605
+        node_id: MDc6UHJvamVjdDEwMDI2MDU=
+        name: Organization Roadmap
+        body: High-level roadmap for the upcoming year.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-11T20:09:31Z'
+        updated_at: '2014-03-04T18:58:10Z'
+        organization_permission: write
+        private: true
+    project-column:
+      value:
+        url: https://api.github.com/projects/columns/367
+        project_url: https://api.github.com/projects/120
+        cards_url: https://api.github.com/projects/columns/367/cards
+        id: 367
+        node_id: MDEzOlByb2plY3RDb2x1bW4zNjc=
+        name: To Do
+        created_at: '2016-09-05T14:18:44Z'
+        updated_at: '2016-09-05T14:22:28Z'
+  schemas:
+    project:
+      title: Project
+      description: Projects are a way to organize columns and cards of work.
+      type: object
+      properties:
+        owner_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/api-playground/projects-test
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/1002604
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/api-playground/projects-test/projects/12
+        columns_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/1002604/columns
+        id:
+          type: integer
+          example: 1002604
+        node_id:
+          type: string
+          example: MDc6UHJvamVjdDEwMDI2MDQ=
+        name:
+          description: Name of the project
+          example: Week One Sprint
+          type: string
+        body:
+          description: Body of the project
+          example: This project represents the sprint of the first week in January
+          type:
+          - string
+          - 'null'
+        number:
+          type: integer
+          example: 1
+        state:
+          description: State of the project; either 'open' or 'closed'
+          example: open
+          type: string
+        creator:
+          $ref: '#/components/schemas/nullable-simple-user'
+        created_at:
+          type: string
+          format: date-time
+          example: '2011-04-10T20:09:31Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2014-03-03T18:58:10Z'
+        organization_permission:
+          description: The baseline permission that all organization members have on this project. Only present if owner is an organization.
+          type: string
+          enum:
+          - read
+          - write
+          - admin
+          - none
+          example: read
+        private:
+          description: Whether or not this project can be seen by everyone. Only present if owner is an organization.
+          type: boolean
+          example: true
+      required:
+      - id
+      - node_id
+      - number
+      - name
+      - body
+      - state
+      - url
+      - html_url
+      - owner_url
+      - creator
+      - columns_url
+      - created_at
+      - updated_at
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    validation-error-simple:
+      title: Validation Error Simple
+      description: Validation Error Simple
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: string
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    project-column:
+      title: Project Column
+      description: Project columns contain cards of work.
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367
+        project_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/120
+        cards_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367/cards
+        id:
+          description: The unique identifier of the project column
+          example: 42
+          type: integer
+        node_id:
+          type: string
+          example: MDEzOlByb2plY3RDb2x1bW4zNjc=
+        name:
+          description: Name of the project column
+          example: Remaining tasks
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:18:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:22:28Z'
+      required:
+      - id
+      - node_id
+      - url
+      - project_url
+      - cards_url
+      - name
+      - created_at
+      - updated_at
+    project-collaborator-permission:
+      title: Project Collaborator Permission
+      description: Project Collaborator Permission
+      type: object
+      properties:
+        permission:
+          type: string
+          example: example_value
+        user:
+          $ref: '#/components/schemas/nullable-simple-user'
+      required:
+      - permission
+      - user
+    project-card:
+      title: Project Card
+      description: Project cards represent a scope of work.
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/cards/1478
+        id:
+          description: The project card's ID
+          example: 42
+          type: integer
+        node_id:
+          type: string
+          example: MDExOlByb2plY3RDYXJkMTQ3OA==
+        note:
+          type:
+          - string
+          - 'null'
+          example: Add payload for delete Project column
+        creator:
+          $ref: '#/components/schemas/nullable-simple-user'
+        created_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:21:06Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:20:22Z'
+        archived:
+          description: Whether or not the card is archived
+          example: false
+          type: boolean
+        column_name:
+          type: string
+          example: octocat
+        project_id:
+          type: string
+          example: '12345678'
+        column_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367
+        content_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/api-playground/projects-test/issues/3
+        project_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/120
+      required:
+      - id
+      - node_id
+      - note
+      - url
+      - column_url
+      - project_url
+      - creator
+      - created_at
+      - updated_at
+    nullable-simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+  responses:
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_modified:
+      description: Not modified
+    validation_failed_simple:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error-simple'
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    gone:
+      description: Gone
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  parameters:
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+    column-id:
+      name: column_id
+      description: The unique identifier of the column.
+      in: path
+      required: true
+      schema:
+        type: integer
+    username:
+      name: username
+      description: The handle for the GitHub user account.
+      in: path
+      required: true
+      schema:
+        type: string
+    card-id:
+      name: card_id
+      description: The unique identifier of the card.
+      in: path
+      required: true
+      schema:
+        type: integer
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+  headers:
+    link:
+      example: <https://api.github.com/resource?page=2>; rel="next", <https://api.github.com/resource?page=5>; rel="last"
+      schema:
+        type: string
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/

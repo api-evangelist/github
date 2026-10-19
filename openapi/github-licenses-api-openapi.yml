@@ -1,18 +1,20 @@
 openapi: 3.2.0
 info:
+  title: Github Licenses API
   version: 1.1.4
-  title: GitHub v3 REST Licenses API
-  description: GitHub's v3 REST API.
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
   license:
     name: MIT
     url: https://spdx.org/licenses/MIT
   termsOfService: https://docs.github.com/articles/github-terms-of-service
-  contact:
-    name: Support
-    url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-refined-note:
+  - x-github-plan differs across the merged source definitions and was not carried
+  - x-github-release differs across the merged source definitions and was not carried
+  description: 'Operations tagged licenses across 2 of this provider''s published API definitions: github-openapi.json, github-setup-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
+- url: https://api.github.com
 - url: '{protocol}://{hostname}/api/v3'
   variables:
     hostname:
@@ -27,21 +29,20 @@ tags:
 paths:
   /licenses:
     get:
-      summary: GitHub Get All Commonly Used Licenses
+      summary: Get all commonly used licenses
       description: Lists the most commonly used licenses on GitHub. For more information, see "Licensing a repository ."
       tags:
       - Licenses
       operationId: licenses/get-all-commonly-used
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/licenses/licenses#get-all-commonly-used-licenses
+        url: https://docs.github.com/rest/licenses/licenses#get-all-commonly-used-licenses
       parameters:
       - name: featured
         in: query
         required: false
         schema:
           type: boolean
-        example: true
       - $ref: '#/components/parameters/per-page'
       - $ref: '#/components/parameters/page'
       responses:
@@ -63,26 +64,24 @@ paths:
         enabledForGitHubApps: true
         category: licenses
         subcategory: licenses
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+    servers:
+    - url: https://api.github.com
   /licenses/{license}:
     get:
-      summary: GitHub Get a License
+      summary: Get a license
       description: Gets information about a specific license. For more information, see "Licensing a repository ."
       tags:
       - Licenses
       operationId: licenses/get
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/licenses/licenses#get-a-license
+        url: https://docs.github.com/rest/licenses/licenses#get-a-license
       parameters:
       - name: license
         in: path
         required: true
         schema:
           type: string
-        example: example_value
       responses:
         '200':
           description: Response
@@ -93,23 +92,22 @@ paths:
               examples:
                 default:
                   $ref: '#/components/examples/license'
-        '304':
-          $ref: '#/components/responses/not_modified'
         '403':
           $ref: '#/components/responses/forbidden'
         '404':
           $ref: '#/components/responses/not_found'
+        '304':
+          $ref: '#/components/responses/not_modified'
       x-github:
         githubCloudOnly: false
         enabledForGitHubApps: true
         category: licenses
         subcategory: licenses
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
+    servers:
+    - url: https://api.github.com
   /repos/{owner}/{repo}/license:
     get:
-      summary: GitHub Get the License for a Repository
+      summary: Get the license for a repository
       description: 'This method returns the contents of the repository''s license file, if one is detected.
 
 
@@ -124,10 +122,11 @@ paths:
       operationId: licenses/get-for-repo
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/licenses/licenses#get-the-license-for-a-repository
+        url: https://docs.github.com/rest/licenses/licenses#get-the-license-for-a-repository
       parameters:
       - $ref: '#/components/parameters/owner'
       - $ref: '#/components/parameters/repo'
+      - $ref: '#/components/parameters/git-ref'
       responses:
         '200':
           description: Response
@@ -145,48 +144,114 @@ paths:
         enabledForGitHubApps: true
         category: licenses
         subcategory: licenses
+    servers:
+    - url: https://api.github.com
+  /setup/api/upgrade:
+    post:
+      summary: GitHub Upgrade License
+      description: 'This API upgrades your license and also triggers the configuration process.
+
+
+        **Note:** The request body for this operation must be submitted as `multipart/form-data` data. You can can reference the license file by prefixing the filename with the `@` symbol using `curl`. For more information, see the `curl` documentation.'
+      operationId: upgradeLicense
+      tags:
+      - Licenses
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/management-console#upgrade-a-license
+      servers:
+      - url: '{protocol}://{hostname}'
+        variables:
+          hostname:
+            default: HOSTNAME
+            description: Self-hosted Enterprise Server hostname
+          protocol:
+            default: http
+            description: Self-hosted Enterprise Server protocol
+      responses:
+        '202':
+          description: Response
+        '401':
+          description: Unauthorized
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                license:
+                  type: string
+                  description: The content of your new _.ghl_ license file.
+            examples:
+              default:
+                value:
+                  license: '@enterprise.ghl'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        category: enterprise-admin
+        subcategory: management-console
+      security:
+      - bearerHttpAuthentication: []
       x-microcks-operation:
         delay: 0
         dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
 components:
   schemas:
-    nullable-license-simple:
+    license-simple:
       title: License Simple
       description: License Simple
-      type:
-      - object
-      - 'null'
+      type: object
       properties:
         key:
           type: string
-          example: mit
+          examples:
+          - mit
         name:
           type: string
-          example: MIT License
+          examples:
+          - MIT License
         url:
           type:
           - string
           - 'null'
           format: uri
-          example: https://api.github.com/licenses/mit
+          examples:
+          - https://api.github.com/licenses/mit
         spdx_id:
           type:
           - string
           - 'null'
-          example: MIT
+          examples:
+          - MIT
         node_id:
           type: string
-          example: MDc6TGljZW5zZW1pdA==
+          examples:
+          - MDc6TGljZW5zZW1pdA==
         html_url:
           type: string
           format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
       required:
       - key
       - name
       - url
       - spdx_id
       - node_id
+    code-scanning-ref:
+      type: string
+      description: 'The Git reference, formatted as `refs/pull/<number>/merge`, `refs/pull/<number>/head`,
+
+        `refs/heads/<branch name>` or simply `<branch name>`.'
     license:
       title: License
       description: License
@@ -194,59 +259,68 @@ components:
       properties:
         key:
           type: string
-          example: mit
+          examples:
+          - mit
         name:
           type: string
-          example: MIT License
+          examples:
+          - MIT License
         spdx_id:
           type:
           - string
           - 'null'
-          example: MIT
+          examples:
+          - MIT
         url:
           type:
           - string
           - 'null'
           format: uri
-          example: https://api.github.com/licenses/mit
+          examples:
+          - https://api.github.com/licenses/mit
         node_id:
           type: string
-          example: MDc6TGljZW5zZW1pdA==
+          examples:
+          - MDc6TGljZW5zZW1pdA==
         html_url:
           type: string
           format: uri
-          example: http://choosealicense.com/licenses/mit/
+          examples:
+          - http://choosealicense.com/licenses/mit/
         description:
           type: string
-          example: A permissive license that is short and to the point. It lets people do anything with your code with proper attribution and without warranty.
+          examples:
+          - A permissive license that is short and to the point. It lets people do anything with your code with proper attribution and without warranty.
         implementation:
           type: string
-          example: Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders.
+          examples:
+          - Create a text file (typically named LICENSE or LICENSE.txt) in the root of your source code and copy the text of the license into the file. Replace [year] with the current year and [fullname] with the name (or names) of the copyright holders.
         permissions:
           type: array
-          example:
+          items:
+            type: string
+          examples:
           - commercial-use
           - modifications
           - distribution
           - sublicense
           - private-use
-          items:
-            type: string
         conditions:
           type: array
-          example:
-          - include-copyright
           items:
             type: string
+          examples:
+          - include-copyright
         limitations:
           type: array
-          example:
-          - no-liability
           items:
             type: string
+          examples:
+          - no-liability
         body:
           type: string
-          example: '
+          examples:
+          - '
 
 
             The MIT License (MIT)
@@ -290,7 +364,8 @@ components:
             '
         featured:
           type: boolean
-          example: true
+          examples:
+          - true
       required:
       - key
       - name
@@ -312,16 +387,12 @@ components:
       properties:
         message:
           type: string
-          example: Example body text
         documentation_url:
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
         url:
           type: string
-          example: https://api.github.com/repos/octocat/Hello-World
         status:
           type: string
-          example: open
     license-content:
       title: License Content
       description: License Content
@@ -329,47 +400,36 @@ components:
       properties:
         name:
           type: string
-          example: octocat
         path:
           type: string
-          example: src/index.js
         sha:
           type: string
-          example: abc123def456789012345678901234567890
         size:
           type: integer
-          example: 42
         url:
           type: string
           format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
         html_url:
           type:
           - string
           - 'null'
           format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
         git_url:
           type:
           - string
           - 'null'
           format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
         download_url:
           type:
           - string
           - 'null'
           format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
         type:
           type: string
-          example: User
         content:
           type: string
-          example: example_value
         encoding:
           type: string
-          example: example_value
         _links:
           type: object
           properties:
@@ -391,7 +451,9 @@ components:
           - html
           - self
         license:
-          $ref: '#/components/schemas/nullable-license-simple'
+          anyOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/license-simple'
       required:
       - _links
       - git_url
@@ -406,85 +468,6 @@ components:
       - content
       - encoding
       - license
-    license-simple:
-      title: License Simple
-      description: License Simple
-      type: object
-      properties:
-        key:
-          type: string
-          example: mit
-        name:
-          type: string
-          example: MIT License
-        url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.github.com/licenses/mit
-        spdx_id:
-          type:
-          - string
-          - 'null'
-          example: MIT
-        node_id:
-          type: string
-          example: MDc6TGljZW5zZW1pdA==
-        html_url:
-          type: string
-          format: uri
-          example: https://api.github.com/repos/octocat/Hello-World
-      required:
-      - key
-      - name
-      - url
-      - spdx_id
-      - node_id
-  responses:
-    not_modified:
-      description: Not modified
-    not_found:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-    forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/basic-error'
-  parameters:
-    repo:
-      name: repo
-      description: The name of the repository without the `.git` extension. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    owner:
-      name: owner
-      description: The account owner of the repository. The name is not case sensitive.
-      in: path
-      required: true
-      schema:
-        type: string
-    per-page:
-      name: per_page
-      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 30
-    page:
-      name: page
-      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/enterprise-server@3.9/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
-      in: query
-      schema:
-        type: integer
-        default: 1
   examples:
     license-simple-items:
       value:
@@ -657,6 +640,62 @@ components:
 
           '
         featured: true
-externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  parameters:
+    repo:
+      name: repo
+      description: The name of the repository without the `.git` extension. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    owner:
+      name: owner
+      description: The account owner of the repository. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    git-ref:
+      name: ref
+      description: The Git reference for the results you want to list. The `ref` for a branch can be formatted either as `refs/heads/<branch name>` or simply `<branch name>`. To reference a pull request use `refs/pull/<number>/merge`.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/code-scanning-ref'
+    per-page:
+      name: per_page
+      description: The number of results per page (max 100). For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 30
+    page:
+      name: page
+      description: The page number of the results to fetch. For more information, see "[Using pagination in the REST API](https://docs.github.com/rest/using-the-rest-api/using-pagination-in-the-rest-api)."
+      in: query
+      schema:
+        type: integer
+        default: 1
+  responses:
+    not_modified:
+      description: Not modified
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+x-refined-from:
+- github-openapi.json
+- github-setup-openapi.yml

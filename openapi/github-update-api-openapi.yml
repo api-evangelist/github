@@ -1,0 +1,2246 @@
+openapi: 3.2.0
+info:
+  title: Github Update API
+  version: 1.1.4
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  x-github-plan: ghes
+  x-github-release: 3.9
+  description: 'Operations tagged Update across 3 of this provider''s published API definitions: github-auth-api-openapi.yml, github-projects-openapi.yml, github-scim-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: api.github.com
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: https
+tags:
+- name: Update
+paths:
+  /authorizations/{authorization_id}:
+    patch:
+      summary: GitHub Update an Existing Authorization
+      description: '**Deprecation Notice:** GitHub Enterprise Server will discontinue the OAuth Authorizations API, which is used by integrations to create personal access tokens and OAuth tokens, and you must now create these tokens using our web application flow. The OAuth Authorizations API will be removed on November, 13, 2020. For more information, including scheduled brownouts, see the blog post.
+
+
+        If you have two-factor authentication setup, Basic Authentication for this endpoint requires that you use a one-time password (OTP) and your username and password instead of tokens. For more information, see "Working with two-factor authentication."
+
+
+        You can only send one of these scope keys at a time.'
+      tags:
+      - Update
+      operationId: updateAnExistingAuthorization
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/oauth-authorizations/oauth-authorizations#update-an-existing-authorization
+      parameters:
+      - $ref: '#/components/parameters/authorization-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scopes:
+                  description: A list of scopes that this authorization is in.
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+                  example:
+                  - public_repo
+                  - user
+                add_scopes:
+                  description: A list of scopes to add to this authorization.
+                  type: array
+                  items:
+                    type: string
+                remove_scopes:
+                  description: A list of scopes to remove from this authorization.
+                  type: array
+                  items:
+                    type: string
+                note:
+                  description: A note to remind you what the OAuth token is for.
+                  type: string
+                  example: Update all gems
+                note_url:
+                  description: A URL to remind you what app the OAuth token is for.
+                  type: string
+                fingerprint:
+                  description: A unique string to distinguish an authorization from others created for the same client ID and user.
+                  type: string
+            examples:
+              default:
+                summary: Example of updating scopes and note
+                value:
+                  add_scopes:
+                  - public_repo
+                  remove_scopes:
+                  - user
+                  note: optional note
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/authorization'
+              examples:
+                default:
+                  $ref: '#/components/examples/authorization-2'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: false
+        removalDate: '2020-11-13'
+        deprecationDate: '2020-02-14'
+        category: oauth-authorizations
+        subcategory: oauth-authorizations
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: api.github.com
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: https
+  /orgs/{org}/teams/{team_slug}/projects/{project_id}:
+    put:
+      summary: GitHub Add or Update Team Project Permissions
+      description: 'Adds an organization project to a team. To add a project to a team or update the team''s permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.
+
+
+        **Note:** You can also specify a team by `org_id` and `team_id` using the route `PUT /organizations/{org_id}/team/{team_id}/projects/{project_id}`.'
+      tags:
+      - Update
+      operationId: addOrUpdateTeamProjectPermissions
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+      parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/team-slug'
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type:
+              - object
+              - 'null'
+              properties:
+                permission:
+                  type: string
+                  description: 'The permission to grant to the team for this project. Default: the team''s `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you''ll need to set `Content-Length` to zero when calling this endpoint. For more information, see "[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method)."'
+                  enum:
+                  - read
+                  - write
+                  - admin
+            examples:
+              default:
+                summary: Updates the permissions for the team to write for the project
+                value:
+                  permission: write
+      responses:
+        '204':
+          description: Response
+        '403':
+          description: Forbidden if the project is not owned by the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+              examples:
+                response-if-the-project-is-not-owned-by-the-organization:
+                  value:
+                    message: Must have admin rights to Repository.
+                    documentation_url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: teams
+        subcategory: teams
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/columns/cards/{card_id}:
+    patch:
+      summary: GitHub Update an Existing Project Card
+      description: The PATCH operation on the `/projects/columns/cards/{card_id}` endpoint allows you to modify an existing project card within a GitHub project board by providing the card's unique identifier. This API call enables you to update card properties such as the note content or archived status, giving you programmatic control over managing cards in your project workflows. You must authenticate with appropriate permissions to modify cards, and the endpoint returns the updated card object upon successful execution. This is particularly useful for automation scenarios where you need to dynamically update card information, move cards between states, or archive cards based on project progress without manually interacting with the GitHub web interface.
+      tags:
+      - Update
+      operationId: updateAnExistingProjectCard
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/cards#update-an-existing-project-card
+      parameters:
+      - $ref: '#/components/parameters/card-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  description: The project card's note
+                  example: Update all gems
+                  type:
+                  - string
+                  - 'null'
+                archived:
+                  description: Whether or not the card is archived
+                  example: false
+                  type: boolean
+            examples:
+              default:
+                summary: Change the note on the card
+                value:
+                  note: Add payload for delete Project column
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-card'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-card'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: cards
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/columns/{column_id}:
+    patch:
+      summary: GitHub Update an Existing Project Column
+      description: The PATCH operation on the /projects/columns/{column_id} endpoint allows developers to modify the properties of an existing project column within GitHub Projects. By sending a PATCH request with the column's unique identifier, users can update attributes such as the column's name. This endpoint is particularly useful for reorganizing project boards, renaming workflow stages, or adjusting column configurations without needing to delete and recreate columns. The operation requires appropriate authentication and permissions to modify the project column, and it returns the updated column object upon successful execution, maintaining the column's position and associated cards while applying the requested changes.
+      tags:
+      - Update
+      operationId: updateAnExistingProjectColumn
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/columns#update-an-existing-project-column
+      parameters:
+      - $ref: '#/components/parameters/column-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project column
+                  example: Remaining tasks
+                  type: string
+              required:
+              - name
+              type: object
+            examples:
+              default:
+                summary: Rename the project column
+                value:
+                  name: To Do
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-column'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-column'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          $ref: '#/components/responses/forbidden'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: columns
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /projects/{project_id}:
+    patch:
+      summary: GitHub Update Project
+      description: The Update Project operation is a PATCH request to the /projects/{project_id} endpoint that allows you to modify an existing GitHub project's properties. By providing the project's unique identifier in the URL path, you can update various attributes such as the project's name, description (body), state (open or closed), organization permission levels, and privacy settings. This endpoint requires appropriate authentication and permissions to modify the project, and it returns the updated project object with all its current properties upon successful execution. The PATCH method enables partial updates, meaning you only need to include the specific fields you want to change rather than sending the entire project object.
+      operationId: updateProject
+      tags:
+      - Update
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/projects/projects#update-a-project
+      parameters:
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Name of the project
+                  example: Week One Sprint
+                  type: string
+                body:
+                  description: Body of the project
+                  example: This project represents the sprint of the first week in January
+                  type:
+                  - string
+                  - 'null'
+                state:
+                  description: State of the project; either 'open' or 'closed'
+                  example: open
+                  type: string
+                organization_permission:
+                  description: The baseline permission that all organization members have on this project
+                  type: string
+                  enum:
+                  - read
+                  - write
+                  - admin
+                  - none
+                private:
+                  description: Whether or not this project can be seen by everyone.
+                  type: boolean
+              type: object
+            examples:
+              default:
+                summary: Change the name, state, and permissions for a project
+                value:
+                  name: Week One Sprint
+                  state: open
+                  organization_permission: write
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project'
+              examples:
+                default:
+                  $ref: '#/components/examples/project-3'
+        '304':
+          $ref: '#/components/responses/not_modified'
+        '401':
+          $ref: '#/components/responses/requires_authentication'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Not Found if the authenticated user does not have access to the project
+        '410':
+          $ref: '#/components/responses/gone'
+        '422':
+          $ref: '#/components/responses/validation_failed_simple'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: projects
+        subcategory: projects
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /teams/{team_id}/projects/{project_id}:
+    put:
+      summary: GitHub Add or Update Team Project Permissions (legacy)
+      description: '**Deprecation Notice:** This endpoint route is deprecated and will be removed from the Teams API. We recommend migrating your existing code to use the new Add or update team project permissions endpoint.
+
+
+        Adds an organization project to a team. To add a project to a team or update the team''s permission on a project, the authenticated user must have `admin` permissions for the project. The project and team must be part of the same organization.'
+      tags:
+      - Update
+      operationId: addOrUpdateTeamProjectPermissionsLegacy
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions-legacy
+      parameters:
+      - $ref: '#/components/parameters/team-id'
+      - $ref: '#/components/parameters/project-id'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: 'The permission to grant to the team for this project. Default: the team''s `permission` attribute will be used to determine what permission to grant the team on this project. Note that, if you choose not to pass any parameters, you''ll need to set `Content-Length` to zero when calling this endpoint. For more information, see "[HTTP method](https://docs.github.com/enterprise-server@3.9/rest/guides/getting-started-with-the-rest-api#http-method)."'
+                  enum:
+                  - read
+                  - write
+                  - admin
+            examples:
+              default:
+                summary: Example of setting permission to read
+                value:
+                  permission: read
+      responses:
+        '204':
+          description: Response
+        '403':
+          description: Forbidden if the project is not owned by the organization
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  documentation_url:
+                    type: string
+              examples:
+                response-if-the-project-is-not-owned-by-the-organization:
+                  value:
+                    message: Must have admin rights to Repository.
+                    documentation_url: https://docs.github.com/enterprise-server@3.9/rest/teams/teams#add-or-update-team-project-permissions
+        '404':
+          $ref: '#/components/responses/not_found'
+        '422':
+          $ref: '#/components/responses/validation_failed'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        removalDate: '2021-02-01'
+        deprecationDate: '2020-01-21'
+        category: teams
+        subcategory: teams
+      deprecated: true
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /scim/v2/Groups/{scim_group_id}:
+    patch:
+      summary: GitHub Update an Attribute for Scim Enterprise Group
+      description: '**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.
+
+
+        Update a provisioned group’s individual attributes.
+
+
+        To change a group’s values, you must provide a specific Operations JSON format that contains at least one of the add, remove, or replace operations. For examples and more information on the SCIM operations format, see the SCIM specification. Update can also be used to add group memberships.
+
+
+        Group memberships can be sent one at a time or in batches for faster performance. **Note**: The memberships are referenced through a local user `id`, and the user will need to be created before they are referenced here.'
+      operationId: updateAnAttributeForScimEnterpriseGroup
+      tags:
+      - Update
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/scim#update-an-attribute-for-a-scim-enterprise-group
+      parameters:
+      - $ref: '#/components/parameters/scim-group-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patch-schema'
+            examples:
+              updateGroup:
+                summary: Update Group
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: displayName
+                    value: Employees
+              addMembers:
+                summary: Add Members
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: add
+                    path: members
+                    value:
+                    - value: 879db59-3bdf-4490-ad68-ab880a2694745
+                    - value: 0db508eb-91e2-46e4-809c-30dcbda0c685
+      responses:
+        '200':
+          description: Success, group was updated
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim-enterprise-group-response'
+              examples:
+                updateGroup:
+                  $ref: '#/components/examples/scim-enterprise-group'
+                addMembers:
+                  $ref: '#/components/examples/scim-enterprise-group'
+        '204':
+          description: Response
+        '400':
+          $ref: '#/components/responses/scim_bad_request'
+        '401':
+          $ref: '#/components/responses/authorization_failure'
+        '403':
+          $ref: '#/components/responses/permission_denied'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '409':
+          $ref: '#/components/responses/duplicate_record_detected'
+        '429':
+          $ref: '#/components/responses/scim_too_many_requests'
+        '500':
+          $ref: '#/components/responses/scim_internal_error'
+      x-github:
+        enabledForGitHubApps: true
+        githubCloudOnly: true
+        category: enterprise-admin
+        subcategory: scim
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+  /scim/v2/Users/{scim_user_id}:
+    patch:
+      summary: GitHub Update an Attribute for Scim Enterprise User
+      description: '**Note:** The SCIM API endpoints for enterprise accounts are currently in *private* beta and are subject to change.
+
+
+        Update a provisioned user''s individual attributes.
+
+
+        To change a user''s values, you must provide a specific `Operations` JSON format that contains at least one of the `add`, `remove`, or `replace` operations. For examples and more information on the SCIM operations format, see the SCIM specification.
+
+
+        **Note:** Complicated SCIM `path` selectors that include filters are not supported. For example, a `path` selector defined as `"path": "emails[type eq \"work\"]"` will not work.
+
+
+        **Warning:** Setting `active: false` will suspend a user and obfuscate the user handle and user email. Since the implementation is a generic SCIM implementation and does not differentiate yet between different IdP providers, for Okta, the user GDPR data will not be purged and the credentials will not be removed.
+
+        ```
+
+        {
+
+        "Operations":[{
+
+        "op":"replace",
+
+        "value":{
+
+        "active":false
+
+        }
+
+        }]
+
+        }
+
+        ```'
+      operationId: updateAnAttributeForScimEnterpriseUser
+      tags:
+      - Update
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/enterprise-admin/scim#update-an-attribute-for-a-scim-enterprise-user
+      parameters:
+      - $ref: '#/components/parameters/scim-user-id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/patch-schema'
+            examples:
+              userMultiValuedProperties:
+                summary: Multi Valued Property
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: emails[type eq 'work'].value
+                    value: updatedEmail@microsoft.com
+                  - op: replace
+                    path: name.familyName
+                    value: updatedFamilyName
+              userSingleValuedProperties:
+                summary: Single Valued Property
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: userName
+                    value: 5b50642d-79fc-4410-9e90-4c077cdd1a59@testuser.com
+                  - op: replace
+                    path: displayName
+                    value: Monalisa Octocat
+              disableUser:
+                summary: Disable User
+                value:
+                  schemas:
+                  - urn:ietf:params:scim:api:messages:2.0:PatchOp
+                  Operations:
+                  - op: replace
+                    path: active
+                    value: false
+      responses:
+        '200':
+          description: Success, user was updated
+          content:
+            application/scim+json:
+              schema:
+                $ref: '#/components/schemas/scim-enterprise-user-response'
+              examples:
+                userMultiValuedProperties:
+                  $ref: '#/components/examples/scim-enterprise-user'
+                userSingleValuedProperties:
+                  $ref: '#/components/examples/scim-enterprise-user'
+                disableUser:
+                  $ref: '#/components/examples/scim-enterprise-user'
+        '400':
+          $ref: '#/components/responses/scim_bad_request'
+        '401':
+          $ref: '#/components/responses/authorization_failure'
+        '403':
+          $ref: '#/components/responses/permission_denied'
+        '404':
+          $ref: '#/components/responses/not_found'
+        '409':
+          $ref: '#/components/responses/duplicate_record_detected'
+        '429':
+          $ref: '#/components/responses/scim_too_many_requests'
+        '500':
+          $ref: '#/components/responses/scim_internal_error'
+      x-github:
+        enabledForGitHubApps: true
+        githubCloudOnly: true
+        category: enterprise-admin
+        subcategory: scim
+      security:
+      - bearerHttpAuthentication: []
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    servers:
+    - url: '{protocol}://{hostname}/api/v3'
+      variables:
+        hostname:
+          description: Self-hosted Enterprise Server hostname
+          default: HOSTNAME
+        protocol:
+          description: Self-hosted Enterprise Server protocol
+          default: http
+components:
+  schemas:
+    nullable-simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type:
+      - object
+      - 'null'
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    app-permissions:
+      title: App Permissions
+      type: object
+      description: The permissions granted to the user access token.
+      properties:
+        actions:
+          type: string
+          description: The level of permission to grant the access token for GitHub Actions workflows, workflow runs, and artifacts.
+          enum:
+          - read
+          - write
+          example: read
+        administration:
+          type: string
+          description: The level of permission to grant the access token for repository creation, deletion, settings, teams, and collaborators creation.
+          enum:
+          - read
+          - write
+          example: read
+        checks:
+          type: string
+          description: The level of permission to grant the access token for checks on code.
+          enum:
+          - read
+          - write
+          example: read
+        codespaces:
+          type: string
+          description: The level of permission to grant the access token to create, edit, delete, and list Codespaces.
+          enum:
+          - read
+          - write
+          example: read
+        contents:
+          type: string
+          description: The level of permission to grant the access token for repository contents, commits, branches, downloads, releases, and merges.
+          enum:
+          - read
+          - write
+          example: read
+        dependabot_secrets:
+          type: string
+          description: The leve of permission to grant the access token to manage Dependabot secrets.
+          enum:
+          - read
+          - write
+          example: read
+        deployments:
+          type: string
+          description: The level of permission to grant the access token for deployments and deployment statuses.
+          enum:
+          - read
+          - write
+          example: read
+        environments:
+          type: string
+          description: The level of permission to grant the access token for managing repository environments.
+          enum:
+          - read
+          - write
+          example: read
+        issues:
+          type: string
+          description: The level of permission to grant the access token for issues and related comments, assignees, labels, and milestones.
+          enum:
+          - read
+          - write
+          example: read
+        metadata:
+          type: string
+          description: The level of permission to grant the access token to search repositories, list collaborators, and access repository metadata.
+          enum:
+          - read
+          - write
+          example: read
+        packages:
+          type: string
+          description: The level of permission to grant the access token for packages published to GitHub Packages.
+          enum:
+          - read
+          - write
+          example: read
+        pages:
+          type: string
+          description: The level of permission to grant the access token to retrieve Pages statuses, configuration, and builds, as well as create new builds.
+          enum:
+          - read
+          - write
+          example: read
+        pull_requests:
+          type: string
+          description: The level of permission to grant the access token for pull requests and related comments, assignees, labels, milestones, and merges.
+          enum:
+          - read
+          - write
+          example: read
+        repository_hooks:
+          type: string
+          description: The level of permission to grant the access token to manage the post-receive hooks for a repository.
+          enum:
+          - read
+          - write
+          example: read
+        repository_projects:
+          type: string
+          description: The level of permission to grant the access token to manage repository projects, columns, and cards.
+          enum:
+          - read
+          - write
+          - admin
+          example: read
+        secret_scanning_alerts:
+          type: string
+          description: The level of permission to grant the access token to view and manage secret scanning alerts.
+          enum:
+          - read
+          - write
+          example: read
+        secrets:
+          type: string
+          description: The level of permission to grant the access token to manage repository secrets.
+          enum:
+          - read
+          - write
+          example: read
+        security_events:
+          type: string
+          description: The level of permission to grant the access token to view and manage security events like code scanning alerts.
+          enum:
+          - read
+          - write
+          example: read
+        single_file:
+          type: string
+          description: The level of permission to grant the access token to manage just a single file.
+          enum:
+          - read
+          - write
+          example: read
+        statuses:
+          type: string
+          description: The level of permission to grant the access token for commit statuses.
+          enum:
+          - read
+          - write
+          example: read
+        vulnerability_alerts:
+          type: string
+          description: The level of permission to grant the access token to manage Dependabot alerts.
+          enum:
+          - read
+          - write
+        workflows:
+          type: string
+          description: The level of permission to grant the access token to update GitHub Actions workflow files.
+          enum:
+          - write
+        members:
+          type: string
+          description: The level of permission to grant the access token for organization teams and members.
+          enum:
+          - read
+          - write
+        organization_administration:
+          type: string
+          description: The level of permission to grant the access token to manage access to an organization.
+          enum:
+          - read
+          - write
+        organization_custom_roles:
+          type: string
+          description: The level of permission to grant the access token for custom repository roles management.
+          enum:
+          - read
+          - write
+        organization_copilot_seat_management:
+          type: string
+          description: The level of permission to grant the access token for managing access to GitHub Copilot for members of an organization with a Copilot Business subscription. This property is in beta and is subject to change.
+          enum:
+          - write
+        organization_announcement_banners:
+          type: string
+          description: The level of permission to grant the access token to view and manage announcement banners for an organization.
+          enum:
+          - read
+          - write
+        organization_events:
+          type: string
+          description: The level of permission to grant the access token to view events triggered by an activity in an organization.
+          enum:
+          - read
+        organization_hooks:
+          type: string
+          description: The level of permission to grant the access token to manage the post-receive hooks for an organization.
+          enum:
+          - read
+          - write
+        organization_personal_access_tokens:
+          type: string
+          description: The level of permission to grant the access token for viewing and managing fine-grained personal access token requests to an organization.
+          enum:
+          - read
+          - write
+        organization_personal_access_token_requests:
+          type: string
+          description: The level of permission to grant the access token for viewing and managing fine-grained personal access tokens that have been approved by an organization.
+          enum:
+          - read
+          - write
+        organization_plan:
+          type: string
+          description: The level of permission to grant the access token for viewing an organization's plan.
+          enum:
+          - read
+        organization_projects:
+          type: string
+          description: The level of permission to grant the access token to manage organization projects and projects beta (where available).
+          enum:
+          - read
+          - write
+          - admin
+        organization_packages:
+          type: string
+          description: The level of permission to grant the access token for organization packages published to GitHub Packages.
+          enum:
+          - read
+          - write
+        organization_secrets:
+          type: string
+          description: The level of permission to grant the access token to manage organization secrets.
+          enum:
+          - read
+          - write
+        organization_self_hosted_runners:
+          type: string
+          description: The level of permission to grant the access token to view and manage GitHub Actions self-hosted runners available to an organization.
+          enum:
+          - read
+          - write
+        organization_user_blocking:
+          type: string
+          description: The level of permission to grant the access token to view and manage users blocked by the organization.
+          enum:
+          - read
+          - write
+        team_discussions:
+          type: string
+          description: The level of permission to grant the access token to manage team discussions and related comments.
+          enum:
+          - read
+          - write
+        email_addresses:
+          type: string
+          description: The level of permission to grant the access token to manage the email addresses belonging to a user.
+          enum:
+          - read
+          - write
+        followers:
+          type: string
+          description: The level of permission to grant the access token to manage the followers belonging to a user.
+          enum:
+          - read
+          - write
+        git_ssh_keys:
+          type: string
+          description: The level of permission to grant the access token to manage git SSH keys.
+          enum:
+          - read
+          - write
+        gpg_keys:
+          type: string
+          description: The level of permission to grant the access token to view and manage GPG keys belonging to a user.
+          enum:
+          - read
+          - write
+        interaction_limits:
+          type: string
+          description: The level of permission to grant the access token to view and manage interaction limits on a repository.
+          enum:
+          - read
+          - write
+        profile:
+          type: string
+          description: The level of permission to grant the access token to manage the profile settings belonging to a user.
+          enum:
+          - write
+        starring:
+          type: string
+          description: The level of permission to grant the access token to list and manage repositories a user is starring.
+          enum:
+          - read
+          - write
+      example:
+        contents: read
+        issues: read
+        deployments: write
+        single_file: read
+    validation-error:
+      title: Validation Error
+      description: Validation Error
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: object
+            required:
+            - code
+            properties:
+              resource:
+                type: string
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+              index:
+                type: integer
+              value:
+                oneOf:
+                - type:
+                  - string
+                  - 'null'
+                - type:
+                  - integer
+                  - 'null'
+                - type:
+                  - array
+                  - 'null'
+                  items:
+                    type: string
+    authorization:
+      title: Authorization
+      description: The authorization for an OAuth app, GitHub App, or a Personal Access Token.
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        scopes:
+          description: A list of scopes that this authorization is in.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        token:
+          type: string
+          example: example_value
+        token_last_eight:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        hashed_token:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        app:
+          type: object
+          properties:
+            client_id:
+              type: string
+            name:
+              type: string
+            url:
+              type: string
+              format: uri
+          required:
+          - client_id
+          - name
+          - url
+        note:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        note_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.github.com/repos/octocat/Hello-World
+        updated_at:
+          type: string
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+        fingerprint:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        user:
+          $ref: '#/components/schemas/nullable-simple-user'
+        installation:
+          $ref: '#/components/schemas/nullable-scoped-installation'
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2026-04-17T12:00:00Z'
+      required:
+      - app
+      - id
+      - note
+      - note_url
+      - scopes
+      - token
+      - hashed_token
+      - token_last_eight
+      - fingerprint
+      - url
+      - created_at
+      - updated_at
+      - expires_at
+    simple-user:
+      title: Simple User
+      description: A GitHub user.
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: octocat
+        email:
+          type:
+          - string
+          - 'null'
+          example: octocat@github.com
+        login:
+          type: string
+          example: octocat
+        id:
+          type: integer
+          example: 1
+        node_id:
+          type: string
+          example: MDQ6VXNlcjE=
+        avatar_url:
+          type: string
+          format: uri
+          example: https://github.com/images/error/octocat_happy.gif
+        gravatar_id:
+          type:
+          - string
+          - 'null'
+          example: 41d064eb2195891e12d0413f63227ea7
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/octocat
+        followers_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/followers
+        following_url:
+          type: string
+          example: https://api.github.com/users/octocat/following{/other_user}
+        gists_url:
+          type: string
+          example: https://api.github.com/users/octocat/gists{/gist_id}
+        starred_url:
+          type: string
+          example: https://api.github.com/users/octocat/starred{/owner}{/repo}
+        subscriptions_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/subscriptions
+        organizations_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/orgs
+        repos_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        events_url:
+          type: string
+          example: https://api.github.com/users/octocat/events{/privacy}
+        received_events_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/received_events
+        type:
+          type: string
+          example: User
+        site_admin:
+          type: boolean
+          example: true
+        starred_at:
+          type: string
+          example: '"2020-07-09T00:17:55Z"'
+      required:
+      - avatar_url
+      - events_url
+      - followers_url
+      - following_url
+      - gists_url
+      - gravatar_id
+      - html_url
+      - id
+      - node_id
+      - login
+      - organizations_url
+      - received_events_url
+      - repos_url
+      - site_admin
+      - starred_url
+      - subscriptions_url
+      - type
+      - url
+    nullable-scoped-installation:
+      title: Scoped Installation
+      type:
+      - object
+      - 'null'
+      properties:
+        permissions:
+          $ref: '#/components/schemas/app-permissions'
+        repository_selection:
+          description: Describe whether all repositories have been selected or there's a selection involved
+          type: string
+          enum:
+          - all
+          - selected
+          example: all
+        single_file_name:
+          type:
+          - string
+          - 'null'
+          example: config.yaml
+        has_multiple_single_files:
+          type: boolean
+          example: true
+        single_file_paths:
+          type: array
+          items:
+            type: string
+          example:
+          - config.yml
+          - .github/issue_TEMPLATE.md
+        repositories_url:
+          type: string
+          format: uri
+          example: https://api.github.com/users/octocat/repos
+        account:
+          $ref: '#/components/schemas/simple-user'
+      required:
+      - permissions
+      - repository_selection
+      - single_file_name
+      - repositories_url
+      - account
+    validation-error-simple:
+      title: Validation Error Simple
+      description: Validation Error Simple
+      type: object
+      required:
+      - message
+      - documentation_url
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        errors:
+          type: array
+          items:
+            type: string
+    project:
+      title: Project
+      description: Projects are a way to organize columns and cards of work.
+      type: object
+      properties:
+        owner_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/api-playground/projects-test
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/1002604
+        html_url:
+          type: string
+          format: uri
+          example: https://github.com/api-playground/projects-test/projects/12
+        columns_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/1002604/columns
+        id:
+          type: integer
+          example: 1002604
+        node_id:
+          type: string
+          example: MDc6UHJvamVjdDEwMDI2MDQ=
+        name:
+          description: Name of the project
+          example: Week One Sprint
+          type: string
+        body:
+          description: Body of the project
+          example: This project represents the sprint of the first week in January
+          type:
+          - string
+          - 'null'
+        number:
+          type: integer
+          example: 1
+        state:
+          description: State of the project; either 'open' or 'closed'
+          example: open
+          type: string
+        creator:
+          $ref: '#/components/schemas/nullable-simple-user'
+        created_at:
+          type: string
+          format: date-time
+          example: '2011-04-10T20:09:31Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2014-03-03T18:58:10Z'
+        organization_permission:
+          description: The baseline permission that all organization members have on this project. Only present if owner is an organization.
+          type: string
+          enum:
+          - read
+          - write
+          - admin
+          - none
+          example: read
+        private:
+          description: Whether or not this project can be seen by everyone. Only present if owner is an organization.
+          type: boolean
+          example: true
+      required:
+      - id
+      - node_id
+      - number
+      - name
+      - body
+      - state
+      - url
+      - html_url
+      - owner_url
+      - creator
+      - columns_url
+      - created_at
+      - updated_at
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    project-card:
+      title: Project Card
+      description: Project cards represent a scope of work.
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/cards/1478
+        id:
+          description: The project card's ID
+          example: 42
+          type: integer
+        node_id:
+          type: string
+          example: MDExOlByb2plY3RDYXJkMTQ3OA==
+        note:
+          type:
+          - string
+          - 'null'
+          example: Add payload for delete Project column
+        creator:
+          $ref: '#/components/schemas/nullable-simple-user'
+        created_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:21:06Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:20:22Z'
+        archived:
+          description: Whether or not the card is archived
+          example: false
+          type: boolean
+        column_name:
+          type: string
+          example: octocat
+        project_id:
+          type: string
+          example: '12345678'
+        column_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367
+        content_url:
+          type: string
+          format: uri
+          example: https://api.github.com/repos/api-playground/projects-test/issues/3
+        project_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/120
+      required:
+      - id
+      - node_id
+      - note
+      - url
+      - column_url
+      - project_url
+      - creator
+      - created_at
+      - updated_at
+    project-column:
+      title: Project Column
+      description: Project columns contain cards of work.
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367
+        project_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/120
+        cards_url:
+          type: string
+          format: uri
+          example: https://api.github.com/projects/columns/367/cards
+        id:
+          description: The unique identifier of the project column
+          example: 42
+          type: integer
+        node_id:
+          type: string
+          example: MDEzOlByb2plY3RDb2x1bW4zNjc=
+        name:
+          description: Name of the project column
+          example: Remaining tasks
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:18:44Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2016-09-05T14:22:28Z'
+      required:
+      - id
+      - node_id
+      - url
+      - project_url
+      - cards_url
+      - name
+      - created_at
+      - updated_at
+    user-emails-response:
+      type: array
+      description: The emails for the user.
+      items:
+        type: object
+        required:
+        - value
+        properties:
+          value:
+            type: string
+            description: The email address.
+            example: mlisa@example.com
+          type:
+            type: string
+            description: The type of email address.
+            example: work
+          primary:
+            type: boolean
+            description: Whether this email address is the primary address.
+            example: true
+    user-role:
+      type: array
+      description: The roles assigned to the user.
+      items:
+        type: object
+        required:
+        - value
+        properties:
+          display:
+            type: string
+          type:
+            type: string
+          value:
+            type: string
+            description: The role value representing a user role in GitHub.
+            enum:
+            - user
+            - 27d9891d-2c17-4f45-a262-781a0e55c80a
+            - guest_collaborator
+            - 1ebc4a02-e56c-43a6-92a5-02ee09b90824
+            - enterprise_owner
+            - 981df190-8801-4618-a08a-d91f6206c954
+            - ba4987ab-a1c3-412a-b58c-360fc407cb10
+            - billing_manager
+            - 0e338b8c-cc7f-498a-928d-ea3470d7e7e3
+            - e6be2762-e4ad-4108-b72d-1bbe884a0f91
+            example: user
+          primary:
+            type: boolean
+            description: Is the role a primary role for the user.
+            example: false
+    user-name-response:
+      type: object
+      properties:
+        formatted:
+          type: string
+          description: The full name, including all middle names, titles, and suffixes as appropriate, formatted for display.
+          example: Ms. Mona Lisa Octocat
+        familyName:
+          type: string
+          description: The family name of the user.
+          example: Octocat
+        givenName:
+          type: string
+          description: The given name of the user.
+          example: Mona
+        middleName:
+          type: string
+          description: The middle name(s) of the user.
+          example: Lisa
+    group-response:
+      type: object
+      required:
+      - schemas
+      properties:
+        schemas:
+          type: array
+          description: The URIs that are used to indicate the namespaces of the SCIM schemas.
+          items:
+            type: string
+            enum:
+            - urn:ietf:params:scim:schemas:core:2.0:Group
+            - urn:ietf:params:scim:api:messages:2.0:ListResponse
+          example:
+          - urn:ietf:params:scim:schemas:core:2.0:Group
+        externalId:
+          type:
+          - string
+          - 'null'
+          description: A unique identifier for the resource as defined by the provisioning client.
+          example: 8aa1a0c0-c4c3-4bc0-b4a5-2ef676900159
+        displayName:
+          type:
+          - string
+          - 'null'
+          description: A human-readable name for a security group.
+          example: Engineering
+        members:
+          type: array
+          description: The group members.
+          items:
+            type: object
+            required:
+            - value
+            - $ref
+            properties:
+              value:
+                type: string
+                description: The local unique identifier for the member
+                example: 23a35c27-23d3-4c03-b4c5-6443c09e7173
+              $ref:
+                type: string
+              display:
+                type: string
+                description: The display name associated with the member
+                example: Monalisa Octocat
+    scim-enterprise-group-response:
+      allOf:
+      - $ref: '#/components/schemas/group-response'
+      - type: object
+        properties:
+          id:
+            type: string
+            description: The internally generated id for the group object.
+            example: 7fce0092-d52e-4f76-b727-3955bd72c939
+          members:
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                $ref:
+                  type: string
+                display:
+                  type: string
+            description: The security group members.
+            example:
+            - value: 879db59-3bdf-4490-ad68-ab880a2694745
+              $+ref: https://api.github.localhost/scim/v2/Users/879db59-3bdf-4490-ad68-ab880a2694745
+              displayName: User 1
+            - value: 0db508eb-91e2-46e4-809c-30dcbda0c685
+              $+ref: https://api.github.localhost/scim/v2/Users/0db508eb-91e2-46e4-809c-30dcbda0c685
+              displayName: User 2
+          meta:
+            $ref: '#/components/schemas/meta'
+    meta:
+      type: object
+      description: The metadata associated with the creation/updates to the user.
+      required:
+      - resourceType
+      properties:
+        resourceType:
+          type: string
+          description: A type of a resource
+          enum:
+          - User
+          - Group
+          example: User
+        created:
+          type: string
+          description: A date and time when the user was created.
+          example: '2022-03-27T19:59:26.000Z'
+        lastModified:
+          type: string
+          description: A data and time when the user was last modified.
+          example: '2022-03-27T19:59:26.000Z'
+        location:
+          type: string
+          description: A URL location of an object
+          example: example_value
+    patch-schema:
+      type: object
+      required:
+      - Operations
+      - schemas
+      properties:
+        Operations:
+          type: array
+          description: patch operations list
+          items:
+            type: object
+            required:
+            - op
+            properties:
+              op:
+                type: string
+                enum:
+                - add
+                - replace
+                - remove
+              path:
+                type: string
+              value:
+                type: string
+                description: Corresponding 'value' of that field specified by 'path'
+        schemas:
+          type: array
+          items:
+            type: string
+            enum:
+            - urn:ietf:params:scim:api:messages:2.0:PatchOp
+    user-response:
+      type: object
+      required:
+      - schemas
+      - active
+      - emails
+      properties:
+        schemas:
+          type: array
+          description: The URIs that are used to indicate the namespaces of the SCIM schemas.
+          items:
+            type: string
+            enum:
+            - urn:ietf:params:scim:schemas:core:2.0:User
+          example:
+          - urn:ietf:params:scim:schemas:core:2.0:User
+        externalId:
+          type:
+          - string
+          - 'null'
+          description: A unique identifier for the resource as defined by the provisioning client.
+          example: E012345
+        active:
+          type: boolean
+          description: Whether the user active in the IdP.
+          example: true
+        userName:
+          type: string
+          description: The username for the user.
+          example: E012345
+        name:
+          $ref: '#/components/schemas/user-name-response'
+        displayName:
+          type:
+          - string
+          - 'null'
+          description: A human-readable name for the user.
+          example: Mona Lisa
+        emails:
+          $ref: '#/components/schemas/user-emails-response'
+        roles:
+          $ref: '#/components/schemas/user-role'
+    scim-error:
+      title: Scim Error
+      description: Scim Error
+      type: object
+      properties:
+        message:
+          type:
+          - string
+          - 'null'
+          example: Example body text
+        documentation_url:
+          type:
+          - string
+          - 'null'
+          example: https://api.github.com/repos/octocat/Hello-World
+        detail:
+          type:
+          - string
+          - 'null'
+          example: example_value
+        status:
+          type: integer
+          example: 42
+        scimType:
+          type:
+          - string
+          - 'null'
+          example: User
+        schemas:
+          type: array
+          items:
+            type: string
+    scim-enterprise-user-response:
+      allOf:
+      - $ref: '#/components/schemas/user-response'
+      - type: object
+        required:
+        - id
+        - meta
+        properties:
+          id:
+            type: string
+            description: The internally generated id for the user object.
+            example: 7fce0092-d52e-4f76-b727-3955bd72c939
+          groups:
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                $ref:
+                  type: string
+                display:
+                  type: string
+            description: Provisioned SCIM groups that the user is a member of.
+          meta:
+            $ref: '#/components/schemas/meta'
+  responses:
+    validation_failed:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error'
+    validation_failed_simple:
+      description: Validation failed, or the endpoint has been spammed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/validation-error-simple'
+    not_modified:
+      description: Not modified
+    requires_authentication:
+      description: Requires authentication
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    gone:
+      description: Gone
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    scim_bad_request:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    permission_denied:
+      description: Permission denied
+    scim_internal_error:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    scim_too_many_requests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+        application/scim+json:
+          schema:
+            $ref: '#/components/schemas/scim-error'
+    duplicate_record_detected:
+      description: Duplicate record detected
+    authorization_failure:
+      description: Authorization failure
+  parameters:
+    authorization-id:
+      name: authorization_id
+      description: The unique identifier of the authorization.
+      in: path
+      required: true
+      schema:
+        type: integer
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+    column-id:
+      name: column_id
+      description: The unique identifier of the column.
+      in: path
+      required: true
+      schema:
+        type: integer
+    project-id:
+      name: project_id
+      description: The unique identifier of the project.
+      in: path
+      required: true
+      schema:
+        type: integer
+    team-id:
+      name: team_id
+      description: The unique identifier of the team.
+      in: path
+      required: true
+      schema:
+        type: integer
+    card-id:
+      name: card_id
+      description: The unique identifier of the card.
+      in: path
+      required: true
+      schema:
+        type: integer
+    team-slug:
+      name: team_slug
+      description: The slug of the team name.
+      in: path
+      required: true
+      schema:
+        type: string
+    scim-group-id:
+      name: scim_group_id
+      description: A unique identifier of the SCIM group.
+      in: path
+      required: true
+      schema:
+        type: string
+        example: 7fce0092-d52e-4f76-b727-3955bd72c939
+    scim-user-id:
+      name: scim_user_id
+      description: The unique identifier of the SCIM user.
+      in: path
+      required: true
+      schema:
+        type: string
+  examples:
+    authorization-2:
+      value:
+        id: 1
+        url: https://api.github.com/authorizations/1
+        scopes:
+        - public_repo
+        token: REDACTED_GITHUB_TOKEN
+        token_last_eight: Ae178B4a
+        hashed_token: 25f94a2a5c7fbaf499c665bc73d67c1c87e496da8985131633ee0a95819db2e8
+        app:
+          url: http://my-github-app.com
+          name: my github app
+          client_id: abcde12345fghij67890
+        note: optional note
+        note_url: http://optional/note/url
+        updated_at: '2011-09-06T20:39:23Z'
+        created_at: '2011-09-06T17:26:27Z'
+        expires_at: '2011-10-06T17:26:27Z'
+        fingerprint: jklmnop12345678
+    project-column:
+      value:
+        url: https://api.github.com/projects/columns/367
+        project_url: https://api.github.com/projects/120
+        cards_url: https://api.github.com/projects/columns/367/cards
+        id: 367
+        node_id: MDEzOlByb2plY3RDb2x1bW4zNjc=
+        name: To Do
+        created_at: '2016-09-05T14:18:44Z'
+        updated_at: '2016-09-05T14:22:28Z'
+    project-3:
+      value:
+        owner_url: https://api.github.com/repos/api-playground/projects-test
+        url: https://api.github.com/projects/1002604
+        html_url: https://github.com/api-playground/projects-test/projects/1
+        columns_url: https://api.github.com/projects/1002604/columns
+        id: 1002604
+        node_id: MDc6UHJvamVjdDEwMDI2MDQ=
+        name: Projects Documentation
+        body: Developer documentation project for the developer site.
+        number: 1
+        state: open
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2011-04-10T20:09:31Z'
+        updated_at: '2014-03-03T18:58:10Z'
+    project-card:
+      value:
+        url: https://api.github.com/projects/columns/cards/1478
+        id: 1478
+        node_id: MDExOlByb2plY3RDYXJkMTQ3OA==
+        note: Add payload for delete Project column
+        creator:
+          login: octocat
+          id: 1
+          node_id: MDQ6VXNlcjE=
+          avatar_url: https://github.com/images/error/octocat_happy.gif
+          gravatar_id: ''
+          url: https://api.github.com/users/octocat
+          html_url: https://github.com/octocat
+          followers_url: https://api.github.com/users/octocat/followers
+          following_url: https://api.github.com/users/octocat/following{/other_user}
+          gists_url: https://api.github.com/users/octocat/gists{/gist_id}
+          starred_url: https://api.github.com/users/octocat/starred{/owner}{/repo}
+          subscriptions_url: https://api.github.com/users/octocat/subscriptions
+          organizations_url: https://api.github.com/users/octocat/orgs
+          repos_url: https://api.github.com/users/octocat/repos
+          events_url: https://api.github.com/users/octocat/events{/privacy}
+          received_events_url: https://api.github.com/users/octocat/received_events
+          type: User
+          site_admin: false
+        created_at: '2016-09-05T14:21:06Z'
+        updated_at: '2016-09-05T14:20:22Z'
+        archived: false
+        column_url: https://api.github.com/projects/columns/367
+        content_url: https://api.github.com/repos/api-playground/projects-test/issues/3
+        project_url: https://api.github.com/projects/120
+    scim-enterprise-user:
+      value:
+        schemas:
+        - urn:ietf:params:scim:schemas:core:2.0:User
+        id: 7fce0092-d52e-4f76-b727-3955bd72c939
+        externalId: E012345
+        active: true
+        userName: E012345
+        name:
+          formatted: Ms. Mona Lisa Octocat
+          familyName: Octocat
+          givenName: Mona
+          middleName: Lisa
+        displayName: Mona Lisa
+        emails:
+        - value: mlisa@example.com
+          type: work
+          primary: true
+        roles:
+        - value: User
+          primary: false
+        meta:
+          resourceType: User
+          created: '2012-03-27T19:59:26.000Z'
+          lastModified: '2018-03-27T19:59:26.000Z'
+          location: https://api.github.localhost/scim/v2/Users/7fce0092-d52e-4f76-b727-3955bd72c939
+    scim-enterprise-group:
+      value:
+        schemas:
+        - urn:ietf:params:scim:schemas:core:2.0:Group
+        id: abcd27f8-a9aa-11ea-8221-f59b2be9cccc
+        externalId: 8aa1a0c0-c4c3-4bc0-b4a5-2ef676900159
+        displayName: Engineering
+        members:
+        - value: 879db59-3bdf-4490-ad68-ab880a2694745
+          $+ref: https://api.github.localhost/scim/v2/Users/879db59-3bdf-4490-ad68-ab880a2694745
+          displayName: User 1
+        - value: 0db508eb-91e2-46e4-809c-30dcbda0c685
+          $+ref: https://api.github.localhost/scim/v2/Users/0db508eb-91e2-46e4-809c-30dcbda0c685
+          displayName: User 2
+        meta:
+          resourceType: Group
+          created: '2012-03-27T19:59:26.000Z'
+          lastModified: '2018-03-27T19:59:26.000Z'
+          location: https://api.github.localhost/scim/v2/Groups/927fa2c08dcb4a7fae9e
+  securitySchemes:
+    bearerHttpAuthentication:
+      description: Bearer Token
+      type: http
+      scheme: Bearer
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/
+x-refined-from:
+- github-auth-api-openapi.yml
+- github-projects-openapi.yml
+- github-scim-openapi.yml

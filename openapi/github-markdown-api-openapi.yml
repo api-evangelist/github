@@ -10,31 +10,23 @@ info:
   contact:
     name: Support
     url: https://support.github.com/contact?tags=dotcom-rest-api
-  x-github-plan: ghes
-  x-github-release: 3.9
+  x-github-plan: api.github.com
 servers:
-- url: '{protocol}://{hostname}/api/v3'
-  variables:
-    hostname:
-      description: Self-hosted Enterprise Server hostname
-      default: HOSTNAME
-    protocol:
-      description: Self-hosted Enterprise Server protocol
-      default: http
+- url: https://api.github.com
 tags:
 - name: Markdown
-  description: Render GitHub flavored markdown
+  description: Render GitHub flavored Markdown
 paths:
   /markdown:
     post:
-      summary: GitHub Render a Markdown Document
-      description: ''
+      summary: Render a Markdown document
+      description: Depending on what is rendered in the Markdown, you may need to provide additional token scopes for labels, such as `issues:read` or `pull_requests:read`.
       operationId: markdown/render
       tags:
       - Markdown
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/markdown/markdown#render-a-markdown-document
+        url: https://docs.github.com/rest/markdown/markdown#render-a-markdown-document
       parameters: []
       requestBody:
         required: true
@@ -51,8 +43,9 @@ paths:
                   - markdown
                   - gfm
                   default: markdown
-                  example: markdown
                   type: string
+                  examples:
+                  - markdown
                 context:
                   description: The repository context to use when creating references in `gfm` mode.  For example, setting `context` to `octo-org/octo-repo` will change the text `#42` into an HTML link to issue 42 in the `octo-org/octo-repo` repository.
                   type: string
@@ -91,19 +84,16 @@ paths:
         enabledForGitHubApps: true
         category: markdown
         subcategory: markdown
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
   /markdown/raw:
     post:
-      summary: GitHub Render a Markdown Document in Raw Mode
+      summary: Render a Markdown document in raw mode
       description: You must send Markdown as plain text (using a `Content-Type` header of `text/plain` or `text/x-markdown`) to this endpoint, rather than using JSON format. In raw mode, GitHub Flavored Markdown is not supported and Markdown will be rendered in plain format like a README.md file. Markdown content must be 400 KB or less.
       operationId: markdown/render-raw
       tags:
       - Markdown
       externalDocs:
         description: API method documentation
-        url: https://docs.github.com/enterprise-server@3.9/rest/markdown/markdown#render-a-markdown-document-in-raw-mode
+        url: https://docs.github.com/rest/markdown/markdown#render-a-markdown-document-in-raw-mode
       parameters: []
       requestBody:
         required: false
@@ -144,22 +134,19 @@ paths:
         enabledForGitHubApps: true
         category: markdown
         subcategory: markdown
-      x-microcks-operation:
-        delay: 0
-        dispatcher: FALLBACK
 components:
   responses:
     not_modified:
       description: Not modified
   headers:
-    x-common-marker-version:
-      example: 0.17.4
-      schema:
-        type: string
     content-type:
       example: text/html
       schema:
         type: string
+    x-common-marker-version:
+      example: 0.17.4
+      schema:
+        type: string
 externalDocs:
-  description: GitHub Enterprise Developer Docs
-  url: https://docs.github.com/enterprise-server@3.9/rest/
+  description: GitHub v3 REST API
+  url: https://docs.github.com/rest/

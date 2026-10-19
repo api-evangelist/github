@@ -1,0 +1,198 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub v3 REST Gitignore API
+  description: GitHub's v3 REST API.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
+tags:
+- name: Gitignore
+paths:
+  /gitignore/templates:
+    get:
+      summary: GitHub Get All Gitignore Templates
+      description: List all templates available to pass as an option when creating a repository.
+      operationId: gitignore/get-all-templates
+      tags:
+      - Gitignore
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gitignore/gitignore#get-all-gitignore-templates
+      parameters: []
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                default:
+                  value:
+                  - Actionscript
+                  - Android
+                  - AppceleratorTitanium
+                  - Autotools
+                  - Bancha
+                  - C
+                  - C++
+        '304':
+          $ref: '#/components/responses/not_modified'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: gitignore
+        subcategory: gitignore
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /gitignore/templates/{name}:
+    get:
+      summary: GitHub Get a Gitignore Template
+      description: 'Get the content of a gitignore template.
+
+
+        This endpoint supports the following custom media types. For more information, see "Media types."
+
+
+        - **`application/vnd.github.raw+json`**: Returns the raw .gitignore contents.'
+      operationId: gitignore/get-template
+      tags:
+      - Gitignore
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/gitignore/gitignore#get-a-gitignore-template
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        example: octocat
+      responses:
+        '200':
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gitignore-template'
+              examples:
+                default:
+                  $ref: '#/components/examples/gitignore-template'
+        '304':
+          $ref: '#/components/responses/not_modified'
+      x-github:
+        githubCloudOnly: false
+        enabledForGitHubApps: true
+        category: gitignore
+        subcategory: gitignore
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    gitignore-template:
+      title: Gitignore Template
+      description: Gitignore Template
+      type: object
+      properties:
+        name:
+          type: string
+          example: C
+        source:
+          type: string
+          example: '# Object files
+
+            *.o
+
+
+            # Libraries
+
+            *.lib
+
+            *.a
+
+
+            # Shared objects (inc. Windows DLLs)
+
+            *.dll
+
+            *.so
+
+            *.so.*
+
+            *.dylib
+
+
+            # Executables
+
+            *.exe
+
+            *.out
+
+            *.app
+
+            '
+      required:
+      - name
+      - source
+  examples:
+    gitignore-template:
+      value:
+        name: C
+        source: '# Object files
+
+          *.o
+
+
+          # Libraries
+
+          *.lib
+
+          *.a
+
+
+          # Shared objects (inc. Windows DLLs)
+
+          *.dll
+
+          *.so
+
+          *.so.*
+
+          *.dylib
+
+
+          # Executables
+
+          *.exe
+
+          *.out
+
+          *.app
+
+          '
+  responses:
+    not_modified:
+      description: Not modified
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/

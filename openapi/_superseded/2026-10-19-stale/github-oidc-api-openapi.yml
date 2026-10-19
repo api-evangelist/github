@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  version: 1.1.4
+  title: GitHub v3 REST Oidc API
+  description: GitHub's v3 REST API.
+  license:
+    name: MIT
+    url: https://spdx.org/licenses/MIT
+  termsOfService: https://docs.github.com/articles/github-terms-of-service
+  contact:
+    name: Support
+    url: https://support.github.com/contact?tags=dotcom-rest-api
+  x-github-plan: ghes
+  x-github-release: 3.9
+servers:
+- url: '{protocol}://{hostname}/api/v3'
+  variables:
+    hostname:
+      description: Self-hosted Enterprise Server hostname
+      default: HOSTNAME
+    protocol:
+      description: Self-hosted Enterprise Server protocol
+      default: http
+tags:
+- name: OIDC
+paths:
+  /orgs/{org}/actions/oidc/customization/sub:
+    get:
+      summary: GitHub Get the Customization Template for an OIDC Subject Claim for an…
+      description: 'Gets the customization template for an OpenID Connect (OIDC) subject claim.
+
+
+        OAuth app tokens and personal access tokens (classic) need the `read:org` scope to use this endpoint.'
+      tags:
+      - OIDC
+      operationId: oidc/get-oidc-custom-sub-template-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/actions/oidc#get-the-customization-template-for-an-oidc-subject-claim-for-an-organization
+      parameters:
+      - $ref: '#/components/parameters/org'
+      responses:
+        '200':
+          description: A JSON serialized template for OIDC subject claim customization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oidc-custom-sub'
+              examples:
+                default:
+                  $ref: '#/components/examples/oidc-custom-sub'
+      x-github:
+        enabledForGitHubApps: true
+        category: actions
+        subcategory: oidc
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      summary: GitHub Set the Customization Template for an OIDC Subject Claim for an…
+      description: 'Creates or updates the customization template for an OpenID Connect (OIDC) subject claim.
+
+
+        OAuth app tokens and personal access tokens (classic) need the `write:org` scope to use this endpoint.'
+      tags:
+      - OIDC
+      operationId: oidc/update-oidc-custom-sub-template-for-org
+      externalDocs:
+        description: API method documentation
+        url: https://docs.github.com/enterprise-server@3.9/rest/actions/oidc#set-the-customization-template-for-an-oidc-subject-claim-for-an-organization
+      parameters:
+      - $ref: '#/components/parameters/org'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/oidc-custom-sub'
+            examples:
+              default:
+                $ref: '#/components/examples/oidc-custom-sub'
+      responses:
+        '201':
+          description: Empty response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/empty-object'
+              examples:
+                default:
+                  value: null
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/not_found'
+      x-github:
+        enabledForGitHubApps: true
+        previews: []
+        category: actions
+        subcategory: oidc
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  responses:
+    not_found:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+    forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/basic-error'
+  schemas:
+    basic-error:
+      title: Basic Error
+      description: Basic Error
+      type: object
+      properties:
+        message:
+          type: string
+          example: Example body text
+        documentation_url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        url:
+          type: string
+          example: https://api.github.com/repos/octocat/Hello-World
+        status:
+          type: string
+          example: open
+    oidc-custom-sub:
+      title: Actions OIDC Subject customization
+      description: Actions OIDC Subject customization
+      type: object
+      properties:
+        include_claim_keys:
+          description: Array of unique strings. Each claim key can only contain alphanumeric characters and underscores.
+          type: array
+          items:
+            type: string
+      required:
+      - include_claim_keys
+    empty-object:
+      title: Empty Object
+      description: An object without any properties.
+      type: object
+      properties: {}
+      additionalProperties: false
+  examples:
+    oidc-custom-sub:
+      value:
+        include_claim_keys:
+        - repo
+        - context
+  parameters:
+    org:
+      name: org
+      description: The organization name. The name is not case sensitive.
+      in: path
+      required: true
+      schema:
+        type: string
+externalDocs:
+  description: GitHub Enterprise Developer Docs
+  url: https://docs.github.com/enterprise-server@3.9/rest/
